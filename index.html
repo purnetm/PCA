@@ -1,0 +1,3592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Call Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    /* ── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    /* ── Design tokens ──────────────────────────────────────────── */
+    :root {
+      --teal:       #4DB6AC;
+      --teal-10:    rgba(77, 182, 172, 0.10);
+      --teal-15:    rgba(77, 182, 172, 0.15);
+      --teal-20:    rgba(77, 182, 172, 0.20);
+      --teal-30:    rgba(77, 182, 172, 0.30);
+      --teal-50:    rgba(77, 182, 172, 0.50);
+      --teal-80:    rgba(77, 182, 172, 0.80);
+      --cutty-sark: #4C6A69;
+      --dark-teal:  #1F4141;
+      --aqua-haze:  #ECF4F2;
+      --nebula:     #C7D9D6;
+      --surface:    #F5FAF8;
+      --bg-light:   #F8FDFC;
+      --bg-gradient-top: #EFF6F5;
+      --bg-gradient-mid: rgba(241, 236, 239, 0.92);
+      --bg-gradient-bot: rgba(216, 188, 196, 0.90);
+      --radius-sm:  8px;
+      --radius-md:  12px;
+      --radius-lg:  20px;
+    }
+
+    /* ── Root shell ─────────────────────────────────────────────── */
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Background ─────────────────────────────────────────────── */
+    .bg-layer {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0;
+    }
+    .bg-layer::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--bg-light); mix-blend-mode: multiply;
+    }
+    .bg-layer::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        var(--bg-gradient-top) 0%,
+        var(--bg-gradient-mid) 70%,
+        var(--bg-gradient-bot) 100%);
+      mix-blend-mode: multiply;
+    }
+    .bg-wave {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; opacity: 0.35;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* ── Sidebar ────────────────────────────────────────────────── */
+    .sidebar {
+      position: relative; z-index: 2;
+      width: 256px; min-width: 256px; height: 100vh;
+      display: flex; flex-direction: column;
+      border-right: 0.571px solid var(--nebula);
+      padding: 8px;
+    }
+    .sidebar-header { padding: 8px; flex-shrink: 0; }
+    .sidebar-title {
+      display: flex; align-items: center;
+      height: 48px; padding: 8px; border-radius: var(--radius-sm);
+      font-size: 20px; font-weight: 700;
+      color: var(--cutty-sark); line-height: 25px;
+    }
+    .sidebar-nav {
+      flex: 1; overflow-y: auto; padding: 8px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .sidebar-nav::-webkit-scrollbar { width: 0; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 8px;
+      height: 32px; padding: 0 8px;
+      border-radius: var(--radius-sm);
+      text-decoration: none; cursor: pointer;
+      color: var(--cutty-sark); font-size: 14px; font-weight: 400;
+      white-space: nowrap; transition: background 0.15s;
+      border: none; background: transparent; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .nav-item:hover { background: var(--teal-20); }
+    .nav-item.active {
+      background: var(--teal-20); color: var(--teal); font-weight: 500;
+    }
+    .nav-item.active svg { color: var(--teal); }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .nav-icon-img { width: 16px; height: 16px; flex-shrink: 0; }
+    .nav-label { flex: 1; text-align: left; }
+    .nav-chevron { width: 16px; height: 16px; flex-shrink: 0; margin-left: auto; transition: transform 0.2s ease; }
+    .nav-item.expanded .nav-chevron { transform: rotate(90deg); }
+
+    /* ── Sidebar sub-nav items ──────────────────────────────────── */
+    .nav-subnav { display: none; flex-direction: column; gap: 2px; padding: 2px 0 4px; }
+    .nav-subnav.open { display: flex; }
+    .nav-subitem {
+      display: flex; align-items: center; gap: 8px;
+      height: 30px; padding: 0 8px 0 30px;
+      border-radius: var(--radius-sm);
+      cursor: pointer; color: var(--cutty-sark);
+      font-size: 13px; font-weight: 400; font-family: 'Inter', sans-serif;
+      white-space: nowrap; transition: background 0.15s;
+      border: none; background: transparent; width: 100%; text-align: left;
+    }
+    .nav-subitem:hover { background: var(--teal-10); }
+    .nav-subitem.active { background: var(--teal-10); color: var(--teal); font-weight: 500; }
+    .nav-subitem-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: currentColor; opacity: 0.35; flex-shrink: 0; transition: opacity 0.15s;
+    }
+    .nav-subitem.active .nav-subitem-dot { opacity: 1; }
+
+    .sidebar-footer { position: relative; flex-shrink: 0; padding: 8px; }
+
+    /* User menu trigger button */
+    .user-menu-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; height: 48px; padding: 8px; border-radius: var(--radius-sm);
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; text-align: left;
+      transition: background 0.15s;
+    }
+    .user-menu-btn:hover,
+    .user-menu-btn.open { background: var(--teal-10); }
+
+    .user-avatar {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: var(--aqua-haze);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 400; color: var(--cutty-sark); flex-shrink: 0;
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name {
+      font-size: 14px; font-weight: 600; color: var(--cutty-sark);
+      line-height: 17.5px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .user-email {
+      font-size: 12px; font-weight: 400; color: var(--cutty-sark);
+      line-height: 16px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* User popup */
+    .user-popup {
+      position: absolute; bottom: calc(100% + 4px); left: 8px; right: 8px;
+      background: #fff; border-radius: var(--radius-md);
+      box-shadow: 0 8px 24px rgba(31,65,65,0.14), 0 2px 8px rgba(31,65,65,0.08);
+      overflow: hidden;
+      opacity: 0; transform: translateY(6px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 20;
+    }
+    .user-popup.open { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+    .user-popup-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px;
+    }
+    .user-popup-divider { height: 1px; background: var(--aqua-haze); }
+    .user-popup-item {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 12px 16px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 400;
+      color: var(--dark-teal); text-align: left;
+      transition: background 0.12s;
+    }
+    .user-popup-item:hover { background: var(--aqua-haze); }
+    .user-popup-item.danger { color: #E57373; }
+    .user-popup-item.danger:hover { background: rgba(229,115,115,0.07); }
+
+    /* ── Main + view switching ──────────────────────────────────── */
+    .main {
+      position: relative; z-index: 1;
+      flex: 1; height: 100vh; overflow: hidden;
+    }
+    .view {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .view.active { opacity: 1; pointer-events: all; }
+
+    /* ── Shared topbar ──────────────────────────────────────────── */
+    .topbar {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 0.571px solid var(--nebula);
+      backdrop-filter: blur(4px);
+      background: rgba(255, 255, 255, 0.20);
+      gap: 12px;
+    }
+    .topbar-left {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .topbar-page-name {
+      font-size: 13px; font-weight: 500;
+      color: var(--cutty-sark); opacity: 0.7;
+    }
+    .topbar-right {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .topbar-btn {
+      width: 28px; height: 28px; border-radius: 10px;
+      border: 1px solid var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; background: transparent; padding: 0;
+    }
+    .topbar-btn img { width: 14px; height: 14px; }
+
+    /* ── Kap AI view ────────────────────────────────────────────── */
+    .content {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      padding-top: 138px; overflow-y: auto; padding-bottom: 32px;
+    }
+    .content-inner {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 42px; width: 585px;
+    }
+    .hero-text { text-align: center; display: flex; flex-direction: column; gap: 8px; }
+    .hero-heading {
+      font-size: 24px; font-weight: 600;
+      color: var(--dark-teal); line-height: 32px;
+    }
+    .hero-sub {
+      font-size: 14px; font-weight: 400;
+      color: var(--cutty-sark); line-height: 20px;
+    }
+    .input-card {
+      width: 100%; background: #fff; border-radius: var(--radius-lg);
+      box-shadow: 0px 10px 15px rgba(77,182,172,0.10), 0px 4px 6px rgba(77,182,172,0.10);
+      padding: 16px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .input-placeholder {
+      height: 48px; display: flex; align-items: flex-start;
+      overflow: auto; font-size: 16px; font-weight: 400;
+      color: var(--cutty-sark); line-height: 24px; cursor: text;
+    }
+    .input-placeholder span { opacity: 0.6; }
+    .input-bottom { display: flex; align-items: center; justify-content: space-between; }
+    .attach-icon { width: 18px; height: 18px; cursor: pointer; }
+    .send-btn {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: var(--aqua-haze);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: none; flex-shrink: 0;
+    }
+    .send-btn img { width: 18px; height: 18px; }
+    .quick-actions-wrapper { display: flex; flex-direction: column; gap: 40px; align-items: center; width: 100%; }
+    .quick-actions { display: flex; align-items: center; gap: 12px; width: 100%; flex-wrap: wrap; }
+    .pill-btn {
+      display: flex; align-items: center; gap: 6px;
+      height: 35px; padding: 0 16px 0 36px;
+      border-radius: 9999px; background: var(--teal); border: 1px solid var(--teal);
+      color: var(--surface); font-size: 12px; font-weight: 500;
+      font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+      position: relative; transition: opacity 0.15s;
+    }
+    .pill-btn:hover { opacity: 0.88; }
+    .pill-icon {
+      position: absolute; left: 15px; top: 50%;
+      transform: translateY(-50%); width: 14px; height: 14px;
+    }
+    .kb-hint {
+      font-size: 12px; font-weight: 400; color: var(--cutty-sark);
+      line-height: 16px; text-align: center;
+    }
+    .kb-hint strong { font-weight: 500; color: var(--dark-teal); }
+    .insights { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+    .insight-row {
+      display: flex; align-items: center;
+      height: 29px; border-radius: 10px;
+      padding: 0 12px; overflow: hidden;
+    }
+    .insight-row.level-1 { background: rgba(77,182,172,0.80); border: 1px solid rgba(77,182,172,0.30); }
+    .insight-row.level-2 { background: rgba(77,182,172,0.50); border: 1px solid rgba(77,182,172,0.18); }
+    .insight-row.level-3 { background: rgba(77,182,172,0.30); border: 1px solid rgba(77,182,172,0.10); }
+    .insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-right: 14px; }
+    .insight-text { font-size: 12px; font-weight: 400; color: var(--dark-teal); line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ══════════════════════════════════════════════════════════════
+       DATA STUDIO VIEW
+    ══════════════════════════════════════════════════════════════ */
+
+    /* DS layout */
+    .ds-view { display: flex; flex-direction: column; }
+
+    .ds-page-header {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px 16px;
+    }
+    .ds-page-title {
+      font-size: 20px; font-weight: 700;
+      color: var(--dark-teal); line-height: 28px;
+    }
+    .ds-page-sub {
+      font-size: 13px; font-weight: 400;
+      color: var(--cutty-sark); line-height: 18px; margin-top: 2px;
+    }
+
+    /* Mode toggle (segmented control) */
+    .mode-toggle {
+      display: flex; align-items: center;
+      background: var(--teal-10); border-radius: 12px;
+      padding: 4px; gap: 2px;
+    }
+    .mode-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+      color: var(--cutty-sark); border: none;
+      background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
+    }
+    .mode-btn.active {
+      background: #fff;
+      color: var(--dark-teal);
+      box-shadow: 0 1px 4px rgba(77,182,172,0.18), 0 0 0 0.5px var(--nebula);
+    }
+    .mode-btn svg { flex-shrink: 0; }
+    .mode-btn .sparkle-badge {
+      font-size: 10px; font-weight: 600;
+      color: var(--teal); background: rgba(77,182,172,0.12);
+      padding: 1px 6px; border-radius: 20px; line-height: 16px;
+    }
+
+    /* DS body — holds controls, grid OR ai content */
+    .ds-body {
+      flex: 1; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── Manual mode ─────────────────────────────────────────── */
+    .ds-controls {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px 14px; gap: 16px;
+    }
+    .category-filters {
+      display: flex; align-items: center; gap: 6px;
+      overflow-x: auto; flex: 1;
+    }
+    .category-filters::-webkit-scrollbar { height: 0; }
+    .cat-btn {
+      padding: 5px 13px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+      color: var(--cutty-sark);
+      border: 1px solid var(--nebula);
+      background: rgba(255,255,255,0.6);
+      cursor: pointer; white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .cat-btn:hover { background: var(--teal-10); border-color: var(--teal); color: var(--dark-teal); }
+    .cat-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+    .ds-search {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--nebula);
+      border-radius: 10px; padding: 7px 12px;
+      width: 200px; flex-shrink: 0;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .ds-search:focus-within {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(77,182,172,0.12);
+    }
+    .ds-search svg { flex-shrink: 0; color: var(--cutty-sark); opacity: 0.6; }
+    .ds-search input {
+      border: none; background: transparent; outline: none;
+      font-size: 13px; font-weight: 400; color: var(--dark-teal);
+      font-family: 'Inter', sans-serif; width: 100%;
+    }
+    .ds-search input::placeholder { color: var(--cutty-sark); opacity: 0.55; }
+
+    /* Card grid */
+    .card-grid-wrap {
+      flex: 1; overflow-y: auto; padding: 0 28px 16px;
+    }
+    .card-grid-wrap::-webkit-scrollbar { width: 4px; }
+    .card-grid-wrap::-webkit-scrollbar-thumb { background: var(--nebula); border-radius: 2px; }
+
+    .card-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    /* Individual card */
+    .ds-card {
+      background: rgba(255,255,255,0.82);
+      border-radius: var(--radius-md);
+      border: 1.5px solid rgba(199,217,214,0.5);
+      overflow: hidden; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      position: relative;
+      backdrop-filter: blur(6px);
+    }
+    .ds-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(77,182,172,0.14);
+      border-color: rgba(77,182,172,0.4);
+    }
+    .ds-card.selected {
+      border-color: var(--teal);
+      box-shadow: 0 4px 16px rgba(77,182,172,0.22);
+    }
+    .ds-card.hidden-card { display: none; }
+
+    /* Selected checkmark badge */
+    .card-check {
+      position: absolute; top: 8px; right: 8px; z-index: 2;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.6);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .ds-card.selected .card-check { opacity: 1; transform: scale(1); }
+
+    /* Preview area */
+    .card-preview {
+      height: 90px; padding: 12px 16px 8px;
+      background: rgba(77,182,172,0.04);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .card-preview svg { display: block; }
+    .kpi-preview {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px; width: 100%;
+    }
+    .kpi-value { font-size: 26px; font-weight: 700; color: var(--dark-teal); line-height: 1; }
+    .kpi-trend { font-size: 11px; font-weight: 600; }
+    .kpi-trend.up   { color: #16A34A; }
+    .kpi-trend.down { color: #DC2626; }
+
+    /* Card body */
+    .card-body { padding: 10px 14px 14px; }
+    .card-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
+    .card-name {
+      font-size: 13px; font-weight: 600;
+      color: var(--dark-teal); line-height: 18px; flex: 1;
+    }
+    .cat-badge {
+      font-size: 10px; font-weight: 500;
+      padding: 2px 7px; border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0; line-height: 16px;
+    }
+    .cat-badge.Volume      { background: rgba(77,182,172,0.14); color: #2E7D72; }
+    .cat-badge.Performance { background: rgba(76,106,105,0.12); color: #4C6A69; }
+    .cat-badge.Experience  { background: rgba(99,102,241,0.10); color: #4F46E5; }
+    .cat-badge.Compliance  { background: rgba(180,83,9,0.10);   color: #B45309; }
+    .cat-badge.Quality     { background: rgba(22,101,52,0.10);   color: #166534; }
+    .cat-badge.Operations  { background: rgba(31,65,65,0.10);    color: #1F4141; }
+
+    .card-desc {
+      font-size: 11.5px; font-weight: 400;
+      color: var(--cutty-sark); line-height: 16px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* ── AI mode ─────────────────────────────────────────────── */
+    .ai-mode-wrap {
+      flex: 1; overflow-y: auto;
+      display: flex; flex-direction: column;
+      align-items: center; padding: 0 28px 16px;
+    }
+    .ai-mode-wrap::-webkit-scrollbar { width: 4px; }
+    .ai-mode-wrap::-webkit-scrollbar-thumb { background: var(--nebula); border-radius: 2px; }
+    .ai-mode-inner {
+      display: flex; flex-direction: column;
+      gap: 28px; width: 100%; max-width: 620px;
+    }
+
+    /* Chips inside input card */
+    #ai-chips-wrap:empty { display: none; }
+    #ai-chips-wrap:not(:empty) {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+      padding-top: 10px; border-top: 1px solid var(--nebula);
+    }
+    .chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px 4px 10px; border-radius: 20px;
+      background: var(--teal-15); border: 1px solid rgba(77,182,172,0.35);
+      font-size: 12px; font-weight: 500; color: var(--dark-teal);
+    }
+    .chip-remove {
+      display: flex; align-items: center; justify-content: center;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: rgba(77,182,172,0.2); cursor: pointer;
+      border: none; padding: 0; color: var(--cutty-sark);
+      font-family: 'Inter', sans-serif; flex-shrink: 0;
+      transition: background 0.12s;
+    }
+    .chip-remove:hover { background: rgba(77,182,172,0.4); }
+
+    .add-manual-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500; color: var(--teal);
+      background: none; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; padding: 0;
+    }
+    .add-manual-btn:hover { text-decoration: underline; }
+
+    /* AI input card */
+    .ai-heading-row {
+      display: flex; flex-direction: column; gap: 4px; text-align: center;
+    }
+    .ai-heading {
+      font-size: 18px; font-weight: 600; color: var(--dark-teal); line-height: 26px;
+    }
+    .ai-sub {
+      font-size: 13px; font-weight: 400; color: var(--cutty-sark); line-height: 18px;
+    }
+
+    .ai-input-card {
+      background: #fff; border-radius: var(--radius-lg);
+      box-shadow: 0 10px 15px rgba(77,182,172,0.10), 0 4px 6px rgba(77,182,172,0.08);
+      padding: 16px; display: flex; flex-direction: column; gap: 14px;
+    }
+    .ai-textarea {
+      width: 100%; min-height: 72px; resize: none;
+      border: none; outline: none; background: transparent;
+      font-size: 14px; font-weight: 400; line-height: 22px;
+      color: var(--dark-teal); font-family: 'Inter', sans-serif;
+    }
+    .ai-textarea::placeholder { color: var(--cutty-sark); opacity: 0.55; }
+    .ai-input-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ai-send-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 10px;
+      background: var(--teal); border: none;
+      color: #fff; font-size: 13px; font-weight: 500;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .ai-send-btn:hover { opacity: 0.88; }
+
+    /* AI suggestion chips */
+    .ai-prompts-label {
+      font-size: 11px; font-weight: 600; color: var(--cutty-sark);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
+    }
+    .ai-prompt-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prompt-chip {
+      padding: 7px 14px; border-radius: 20px;
+      background: rgba(255,255,255,0.75); border: 1px solid var(--nebula);
+      font-size: 12px; font-weight: 400; color: var(--cutty-sark);
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .prompt-chip:hover {
+      background: var(--teal-10); border-color: var(--teal); color: var(--dark-teal);
+    }
+
+    /* ── Sticky action bar ──────────────────────────────────────── */
+    .action-bar {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 28px;
+      border-top: 0.571px solid var(--nebula);
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.55);
+    }
+    .selection-info { display: flex; align-items: center; gap: 10px; }
+    .selection-count {
+      font-size: 13px; font-weight: 500; color: var(--cutty-sark);
+    }
+    .selection-count span { font-weight: 700; color: var(--teal); }
+    .clear-btn {
+      font-size: 12px; font-weight: 500; color: var(--cutty-sark);
+      background: none; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; opacity: 0.65;
+      display: none;
+    }
+    .clear-btn:hover { opacity: 1; text-decoration: underline; }
+    .action-btns { display: flex; align-items: center; gap: 10px; }
+    .btn-secondary {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 16px; border-radius: 10px;
+      background: transparent; border: 1px solid var(--teal);
+      color: var(--teal); font-size: 13px; font-weight: 500;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-secondary:hover { background: var(--teal-10); }
+    .btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 20px; border-radius: 10px;
+      background: var(--teal); border: none;
+      color: #fff; font-size: 13px; font-weight: 500;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: opacity 0.15s; white-space: nowrap;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* ── Toast ──────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--dark-teal); color: #fff;
+      font-size: 13px; font-weight: 500;
+      padding: 12px 22px; border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(31,65,65,0.25);
+      display: flex; align-items: center; gap: 10px;
+      z-index: 100; opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ══════════════════════════════════════════════════════════════
+       HAMBURGER + SIDEBAR OVERLAY
+    ══════════════════════════════════════════════════════════════ */
+    .hamburger {
+      display: none;
+      align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      border: none; background: transparent; cursor: pointer; padding: 0;
+      color: var(--cutty-sark); flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .hamburger:hover { background: var(--teal-10); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 9;
+      background: rgba(31, 65, 65, 0.18);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.open { display: block; }
+
+    /* ══════════════════════════════════════════════════════════════
+       RESPONSIVE — TABLET  (≤ 1024px)
+    ══════════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      /* Sidebar becomes a fixed drawer */
+      .sidebar {
+        position: fixed; left: 0; top: 0; bottom: 0; z-index: 10;
+        transform: translateX(-100%);
+        transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(248, 253, 252, 0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 4px 0 32px rgba(77, 182, 172, 0.14);
+      }
+      .sidebar.open { transform: translateX(0); }
+
+      /* Main fills full width */
+      .main { width: 100%; }
+
+      /* Show hamburger in topbar */
+      .hamburger { display: flex; }
+
+      /* Kap AI content: fluid width */
+      .content-inner { width: min(560px, calc(100% - 40px)); }
+
+      /* DS page header: allow wrapping */
+      .ds-page-header { padding: 16px 20px 12px; gap: 12px; }
+
+      /* DS controls padding */
+      .ds-controls { padding: 0 20px 12px; }
+
+      /* Card grid: 2 columns */
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+      .card-grid-wrap { padding: 0 20px 16px; }
+
+      /* AI mode */
+      .ai-mode-wrap { padding: 0 20px 16px; }
+
+      /* Action bar */
+      .action-bar { padding: 12px 20px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       RESPONSIVE — MOBILE  (≤ 640px)
+    ══════════════════════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      /* Card grid: 1 column */
+      .card-grid { grid-template-columns: 1fr; gap: 10px; }
+      .card-grid-wrap { padding: 0 14px 16px; }
+
+      /* DS page header stacks */
+      .ds-page-header {
+        flex-direction: column; align-items: flex-start;
+        padding: 14px 14px 10px;
+      }
+
+      /* Mode toggle full width */
+      .mode-toggle { width: 100%; }
+      .mode-btn { flex: 1; justify-content: center; }
+
+      /* DS controls stacks */
+      .ds-controls {
+        flex-direction: column; gap: 10px; padding: 0 14px 12px;
+      }
+      .ds-search { width: 100%; }
+      .category-filters { width: 100%; }
+
+      /* AI mode */
+      .ai-mode-wrap { padding: 0 14px 16px; }
+      .ai-mode-inner { gap: 18px; }
+
+      /* Kap AI content */
+      .content { padding-top: 60px; }
+      .content-inner { width: calc(100% - 28px); gap: 28px; }
+      .hero-heading { font-size: 20px; line-height: 28px; }
+      .quick-actions { gap: 8px; }
+      .pill-btn { flex: 1; min-width: 140px; justify-content: center; }
+
+      /* Action bar stacks */
+      .action-bar {
+        flex-direction: column; gap: 10px;
+        padding: 12px 14px; align-items: stretch;
+      }
+      .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .btn-secondary, .btn-primary { justify-content: center; }
+
+      /* Topbar tighter */
+      .topbar { padding: 10px 14px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       FULLSCREEN — ensure the layout always fills the viewport
+    ══════════════════════════════════════════════════════════════ */
+    html { height: 100dvh; }
+    body { height: 100dvh; min-height: 100dvh; }
+    .main { min-height: 0; flex: 1; }
+    .view { min-height: 0; }
+    .ds-body { min-height: 0; }
+    .ds-body > div { min-height: 0; }
+    #manual-mode {
+      display: flex; flex-direction: column;
+      flex: 1; overflow: hidden; min-height: 0;
+    }
+    #ai-mode { min-height: 0; }
+    #queries-section { min-height: 0; }
+
+    /* ── New Query button in page header ────────────────────── */
+    .new-query-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--teal-30);
+      background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--dark-teal); transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .new-query-btn:hover { background: var(--teal-10); border-color: var(--teal-50); }
+
+    /* ── Queries section ─────────────────────────────────────── */
+    #queries-section {
+      display: none; flex: 1; flex-direction: column; overflow: hidden;
+    }
+    .queries-header {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid var(--nebula);
+    }
+    .queries-title { font-size: 17px; font-weight: 600; color: var(--dark-teal); }
+    .queries-sub { font-size: 12px; color: var(--cutty-sark); margin-top: 2px; }
+    .queries-header-right { display: flex; align-items: center; gap: 10px; }
+    .back-to-builder-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--nebula);
+      background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--cutty-sark); transition: background 0.15s, border-color 0.15s;
+    }
+    .back-to-builder-btn:hover { background: var(--aqua-haze); border-color: var(--teal-30); }
+    .create-question-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      border: none; background: var(--teal); cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: #fff; transition: opacity 0.15s;
+    }
+    .create-question-btn:hover { opacity: 0.88; }
+
+    /* Query card grid */
+    .query-grid-wrap {
+      flex: 1; overflow-y: auto; padding: 24px 28px;
+    }
+    .query-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .query-card {
+      background: var(--surface);
+      border: 1px solid var(--nebula);
+      border-radius: var(--radius-md);
+      padding: 18px 18px 14px;
+      cursor: pointer; transition: box-shadow 0.18s, border-color 0.18s;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .query-card:hover {
+      border-color: var(--teal-30);
+      box-shadow: 0 4px 16px rgba(77,182,172,0.12);
+    }
+    .query-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .query-card-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--teal-10); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--teal);
+    }
+    .query-card-more {
+      width: 28px; height: 28px; border-radius: 6px;
+      border: none; background: transparent; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cutty-sark); opacity: 0; transition: opacity 0.15s, background 0.12s;
+      flex-shrink: 0;
+    }
+    .query-card:hover .query-card-more { opacity: 1; }
+    .query-card-more:hover { background: var(--aqua-haze); }
+    .query-card-name {
+      font-size: 14px; font-weight: 600; color: var(--dark-teal);
+      line-height: 1.3;
+    }
+    .query-card-desc {
+      font-size: 12px; color: var(--cutty-sark); line-height: 1.4;
+    }
+    .query-card-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .query-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 8px; border-radius: 6px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.01em;
+    }
+    .query-tag.chart { background: var(--teal-10); color: var(--teal); }
+    .query-tag.dataset { background: var(--aqua-haze); color: var(--cutty-sark); }
+    .query-card-footer {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--cutty-sark); opacity: 0.7;
+      padding-top: 6px; border-top: 1px solid var(--aqua-haze);
+    }
+
+    @media (max-width: 1024px) {
+      .query-grid { grid-template-columns: repeat(2, 1fr); }
+      .queries-header { padding: 16px 20px 12px; }
+      .query-grid-wrap { padding: 20px; }
+    }
+    @media (max-width: 640px) {
+      .query-grid { grid-template-columns: 1fr; }
+      .queries-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .queries-header-right { width: 100%; }
+      .create-question-btn { flex: 1; justify-content: center; }
+      .query-grid-wrap { padding: 14px; }
+    }
+
+    /* ── QS layout (sidebar + paged content) ──────────────────── */
+    #queries-section { display: none; flex: 1; min-height: 0; overflow: hidden; }
+    .qs-sidebar {
+      width: 190px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--nebula);
+      background: var(--bg-light); padding: 10px 0; gap: 0;
+    }
+    .qs-back-btn {
+      display: flex; align-items: center; gap: 6px;
+      margin: 0 10px 2px; padding: 7px 10px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      color: var(--cutty-sark); border-radius: 6px; text-align: left;
+      transition: background 0.12s;
+    }
+    .qs-back-btn:hover { background: var(--aqua-haze); }
+    .qs-sidebar-divider { height: 1px; background: var(--nebula); margin: 8px 10px; }
+    .qs-sidebar-context {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--cutty-sark); opacity: 0.6;
+      padding: 0 20px 8px;
+    }
+    .qs-nav { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
+    .qs-nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 12px; border-radius: 8px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400;
+      color: var(--dark-teal); text-align: left; transition: background 0.12s;
+    }
+    .qs-nav-item:hover { background: var(--aqua-haze); }
+    .qs-nav-item.active {
+      background: var(--teal-10); color: var(--teal); font-weight: 500;
+    }
+    .qs-nav-item svg { flex-shrink: 0; }
+
+    /* QS paged content */
+    .qs-content { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .qs-page { flex: 1; display: none; flex-direction: column; overflow: hidden; min-height: 0; }
+    .qs-page.active { display: flex; }
+
+    /* QS page header */
+    .qs-page-topbar {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px 16px; border-bottom: 1px solid var(--nebula);
+    }
+    .qs-page-title { font-size: 17px; font-weight: 600; color: var(--dark-teal); }
+    .qs-page-sub { font-size: 12px; color: var(--cutty-sark); margin-top: 2px; }
+    .qs-primary-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      border: none; background: var(--teal); cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: #fff; transition: opacity 0.15s; white-space: nowrap;
+    }
+    .qs-primary-btn:hover { opacity: 0.88; }
+
+    /* ── Query Builder layout ────────────────────────────────── */
+    .qb-panel {
+      width: 268px; flex-shrink: 0;
+      border-right: 1px solid var(--nebula);
+      overflow-y: auto; background: #fff;
+      display: flex; flex-direction: column;
+    }
+    .qb-panel-hd {
+      flex-shrink: 0; padding: 14px 16px;
+      font-size: 13px; font-weight: 600; color: var(--dark-teal);
+      border-bottom: 1px solid var(--nebula);
+    }
+    .qb-section {
+      padding: 14px 16px; border-bottom: 1px solid var(--aqua-haze);
+    }
+    .qb-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--cutty-sark);
+      margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .qb-cols-hd { margin-bottom: 10px; }
+    .qb-select-all-btn {
+      font-size: 11px; font-weight: 500; color: var(--teal);
+      border: none; background: none; cursor: pointer; padding: 0;
+    }
+    .qb-select-all-btn:hover { text-decoration: underline; }
+    .qb-select-wrap {
+      position: relative; display: flex; align-items: center;
+      border: 1px solid var(--nebula); border-radius: 8px;
+      background: var(--bg-light); transition: border-color 0.15s;
+    }
+    .qb-select-wrap:focus-within { border-color: var(--teal-30); }
+    .qb-select-ico {
+      position: absolute; left: 10px; color: var(--cutty-sark);
+      pointer-events: none; flex-shrink: 0;
+    }
+    .qb-select {
+      flex: 1; appearance: none; border: none; background: transparent;
+      padding: 8px 28px 8px 30px; font-family: 'Inter', sans-serif;
+      font-size: 13px; color: var(--dark-teal); cursor: pointer; outline: none;
+      min-width: 0;
+    }
+    .qb-chevron {
+      position: absolute; right: 8px; color: var(--cutty-sark); pointer-events: none;
+    }
+    .qb-table-badge-wrap { margin-top: 6px; }
+    .qb-type-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+      background: var(--teal-10); color: var(--teal);
+    }
+
+    /* Column list */
+    .qb-col-list { display: flex; flex-direction: column; gap: 2px; }
+    .qb-col-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 4px; border-radius: 6px; cursor: pointer;
+      transition: background 0.1s;
+    }
+    .qb-col-item:hover { background: var(--aqua-haze); }
+    .qb-col-item input[type=checkbox] { accent-color: var(--teal); flex-shrink: 0; cursor: pointer; }
+    .qb-col-name { flex: 1; font-size: 12px; color: var(--dark-teal); font-weight: 400; }
+    .qb-col-type {
+      font-size: 10px; font-weight: 500; padding: 2px 6px;
+      border-radius: 4px; letter-spacing: 0.02em;
+      background: var(--aqua-haze); color: var(--cutty-sark);
+    }
+    .qb-col-type.type-varchar { background: #E3F2FD; color: #1565C0; }
+    .qb-col-type.type-bigint, .qb-col-type.type-int { background: #FFF3E0; color: #E65100; }
+    .qb-col-type.type-datetime { background: #F3E5F5; color: #6A1B9A; }
+
+    /* QB right area */
+    .qb-right { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .qb-topbar {
+      flex-shrink: 0; display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; border-bottom: 1px solid var(--nebula);
+      background: #fff;
+    }
+    .qb-title-input {
+      border: none; background: transparent; outline: none;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+      color: var(--dark-teal); min-width: 120px; max-width: 220px;
+    }
+    .qb-title-input:hover { background: var(--aqua-haze); border-radius: 4px; padding: 0 4px; }
+    .qb-view-tabs {
+      display: flex; align-items: center; gap: 2px;
+      background: var(--aqua-haze); border-radius: 8px; padding: 3px;
+    }
+    .qb-view-tab {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 12px; border-radius: 6px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 400;
+      color: var(--cutty-sark); transition: background 0.12s, color 0.12s;
+    }
+    .qb-view-tab.active {
+      background: #fff; color: var(--dark-teal); font-weight: 500;
+      box-shadow: 0 1px 3px rgba(31,65,65,0.1);
+    }
+    .qb-topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+    .qb-reset-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 7px;
+      border: 1.5px solid var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      color: var(--cutty-sark); transition: background 0.12s;
+    }
+    .qb-reset-btn:hover { background: var(--aqua-haze); }
+    .qb-save-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 7px;
+      border: 1.5px solid var(--teal-30); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      color: var(--dark-teal); transition: background 0.12s, border-color 0.12s;
+    }
+    .qb-save-btn:hover { background: var(--teal-10); border-color: var(--teal-50); }
+
+    /* Visual Builder area */
+    .qb-visual-area {
+      flex: 1; overflow: auto; min-height: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 50% 40%, rgba(77,182,172,0.04) 0%, transparent 70%), var(--bg-light);
+    }
+    .qb-sql-area {
+      flex: 1; overflow: hidden; min-height: 0;
+      background: #1e2a2a; display: flex;
+    }
+    .qb-sql-editor {
+      flex: 1; border: none; outline: none; resize: none;
+      padding: 20px 24px; background: transparent;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px;
+      color: #7fbfb8; line-height: 1.6;
+    }
+    .qb-flow {
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+      padding: 32px 24px;
+    }
+    .qb-flow-node {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; border-radius: 12px; min-width: 260px; max-width: 340px;
+      border: 1px solid var(--nebula); background: #fff;
+      box-shadow: 0 2px 8px rgba(31,65,65,0.06);
+    }
+    .qb-flow-node-ico {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .qb-flow-node-ico.ico-blue { background: #E3F2FD; color: #1565C0; }
+    .qb-flow-node-ico.ico-green { background: #E8F5E9; color: #2E7D32; }
+    .qb-flow-node-ico.ico-purple { background: #F3E5F5; color: #6A1B9A; }
+    .qb-flow-node-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--cutty-sark);
+    }
+    .qb-flow-node-val {
+      font-size: 13px; font-weight: 500; color: var(--dark-teal); margin-top: 2px;
+    }
+    .qb-flow-connector {
+      width: 1.5px; height: 24px; background: var(--nebula);
+      margin: 0 auto;
+    }
+    .qb-flow-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--nebula); margin: 0 auto;
+    }
+
+    /* Resize handle */
+    .qb-resize-handle {
+      flex-shrink: 0; height: 12px; display: flex; align-items: center; justify-content: center;
+      border-top: 1px solid var(--nebula); border-bottom: 1px solid var(--nebula);
+      background: var(--bg-light); cursor: row-resize; user-select: none;
+      color: var(--cutty-sark);
+    }
+
+    /* Data Preview */
+    .qb-preview {
+      flex-shrink: 0; height: 260px; display: flex; flex-direction: column;
+      border-top: 1px solid var(--nebula);
+    }
+    .qb-preview-topbar {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; border-bottom: 1px solid var(--aqua-haze);
+      background: #fff;
+    }
+    .qb-preview-title {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 500; color: var(--dark-teal);
+    }
+    .qb-preview-meta { font-size: 11px; color: var(--cutty-sark); font-weight: 400; }
+    .qb-preview-actions { display: flex; align-items: center; gap: 8px; }
+    .qb-search-box {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border-radius: 7px;
+      border: 1px solid var(--nebula); background: var(--bg-light);
+    }
+    .qb-search-box svg { color: var(--cutty-sark); flex-shrink: 0; }
+    .qb-search-box input {
+      border: none; background: transparent; outline: none;
+      font-family: 'Inter', sans-serif; font-size: 12px; color: var(--dark-teal);
+      width: 120px;
+    }
+    .qb-limit-wrap {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; color: var(--cutty-sark);
+    }
+    .qb-limit-wrap select {
+      border: none; background: transparent; font-family: 'Inter', sans-serif;
+      font-size: 12px; color: var(--dark-teal); cursor: pointer;
+      outline: none; font-weight: 500;
+    }
+    .qb-export-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 7px;
+      border: 1.5px solid var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; color: var(--cutty-sark);
+      transition: background 0.12s;
+    }
+    .qb-export-btn:not(:disabled):hover { background: var(--aqua-haze); }
+    .qb-export-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .qb-run-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 7px; border: none;
+      background: var(--teal); color: #fff; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .qb-run-btn:hover { opacity: 0.88; }
+    .qb-preview-body { flex: 1; overflow: hidden; position: relative; }
+    .qb-empty-preview {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 100%; gap: 10px; color: var(--cutty-sark);
+    }
+    .qb-empty-preview p { font-size: 13px; margin: 0; }
+    .qb-table-scroll { height: 100%; overflow: auto; }
+    .qb-data-table {
+      width: 100%; border-collapse: collapse; font-size: 12px;
+    }
+    .qb-data-table th {
+      position: sticky; top: 0;
+      background: var(--bg-light); padding: 7px 12px;
+      font-size: 11px; font-weight: 600; color: var(--cutty-sark);
+      border-bottom: 1px solid var(--nebula); text-align: left; white-space: nowrap;
+    }
+    .qb-data-table th .col-type {
+      font-size: 9px; font-weight: 400; color: var(--teal); margin-left: 4px;
+      opacity: 0.8;
+    }
+    .qb-data-table td {
+      padding: 6px 12px; border-bottom: 1px solid var(--aqua-haze);
+      color: var(--dark-teal); white-space: nowrap; max-width: 200px;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .qb-data-table tr:hover td { background: var(--teal-10); }
+
+    /* ── Save Query modal ─────────────────────────────────── */
+    .sq-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(14,40,40,0.4); backdrop-filter: blur(2px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .sq-overlay.open { display: flex; }
+    .sq-modal {
+      background: #fff; border-radius: var(--radius-md);
+      width: 520px; max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 80px); display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(14,40,40,0.2);
+    }
+    .sq-modal-hd {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 20px 22px 16px; border-bottom: 1px solid var(--nebula); flex-shrink: 0;
+    }
+    .sq-modal-title { font-size: 16px; font-weight: 600; color: var(--dark-teal); }
+    .sq-modal-sub { font-size: 12px; color: var(--cutty-sark); margin-top: 3px; }
+    .sq-close-btn {
+      border: none; background: none; cursor: pointer;
+      color: var(--cutty-sark); padding: 4px; border-radius: 6px;
+      transition: background 0.12s;
+    }
+    .sq-close-btn:hover { background: var(--aqua-haze); }
+    .sq-modal-body {
+      flex: 1; overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .sq-field { display: flex; flex-direction: column; gap: 6px; }
+    .sq-label {
+      font-size: 12px; font-weight: 500; color: var(--dark-teal);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sq-input {
+      border: 1.5px solid var(--teal-30); border-radius: 8px;
+      padding: 9px 12px; font-family: 'Inter', sans-serif;
+      font-size: 13px; color: var(--dark-teal); outline: none;
+      background: #F0FAFA; transition: border-color 0.15s;
+    }
+    .sq-input:focus { border-color: var(--teal); background: #fff; }
+    .sq-textarea {
+      border: 1.5px solid var(--nebula); border-radius: 8px;
+      padding: 9px 12px; font-family: 'Inter', sans-serif;
+      font-size: 13px; color: var(--dark-teal); outline: none;
+      resize: vertical; min-height: 64px; transition: border-color 0.15s;
+    }
+    .sq-textarea:focus { border-color: var(--teal-30); }
+    .sq-collection {
+      border: 1.5px solid var(--nebula); border-radius: 8px; overflow: hidden;
+    }
+    .sq-col-root {
+      padding: 8px 14px; font-size: 12px; font-weight: 600;
+      color: var(--cutty-sark); background: var(--bg-light);
+      border-bottom: 1px solid var(--nebula);
+    }
+    .sq-col-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; font-size: 13px; color: var(--dark-teal);
+      border-bottom: 1px solid var(--aqua-haze);
+    }
+    .sq-col-item--selected { background: var(--teal-10); }
+    .sq-col-badge {
+      margin-left: auto; font-size: 10px; font-weight: 600;
+      color: var(--teal); background: rgba(77,182,172,0.12);
+      padding: 2px 7px; border-radius: 5px;
+    }
+    .sq-col-empty {
+      padding: 8px 14px; font-size: 12px; color: var(--cutty-sark);
+      opacity: 0.6; font-style: italic;
+    }
+    .sq-cache-hd {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--dark-teal);
+      margin-bottom: 10px;
+    }
+    .sq-cache-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border: 1px solid var(--nebula); border-radius: 8px;
+      margin-bottom: 6px; background: var(--bg-light);
+    }
+    .sq-cache-title { font-size: 13px; font-weight: 500; color: var(--dark-teal); }
+    .sq-cache-sub { font-size: 11px; color: var(--cutty-sark); margin-top: 1px; }
+    .sq-toggle {
+      width: 38px; height: 22px; border-radius: 11px;
+      background: var(--nebula); cursor: pointer; flex-shrink: 0;
+      position: relative; transition: background 0.2s; margin-left: auto;
+    }
+    .sq-toggle.active { background: var(--teal); }
+    .sq-toggle-knob {
+      position: absolute; top: 3px; left: 3px;
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .sq-toggle.active .sq-toggle-knob { left: 19px; }
+    .sq-slider { flex: 1; accent-color: var(--teal); max-width: 120px; cursor: pointer; }
+    .sq-dur-label { font-size: 12px; font-weight: 500; color: var(--dark-teal); white-space: nowrap; }
+    .sq-share-hint {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--cutty-sark);
+    }
+    .sq-modal-ft {
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+      padding: 14px 22px; border-top: 1px solid var(--nebula); flex-shrink: 0;
+    }
+    .sq-cancel-btn {
+      padding: 8px 18px; border-radius: 8px;
+      border: 1.5px solid var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--dark-teal); transition: background 0.12s;
+    }
+    .sq-cancel-btn:hover { background: var(--aqua-haze); }
+    .sq-save-btn {
+      padding: 8px 20px; border-radius: 8px;
+      border: none; background: var(--teal); cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: #fff; transition: opacity 0.15s;
+    }
+    .sq-save-btn:hover { opacity: 0.88; }
+
+    /* ── Dashboards page ─────────────────────────────────── */
+    .dash-grid-wrap { flex: 1; overflow-y: auto; padding: 24px 28px; }
+    .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .dash-card {
+      position: relative;
+      background: var(--surface); border: 1px solid var(--nebula);
+      border-radius: var(--radius-md); padding: 18px 18px 14px;
+      cursor: pointer; transition: box-shadow 0.18s, border-color 0.18s;
+    }
+    .dash-card:hover { border-color: var(--teal-30); box-shadow: 0 4px 16px rgba(77,182,172,0.12); }
+    .dash-card-thumb {
+      height: 60px; background: var(--teal-10); border-radius: 8px;
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .dash-card-title { font-size: 14px; font-weight: 600; color: var(--dark-teal); margin-bottom: 4px; }
+    .dash-card-desc { font-size: 12px; color: var(--cutty-sark); line-height: 1.4; margin-bottom: 10px; }
+    .dash-card-meta {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 11px; color: var(--cutty-sark); opacity: 0.7;
+      padding-top: 8px; border-top: 1px solid var(--aqua-haze);
+    }
+    .dash-empty {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; color: var(--cutty-sark); padding: 40px;
+    }
+    .dash-empty p { font-size: 14px; text-align: center; margin: 0; }
+    .dash-empty-sub { font-size: 12px; opacity: 0.7; }
+
+    /* Dash editor */
+    .dash-picker-panel {
+      width: 260px; flex-shrink: 0;
+      border-right: 1px solid var(--nebula);
+      overflow-y: auto; background: #fff; display: flex; flex-direction: column;
+    }
+    .dash-picker-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; cursor: pointer; border-bottom: 1px solid var(--aqua-haze);
+      transition: background 0.12s;
+    }
+    .dash-picker-item:hover { background: var(--teal-10); }
+    .dash-picker-item.added { background: var(--teal-10); }
+    .dash-picker-ico {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: var(--aqua-haze); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--teal);
+    }
+    .dash-picker-name { font-size: 12px; font-weight: 500; color: var(--dark-teal); flex: 1; }
+    .dash-picker-add {
+      font-size: 18px; line-height: 1; color: var(--teal);
+      border: none; background: none; cursor: pointer;
+      font-weight: 300; flex-shrink: 0;
+    }
+    .dash-composer-right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .dash-canvas {
+      flex: 1; overflow: auto; padding: 20px;
+      background: radial-gradient(circle at 50% 40%, rgba(77,182,172,0.04) 0%, transparent 70%), var(--bg-light);
+    }
+    .dash-canvas-empty {
+      height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; color: var(--cutty-sark);
+    }
+    .dash-canvas-empty p { font-size: 13px; text-align: center; max-width: 280px; margin: 0; }
+    .dash-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .dash-tile {
+      background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md);
+      padding: 14px; min-height: 160px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .dash-tile-hd {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .dash-tile-title { font-size: 13px; font-weight: 600; color: var(--dark-teal); }
+    .dash-tile-remove {
+      border: none; background: none; cursor: pointer;
+      color: var(--cutty-sark); opacity: 0.5; font-size: 16px; line-height: 1;
+      transition: opacity 0.12s;
+    }
+    .dash-tile-remove:hover { opacity: 1; color: #E57373; }
+    .dash-tile-viz { flex: 1; background: var(--teal-10); border-radius: 6px; }
+
+    @media (max-width: 1024px) {
+      .dash-grid { grid-template-columns: repeat(2, 1fr); }
+      .qb-panel { width: 220px; }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .qs-page { animation: fadeIn 0.18s ease; }
+
+    /* ── Topbar back button (queries section) ─────────────────── */
+    .topbar-back-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 6px 4px 2px; border-radius: 8px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--cutty-sark); transition: background 0.12s;
+      flex-shrink: 0;
+    }
+    .topbar-back-btn:hover { background: var(--aqua-haze); }
+
+    /* ── QS horizontal sub-nav ────────────────────────────────── */
+    .qs-subnav {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 4px;
+      padding: 8px 20px;
+      border-bottom: 1px solid var(--nebula);
+      background: rgba(255,255,255,0.20);
+      backdrop-filter: blur(4px);
+    }
+    .qs-subnav-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 8px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400;
+      color: var(--cutty-sark); transition: background 0.12s, color 0.12s;
+    }
+    .qs-subnav-item:hover { background: var(--teal-10); color: var(--dark-teal); }
+    .qs-subnav-item.active {
+      background: var(--teal-10); color: var(--teal); font-weight: 500;
+    }
+    .qs-subnav-item svg { flex-shrink: 0; }
+
+    /* Fix queries-section to column layout (no sidebar) */
+    #queries-section {
+      display: none; flex: 1; flex-direction: column; min-height: 0; overflow: hidden;
+    }
+
+    /* ── Build Dash Modal – query rows ─────────────────────────── */
+    .bdm-query-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; cursor: pointer;
+      border-bottom: 1px solid var(--aqua-haze); transition: background 0.12s;
+    }
+    .bdm-query-row:last-child { border-bottom: none; }
+    .bdm-query-row:hover { background: var(--aqua-haze); }
+    .bdm-query-row.selected { background: var(--teal-10); }
+    .bdm-query-row.selected:hover { background: var(--teal-15); }
+    .bdm-check {
+      width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+      border: 1.5px solid var(--nebula); display: flex; align-items: center; justify-content: center;
+      color: #fff; background: transparent; transition: background 0.12s, border-color 0.12s;
+    }
+    .bdm-query-row.selected .bdm-check { background: var(--teal); border-color: var(--teal); }
+    .bdm-query-name { flex: 1; font-size: 13px; color: var(--dark-teal); font-weight: 400; }
+    .bdm-query-meta { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; white-space: nowrap; }
+
+    /* ── Dash card hover actions ─────────────────────────────────── */
+    .dash-card-actions {
+      position: absolute; top: 8px; right: 8px;
+      display: none; gap: 4px;
+    }
+    .dash-card:hover .dash-card-actions { display: flex; }
+    .dash-card-del-btn {
+      width: 26px; height: 26px; border-radius: 6px;
+      border: 1px solid var(--nebula); background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #E57373; transition: background 0.12s, border-color 0.12s;
+    }
+    .dash-card-del-btn:hover { background: #FEF2F2; border-color: #E57373; }
+
+    /* ── Home page ──────────────────────────────────────────────── */
+    .home-mode-tabs {
+      display: flex; gap: 6px; padding: 0 28px 16px; flex-shrink: 0;
+    }
+    .home-tab {
+      padding: 6px 18px; border-radius: 20px; border: 1px solid var(--nebula);
+      background: transparent; cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 13px; color: var(--cutty-sark); transition: all 0.15s;
+    }
+    .home-tab:hover { background: var(--teal-10); border-color: var(--teal-30); }
+    .home-tab.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 500; }
+    .home-mode-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 20px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .home-mode-badge.manual { background: var(--aqua-haze); color: var(--cutty-sark); }
+    .home-mode-badge.ai     { background: var(--teal-10); color: var(--teal); }
+    .home-mode-badge.hybrid { background: rgba(107,70,193,0.08); color: #6B46C1; }
+
+    /* ── New Question layout — three inline columns ─────────────── */
+    .nq-body { flex: 1; display: flex; flex-direction: row; min-height: 0; overflow: hidden; padding: 8px 12px 12px; gap: 12px; }
+    /* Wrapper for topbar + QB/VB columns */
+    .nq-main-area { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    /* AI panel toggle button */
+    .nq-ai-toggle-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 11px; border-radius: var(--radius-sm);
+      border: 1px solid var(--teal); background: var(--teal);
+      color: #fff; font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 500; cursor: pointer;
+      transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
+    }
+    .nq-ai-toggle-btn.off { background: transparent; color: var(--teal); }
+    .nq-ai-toggle-btn:hover { opacity: 0.85; }
+    .nq-panels {
+      display: flex; flex-direction: row; flex: 1;
+      min-height: 0; overflow: hidden; gap: 12px;
+    }
+    /* Column 1: Query Builder (narrow, fixed) */
+    .nq-col-qb {
+      flex: 0 0 210px; border: 1px solid var(--nebula); border-radius: 16px;
+      overflow-y: auto; display: flex; flex-direction: column; min-width: 0;
+      background: #fff;
+    }
+    /* Column 2: Visual Builder / SQL Console (flexible) */
+    .nq-col-vb {
+      flex: 1; border: 1px solid var(--nebula); border-radius: 16px;
+      display: flex; flex-direction: column; overflow: hidden; min-width: 0;
+      background: #fff;
+    }
+    /* Column 3: AI Assistant (fixed) */
+    .nq-col-ai {
+      flex: 0 0 230px; display: flex; flex-direction: column;
+      background: var(--bg-light); min-width: 0; overflow: hidden;
+      border: 1px solid var(--nebula); border-radius: 16px;
+    }
+    /* Shared column header bar */
+    .nq-col-hd {
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+      padding: 9px 14px; border-bottom: 1px solid var(--nebula);
+      font-size: 12px; font-weight: 600; color: var(--dark-teal);
+      background: #fff;
+    }
+    /* AI column scrollable body */
+    .nq-col-ai-body {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 12px 14px; gap: 9px; overflow-y: auto;
+    }
+    .nq-preview { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+    /* AI panel content styles */
+    .nq-ai-sub { font-size: 11.5px; color: var(--cutty-sark); opacity: 0.8; line-height: 1.5; }
+    .nq-ai-textarea {
+      width: 100%; border: 1.5px solid var(--nebula); border-radius: var(--radius-sm);
+      padding: 8px 10px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--dark-teal);
+      background: #fff; resize: none; height: 78px; transition: border-color 0.15s; outline: none; line-height: 1.5;
+    }
+    .nq-ai-textarea:focus { border-color: var(--teal); }
+    .nq-ai-chips-label {
+      font-size: 10px; font-weight: 600; color: var(--cutty-sark);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .nq-ai-chips { display: flex; flex-direction: column; gap: 4px; }
+    .nq-ai-chip {
+      padding: 5px 9px; border-radius: 7px; border: 1px solid var(--nebula); background: #fff;
+      cursor: pointer; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--cutty-sark);
+      text-align: left; transition: background 0.12s, border-color 0.12s; line-height: 1.4;
+    }
+    .nq-ai-chip:hover { background: var(--teal-10); border-color: var(--teal-30); color: var(--dark-teal); }
+    .nq-generate-btn {
+      padding: 8px 12px; border-radius: var(--radius-sm); border: none; background: var(--teal);
+      color: #fff; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: opacity 0.15s; margin-top: auto; width: 100%;
+    }
+    .nq-generate-btn:hover { opacity: 0.88; }
+    .nq-run-btn {
+      padding: 8px 20px; border-radius: var(--radius-sm); border: none; background: var(--teal);
+      color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s; display: flex; align-items: center; gap: 6px;
+    }
+    .nq-run-btn:hover { opacity: 0.88; }
+
+    /* ── Create Dashboard Modal (two-column) ────────────────────── */
+    .cdm-body { display: flex; flex-direction: row; height: 380px; overflow: hidden; }
+    .cdm-left {
+      flex: 0 0 55%; border-right: 1px solid var(--nebula);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .cdm-left-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-bottom: 1px solid var(--nebula); flex-shrink: 0;
+      font-size: 13px; font-weight: 500; color: var(--dark-teal);
+    }
+    .cdm-select-all-btn {
+      font-size: 12px; font-weight: 500; color: var(--teal); background: none; border: none;
+      cursor: pointer; font-family: 'Inter', sans-serif; padding: 0;
+    }
+    .cdm-query-list { flex: 1; overflow-y: auto; }
+    .cdm-query-row {
+      display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+      cursor: pointer; border-bottom: 1px solid var(--aqua-haze); transition: background 0.12s;
+    }
+    .cdm-query-row:last-child { border-bottom: none; }
+    .cdm-query-row:hover { background: var(--aqua-haze); }
+    .cdm-query-row.selected { background: var(--teal-10); }
+    .cdm-check {
+      width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+      border: 1.5px solid var(--nebula); display: flex; align-items: center; justify-content: center;
+      color: #fff; background: transparent; transition: background 0.12s, border-color 0.12s;
+    }
+    .cdm-query-row.selected .cdm-check { background: var(--teal); border-color: var(--teal); }
+    .cdm-query-name { flex: 1; font-size: 13px; color: var(--dark-teal); }
+    .cdm-query-meta { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; white-space: nowrap; }
+    .cdm-right {
+      flex: 1; display: flex; flex-direction: column; gap: 14px;
+      padding: 18px 20px; overflow-y: auto;
+    }
+    .cdm-summary-count { font-size: 36px; font-weight: 700; color: var(--teal); line-height: 1; }
+    .cdm-summary-label { font-size: 12px; color: var(--cutty-sark); margin-top: 2px; }
+    .cdm-selected-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .cdm-selected-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px; background: var(--teal-10);
+      color: var(--teal); font-size: 11px; font-weight: 500;
+    }
+    .cdm-selected-chip button {
+      border: none; background: none; cursor: pointer;
+      color: var(--cutty-sark); font-size: 14px; line-height: 1; padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Background ───────────────────────────────────────────────── -->
+<div class="bg-layer"></div>
+<!-- ── Sidebar overlay (mobile/tablet) ──────────────────────────── -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+<img class="bg-wave"
+  src="https://www.figma.com/api/mcp/asset/0117ebd8-928e-4eeb-a8bd-70605a75aaa3" alt="" />
+
+<!-- ── Sidebar ──────────────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Post Call Analysis</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <!-- Kap AI -->
+    <button class="nav-item active" data-nav="kap-ai">
+      <img class="nav-icon-img" src="https://www.figma.com/api/mcp/asset/00858870-9c70-47bf-8f46-384b8d4c3ccf" alt="" />
+      <span class="nav-label">Kap AI</span>
+    </button>
+
+    <!-- Data Studio — expandable -->
+    <button class="nav-item" id="nav-data-studio" onclick="toggleDsExpand()">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+        <rect x="1" y="1" width="6" height="6" rx="1.5"/>
+        <rect x="9" y="1" width="6" height="6" rx="1.5"/>
+        <rect x="1" y="9" width="6" height="6" rx="1.5"/>
+        <rect x="9" y="9" width="6" height="6" rx="1.5"/>
+      </svg>
+      <span class="nav-label">Data Studio</span>
+      <svg class="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="nav-subnav" id="ds-subnav">
+      <button class="nav-subitem" id="subnav-home" onclick="navigateToDs('home')">
+        <span class="nav-subitem-dot"></span>
+        Home
+      </button>
+      <button class="nav-subitem" id="subnav-new-question" onclick="navigateToDs('new-question')">
+        <span class="nav-subitem-dot"></span>
+        New Query
+      </button>
+    </div>
+
+    <!-- Intelligence -->
+    <div class="nav-item" style="font-size:15.2px;">
+      <img class="nav-icon-img" src="https://www.figma.com/api/mcp/asset/099f47f3-a2e0-4163-8e64-0c143b8bb949" alt="" />
+      <span class="nav-label">Intelligence</span>
+      <svg class="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Configuration -->
+    <div class="nav-item" style="font-size:15.2px;">
+      <img class="nav-icon-img" src="https://www.figma.com/api/mcp/asset/f0b8be0c-e4e8-4611-8e85-610e59e5b19c" alt="" />
+      <span class="nav-label">Configuration</span>
+      <svg class="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Help Center -->
+    <button class="nav-item" data-nav="">
+      <img class="nav-icon-img" src="https://www.figma.com/api/mcp/asset/5fffe1b7-2451-4015-9374-d5c0e0be76db" alt="" />
+      <span class="nav-label">Help Center</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+
+    <!-- User popup menu -->
+    <div class="user-popup" id="user-popup">
+      <div class="user-popup-header">
+        <div class="user-avatar">W</div>
+        <div class="user-info">
+          <div class="user-name">Wellness Forever</div>
+          <div class="user-email">rajeshwari.nb@kapturecrm.com</div>
+        </div>
+      </div>
+      <div class="user-popup-divider"></div>
+      <button class="user-popup-item" onclick="toggleDarkMode()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z"
+            stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Dark Mode
+      </button>
+      <button class="user-popup-item danger" onclick="handleSignOut()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M6 13H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h3M10.5 10.5L13 8m0 0l-2.5-2.5M13 8H6"
+            stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Sign out
+      </button>
+    </div>
+
+    <!-- Trigger button -->
+    <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
+      <div class="user-avatar">W</div>
+      <div class="user-info">
+        <div class="user-name">Wellness Forever</div>
+        <div class="user-email">rajeshwari.nb@kapture…</div>
+      </div>
+      <svg id="user-menu-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"
+        style="flex-shrink:0;color:var(--cutty-sark);transition:transform 0.18s;">
+        <path d="M4 10l4-4 4 4" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+  </div>
+</aside>
+
+<!-- ── Main ─────────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- ══ View: Kap AI ════════════════════════════════════════════ -->
+  <div id="view-kap-ai" class="view active">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <span class="topbar-page-name">Kap AI</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" aria-label="History">
+          <img src="https://www.figma.com/api/mcp/asset/0591e0e9-dfee-47bb-a71d-a448ebb23cb6" alt="" />
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="content-inner">
+        <div class="hero-text">
+          <h1 class="hero-heading">How can I help you today?</h1>
+          <p class="hero-sub">Ask questions, analyze data, or generate insights instantly</p>
+        </div>
+
+        <div class="input-card">
+          <div class="input-placeholder">
+            <span>Ask anything about your organization…</span>
+          </div>
+          <div class="input-bottom">
+            <img class="attach-icon" src="https://www.figma.com/api/mcp/asset/b799b87c-0802-4fd6-ba2d-0abad75a75ed" alt="Attach" />
+            <button class="send-btn" aria-label="Send">
+              <img src="https://www.figma.com/api/mcp/asset/0eee58d5-8a84-4433-bd1f-c9545f68c058" alt="" />
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-actions-wrapper">
+          <div class="quick-actions">
+            <button class="pill-btn" style="width:204px;" onclick="navigate('data-studio')">
+              <img class="pill-icon" src="https://www.figma.com/api/mcp/asset/9e2075cc-8469-40a9-b7a3-328e469ea2a5" alt="" />
+              Build a custom dashboard
+            </button>
+            <button class="pill-btn" style="width:163px;">
+              <img class="pill-icon" src="https://www.figma.com/api/mcp/asset/e38ebaef-aca7-43a4-bcf1-5ccac2f86a67" alt="" />
+              Analyze my tickets
+            </button>
+            <button class="pill-btn" style="width:196px;">
+              <img class="pill-icon" src="https://www.figma.com/api/mcp/asset/7e6fcc4f-878d-4c3e-8e3f-307799bd3844" alt="" />
+              Generate weekly reports
+            </button>
+          </div>
+          <p class="kb-hint">
+            Press <strong>Enter</strong> to send · <strong>Shift + Enter</strong> for new line
+          </p>
+        </div>
+
+        <div class="insights">
+          <div class="insight-row level-1">
+            <div class="insight-dot"></div>
+            <span class="insight-text">15 customers waiting for first response over 30 min</span>
+          </div>
+          <div class="insight-row level-2">
+            <div class="insight-dot"></div>
+            <span class="insight-text">Agent response time exceeded SLA on 8 open tickets</span>
+          </div>
+          <div class="insight-row level-3">
+            <div class="insight-dot"></div>
+            <span class="insight-text">Customer sentiment score dropped 12 points this morning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ View: Data Studio ═══════════════════════════════════════ -->
+  <div id="view-data-studio" class="view ds-view">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="topbar-back-btn" id="ds-back-btn" onclick="setDsSection('home')" style="display:none;">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M8.5 10.5L4.5 6.5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="topbar-page-name">Data Studio</span>
+      </div>
+      <div class="topbar-right">
+        <button class="nq-ai-toggle-btn off" id="nq-ai-toggle-btn" onclick="toggleAiPanel()" title="Toggle AI Assistant" style="display:none;">
+          <svg width="11" height="11" viewBox="0 0 13 13" fill="currentColor">
+            <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
+          </svg>
+          AI
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Home: Dashboard Gallery ──────────────────────────────── -->
+    <div id="ds-home" style="display:none; flex:1; flex-direction:column; min-height:0; overflow:hidden;">
+
+      <!-- Topbar: title + action buttons -->
+      <div class="qs-page-topbar">
+        <div>
+          <div class="qs-page-title">My Dashboards</div>
+          <div class="qs-page-sub" id="home-dash-count">0 dashboards</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="qs-primary-btn" onclick="setDsSection('new-question');if(document.getElementById('ds-back-btn'))document.getElementById('ds-back-btn').style.display='';">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M6 1v10M1 6h10" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            + New Question
+          </button>
+          <button class="qs-primary-btn" onclick="showCreateDashboardModal()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <rect x="1" y="1" width="4" height="4" rx="1" fill="white" opacity=".9"/>
+              <rect x="7" y="1" width="4" height="4" rx="1" fill="white" opacity=".9"/>
+              <rect x="1" y="7" width="4" height="4" rx="1" fill="white" opacity=".9"/>
+              <rect x="7" y="7" width="4" height="4" rx="1" fill="white" opacity=".9"/>
+            </svg>
+            + Create New Dashboard
+          </button>
+        </div>
+      </div>
+
+      <!-- Mode filter tabs -->
+      <div class="home-mode-tabs" id="home-mode-tabs">
+        <button class="home-tab active" id="htab-all"    onclick="setHomeTab('all')">All</button>
+        <button class="home-tab"        id="htab-manual" onclick="setHomeTab('manual')">Manual</button>
+        <button class="home-tab"        id="htab-ai"     onclick="setHomeTab('ai')">AI</button>
+        <button class="home-tab"        id="htab-hybrid" onclick="setHomeTab('hybrid')">Hybrid</button>
+      </div>
+
+      <!-- Gallery grid (sub-view A) -->
+      <div id="home-gallery" style="display:flex; flex:1; flex-direction:column; min-height:0; overflow:hidden;">
+        <div class="dash-grid-wrap">
+          <div class="dash-grid" id="home-dash-grid"></div>
+        </div>
+      </div>
+
+      <!-- Composer (sub-view B, shown after Create & Build) -->
+      <div id="dash-composer-view" style="display:none; flex:1; flex-direction:row; min-height:0; overflow:hidden;">
+        <div class="dash-picker-panel">
+          <div class="qb-panel-hd" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>Saved Questions</span>
+            <button class="qb-select-all-btn" style="font-size:11px;" onclick="dashAddAll()">Add all</button>
+          </div>
+          <div id="dash-picker-list"></div>
+        </div>
+        <div class="dash-composer-right">
+          <div class="qb-topbar">
+            <input class="qb-title-input" id="dash-composer-title" value="Untitled Dashboard" />
+            <div style="display:flex;gap:8px;margin-left:auto;">
+              <button class="qb-reset-btn" onclick="showHomeGallery()">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back
+              </button>
+              <button class="qb-save-btn" onclick="saveDashboard()">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                </svg>
+                Save Dashboard
+              </button>
+            </div>
+          </div>
+          <div class="dash-canvas" id="dash-canvas">
+            <div class="dash-canvas-empty" id="dash-canvas-empty">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+                <rect x="2" y="2" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+                <rect x="28" y="2" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+                <rect x="2" y="28" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+                <rect x="28" y="28" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+              </svg>
+              <p>Select questions on the left to add them to your dashboard</p>
+            </div>
+            <div class="dash-tiles" id="dash-tiles" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ds-home -->
+
+    <!-- Page header + mode toggle -->
+    <div class="ds-page-header">
+      <div>
+        <div class="ds-page-title">Dashboard Builder</div>
+        <div class="ds-page-sub">Pick metrics manually, let AI suggest them, or combine both</div>
+      </div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-manual" onclick="setDsMode('manual')">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/>
+            <rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/>
+            <rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/>
+            <rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/>
+          </svg>
+          Manual
+        </button>
+        <button class="mode-btn" id="btn-ai" onclick="setDsMode('ai')">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+            <path d="M7 0.5L8.3 4.7L12.5 7L8.3 9.3L7 13.5L5.7 9.3L1.5 7L5.7 4.7L7 0.5Z"/>
+          </svg>
+          Build with AI
+          <span class="sparkle-badge" id="ai-badge"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- DS body (switches between manual and ai content) -->
+    <div class="ds-body">
+
+      <!-- Manual mode content -->
+      <div id="manual-mode">
+        <div class="ds-controls">
+          <div class="category-filters" id="cat-filters">
+            <!-- rendered by JS -->
+          </div>
+          <div class="ds-search">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M9.5 9.5L12.5 12.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            <input type="text" id="card-search" placeholder="Search cards…" oninput="filterCards()" />
+          </div>
+        </div>
+
+        <div class="card-grid-wrap">
+          <div class="card-grid" id="card-grid">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- AI mode content -->
+      <div id="ai-mode" style="display:none; flex:1; overflow:hidden; flex-direction:column;">
+        <div class="ai-mode-wrap">
+          <div class="ai-mode-inner">
+
+            <!-- AI heading -->
+            <div class="ai-heading-row">
+              <div class="ai-heading">Describe your ideal dashboard</div>
+              <div class="ai-sub">Tell AI what insights matter — it will suggest and add the right cards for you</div>
+            </div>
+
+            <!-- AI input -->
+            <div class="ai-input-card">
+              <textarea class="ai-textarea" id="ai-textarea"
+                placeholder="e.g. Show me agent performance and SLA compliance for this week…"
+                rows="3"></textarea>
+              <div id="ai-chips-wrap"></div>
+              <div class="ai-input-bottom">
+                <div style="display:flex;align-items:center;gap:6px;color:var(--cutty-sark);opacity:0.55;font-size:12px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 10L6.5 3L9 7.5L10.5 5.5L12 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
+                  </svg>
+                  AI will analyze your data in real-time
+                </div>
+                <button class="ai-send-btn" onclick="handleAiGenerate()">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                    <path d="M7 0.5L8.3 4.7L12.5 7L8.3 9.3L7 13.5L5.7 9.3L1.5 7L5.7 4.7L7 0.5Z"/>
+                  </svg>
+                  Generate Dashboard
+                </button>
+              </div>
+            </div>
+
+            <!-- Prompt suggestions -->
+            <div>
+              <div class="ai-prompts-label">Try a prompt</div>
+              <div class="ai-prompt-chips">
+                <div class="prompt-chip" onclick="fillPrompt(this)">Show agent performance trends for this week</div>
+                <div class="prompt-chip" onclick="fillPrompt(this)">Build a customer experience overview with CSAT and sentiment</div>
+                <div class="prompt-chip" onclick="fillPrompt(this)">Create an operations summary with queue and resolution metrics</div>
+                <div class="prompt-chip" onclick="fillPrompt(this)">Summarize SLA compliance for the last 30 days</div>
+                <div class="prompt-chip" onclick="fillPrompt(this)">Which agents need coaching based on recent ticket data?</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ── New Question page ─────────────────────────────────── -->
+      <div id="ds-new-question" style="display:none; flex:1; flex-direction:column; min-height:0; overflow:hidden;">
+
+        <div class="nq-body">
+
+          <!-- Left: topbar + QB/VB panels -->
+          <div class="nq-main-area">
+
+          <!-- Two-column panels: QB | Visual Builder/SQL -->
+          <div class="nq-panels">
+
+            <!-- Column 1: Query Builder -->
+            <div class="nq-col-qb">
+              <div class="qb-panel" id="qb-panel" style="width:100%;border:none;height:100%;">
+                <div class="qb-panel-hd">Query Builder</div>
+                <div class="qb-section">
+                  <div class="qb-section-label">DATA SOURCE</div>
+                  <div class="qb-select-wrap">
+                    <svg class="qb-select-ico" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <ellipse cx="7" cy="4" rx="5.5" ry="2" stroke="currentColor" stroke-width="1.3"/>
+                      <path d="M1.5 4v6c0 1.1 2.46 2 5.5 2s5.5-.9 5.5-2V4" stroke="currentColor" stroke-width="1.3"/>
+                    </svg>
+                    <select class="qb-select" id="qb-ds" onchange="qbSelectDs(this.value)">
+                      <option value="">Select data source...</option>
+                      <option value="StarRocks">StarRocks</option>
+                    </select>
+                    <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  </div>
+                </div>
+                <div class="qb-section" id="qbs-schema" style="display:none">
+                  <div class="qb-section-label">SCHEMA</div>
+                  <div class="qb-select-wrap">
+                    <select class="qb-select" id="qb-schema" onchange="qbSelectSchema(this.value)">
+                      <option value="">Select schema...</option>
+                    </select>
+                    <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  </div>
+                </div>
+                <div class="qb-section" id="qbs-table" style="display:none">
+                  <div class="qb-section-label">TABLE</div>
+                  <div class="qb-select-wrap" id="qb-table-wrap">
+                    <select class="qb-select" id="qb-table" onchange="qbSelectTable(this.value)">
+                      <option value="">Select table...</option>
+                    </select>
+                    <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="qb-table-badge-wrap" id="qb-table-badge"></div>
+                </div>
+                <div class="qb-section" id="qbs-cols" style="display:none">
+                  <div class="qb-section-label qb-cols-hd">
+                    <span id="qb-col-count">COLUMNS (0/0)</span>
+                    <button class="qb-select-all-btn" id="qb-selall-btn" onclick="qbSelectAll()">Select all</button>
+                  </div>
+                  <div class="qb-col-list" id="qb-col-list"></div>
+                </div>
+                <div class="qb-section" id="qbs-groupby" style="display:none">
+                  <div class="qb-section-label">GROUP BY</div>
+                  <div class="qb-select-wrap">
+                    <select class="qb-select" id="qb-groupby">
+                      <option value="">No group by</option>
+                    </select>
+                    <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 2: Visual Builder / SQL Console -->
+            <div class="nq-col-vb">
+              <div class="nq-col-hd" style="justify-content:space-between;padding:6px 14px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <input class="qb-title-input" id="qb-title" value="Untitled Query" style="width:140px;" />
+                  <div class="qb-view-tabs" style="margin:0;">
+                    <button class="qb-view-tab active" id="qbtab-visual" onclick="setQbTab('visual')">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <rect x="1" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                        <rect x="7" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                        <rect x="1" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                        <rect x="7" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                      </svg>
+                      Visual Builder
+                    </button>
+                    <button class="qb-view-tab" id="qbtab-sql" onclick="setQbTab('sql')">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      SQL Console
+                    </button>
+                  </div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <button class="qb-reset-btn" onclick="qbReset()">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                      <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Reset
+                  </button>
+                  <button class="qb-save-btn" onclick="openSaveModal()">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                      <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                      <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
+                    </svg>
+                    Save Query
+                  </button>
+                </div>
+              </div>
+              <div class="qb-visual-area" id="qb-visual-area">
+                <div class="qb-flow" id="qb-flow"></div>
+              </div>
+              <div class="qb-sql-area" id="qb-sql-area" style="display:none;">
+                <textarea class="qb-sql-editor" id="qb-sql-editor" readonly
+                  placeholder="-- Select a table and columns to generate SQL"></textarea>
+              </div>
+
+              <!-- Data Preview — inside middle column, below Visual/SQL -->
+              <div class="qb-preview" style="flex-shrink:0;height:260px;display:flex;flex-direction:column;overflow:hidden;">
+                <div class="qb-preview-topbar">
+                  <div class="qb-preview-title">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                      <path d="M1 4.5h12M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.3"/>
+                    </svg>
+                    Data Preview
+                    <span class="qb-preview-meta" id="qb-preview-meta"></span>
+                  </div>
+                  <div class="qb-preview-actions">
+                    <div class="qb-search-box">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.2"/>
+                        <path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                      <input placeholder="Search..." id="qb-search" oninput="qbFilterRows(this.value)" />
+                    </div>
+                    <div class="qb-limit-wrap">
+                      <span>Limit:</span>
+                      <select id="qb-limit">
+                        <option>100</option><option>200</option><option>500</option>
+                      </select>
+                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                    </div>
+                    <button class="qb-export-btn" id="qb-export-btn" onclick="qbExport()" disabled>
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M6.5 1v7M3.5 5l3 3L10 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 10h11v2H1z" fill="currentColor" opacity=".25"/>
+                      </svg>
+                      Export
+                    </button>
+                    <button class="nq-run-btn" onclick="qbRunQuery()">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M3 2l7 4-7 4V2Z" fill="white"/>
+                      </svg>
+                      Run Query
+                    </button>
+                  </div>
+                </div>
+                <div class="qb-preview-body" id="qb-preview-body">
+                  <div class="qb-empty-preview" id="qb-empty-preview">
+                    <!-- spinner (hidden by default) -->
+                    <svg id="qb-spinner" width="28" height="28" viewBox="0 0 28 28" fill="none" style="display:none;animation:spin 0.8s linear infinite">
+                      <circle cx="14" cy="14" r="11" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="55" stroke-dashoffset="20"/>
+                    </svg>
+                    <!-- idle table icon -->
+                    <svg id="qb-empty-ico" width="42" height="42" viewBox="0 0 42 42" fill="none">
+                      <rect x="3" y="3" width="36" height="36" rx="6" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+                      <path d="M3 12h36M12 12v27" stroke="currentColor" stroke-width="1.5" opacity=".25" stroke-linecap="round"/>
+                    </svg>
+                    <p id="qb-empty-msg">Select a data source, schema, and table to get started</p>
+                  </div>
+                  <div class="qb-table-scroll" id="qb-table-scroll" style="display:none">
+                    <table class="qb-data-table" id="qb-data-table"></table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /nq-panels -->
+
+          </div><!-- /nq-main-area -->
+
+          <!-- Column 3: AI Assistant (toggleable) -->
+          <div class="nq-col-ai" id="nq-col-ai">
+            <div class="nq-col-hd">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor" style="color:var(--teal);flex-shrink:0;">
+                <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
+              </svg>
+              AI Assistant
+            </div>
+            <div class="nq-col-ai-body">
+              <div class="nq-ai-sub">Describe what you want in plain language</div>
+              <textarea class="nq-ai-textarea" id="nq-ai-textarea"
+                placeholder="e.g. Show top 10 agents by resolved tickets this month, grouped by queue..."></textarea>
+              <div class="nq-ai-chips-label">Try a prompt:</div>
+              <div class="nq-ai-chips" id="nq-ai-chips">
+                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Agent ticket counts by status this week</button>
+                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Email sent vs delivered last 30 days</button>
+                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Top 10 agents by resolved tickets</button>
+                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Queue ageing by folder and priority</button>
+              </div>
+              <button class="nq-generate-btn" id="nq-generate-btn" onclick="generateFromAI()">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                  <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+                </svg>
+                Generate Query
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /nq-body -->
+      </div><!-- /ds-new-question -->
+
+
+    </div><!-- /ds-body -->
+
+    <!-- Sticky action bar -->
+    <div class="action-bar">
+      <div class="selection-info">
+        <span class="selection-count" id="sel-count"><span id="sel-num">0</span> cards selected</span>
+        <button class="clear-btn" id="clear-btn" onclick="clearSelection()">Clear all</button>
+      </div>
+      <div class="action-btns">
+        <button class="btn-secondary" id="btn-continue-ai" onclick="setDsMode('ai')" disabled>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor">
+            <path d="M7 0.5L8.3 4.7L12.5 7L8.3 9.3L7 13.5L5.7 9.3L1.5 7L5.7 4.7L7 0.5Z"/>
+          </svg>
+          Continue with AI
+        </button>
+        <button class="btn-primary" id="btn-create" onclick="handleCreate()" disabled>
+          Create Dashboard
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /view-data-studio -->
+
+</main>
+
+<!-- Save Query modal -->
+<div class="sq-overlay" id="save-query-modal" onclick="if(event.target===this)closeSaveModal()">
+  <div class="sq-modal">
+    <div class="sq-modal-hd">
+      <div>
+        <div class="sq-modal-title">Save Question</div>
+        <div class="sq-modal-sub">Save your query to a collection for later use in dashboards and reports</div>
+      </div>
+      <button class="sq-close-btn" onclick="closeSaveModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="sq-modal-body">
+      <div class="sq-field">
+        <label class="sq-label">Question Name</label>
+        <input class="sq-input" id="sq-name" value="Untitled Query" />
+      </div>
+      <div class="sq-field">
+        <label class="sq-label">Description</label>
+        <textarea class="sq-textarea" id="sq-desc" placeholder="Describe what this question answers..."></textarea>
+      </div>
+      <div class="sq-field">
+        <label class="sq-label">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 3.5L6.5 1L11 3.5V9.5L6.5 12L2 9.5V3.5Z" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+          Save to Collection
+        </label>
+        <div class="sq-collection">
+          <div class="sq-col-root">Root</div>
+          <div class="sq-col-item sq-col-item--selected">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M1.5 6.5L6.5 1.5L11.5 6.5V12.5H8.5V8.5H4.5V12.5H1.5V6.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+            </svg>
+            Save here
+            <span class="sq-col-badge">Selected</span>
+          </div>
+          <div class="sq-col-empty">No sub-collections</div>
+        </div>
+      </div>
+      <div class="sq-field">
+        <label class="sq-label">Default Visualization</label>
+        <div class="qb-select-wrap" style="border-radius:8px;">
+          <svg class="qb-select-ico" width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M1 4.5h11M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+          <select class="qb-select" id="sq-viz">
+            <option>Table</option><option>Bar Chart</option><option>Pie Chart</option><option>Line Chart</option>
+          </select>
+          <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="sq-field">
+        <div class="sq-cache-hd">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6.5 3.5v3l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          Cache Settings
+        </div>
+        <div class="sq-cache-row">
+          <div>
+            <div class="sq-cache-title">Enable Caching</div>
+            <div class="sq-cache-sub">Cache results for faster repeat queries</div>
+          </div>
+          <div class="sq-toggle active" id="sq-cache-toggle" onclick="toggleSqCache()">
+            <div class="sq-toggle-knob"></div>
+          </div>
+        </div>
+        <div class="sq-cache-row" id="sq-dur-row">
+          <span class="sq-cache-title">Cache Duration</span>
+          <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:flex-end;">
+            <input type="range" class="sq-slider" id="sq-dur" min="15" max="240" value="60" step="15" oninput="updateCacheDur(this.value)" />
+            <span class="sq-dur-label" id="sq-dur-label">1 hour</span>
+          </div>
+        </div>
+      </div>
+      <div class="sq-share-hint">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M6 5.5v3.5M6 3.5h.01" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        You can share this question with others after saving
+      </div>
+    </div>
+    <div class="sq-modal-ft">
+      <button class="sq-cancel-btn" onclick="closeSaveModal()">Cancel</button>
+      <button class="sq-save-btn" onclick="saveQueryNow()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create New Dashboard modal -->
+<div class="sq-overlay" id="create-dashboard-modal" onclick="if(event.target===this)hideCreateDashboardModal()" style="display:none;">
+  <div class="sq-modal" style="width:720px;max-width:94vw;display:flex;flex-direction:column;max-height:90vh;">
+    <div class="sq-modal-hd">
+      <div>
+        <div class="sq-modal-title">Create New Dashboard</div>
+        <div class="sq-modal-sub">Select queries and configure your dashboard</div>
+      </div>
+      <button class="sq-close-btn" onclick="hideCreateDashboardModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="cdm-body">
+
+      <!-- LEFT: Query list with checkboxes -->
+      <div class="cdm-left">
+        <div class="cdm-left-hd">
+          Select Queries
+          <button class="cdm-select-all-btn" id="cdm-selectall-btn" onclick="cdmSelectAll()">Select all</button>
+        </div>
+        <div class="cdm-query-list" id="cdm-query-list"></div>
+      </div>
+
+      <!-- RIGHT: Summary + config -->
+      <div class="cdm-right">
+        <div>
+          <div class="cdm-summary-count" id="cdm-counter">0</div>
+          <div class="cdm-summary-label">queries selected</div>
+        </div>
+        <div class="sq-field">
+          <label class="sq-label">Dashboard Name</label>
+          <input class="sq-input" id="cdm-dash-name" placeholder="e.g. Agent Performance Dashboard" />
+        </div>
+        <div class="sq-field">
+          <label class="sq-label">Build Mode</label>
+          <div class="mode-toggle" style="width:100%;">
+            <button class="mode-btn active" id="cdm-mode-manual" onclick="setCdmMode('manual')">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="1" y="1" width="4" height="4" rx="1" fill="currentColor"/>
+                <rect x="8" y="1" width="4" height="4" rx="1" fill="currentColor"/>
+                <rect x="1" y="8" width="4" height="4" rx="1" fill="currentColor"/>
+                <rect x="8" y="8" width="4" height="4" rx="1" fill="currentColor"/>
+              </svg>
+              Manual
+            </button>
+            <button class="mode-btn" id="cdm-mode-ai" onclick="setCdmMode('ai')">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor">
+                <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
+              </svg>
+              AI
+            </button>
+            <button class="mode-btn" id="cdm-mode-hybrid" onclick="setCdmMode('hybrid')">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M6.5 0.5L7.6 3.8L11.5 6.5L7.6 9.2L6.5 12.5L5.4 9.2L1.5 6.5L5.4 3.8Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                <circle cx="6.5" cy="6.5" r="1.5" fill="currentColor"/>
+              </svg>
+              Hybrid
+            </button>
+          </div>
+        </div>
+        <div style="flex:1;">
+          <div class="sq-label" style="margin-bottom:8px;">Selected Queries</div>
+          <div class="cdm-selected-chips" id="cdm-selected-chips">
+            <span style="font-size:12px;color:var(--cutty-sark);opacity:0.6;">No queries selected yet</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="sq-modal-ft">
+      <button class="sq-cancel-btn" onclick="hideCreateDashboardModal()">Cancel</button>
+      <button class="sq-save-btn" id="cdm-build-btn" onclick="createAndBuild()" disabled
+        style="opacity:0.35;cursor:not-allowed;">Create &amp; Build</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <circle cx="8" cy="8" r="7" fill="#4DB6AC"/>
+    <path d="M5 8l2.5 2.5L11 5.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span id="toast-msg">Dashboard created successfully!</span>
+</div>
+
+<script>
+/* ── SVG helpers ─────────────────────────────────────────────── */
+const SVGS = {
+  bar: `<svg width="100%" height="66" viewBox="0 0 180 66" preserveAspectRatio="none">
+    <rect x="5"   y="40" width="20" height="26" rx="3" fill="rgba(77,182,172,0.22)"/>
+    <rect x="33"  y="26" width="20" height="40" rx="3" fill="rgba(77,182,172,0.38)"/>
+    <rect x="61"  y="10" width="20" height="56" rx="3" fill="rgba(77,182,172,0.60)"/>
+    <rect x="89"  y="18" width="20" height="48" rx="3" fill="rgba(77,182,172,0.50)"/>
+    <rect x="117" y="4"  width="20" height="62" rx="3" fill="#4DB6AC"/>
+    <rect x="145" y="22" width="20" height="44" rx="3" fill="rgba(77,182,172,0.40)"/>
+  </svg>`,
+
+  bar2: `<svg width="100%" height="66" viewBox="0 0 180 66" preserveAspectRatio="none">
+    <rect x="5"   y="20" width="20" height="46" rx="3" fill="#4DB6AC"/>
+    <rect x="33"  y="30" width="20" height="36" rx="3" fill="rgba(77,182,172,0.55)"/>
+    <rect x="61"  y="14" width="20" height="52" rx="3" fill="rgba(77,182,172,0.45)"/>
+    <rect x="89"  y="36" width="20" height="30" rx="3" fill="rgba(77,182,172,0.65)"/>
+    <rect x="117" y="8"  width="20" height="58" rx="3" fill="rgba(77,182,172,0.35)"/>
+    <rect x="145" y="24" width="20" height="42" rx="3" fill="rgba(77,182,172,0.50)"/>
+  </svg>`,
+
+  area: `<svg width="100%" height="66" viewBox="0 0 200 66" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="ag1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4DB6AC" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#4DB6AC" stop-opacity="0.02"/>
+      </linearGradient>
+    </defs>
+    <path d="M0 55 C30 50 50 36 70 40 C90 44 120 20 155 14 L200 8 L200 66 L0 66 Z" fill="url(#ag1)"/>
+    <path d="M0 55 C30 50 50 36 70 40 C90 44 120 20 155 14 L200 8"
+      stroke="#4DB6AC" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="200" cy="8" r="3.5" fill="#4DB6AC"/>
+  </svg>`,
+
+  area2: `<svg width="100%" height="66" viewBox="0 0 200 66" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4DB6AC" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#4DB6AC" stop-opacity="0.02"/>
+      </linearGradient>
+    </defs>
+    <path d="M0 45 C25 42 40 55 65 50 C90 44 110 28 140 22 C160 18 180 30 200 18 L200 66 L0 66 Z" fill="url(#ag2)"/>
+    <path d="M0 45 C25 42 40 55 65 50 C90 44 110 28 140 22 C160 18 180 30 200 18"
+      stroke="#4DB6AC" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="200" cy="18" r="3.5" fill="#4DB6AC"/>
+  </svg>`,
+
+  donut73: `<svg width="66" height="66" viewBox="0 0 66 66">
+    <circle cx="33" cy="33" r="24" fill="none" stroke="rgba(77,182,172,0.14)" stroke-width="9"/>
+    <circle cx="33" cy="33" r="24" fill="none" stroke="#4DB6AC" stroke-width="9"
+      stroke-dasharray="110 41" stroke-linecap="round" transform="rotate(-90 33 33)"/>
+    <text x="33" y="37" text-anchor="middle" font-size="12" font-weight="700"
+      fill="#1F4141" font-family="Inter,sans-serif">73%</text>
+  </svg>`,
+
+  donut68: `<svg width="66" height="66" viewBox="0 0 66 66">
+    <circle cx="33" cy="33" r="24" fill="none" stroke="rgba(77,182,172,0.14)" stroke-width="9"/>
+    <circle cx="33" cy="33" r="24" fill="none" stroke="#4DB6AC" stroke-width="9"
+      stroke-dasharray="102 49" stroke-linecap="round" transform="rotate(-90 33 33)"/>
+    <text x="33" y="37" text-anchor="middle" font-size="12" font-weight="700"
+      fill="#1F4141" font-family="Inter,sans-serif">68%</text>
+  </svg>`,
+};
+
+function kpiSVG(val, trend, up) {
+  const color = up ? '#16A34A' : '#DC2626';
+  const arrow = up ? '↑' : '↓';
+  return `<div class="kpi-preview">
+    <div class="kpi-value">${val}</div>
+    <div class="kpi-trend ${up ? 'up' : 'down'}">${arrow} ${trend}</div>
+  </div>`;
+}
+
+/* ── Card template data ─────────────────────────────────────── */
+const CARDS = [
+  { id: 'open-tickets',   name: 'Open Tickets',           desc: 'Real-time count of all open tickets across channels',       category: 'Volume',      preview: 'kpi',   kpiVal: '2,847', kpiTrend: '+12%',   kpiUp: true  },
+  { id: 'avg-response',   name: 'Avg Response Time',       desc: 'Mean first response time across all agents and queues',     category: 'Performance', preview: 'bar'  },
+  { id: 'sentiment',      name: 'Customer Sentiment',      desc: 'CSAT & NPS rolling 30-day score trend',                    category: 'Experience',  preview: 'area' },
+  { id: 'sla-breach',     name: 'SLA Breach Rate',         desc: 'Percentage of tickets that breached their SLA target',     category: 'Compliance',  preview: 'kpi',   kpiVal: '4.2%',  kpiTrend: '+0.8%',  kpiUp: false },
+  { id: 'agent-perf',     name: 'Agent Performance',       desc: 'Tickets resolved per agent per day across all teams',      category: 'Performance', preview: 'bar2' },
+  { id: 'fcr',            name: 'First Call Resolution',   desc: 'Issues fully resolved on the first customer contact',      category: 'Quality',     preview: 'donut73'},
+  { id: 'csat',           name: 'CSAT Score',              desc: 'Overall customer satisfaction rating this month',          category: 'Experience',  preview: 'kpi',   kpiVal: '87',    kpiTrend: '+3 pts', kpiUp: true  },
+  { id: 'volume-trend',   name: 'Volume Trends',           desc: 'Ticket intake over time broken down by channel',           category: 'Volume',      preview: 'area2'},
+  { id: 'queue',          name: 'Queue Analytics',         desc: 'Queue depth, wait times and throughput by queue',          category: 'Operations',  preview: 'bar2' },
+  { id: 'resolution',     name: 'Resolution Time',         desc: 'End-to-end time from ticket open to final close',         category: 'Performance', preview: 'area' },
+  { id: 'escalations',    name: 'Escalation Rate',         desc: 'Tickets escalated to a higher support tier',              category: 'Quality',     preview: 'kpi',   kpiVal: '8.1%',  kpiTrend: '+1.2%',  kpiUp: false },
+  { id: 'agent-util',     name: 'Agent Utilization',       desc: 'Workload balance, capacity and availability by team',      category: 'Operations',  preview: 'donut68'},
+];
+
+const CATEGORIES = ['All', 'Volume', 'Performance', 'Experience', 'Compliance', 'Quality', 'Operations'];
+
+/* ── App state ─────────────────────────────────────────────── */
+const state = {
+  currentView:    'kap-ai',
+  dsMode:         'manual',
+  dsSection:      'home',
+  selectedCards:  new Set(),
+  activeCategory: 'All',
+  searchQuery:    '',
+};
+
+/* ── Saved queries mock data ─────────────────────────────── */
+const QUERIES = [
+  { id:'q1',  name:'Agent Assignment',          chartType:'Pie Chart',  dataset:'adjetter.act_ticket_level_report', updated:'2d ago' },
+  { id:'q2',  name:'Agent Status Test',         chartType:'Pie Chart',  dataset:'adjetter.act_ticket_level_report', updated:'5d ago' },
+  { id:'q3',  name:'Email %',                   chartType:'Table',      dataset:'adjetter.act_ticket_level_report', updated:'1w ago' },
+  { id:'q4',  name:'Email Sent Status',         chartType:'Table',      dataset:'adjetter.act_ticket_level_report', updated:'1w ago' },
+  { id:'q5',  name:'Employee Break Time',       chartType:'Table',      dataset:'adjetter.employee_report',         updated:'3d ago' },
+  { id:'q6',  name:'Employee Login Detail',     chartType:'Table',      dataset:'adjetter.employee_report',         updated:'1w ago' },
+  { id:'q7',  name:'Employee Wise Ticket Count',chartType:'Bar Chart',  dataset:'adjetter.act_ticket_level_report', updated:'2d ago' },
+  { id:'q8',  name:'Queue Ageing Analysis',     chartType:'Table',      dataset:'adjetter.queue_report',            updated:'5d ago' },
+  { id:'q9',  name:'Ticket Count',              chartType:'Table',      dataset:'adjetter.act_ticket_level_report', updated:'1d ago' },
+  { id:'q10', name:'Ticket Data',               chartType:'Table',      dataset:'adjetter.act_ticket_level_report', updated:'3d ago' },
+  { id:'q11', name:'Ticket Report',             chartType:'Table',      dataset:'adjetter.act_ticket_level_report', updated:'2w ago' },
+  { id:'q12', name:'Total Email Sent',          chartType:'Table',      dataset:'adjetter.act_email_report',        updated:'1d ago' },
+  { id:'q13', name:'Total Email Triggered',     chartType:'Table',      dataset:'adjetter.act_email_report',        updated:'3d ago' },
+  { id:'q14', name:'Untitled Query',            chartType:'Pie Chart',  dataset:'adjetter.act_ticket_level_report', updated:'2w ago' },
+];
+
+/* ── Navigation — defined later with sidebar-close support ─────── */
+
+/* ── DS mode toggle ─────────────────────────────────────────── */
+function setDsMode(mode) {
+  state.dsMode = mode;
+  document.getElementById('btn-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('btn-ai').classList.toggle('active',     mode === 'ai');
+
+  const manualEl = document.getElementById('manual-mode');
+  const aiEl     = document.getElementById('ai-mode');
+
+  if (mode === 'manual') {
+    manualEl.style.display = '';
+    aiEl.style.display     = 'none';
+  } else {
+    manualEl.style.display = 'none';
+    aiEl.style.display     = 'flex';
+    renderAiChips();
+  }
+}
+
+/* ── DS section toggle (builder ↔ queries) ──────────────────── */
+/* ── QB mock data ─────────────────────────────────────────── */
+const QB_DATA = {
+  StarRocks: {
+    schemas: ['adjetter'],
+    adjetter: {
+      'act_ticket_level_report':  { type:'Table', cols:[{n:'ticket_id',t:'varchar'},{n:'task_id',t:'bigint'},{n:'cm_id',t:'bigint'},{n:'folder_name',t:'varchar'},{n:'agent_name',t:'varchar'},{n:'status',t:'varchar'},{n:'sub_status',t:'varchar'},{n:'create_date',t:'datetime'},{n:'close_date',t:'datetime'},{n:'priority',t:'varchar'}] },
+      'act_quick_ticket_report':  { type:'View',  cols:[{n:'ticket_id',t:'varchar'},{n:'task_id',t:'bigint'},{n:'cm_id',t:'bigint'},{n:'ticket_title',t:'varchar'},{n:'assigned_to',t:'varchar'},{n:'create_date',t:'datetime'},{n:'status',t:'varchar'},{n:'ticket_type',t:'varchar'},{n:'sub_status',t:'varchar'},{n:'folder_name',t:'varchar'}] },
+      'employee_report':          { type:'Table', cols:[{n:'emp_id',t:'bigint'},{n:'emp_name',t:'varchar'},{n:'login_time',t:'datetime'},{n:'logout_time',t:'datetime'},{n:'break_time',t:'int'},{n:'tickets_handled',t:'int'},{n:'status',t:'varchar'}] },
+      'queue_report':             { type:'Table', cols:[{n:'queue_id',t:'bigint'},{n:'queue_name',t:'varchar'},{n:'ticket_id',t:'varchar'},{n:'entered_at',t:'datetime'},{n:'exited_at',t:'datetime'},{n:'wait_time',t:'int'},{n:'agent_name',t:'varchar'}] },
+      'act_email_report':         { type:'Table', cols:[{n:'email_id',t:'bigint'},{n:'ticket_id',t:'varchar'},{n:'sent_at',t:'datetime'},{n:'status',t:'varchar'},{n:'recipient',t:'varchar'},{n:'subject',t:'varchar'},{n:'trigger_name',t:'varchar'}] },
+    }
+  }
+};
+const QB_MOCK_ROWS = {
+  'act_quick_ticket_report': [
+    {ticket_id:'6772188325789',task_id:1003963591,cm_id:1006888,ticket_title:'Chat Ticket: 6772188325789',assigned_to:'Gurram Triveni',create_date:'2026-02-27 16:02:06',status:'P',ticket_type:'Chat',sub_status:'US',folder_name:'Support'},
+    {ticket_id:'6772188460725',task_id:1003965623,cm_id:1006888,ticket_title:'Chat Ticket: 6772188460725',assigned_to:'Kattoju Usha Rani',create_date:'2026-02-27 16:04:21',status:'P',ticket_type:'Chat',sub_status:'US',folder_name:'Support'},
+    {ticket_id:'6772188766957',task_id:1003970436,cm_id:1006888,ticket_title:'Chat Ticket: 6772188766957',assigned_to:'Gurram Triveni',create_date:'2026-02-27 16:09:27',status:'P',ticket_type:'Chat',sub_status:'CRS',folder_name:'Support'},
+    {ticket_id:'6772188708239',task_id:1003969502,cm_id:1006888,ticket_title:'Chat Ticket: 6772188708239',assigned_to:'Kattoju Usha Rani',create_date:'2026-02-27 16:08:28',status:'P',ticket_type:'Chat',sub_status:'US',folder_name:'Support'},
+    {ticket_id:'6772188352787',task_id:1003963975,cm_id:1006888,ticket_title:'Chat Ticket: 6772188352787',assigned_to:'Swetha Neerudu',create_date:'2026-02-27 16:02:33',status:'C',ticket_type:'Chat',sub_status:'RS',folder_name:'Resolved'},
+    {ticket_id:'6772188421425',task_id:1003965038,cm_id:1006888,ticket_title:'Chat Ticket: 6772188421425',assigned_to:'Gurram Triveni',create_date:'2026-02-27 16:03:41',status:'P',ticket_type:'Chat',sub_status:'US',folder_name:'Support'},
+    {ticket_id:'6772188517564',task_id:1003966468,cm_id:1006888,ticket_title:'Chat Ticket: 6772188517564',assigned_to:'Laxmi Singh',create_date:'2026-02-27 16:05:18',status:'P',ticket_type:'Chat',sub_status:'US',folder_name:'Support'},
+    {ticket_id:'6772188701919',task_id:1003969418,cm_id:1006888,ticket_title:'Chat Ticket: 6772188701919',assigned_to:'Patangey Vinay Kumar',create_date:'2026-02-27 16:08:22',status:'C',ticket_type:'Chat',sub_status:'RS',folder_name:'Resolved'},
+  ],
+};
+const DASHBOARDS_DATA = [
+  { id:'d1', name:'Agent Performance Overview',   desc:'Call volume, handle time, and resolution metrics', tiles:4, updated:'2h ago',   mode:'manual'  },
+  { id:'d2', name:'CSAT & Quality Tracker',       desc:'Customer satisfaction scores and quality audit results', tiles:3, updated:'yesterday', mode:'manual'  },
+  { id:'d3', name:'Volume & Trend Analysis',      desc:'Call volume patterns over time by channel', tiles:3, updated:'6h ago',   mode:'manual'  },
+  { id:'d4', name:'AI-Powered Insights',          desc:'AI-generated trend analysis and predictions', tiles:5, updated:'3d ago',   mode:'ai'      },
+  { id:'d5', name:'Smart Escalation Monitor',     desc:'AI-detected escalation patterns and risk scores', tiles:3, updated:'1w ago',   mode:'ai'      },
+  { id:'d6', name:'Operations Command Center',    desc:'Real-time hybrid view of operations and AI signals', tiles:6, updated:'5h ago',   mode:'hybrid'  },
+  { id:'d7', name:'Compliance & Audit Board',     desc:'Regulation adherence with AI flagging assistance', tiles:4, updated:'2d ago',   mode:'hybrid'  },
+  { id:'d8', name:'Team Productivity Mix',        desc:'Manual KPIs combined with AI workload predictions', tiles:5, updated:'4d ago',   mode:'hybrid'  },
+];
+
+/* ── QB state ─────────────────────────────────────────────── */
+const qbState = { ds:'', schema:'', table:'', selectedCols: new Set(), allRows:[], filteredRows:[] };
+let dashTiles = [];
+
+/* ── DS section toggle ──────────────────────────────────────── */
+function setDsSection(section) {
+  state.dsSection = section;
+  const header     = document.querySelector('.ds-page-header');
+  const manualMode = document.getElementById('manual-mode');
+  const aiMode     = document.getElementById('ai-mode');
+  const actionBar  = document.querySelector('.action-bar');
+  const dsHome     = document.getElementById('ds-home');
+  const dsNewQ     = document.getElementById('ds-new-question');
+  const dsBody     = document.querySelector('.ds-body');
+  const backBtn    = document.getElementById('ds-back-btn');
+
+  const aiBtn = document.getElementById('nq-ai-toggle-btn');
+
+  // Hide all content areas
+  [header, manualMode, aiMode, actionBar, dsHome, dsNewQ].forEach(el => { if (el) el.style.display = 'none'; });
+  if (backBtn) backBtn.style.display = 'none';
+  if (aiBtn) aiBtn.style.display = 'none';
+
+  if (section === 'home') {
+    if (dsBody) dsBody.style.display = 'none';  // prevent flex-1 competition
+    dsHome.style.display = 'flex';
+    renderHome();
+  } else if (section === 'new-question') {
+    if (dsBody) dsBody.style.display = 'flex';
+    dsNewQ.style.display = 'flex';
+    if (backBtn) backBtn.style.display = '';
+    if (aiBtn) aiBtn.style.display = '';
+    renderNewQuestion();
+  } else {
+    // 'builder'
+    if (dsBody) dsBody.style.display = 'flex';
+    header.style.display    = '';
+    actionBar.style.display = '';
+    clearSubnavActive();
+    if (state.dsMode === 'manual') { manualMode.style.display = ''; aiMode.style.display = 'none'; }
+    else { manualMode.style.display = 'none'; aiMode.style.display = 'flex'; }
+  }
+}
+
+/* ── QS section (page within queries) ─────────────────────── */
+function setQsSection(page) {
+  const target = document.getElementById('qs-' + page);
+  if (target) { target.style.display = 'flex'; target.classList.add('active'); }
+  setSubnavActive(page);
+  if (page === 'editor') { qbResetToFresh(); }
+}
+
+/* ── QS chart icon helper ─────────────────────────────────── */
+function chartIcon(type) {
+  if (type === 'Pie Chart') return `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2A7 7 0 1 1 2 9h7V2Z" fill="currentColor" opacity="0.5"/><path d="M9 2v7h7A7 7 0 0 0 9 2Z" fill="currentColor"/></svg>`;
+  if (type === 'Bar Chart')  return `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="10" width="3" height="6" rx="1" fill="currentColor" opacity="0.4"/><rect x="7" y="6" width="3" height="10" rx="1" fill="currentColor" opacity="0.65"/><rect x="12" y="3" width="3" height="13" rx="1" fill="currentColor"/></svg>`;
+  return `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="2.5" rx="1" fill="currentColor"/><rect x="2" y="8" width="14" height="1.5" rx=".75" fill="currentColor" opacity=".5"/><rect x="2" y="11" width="14" height="1.5" rx=".75" fill="currentColor" opacity=".35"/><rect x="2" y="14" width="10" height="1.5" rx=".75" fill="currentColor" opacity=".2"/></svg>`;
+}
+
+/* ── Saved Questions grid ─────────────────────────────────── */
+function renderQueriesGrid() {
+  const grid = document.getElementById('query-grid');
+  document.getElementById('queries-count').textContent = `${QUERIES.length} saved queries`;
+  grid.innerHTML = QUERIES.map(q => `
+    <div class="query-card" onclick="openQueryInEditor('${q.id}')">
+      <div class="query-card-top">
+        <div class="query-card-icon">${chartIcon(q.chartType)}</div>
+        <button class="query-card-more" onclick="event.stopPropagation();queryMenu('${q.id}')" title="More options">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><circle cx="7" cy="3" r="1.2"/><circle cx="7" cy="7" r="1.2"/><circle cx="7" cy="11" r="1.2"/></svg>
+        </button>
+      </div>
+      <div class="query-card-name">${q.name}</div>
+      <div class="query-card-tags">
+        <span class="query-tag chart">${q.chartType}</span>
+        <span class="query-tag dataset">${q.dataset}</span>
+      </div>
+      <div class="query-card-footer">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1"/><path d="M5.5 3v2.5l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+        Updated ${q.updated}
+      </div>
+    </div>`).join('');
+}
+
+function openQueryInEditor(id) { setQsSection('editor'); }
+function queryMenu(id) { const q=QUERIES.find(x=>x.id===id); if(q) showToast(`Options for "${q.name}"`); }
+function handleNewQuestion() { setQsSection('editor'); }
+
+/* ── Query Builder ─────────────────────────────────────────── */
+function qbResetToFresh() {
+  // Only reset if table was previously selected (avoid clearing a clean state)
+  document.getElementById('qb-title').value = 'Untitled Query';
+  ['qbs-schema','qbs-table','qbs-cols','qbs-groupby'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  document.getElementById('qb-ds').value = '';
+  Object.assign(qbState, { ds:'', schema:'', table:'', selectedCols: new Set(), allRows:[], filteredRows:[] });
+  renderQbFlow();
+  const _ep = document.getElementById('qb-empty-preview');
+  const _ts = document.getElementById('qb-table-scroll');
+  const _em = document.getElementById('qb-empty-msg');
+  const _sp = document.getElementById('qb-spinner');
+  const _ic = document.getElementById('qb-empty-ico');
+  if (_ep) _ep.style.display = 'flex';
+  if (_ts) _ts.style.display = 'none';
+  if (_em) _em.textContent   = 'Select a data source, schema, and table to get started';
+  if (_sp) _sp.style.display = 'none';
+  if (_ic) _ic.style.display = '';
+  const _pm = document.getElementById('qb-preview-meta');
+  if (_pm) _pm.textContent = '';
+  document.getElementById('qb-export-btn').disabled = true;
+  setQbTab('visual');
+}
+
+function qbSelectDs(val) {
+  qbState.ds = val;
+  ['qbs-schema','qbs-table','qbs-cols','qbs-groupby'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  qbState.schema = ''; qbState.table = ''; qbState.selectedCols.clear();
+  if (!val) return;
+  const schemaEl = document.getElementById('qbs-schema');
+  const sel = document.getElementById('qb-schema');
+  const schemas = QB_DATA[val].schemas;
+  sel.innerHTML = '<option value="">Select schema...</option>' + schemas.map(s => `<option value="${s}">${s}</option>`).join('');
+  schemaEl.style.display = '';
+  renderQbFlow();
+}
+
+function qbSelectSchema(val) {
+  qbState.schema = val;
+  ['qbs-table','qbs-cols','qbs-groupby'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  qbState.table = ''; qbState.selectedCols.clear();
+  if (!val) return;
+  const tables = QB_DATA[qbState.ds][val];
+  const sel = document.getElementById('qb-table');
+  sel.innerHTML = '<option value="">Select table...</option>' + Object.keys(tables).map(t => `<option value="${t}">${t}</option>`).join('');
+  document.getElementById('qbs-table').style.display = '';
+  renderQbFlow();
+}
+
+function qbSelectTable(val) {
+  qbState.table = val; qbState.selectedCols.clear();
+  ['qbs-cols','qbs-groupby'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display = val ? '' : 'none'; });
+  if (!val) { document.getElementById('qb-table-badge').innerHTML = ''; renderQbFlow(); return; }
+  const tbl = QB_DATA[qbState.ds][qbState.schema][val];
+  document.getElementById('qb-table-badge').innerHTML = `<span class="qb-type-badge">${tbl.type}</span>`;
+  // Build columns
+  const list = document.getElementById('qb-col-list');
+  const gbSel = document.getElementById('qb-groupby');
+  gbSel.innerHTML = '<option value="">No group by</option>' + tbl.cols.map(c => `<option value="${c.n}">${c.n}</option>`).join('');
+  renderQbColList(tbl.cols);
+  // Reset preview
+  const _ep2 = document.getElementById('qb-empty-preview');
+  const _ts2 = document.getElementById('qb-table-scroll');
+  const _em2 = document.getElementById('qb-empty-msg');
+  const _sp2 = document.getElementById('qb-spinner');
+  const _ic2 = document.getElementById('qb-empty-ico');
+  const _pm2 = document.getElementById('qb-preview-meta');
+  const _xb2 = document.getElementById('qb-export-btn');
+  if (_ep2) _ep2.style.display = 'flex';
+  if (_ts2) _ts2.style.display = 'none';
+  if (_em2) _em2.textContent   = 'Click Run Query to see results';
+  if (_sp2) _sp2.style.display = 'none';
+  if (_ic2) _ic2.style.display = '';
+  if (_pm2) _pm2.textContent   = '';
+  if (_xb2) _xb2.disabled      = true;
+  renderQbFlow();
+}
+
+function renderQbColList(cols) {
+  const list = document.getElementById('qb-col-list');
+  const total = cols.length;
+  list.innerHTML = cols.map(c => `
+    <label class="qb-col-item">
+      <input type="checkbox" ${qbState.selectedCols.has(c.n) ? 'checked' : ''}
+        onchange="qbToggleCol('${c.n}', this.checked)" />
+      <span class="qb-col-name">${c.n}</span>
+      <span class="qb-col-type type-${c.t}">${c.t}</span>
+    </label>`).join('');
+  updateQbColCount(cols.length);
+}
+
+function qbToggleCol(name, checked) {
+  if (checked) qbState.selectedCols.add(name); else qbState.selectedCols.delete(name);
+  updateQbColCount(QB_DATA[qbState.ds]?.[qbState.schema]?.[qbState.table]?.cols?.length || 0);
+  renderQbFlow();
+}
+
+function qbSelectAll() {
+  const tbl = QB_DATA[qbState.ds]?.[qbState.schema]?.[qbState.table];
+  if (!tbl) return;
+  const allSelected = qbState.selectedCols.size === tbl.cols.length;
+  if (allSelected) { qbState.selectedCols.clear(); } else { tbl.cols.forEach(c => qbState.selectedCols.add(c.n)); }
+  renderQbColList(tbl.cols);
+  renderQbFlow();
+}
+
+function updateQbColCount(total) {
+  const sel = qbState.selectedCols.size;
+  document.getElementById('qb-col-count').textContent = `COLUMNS (${sel}/${total})`;
+  const btn = document.getElementById('qb-selall-btn');
+  if (btn) btn.textContent = sel === total && total > 0 ? 'Deselect all' : 'Select all';
+
+  // Show a hint in the Data Preview when columns are selected but query not yet run
+  const scrollEl = document.getElementById('qb-table-scroll');
+  const msgEl    = document.getElementById('qb-empty-msg');
+  if (scrollEl && msgEl && scrollEl.style.display === 'none' && qbState.table) {
+    if (sel > 0) {
+      msgEl.innerHTML = `<strong style="color:var(--dark-teal)">${sel} column${sel > 1 ? 's' : ''} selected</strong>&nbsp;&nbsp;·&nbsp;&nbsp;Click <strong>Run Query</strong> to preview your data`;
+    } else {
+      msgEl.textContent = 'Click Run Query to see results';
+    }
+  }
+}
+
+function qbReset() {
+  qbResetToFresh();
+  document.getElementById('qb-ds').value = '';
+  ['qbs-schema','qbs-table','qbs-cols','qbs-groupby'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  document.getElementById('qb-table-badge').innerHTML = '';
+}
+
+/* ── QB Visual flow ─────────────────────────────────────────── */
+function renderQbFlow() {
+  const flow = document.getElementById('qb-flow');
+  if (!flow) return;
+  const tblVal = qbState.table ? `${qbState.schema}.${qbState.table}` : 'No table selected';
+  const colsLabel = qbState.selectedCols.size > 0 ? [...qbState.selectedCols].join(', ').substring(0,30) + (qbState.selectedCols.size > 3 ? '…' : '') : qbState.table ? 'All columns (*)' : 'No columns selected';
+  const srcIco = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.5h14M6.5 6.5v9.5" stroke="currentColor" stroke-width="1.4"/></svg>`;
+  const colIco = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="2.5" rx="1" fill="currentColor"/><rect x="3" y="7.5" width="12" height="1.5" rx=".75" fill="currentColor" opacity=".5"/><rect x="3" y="11" width="12" height="1.5" rx=".75" fill="currentColor" opacity=".35"/><rect x="3" y="14.5" width="8" height="1.5" rx=".75" fill="currentColor" opacity=".2"/></svg>`;
+  const resIco = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M5 9h8M9 5v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+  flow.innerHTML = `
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico ico-blue">${srcIco}</div>
+      <div><div class="qb-flow-node-label">SOURCE TABLE</div><div class="qb-flow-node-val">${tblVal.length > 32 ? tblVal.substring(0,30)+'…' : tblVal}</div></div>
+    </div>
+    <div class="qb-flow-connector"></div><div class="qb-flow-dot"></div><div class="qb-flow-connector"></div>
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico ico-green">${colIco}</div>
+      <div><div class="qb-flow-node-label">SELECT COLUMNS</div><div class="qb-flow-node-val">${colsLabel}</div></div>
+    </div>
+    <div class="qb-flow-connector"></div><div class="qb-flow-dot"></div><div class="qb-flow-connector"></div>
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico ico-purple">${resIco}</div>
+      <div><div class="qb-flow-node-label">RESULT</div><div class="qb-flow-node-val">LIMIT ${document.getElementById('qb-limit')?.value || '100'}</div></div>
+    </div>`;
+  // Update SQL
+  updateQbSql();
+}
+
+function updateQbSql() {
+  const sel = qbState.selectedCols.size > 0 ? [...qbState.selectedCols].join(', ') : '*';
+  const tbl = qbState.schema && qbState.table ? `${qbState.schema}.${qbState.table}` : '<table>';
+  const gb = document.getElementById('qb-groupby')?.value;
+  const limit = document.getElementById('qb-limit')?.value || '100';
+  const sql = `SELECT ${sel}\nFROM ${tbl}${gb ? `\nGROUP BY ${gb}` : ''}\nLIMIT ${limit};`;
+  const ed = document.getElementById('qb-sql-editor');
+  if (ed) ed.value = sql;
+}
+
+function setQbTab(tab) {
+  const isVis = tab === 'visual';
+  document.getElementById('qbtab-visual')?.classList.toggle('active', isVis);
+  document.getElementById('qbtab-sql')?.classList.toggle('active', !isVis);
+  const va = document.getElementById('qb-visual-area');
+  const sa = document.getElementById('qb-sql-area');
+  if (va) va.style.display = isVis ? 'flex' : 'none';
+  if (sa) sa.style.display = isVis ? 'none' : 'flex';
+  if (!isVis) updateQbSql();
+}
+
+/* ── Mock row generator for any table ──────────────────────── */
+function generateMockRows(cols, count) {
+  const n = count || 8;
+  const NAMES  = ['Alice', 'Bob', 'Carlos', 'Diana', 'Ethan', 'Fatima', 'George', 'Hana'];
+  const STATUS = ['Open', 'Closed', 'Pending', 'Resolved', 'Escalated'];
+  const QUEUES = ['Support', 'Billing', 'Technical', 'Returns', 'Sales'];
+  return Array.from({ length: n }, (_, i) => {
+    const row = {};
+    cols.forEach(col => {
+      const nm = col.n.toLowerCase();
+      // Type/ID checks first so queue_id, ticket_id etc. get numbers not labels
+      if      (nm.endsWith('_id') || nm === 'id' || col.t === 'bigint' || col.t === 'int')
+                                                              row[col.n] = 1000 + i * 13;
+      else if (nm.includes('email'))                          row[col.n] = `user${i+1}@example.com`;
+      else if (nm.includes('date') || nm.includes('time') || col.t === 'datetime')
+                                                              row[col.n] = `2026-01-${String(i + 1).padStart(2,'0')} 09:${String(i * 7 % 60).padStart(2,'0')}:00`;
+      else if (nm.includes('status'))                         row[col.n] = STATUS[i % STATUS.length];
+      else if (nm.includes('queue'))                          row[col.n] = QUEUES[i % QUEUES.length];
+      else if (nm.includes('name') || nm.includes('agent'))   row[col.n] = NAMES[i % NAMES.length];
+      else                                                    row[col.n] = `${col.n}_${i + 1}`;
+    });
+    return row;
+  });
+}
+
+/* ── Run Query ──────────────────────────────────────────────── */
+function qbRunQuery() {
+  const msgEl    = document.getElementById('qb-empty-msg');
+  const spinEl   = document.getElementById('qb-spinner');
+  const icoEl    = document.getElementById('qb-empty-ico');
+  const emptyEl  = document.getElementById('qb-empty-preview');
+  const scrollEl = document.getElementById('qb-table-scroll');
+
+  if (!qbState.table) {
+    if (msgEl) msgEl.textContent = 'Please select a data source, schema, and table first';
+    return;
+  }
+
+  // Show loading state — spinner replaces idle icon, message updates
+  if (spinEl)  { spinEl.style.display  = ''; }
+  if (icoEl)   { icoEl.style.display   = 'none'; }
+  if (msgEl)   { msgEl.textContent     = 'Running query…'; }
+  emptyEl.style.display = 'flex';
+  scrollEl.style.display = 'none';
+
+  setTimeout(() => {
+    const limit   = parseInt(document.getElementById('qb-limit').value) || 100;
+    const tblDef  = QB_DATA[qbState.ds]?.[qbState.schema]?.[qbState.table];
+
+    // Determine which columns to show
+    const allCols = tblDef ? tblDef.cols : [];
+    const activeCols = (qbState.selectedCols.size > 0 && allCols.length > 0)
+      ? allCols.filter(c => qbState.selectedCols.has(c.n))
+      : allCols;
+
+    // Get or generate rows
+    let baseRows = QB_MOCK_ROWS[qbState.table] ? [...QB_MOCK_ROWS[qbState.table]] : [];
+    if (baseRows.length === 0) {
+      // Generate mock rows for any table that has no specific fixture
+      baseRows = generateMockRows(activeCols.length > 0 ? activeCols : allCols, 8);
+    } else if (activeCols.length > 0) {
+      // Filter existing mock rows to only show selected columns
+      const colSet = new Set(activeCols.map(c => c.n));
+      baseRows = baseRows.map(r => {
+        const out = {};
+        colSet.forEach(k => { if (k in r) out[k] = r[k]; });
+        return out;
+      });
+    }
+
+    const rows = baseRows.slice(0, limit);
+    qbState.allRows = rows;
+    qbState.filteredRows = rows;
+
+    // Restore idle icon & hide spinner
+    if (spinEl) spinEl.style.display = 'none';
+    if (icoEl)  icoEl.style.display  = '';
+    if (msgEl)  msgEl.textContent    = 'Select a data source, schema, and table to get started';
+
+    emptyEl.style.display = 'none';
+    scrollEl.style.display = '';
+    renderQbTable(rows);
+
+    const t = Date.now() % 200 + 60;
+    document.getElementById('qb-preview-meta').textContent = `${rows.length} rows · ${t}ms`;
+    document.getElementById('qb-export-btn').disabled = false;
+    renderQbFlow();
+  }, 680);
+}
+
+function renderQbTable(rows) {
+  const table = document.getElementById('qb-data-table');
+  if (!rows.length) { table.innerHTML = ''; return; }
+  const keys = Object.keys(rows[0]);
+  const tbl = QB_DATA[qbState.ds]?.[qbState.schema]?.[qbState.table];
+  const typeMap = tbl ? Object.fromEntries(tbl.cols.map(c=>[c.n,c.t])) : {};
+  table.innerHTML = `<thead><tr>${keys.map(k => `<th>${k}<span class="col-type">${typeMap[k]||''}</span></th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r => `<tr>${keys.map(k => `<td>${r[k] ?? ''}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+
+function qbFilterRows(query) {
+  if (!qbState.allRows.length) return;
+  const q = query.toLowerCase();
+  qbState.filteredRows = q ? qbState.allRows.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q))) : qbState.allRows;
+  renderQbTable(qbState.filteredRows);
+}
+
+function qbExport() { showToast('Exporting to CSV…'); }
+
+/* ── Save Query modal ─────────────────────────────────────── */
+function openSaveModal() {
+  const title = document.getElementById('qb-title')?.value || 'Untitled Query';
+  document.getElementById('sq-name').value = title;
+  document.getElementById('save-query-modal').classList.add('open');
+}
+function closeSaveModal() { document.getElementById('save-query-modal').classList.remove('open'); }
+function toggleSqCache() {
+  const t = document.getElementById('sq-cache-toggle');
+  const d = document.getElementById('sq-dur-row');
+  t.classList.toggle('active');
+  d.style.display = t.classList.contains('active') ? '' : 'none';
+}
+function updateCacheDur(v) {
+  const mins = parseInt(v);
+  const label = mins < 60 ? `${mins} min` : `${mins/60} hour${mins>60?'s':''}`;
+  document.getElementById('sq-dur-label').textContent = label;
+}
+function saveQueryNow() {
+  const name = document.getElementById('sq-name').value.trim() || 'Untitled Query';
+  closeSaveModal();
+  showToast(`"${name}" saved successfully!`);
+}
+
+/* ── Home: Dashboard Gallery ───────────────────────────────── */
+let homeActiveTab = 'all';
+
+function renderHome() {
+  const filtered = homeActiveTab === 'all'
+    ? DASHBOARDS_DATA
+    : DASHBOARDS_DATA.filter(d => d.mode === homeActiveTab);
+  const count    = filtered.length;
+  const countEl  = document.getElementById('home-dash-count');
+  if (countEl) countEl.textContent = count === 1 ? '1 dashboard' : `${count} dashboards`;
+
+  const grid = document.getElementById('home-dash-grid');
+  if (!grid) return;
+
+  if (!count) {
+    grid.innerHTML = `<div class="dash-empty" style="grid-column:1/-1;">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <rect x="2" y="2" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+        <rect x="28" y="2" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+        <rect x="2" y="28" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+        <rect x="28" y="28" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+      </svg>
+      <p>No ${homeActiveTab === 'all' ? '' : homeActiveTab + ' '}dashboards yet</p>
+      <span class="dash-empty-sub">Click "+ Create New Dashboard" to build one</span>
+    </div>`;
+    return;
+  }
+
+  const modeLabel = { manual:'Manual', ai:'AI', hybrid:'Hybrid' };
+  grid.innerHTML = filtered.map(d => `
+    <div class="dash-card" onclick="openDashboard('${d.id}')">
+      <div class="dash-card-actions">
+        <button class="dash-card-del-btn" onclick="event.stopPropagation();deleteDashboard('${d.id}')" title="Delete">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M5 3.5V2h3v1.5M5.5 6v4M7.5 6v4M2.5 3.5l.5 7.5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1l.5-7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="dash-card-thumb">${SVGS.bar || ''}</div>
+      <div class="dash-card-title">${d.name}</div>
+      <div class="dash-card-desc">${d.desc}</div>
+      <div class="dash-card-meta">
+        <span class="home-mode-badge ${d.mode}">${modeLabel[d.mode] || d.mode}</span>
+        <span>·</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4.5h8M4 2v2.5M8 2v2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><rect x="1" y="3.5" width="10" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg>
+        ${d.updated}
+        <span>·</span>${d.tiles} tiles
+      </div>
+    </div>`).join('');
+}
+
+function setHomeTab(tab) {
+  homeActiveTab = tab;
+  ['all','manual','ai','hybrid'].forEach(t => {
+    document.getElementById('htab-' + t)?.classList.toggle('active', t === tab);
+  });
+  renderHome();
+}
+
+function openDashboard(id) {
+  const d = DASHBOARDS_DATA.find(x => x.id === id);
+  if (d) showToast(`Opening "${d.name}"…`);
+}
+
+function deleteDashboard(id) {
+  const idx = DASHBOARDS_DATA.findIndex(d => d.id === id);
+  if (idx > -1) { DASHBOARDS_DATA.splice(idx, 1); renderHome(); showToast('Dashboard deleted'); }
+}
+
+function showHomeGallery() {
+  document.getElementById('home-gallery').style.display       = 'flex';
+  document.getElementById('home-gallery').style.flex          = '1';
+  document.getElementById('dash-composer-view').style.display = 'none';
+  renderHome();
+}
+
+function showHomeComposer(preSelectedIds) {
+  document.getElementById('home-gallery').style.display       = 'none';
+  document.getElementById('dash-composer-view').style.display = 'flex';
+  renderDashComposer(preSelectedIds);
+}
+
+function renderDashComposer(preSelectedIds) {
+  dashTiles = [];
+  const list = document.getElementById('dash-picker-list');
+  list.innerHTML = QUERIES.map(q => `
+    <div class="dash-picker-item" id="dpick-${q.id}" onclick="dashToggleTile('${q.id}')">
+      <div class="dash-picker-ico">${chartIcon(q.chartType)}</div>
+      <span class="dash-picker-name">${q.name}</span>
+      <button class="dash-picker-add" onclick="event.stopPropagation();dashToggleTile('${q.id}')">+</button>
+    </div>`).join('');
+  document.getElementById('dash-canvas-empty').style.display = 'flex';
+  document.getElementById('dash-tiles').style.display        = 'none';
+  document.getElementById('dash-tiles').innerHTML            = '';
+  document.getElementById('dash-composer-title').value       = 'Untitled Dashboard';
+  if (preSelectedIds) { preSelectedIds.forEach(id => dashToggleTile(id)); }
+}
+
+/* ── New Question page ──────────────────────────────────────── */
+function renderNewQuestion() { qbResetToFresh(); }
+function fillAiPrompt(text) {
+  const ta = document.getElementById('nq-ai-textarea');
+  if (ta) { ta.value = text; ta.focus(); }
+}
+function generateFromAI() { showToast('AI query generation coming soon!'); }
+
+function toggleAiPanel() {
+  const ai = document.getElementById('nq-col-ai');
+  const btn = document.getElementById('nq-ai-toggle-btn');
+  const isVisible = ai.style.display !== 'none';
+  ai.style.display = isVisible ? 'none' : '';
+  btn.classList.toggle('off', isVisible);
+}
+
+/* ── Create Dashboard Modal ─────────────────────────────────── */
+let cdmSelectedIds = new Set();
+let cdmMode = 'manual';
+
+function showCreateDashboardModal() {
+  cdmSelectedIds = new Set();
+  cdmMode        = 'manual';
+  document.getElementById('cdm-dash-name').value = '';
+  ['manual','ai','hybrid'].forEach(m =>
+    document.getElementById('cdm-mode-' + m)?.classList.toggle('active', m === 'manual'));
+  document.getElementById('cdm-selectall-btn').textContent = 'Select all';
+  renderCdmQueryList();
+  updateCdmSummary();
+  document.getElementById('create-dashboard-modal').style.display = 'flex';
+}
+
+function hideCreateDashboardModal() {
+  document.getElementById('create-dashboard-modal').style.display = 'none';
+}
+
+function renderCdmQueryList() {
+  document.getElementById('cdm-query-list').innerHTML = QUERIES.map(q => `
+    <div class="cdm-query-row${cdmSelectedIds.has(q.id) ? ' selected' : ''}" onclick="toggleQueryForDashboard('${q.id}')">
+      <div class="cdm-check">
+        ${cdmSelectedIds.has(q.id) ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>` : ''}
+      </div>
+      <span class="cdm-query-name">${q.name}</span>
+      <span class="cdm-query-meta">${q.chartType}</span>
+    </div>`).join('');
+}
+
+function toggleQueryForDashboard(id) {
+  cdmSelectedIds.has(id) ? cdmSelectedIds.delete(id) : cdmSelectedIds.add(id);
+  renderCdmQueryList();
+  updateCdmSummary();
+}
+
+function updateCdmSummary() {
+  const n   = cdmSelectedIds.size;
+  const btn = document.getElementById('cdm-build-btn');
+  document.getElementById('cdm-counter').textContent = String(n);
+  btn.disabled      = n === 0;
+  btn.style.opacity = n > 0 ? '1' : '0.35';
+  btn.style.cursor  = n > 0 ? 'pointer' : 'not-allowed';
+  const chips = document.getElementById('cdm-selected-chips');
+  if (!chips) return;
+  if (!n) {
+    chips.innerHTML = '<span style="font-size:12px;color:var(--cutty-sark);opacity:0.6;">No queries selected yet</span>';
+  } else {
+    chips.innerHTML = [...cdmSelectedIds].map(id => {
+      const q = QUERIES.find(x => x.id === id);
+      return q ? `<span class="cdm-selected-chip">${q.name}
+        <button onclick="toggleQueryForDashboard('${id}')" title="Remove">×</button></span>` : '';
+    }).join('');
+  }
+}
+
+function setCdmMode(mode) {
+  cdmMode = mode;
+  ['manual','ai','hybrid'].forEach(m =>
+    document.getElementById('cdm-mode-' + m)?.classList.toggle('active', m === mode));
+}
+
+function cdmSelectAll() {
+  const allSelected = cdmSelectedIds.size === QUERIES.length;
+  if (allSelected) { cdmSelectedIds.clear(); } else { QUERIES.forEach(q => cdmSelectedIds.add(q.id)); }
+  renderCdmQueryList();
+  updateCdmSummary();
+  document.getElementById('cdm-selectall-btn').textContent =
+    cdmSelectedIds.size === QUERIES.length ? 'Deselect all' : 'Select all';
+}
+
+function createAndBuild() {
+  const name         = document.getElementById('cdm-dash-name').value.trim() || 'Untitled Dashboard';
+  const selectedCopy = new Set(cdmSelectedIds);
+  hideCreateDashboardModal();
+  showHomeComposer(selectedCopy);
+  document.getElementById('dash-composer-title').value = name;
+}
+
+/* ── Dashboard composer: save ───────────────────────────────── */
+function renderDashEditor() { renderDashComposer(); }
+
+function dashToggleTile(id) {
+  const idx = dashTiles.indexOf(id);
+  const item = document.getElementById('dpick-' + id);
+  if (idx > -1) {
+    dashTiles.splice(idx, 1);
+    if (item) { item.classList.remove('added'); item.querySelector('.dash-picker-add').textContent = '+'; }
+  } else {
+    dashTiles.push(id);
+    if (item) { item.classList.add('added'); item.querySelector('.dash-picker-add').textContent = '✓'; }
+  }
+  renderDashTiles();
+}
+
+function dashAddAll() {
+  QUERIES.forEach(q => { if (!dashTiles.includes(q.id)) dashToggleTile(q.id); });
+}
+
+function renderDashTiles() {
+  const tilesEl = document.getElementById('dash-tiles');
+  const emptyEl = document.getElementById('dash-canvas-empty');
+  if (!dashTiles.length) { emptyEl.style.display = 'flex'; tilesEl.style.display = 'none'; return; }
+  emptyEl.style.display = 'none'; tilesEl.style.display = 'grid';
+  tilesEl.innerHTML = dashTiles.map(id => {
+    const q = QUERIES.find(x => x.id === id);
+    if (!q) return '';
+    return `<div class="dash-tile">
+      <div class="dash-tile-hd">
+        <span class="dash-tile-title">${q.name}</span>
+        <button class="dash-tile-remove" onclick="dashToggleTile('${q.id}')" title="Remove">×</button>
+      </div>
+      <div class="dash-tile-viz"></div>
+    </div>`;
+  }).join('');
+}
+
+function saveDashboard() {
+  const name = document.getElementById('dash-composer-title').value.trim() || 'Untitled Dashboard';
+  DASHBOARDS_DATA.unshift({
+    id:      'dash-' + Date.now(),
+    name,
+    desc:    `${dashTiles.length} quer${dashTiles.length === 1 ? 'y' : 'ies'} selected`,
+    updated: 'just now',
+    tiles:   dashTiles.length,
+    mode:    cdmMode || 'manual',
+  });
+  dashTiles = [];
+  showToast(`Dashboard "${name}" saved!`);
+  showHomeGallery();
+}
+
+/* ── Card selection ─────────────────────────────────────────── */
+function toggleCard(id) {
+  if (state.selectedCards.has(id)) {
+    state.selectedCards.delete(id);
+  } else {
+    state.selectedCards.add(id);
+  }
+  const el = document.querySelector(`.ds-card[data-id="${id}"]`);
+  if (el) el.classList.toggle('selected', state.selectedCards.has(id));
+  updateActionBar();
+}
+
+function removeCard(id) {
+  state.selectedCards.delete(id);
+  const el = document.querySelector(`.ds-card[data-id="${id}"]`);
+  if (el) el.classList.remove('selected');
+  renderAiChips();
+  updateActionBar();
+}
+
+function clearSelection() {
+  state.selectedCards.forEach(id => {
+    const el = document.querySelector(`.ds-card[data-id="${id}"]`);
+    if (el) el.classList.remove('selected');
+  });
+  state.selectedCards.clear();
+  updateActionBar();
+  if (state.dsMode === 'ai') renderAiChips();
+}
+
+/* ── Action bar ─────────────────────────────────────────────── */
+function updateActionBar() {
+  const n = state.selectedCards.size;
+  document.getElementById('sel-num').textContent = n;
+  document.getElementById('clear-btn').style.display    = n > 0 ? '' : 'none';
+  document.getElementById('btn-continue-ai').disabled   = n === 0;
+  document.getElementById('btn-create').disabled        = n === 0;
+  // Update AI badge
+  const badge = document.getElementById('ai-badge');
+  badge.textContent = n > 0 ? n : '';
+  badge.style.display = n > 0 ? '' : 'none';
+}
+
+/* ── Card grid rendering ────────────────────────────────────── */
+function previewHTML(card) {
+  if (card.preview === 'kpi') return kpiSVG(card.kpiVal, card.kpiTrend, card.kpiUp);
+  return SVGS[card.preview] || SVGS.bar;
+}
+
+function renderCards() {
+  const grid = document.getElementById('card-grid');
+  grid.innerHTML = CARDS.map(c => `
+    <div class="ds-card${state.selectedCards.has(c.id) ? ' selected' : ''}"
+         data-id="${c.id}" data-cat="${c.category}"
+         onclick="toggleCard('${c.id}')">
+      <div class="card-check">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="card-preview">${previewHTML(c)}</div>
+      <div class="card-body">
+        <div class="card-header-row">
+          <div class="card-name">${c.name}</div>
+          <span class="cat-badge ${c.category}">${c.category}</span>
+        </div>
+        <div class="card-desc">${c.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── Category filters ───────────────────────────────────────── */
+function renderCategoryFilters() {
+  const wrap = document.getElementById('cat-filters');
+  wrap.innerHTML = CATEGORIES.map(cat => `
+    <button class="cat-btn${state.activeCategory === cat ? ' active' : ''}"
+      onclick="setCategory('${cat}')">${cat}</button>
+  `).join('');
+}
+
+function setCategory(cat) {
+  state.activeCategory = cat;
+  renderCategoryFilters();
+  filterCards();
+}
+
+function filterCards() {
+  const q = document.getElementById('card-search').value.toLowerCase().trim();
+  state.searchQuery = q;
+  document.querySelectorAll('.ds-card').forEach(el => {
+    const cat    = el.dataset.cat;
+    const nameEl = el.querySelector('.card-name');
+    const descEl = el.querySelector('.card-desc');
+    const name   = nameEl ? nameEl.textContent.toLowerCase() : '';
+    const desc   = descEl ? descEl.textContent.toLowerCase() : '';
+
+    const catOk  = state.activeCategory === 'All' || cat === state.activeCategory;
+    const textOk = !q || name.includes(q) || desc.includes(q);
+
+    el.classList.toggle('hidden-card', !(catOk && textOk));
+  });
+}
+
+/* ── AI chips ───────────────────────────────────────────────── */
+function renderAiChips() {
+  const wrap = document.getElementById('ai-chips-wrap');
+  if (state.selectedCards.size === 0) {
+    wrap.innerHTML = '';
+    return;
+  }
+  const chips = Array.from(state.selectedCards).map(id => {
+    const card = CARDS.find(c => c.id === id);
+    if (!card) return '';
+    return `<div class="chip">
+      ${card.name}
+      <button class="chip-remove" onclick="event.stopPropagation();removeCard('${id}')"
+        title="Remove">
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+          <path d="M1.5 1.5l5 5M6.5 1.5l-5 5" stroke="currentColor"
+            stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>`;
+  }).join('');
+  wrap.innerHTML = chips + `<button class="add-manual-btn" onclick="setDsMode('manual')">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Add manually
+  </button>`;
+}
+
+/* ── Prompt fill ─────────────────────────────────────────────── */
+function fillPrompt(el) {
+  document.getElementById('ai-textarea').value = el.textContent;
+  document.getElementById('ai-textarea').focus();
+}
+
+/* ── Handlers ─────────────────────────────────────────────────── */
+function handleAiGenerate() {
+  const txt = document.getElementById('ai-textarea').value.trim();
+  if (!txt && state.selectedCards.size === 0) return;
+  showToast('Dashboard generated with AI — opening preview…');
+}
+
+function handleCreate() {
+  if (state.selectedCards.size === 0) return;
+  const n = state.selectedCards.size;
+  showToast(`Dashboard created with ${n} card${n > 1 ? 's' : ''}!`);
+}
+
+/* ── User menu popup ───────────────────────────────────────────── */
+function toggleUserMenu() {
+  const popup   = document.getElementById('user-popup');
+  const btn     = document.getElementById('user-menu-btn');
+  const chevron = document.getElementById('user-menu-chevron');
+  const isOpen  = popup.classList.contains('open');
+  popup.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+function closeUserMenu() {
+  document.getElementById('user-popup').classList.remove('open');
+  document.getElementById('user-menu-btn').classList.remove('open');
+  document.getElementById('user-menu-chevron').style.transform = '';
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.sidebar-footer')) closeUserMenu();
+});
+
+function toggleDarkMode() {
+  document.documentElement.classList.toggle('dark');
+  closeUserMenu();
+}
+
+function handleSignOut() {
+  closeUserMenu();
+  showToast('You have been signed out');
+}
+
+/* ── Toast ─────────────────────────────────────────────────────── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ── Sidebar drawer (tablet / mobile) ─────────────────────────── */
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const isOpen  = sidebar.classList.contains('open');
+  sidebar.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('open', !isOpen);
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+/* ── Navigation helpers ─────────────────────────────────────────── */
+function navigate(view) {
+  if (state.currentView === view) return;
+  state.currentView = view;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  // Standard nav-item active state (items that still use data-nav)
+  document.querySelectorAll('.nav-item[data-nav]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.nav === view);
+  });
+  // Data Studio nav item (no data-nav — handled separately)
+  const dsBtn = document.getElementById('nav-data-studio');
+  if (dsBtn) dsBtn.classList.toggle('active', view === 'data-studio');
+  // Collapse DS sub-nav when leaving data-studio
+  if (view !== 'data-studio') {
+    dsBtn && dsBtn.classList.remove('expanded');
+    document.getElementById('ds-subnav')?.classList.remove('open');
+    clearSubnavActive();
+  }
+  closeSidebar();
+}
+
+/* ── Data Studio sidebar expand / sub-item navigation ───────────── */
+function toggleDsExpand() {
+  const btn    = document.getElementById('nav-data-studio');
+  const subnav = document.getElementById('ds-subnav');
+
+  // Always expand and switch to data-studio builder view
+  btn.classList.add('expanded', 'active');
+  subnav.classList.add('open');
+
+  if (state.currentView !== 'data-studio') {
+    state.currentView = 'data-studio';
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-data-studio').classList.add('active');
+    document.querySelectorAll('.nav-item[data-nav]').forEach(b => b.classList.remove('active'));
+  }
+
+  setDsSection('home');
+  setSubnavActive('home');
+  closeSidebar();
+}
+
+function navigateToDs(section) {
+  const btn    = document.getElementById('nav-data-studio');
+  const subnav = document.getElementById('ds-subnav');
+  btn.classList.add('expanded', 'active');
+  subnav.classList.add('open');
+
+  if (state.currentView !== 'data-studio') {
+    state.currentView = 'data-studio';
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-data-studio').classList.add('active');
+    document.querySelectorAll('.nav-item[data-nav]').forEach(b => b.classList.remove('active'));
+  }
+
+  setDsSection(section);
+  setSubnavActive(section);
+  closeSidebar();
+}
+
+function clearSubnavActive() {
+  ['home', 'new-question'].forEach(s => {
+    document.getElementById('subnav-' + s)?.classList.remove('active');
+  });
+}
+
+function setSubnavActive(section) {
+  clearSubnavActive();
+  const map = { home: 'home', 'new-question': 'new-question' };
+  const el = document.getElementById('subnav-' + (map[section] || section));
+  if (el) el.classList.add('active');
+}
+
+/* ── Keyboard: Esc closes sidebar ───────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSidebar();
+});
+
+/* ── Sidebar nav delegation (Kap AI, Help Center, etc.) ────────── */
+document.querySelectorAll('.nav-item[data-nav]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.nav;
+    if (target) navigate(target);
+  });
+});
+
+/* ── Init ──────────────────────────────────────────────────────── */
+renderCategoryFilters();
+renderCards();
+updateActionBar();
+</script>
+</body>
+</html>
