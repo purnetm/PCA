@@ -1908,6 +1908,139 @@
     }
     .nq-run-btn:hover { opacity: 0.88; }
 
+    /* ── Guided Explorer — redesigned new-query flow ─────────────── */
+    .ge-topbar {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; height: 52px;
+      border-bottom: 1px solid var(--nebula); background: #fff;
+    }
+    .ge-topbar-brand { display: flex; align-items: center; gap: 12px; }
+    .ge-topbar-title { font-size: 14px; font-weight: 600; color: var(--dark-teal); }
+    .ge-topbar-sub { font-size: 11px; color: var(--cutty-sark); margin-top: 2px; }
+    .ge-topbar-actions { display: flex; align-items: center; gap: 8px; }
+    .ge-layout { flex: 1; display: flex; flex-direction: row; min-height: 0; overflow: hidden; }
+
+    /* Left steps panel */
+    .ge-steps {
+      width: 340px; flex-shrink: 0;
+      border-right: 1px solid var(--nebula); background: #fff;
+      overflow-y: auto; display: flex; flex-direction: column;
+    }
+    /* Step cards */
+    .ge-card { border-bottom: 1px solid var(--nebula); background: #fff; }
+    .ge-card-hd {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; background: var(--bg-light);
+      border-bottom: 1px solid var(--nebula);
+    }
+    .ge-step-badge {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--teal-10); color: var(--dark-teal);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .ge-step-badge-ai { background: var(--teal); color: #fff; }
+    .ge-card-title { font-size: 13px; font-weight: 600; color: var(--dark-teal); }
+    .ge-card-sub { font-size: 11px; color: var(--cutty-sark); margin-top: 2px; }
+    .ge-card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+    .ge-field { display: flex; flex-direction: column; gap: 5px; }
+    .ge-field-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--cutty-sark);
+    }
+    .ge-select-all {
+      padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500;
+      border: 1.5px solid var(--nebula); background: transparent; cursor: pointer;
+      color: var(--cutty-sark); transition: all 0.12s; flex-shrink: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .ge-select-all:hover { border-color: var(--teal-30); background: var(--teal-10); color: var(--dark-teal); }
+    .ge-groupby-row { display: flex; flex-direction: column; gap: 5px; }
+    /* Column pills */
+    #ds-new-question .qb-col-list { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    #ds-new-question .qb-col-item {
+      padding: 5px 11px; border-radius: 20px;
+      border: 1.5px solid var(--nebula); background: #fff;
+      display: flex; align-items: center; gap: 0;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    #ds-new-question .qb-col-item:has(input:checked) {
+      border-color: var(--teal-50); background: var(--teal-10);
+    }
+    #ds-new-question .qb-col-item:hover { border-color: var(--teal-30); background: var(--teal-10); }
+    #ds-new-question .qb-col-item input[type=checkbox] { display: none; }
+    #ds-new-question .qb-col-name { font-size: 12px; font-weight: 500; color: var(--dark-teal); }
+    #ds-new-question .qb-col-type { display: none; }
+    /* AI card styling */
+    .ge-card-ai { background: var(--bg-light); }
+    .ge-card-ai .ge-card-hd {
+      background: linear-gradient(135deg, rgba(77,182,172,0.08) 0%, rgba(77,182,172,0.02) 100%);
+    }
+    #ds-new-question .nq-generate-btn { width: 100%; justify-content: center; padding: 10px; }
+    #ds-new-question .nq-ai-chips { flex-direction: row; flex-wrap: wrap; }
+    #ds-new-question .nq-ai-chip {
+      font-size: 11px; padding: 4px 9px; border-radius: 12px; white-space: nowrap; flex-shrink: 0;
+    }
+    /* Advanced toggle button */
+    .ge-adv-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border-radius: 8px;
+      border: 1.5px dashed var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 500;
+      color: var(--cutty-sark); transition: all 0.12s; margin-top: 4px; width: 100%;
+    }
+    .ge-adv-toggle:hover { border-color: var(--teal-30); background: var(--teal-10); color: var(--dark-teal); }
+    .ge-adv-toggle.active { border-color: var(--teal-50); background: var(--teal-10); color: var(--dark-teal); }
+
+    /* Right canvas */
+    .ge-canvas { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--bg-light); }
+    .ge-adv-area { display: flex; flex-direction: column; overflow: hidden; border-bottom: 1px solid var(--nebula); }
+    .ge-adv-area .qb-visual-area { flex: 1; min-height: 180px; }
+    .ge-adv-area .qb-sql-area { flex: 1; min-height: 180px; }
+    .ge-adv-close {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 6px;
+      border: 1.5px solid var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500;
+      color: var(--cutty-sark); transition: background 0.12s;
+    }
+    .ge-adv-close:hover { background: var(--aqua-haze); }
+    /* Viz bar */
+    .ge-viz-bar {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px; border-bottom: 1px solid var(--nebula); background: #fff; gap: 8px;
+    }
+    .ge-viz-label { font-size: 11px; font-weight: 600; color: var(--cutty-sark); margin-right: 2px; }
+    .ge-viz-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 11px; border-radius: 7px;
+      border: 1.5px solid var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      color: var(--cutty-sark); transition: all 0.12s;
+    }
+    .ge-viz-btn.active { border-color: var(--teal-50); background: var(--teal-10); color: var(--dark-teal); font-weight: 600; }
+    .ge-viz-btn:hover { border-color: var(--teal-30); background: var(--teal-10); }
+    /* Preview section */
+    .ge-preview-section { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .ge-preview-meta-bar {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 14px; border-bottom: 1px solid var(--nebula); background: #fff;
+    }
+    .ge-preview-section .qb-preview-body {
+      flex: 1; overflow: auto; min-height: 0; display: flex; flex-direction: column;
+      background: var(--bg-light);
+    }
+    .ge-preview-section .qb-empty-preview {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--cutty-sark); gap: 12px; padding: 40px 20px;
+    }
+    .ge-preview-section .qb-empty-preview p {
+      font-size: 13px; color: var(--cutty-sark); text-align: center; max-width: 280px;
+    }
+    .ge-preview-section .qb-table-scroll { flex: 1; overflow: auto; }
+    .ge-canvas .nq-col-hd { background: #fff; }
+
     /* ── Create Dashboard Modal (two-column) ────────────────────── */
     .cdm-body { display: flex; flex-direction: row; height: 380px; overflow: hidden; }
     .cdm-left {
@@ -2575,20 +2708,57 @@
       <!-- ── New Query page ───────────────────────────────────── -->
       <div id="ds-new-question" style="display:none; flex:1; flex-direction:column; min-height:0; overflow:hidden;">
 
-        <div class="nq-body">
+        <!-- ── Guided Explorer topbar ──────────────────────────────── -->
+        <div class="ge-topbar">
+          <div class="ge-topbar-brand">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="1" y="1" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+              <rect x="11.5" y="1" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+              <rect x="1" y="11.5" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+              <rect x="11.5" y="11.5" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+            </svg>
+            <div>
+              <div class="ge-topbar-title">Explore Your Data</div>
+              <div class="ge-topbar-sub">No coding needed — build your custom view step by step</div>
+            </div>
+          </div>
+          <div class="ge-topbar-actions">
+            <button class="qb-reset-btn" onclick="qbReset()">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Start over
+            </button>
+            <button class="qb-save-btn" onclick="openSaveModal()">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
+              </svg>
+              Save Query
+            </button>
+          </div>
+        </div>
 
-          <!-- Left: topbar + QB/VB panels -->
-          <div class="nq-main-area">
+        <!-- ── Main: Steps (left) + Canvas (right) ─────────────────── -->
+        <div class="ge-layout">
 
-          <!-- Two-column panels: QB | Visual Builder/SQL -->
-          <div class="nq-panels">
+          <!-- LEFT: Guided steps ──────────────────────────────────── -->
+          <div class="ge-steps">
 
-            <!-- Column 1: Query Builder -->
-            <div class="nq-col-qb">
-              <div class="qb-panel" id="qb-panel" style="width:100%;border:none;height:100%;">
-                <div class="qb-panel-hd">Query Builder</div>
-                <div class="qb-section">
-                  <div class="qb-section-label">DATA SOURCE</div>
+            <!-- STEP 1: Connect your data ───────────────────────── -->
+            <div class="ge-card">
+              <div class="ge-card-hd">
+                <div class="ge-step-badge">1</div>
+                <div>
+                  <div class="ge-card-title">Connect your data</div>
+                  <div class="ge-card-sub">Choose which data you want to explore</div>
+                </div>
+              </div>
+              <div class="ge-card-body">
+                <div class="ge-field">
+                  <div class="ge-field-label">Data source</div>
                   <div class="qb-select-wrap">
                     <svg class="qb-select-ico" width="14" height="14" viewBox="0 0 14 14" fill="none">
                       <ellipse cx="7" cy="4" rx="5.5" ry="2" stroke="currentColor" stroke-width="1.3"/>
@@ -2601,8 +2771,8 @@
                     <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
                   </div>
                 </div>
-                <div class="qb-section" id="qbs-schema" style="display:none">
-                  <div class="qb-section-label">SCHEMA</div>
+                <div class="ge-field" id="qbs-schema" style="display:none">
+                  <div class="ge-field-label">Schema</div>
                   <div class="qb-select-wrap">
                     <select class="qb-select" id="qb-schema" onchange="qbSelectSchema(this.value)">
                       <option value="">Select schema...</option>
@@ -2610,8 +2780,8 @@
                     <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
                   </div>
                 </div>
-                <div class="qb-section" id="qbs-table" style="display:none">
-                  <div class="qb-section-label">TABLE</div>
+                <div class="ge-field" id="qbs-table" style="display:none">
+                  <div class="ge-field-label">Data set / Table</div>
                   <div class="qb-select-wrap" id="qb-table-wrap">
                     <select class="qb-select" id="qb-table" onchange="qbSelectTable(this.value)">
                       <option value="">Select table...</option>
@@ -2620,18 +2790,28 @@
                   </div>
                   <div class="qb-table-badge-wrap" id="qb-table-badge"></div>
                 </div>
-                <div class="qb-section" id="qbs-cols" style="display:none">
-                  <div class="qb-section-label qb-cols-hd">
-                    <span id="qb-col-count">COLUMNS (0/0)</span>
-                    <button class="qb-select-all-btn" id="qb-selall-btn" onclick="qbSelectAll()">Select all</button>
+              </div>
+            </div>
+
+            <!-- STEP 2: Pick your fields (id=qbs-cols, shown by JS) -->
+            <div class="ge-card" id="qbs-cols" style="display:none">
+              <div class="ge-card-hd" style="justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="ge-step-badge">2</div>
+                  <div>
+                    <div class="ge-card-title">Pick your fields</div>
+                    <div class="ge-card-sub" id="qb-col-count">Select the columns you want</div>
                   </div>
-                  <div class="qb-col-list" id="qb-col-list"></div>
                 </div>
-                <div class="qb-section" id="qbs-groupby" style="display:none">
-                  <div class="qb-section-label">GROUP BY</div>
+                <button class="ge-select-all" id="qb-selall-btn" onclick="qbSelectAll()">Select all</button>
+              </div>
+              <div class="ge-card-body">
+                <div class="qb-col-list" id="qb-col-list"></div>
+                <div class="ge-groupby-row" id="qbs-groupby" style="display:none">
+                  <div class="ge-field-label" style="margin-top:4px">Group results by</div>
                   <div class="qb-select-wrap">
                     <select class="qb-select" id="qb-groupby" onfocus="showAiNudge('groupByOpen')">
-                      <option value="">No group by</option>
+                      <option value="">No grouping</option>
                     </select>
                     <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
                   </div>
@@ -2639,9 +2819,62 @@
               </div>
             </div>
 
-            <!-- Column 2: Visual Builder / SQL Console -->
-            <div class="nq-col-vb">
-              <!-- Builder header (default) -->
+            <!-- STEP 3: Ask a question (AI) ─────────────────────── -->
+            <div class="ge-card ge-card-ai" id="nq-col-ai">
+              <div class="ge-card-hd">
+                <div class="ge-step-badge ge-step-badge-ai">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
+                    <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ge-card-title">Ask a question</div>
+                  <div class="ge-card-sub">Describe what you want — KapAI handles the rest</div>
+                </div>
+              </div>
+              <div class="ge-card-body">
+                <div class="nq-nudge-card" id="nq-nudge-card" style="display:none;">
+                  <div class="nq-nudge-label">
+                    <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
+                    KapAI
+                  </div>
+                  <div class="nq-nudge-text" id="nq-nudge-text"></div>
+                  <div class="nq-nudge-actions" id="nq-nudge-actions"></div>
+                </div>
+                <div class="nq-ai-conv" id="nq-ai-conv"></div>
+                <div class="nq-ai-sep" id="nq-ai-sep" style="display:none;">· · ·</div>
+                <div class="nq-ai-sub" id="nq-ai-sub">Describe what you want in plain language</div>
+                <textarea class="nq-ai-textarea" id="nq-ai-textarea"
+                  placeholder="e.g. Show top 10 agents by resolved tickets this month, grouped by queue..."></textarea>
+                <div class="nq-ai-chips-label" id="nq-ai-chips-label">Try a prompt:</div>
+                <div class="nq-ai-chips" id="nq-ai-chips">
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Agent ticket counts by status this week</button>
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Email sent vs delivered last 30 days</button>
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Top 10 agents by resolved tickets</button>
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Queue ageing by folder and priority</button>
+                </div>
+                <button class="nq-generate-btn" id="nq-generate-btn" onclick="generateFromAI()">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                    <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+                  </svg>
+                  <span id="nq-generate-btn-label">Ask KapAI</span>
+                </button>
+                <button class="ge-adv-toggle" id="ge-adv-toggle" onclick="geToggleAdvanced()">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  SQL Console / Visual Builder
+                </button>
+              </div>
+            </div>
+
+          </div><!-- /ge-steps -->
+
+          <!-- RIGHT: Preview canvas ───────────────────────────────── -->
+          <div class="ge-canvas">
+
+            <!-- Advanced builder panel (hidden by default) -->
+            <div class="ge-adv-area" id="ge-adv-area" style="display:none">
               <div class="nq-col-hd" id="qb-builder-hd" style="justify-content:space-between;padding:6px 14px;">
                 <div class="qb-view-tabs" style="margin:0;">
                   <button class="qb-view-tab active" id="qbtab-visual" onclick="setQbTab('visual')">
@@ -2660,36 +2893,13 @@
                     SQL Console
                   </button>
                 </div>
-                <div style="display:flex;gap:6px;align-items:center;">
-                <button class="qb-reset-btn" onclick="qbReset()">
-                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                    <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                <button class="ge-adv-close" onclick="geToggleAdvanced()">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
                   </svg>
-                  Reset
+                  Close
                 </button>
-                <button class="qb-save-btn" onclick="openSaveModal()">
-                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                    <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
-                    <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
-                  </svg>
-                  Save Query
-                </button>
-                </div>
               </div>
-              <!-- Save-mode header (hidden by default) -->
-              <div class="nq-col-hd" id="qb-save-hd" style="display:none;justify-content:space-between;padding:6px 14px;">
-                <button class="qb-back-btn" onclick="closeSaveModal()">
-                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                    <path d="M8 2L3 6.5L8 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Back to builder
-                </button>
-                <span style="font-size:12px;font-weight:600;color:var(--dark-teal);">Save Question</span>
-                <div style="width:100px;"></div>
-              </div>
-
               <div class="qb-visual-area" id="qb-visual-area">
                 <div class="qb-flow" id="qb-flow"></div>
               </div>
@@ -2698,195 +2908,198 @@
                   placeholder="-- Select a table and columns to generate SQL"
                   oninput="onSqlEditorInput()"></textarea>
               </div>
+            </div>
 
-              <!-- Data Preview — inside middle column, below Visual/SQL -->
-              <div id="qb-preview-section" class="qb-preview" style="flex-shrink:0;height:260px;display:flex;flex-direction:column;overflow:hidden;">
-                <div class="qb-preview-topbar">
-                  <div class="qb-preview-title">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
-                      <path d="M1 4.5h12M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.3"/>
-                    </svg>
-                    Data Preview
-                    <span class="qb-preview-meta" id="qb-preview-meta"></span>
-                  </div>
-                  <div class="qb-preview-actions">
-                    <div class="qb-search-box">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.2"/>
-                        <path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                      </svg>
-                      <input placeholder="Search..." id="qb-search" oninput="qbFilterRows(this.value)" />
-                    </div>
-                    <div class="qb-limit-wrap">
-                      <span>Limit:</span>
-                      <select id="qb-limit">
-                        <option>100</option><option>200</option><option>500</option>
-                      </select>
-                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                    </div>
-                    <button class="qb-export-btn" id="qb-export-btn" onclick="qbExport()" disabled>
-                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                        <path d="M6.5 1v7M3.5 5l3 3L10 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M1 10h11v2H1z" fill="currentColor" opacity=".25"/>
-                      </svg>
-                      Export
-                    </button>
-                    <button class="nq-run-btn" onclick="qbRunQuery()">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M3 2l7 4-7 4V2Z" fill="white"/>
-                      </svg>
-                      Run Query
-                    </button>
-                  </div>
-                </div>
-                <div class="qb-preview-body" id="qb-preview-body">
-                  <div class="qb-empty-preview" id="qb-empty-preview">
-                    <!-- spinner (hidden by default) -->
-                    <svg id="qb-spinner" width="28" height="28" viewBox="0 0 28 28" fill="none" style="display:none;animation:spin 0.8s linear infinite">
-                      <circle cx="14" cy="14" r="11" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="55" stroke-dashoffset="20"/>
-                    </svg>
-                    <!-- idle table icon -->
-                    <svg id="qb-empty-ico" width="42" height="42" viewBox="0 0 42 42" fill="none">
-                      <rect x="3" y="3" width="36" height="36" rx="6" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
-                      <path d="M3 12h36M12 12v27" stroke="currentColor" stroke-width="1.5" opacity=".25" stroke-linecap="round"/>
-                    </svg>
-                    <p id="qb-empty-msg">Select a data source, schema, and table to get started</p>
-                  </div>
-                  <div class="qb-table-scroll" id="qb-table-scroll" style="display:none">
-                    <table class="qb-data-table" id="qb-data-table"></table>
-                  </div>
-                </div>
-              </div>
+            <!-- Save modal header (shown during save flow) -->
+            <div class="nq-col-hd" id="qb-save-hd" style="display:none;justify-content:space-between;padding:6px 14px;">
+              <button class="qb-back-btn" onclick="closeSaveModal()">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M8 2L3 6.5L8 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back to builder
+              </button>
+              <span style="font-size:12px;font-weight:600;color:var(--dark-teal);">Save Question</span>
+              <div style="width:100px;"></div>
+            </div>
 
-              <!-- Inline Save View (hidden by default, replaces builder content) -->
-              <div id="qb-save-view" style="display:none;flex:1;flex-direction:column;overflow-y:auto;padding:18px 20px;gap:16px;">
-                <div class="sq-field">
-                  <label class="sq-label">Question Name</label>
-                  <input class="sq-input" id="sq-name" value="Untitled Query" onfocus="showAiNudge('nameField')" />
-                </div>
-                <div class="sq-field">
-                  <label class="sq-label">Description</label>
-                  <textarea class="sq-textarea" id="sq-desc" placeholder="Describe what this question answers..."></textarea>
-                </div>
-                <div class="sq-field">
-                  <label class="sq-label">
+            <!-- Preview section: viz bar + data table -->
+            <div id="qb-preview-section" class="ge-preview-section">
+
+              <!-- Visualization type + actions bar -->
+              <div class="ge-viz-bar">
+                <div style="display:flex;align-items:center;gap:5px;">
+                  <span class="ge-viz-label">View as:</span>
+                  <button class="ge-viz-btn active" onclick="geSetViz(this,'table')">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                      <path d="M2 3.5L6.5 1L11 3.5V9.5L6.5 12L2 9.5V3.5Z" stroke="currentColor" stroke-width="1.2"/>
-                    </svg>
-                    Save to Collection
-                  </label>
-                  <div class="sq-collection">
-                    <div class="sq-col-root">Root</div>
-                    <div class="sq-col-item sq-col-item--selected">
-                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                        <path d="M1.5 6.5L6.5 1.5L11.5 6.5V12.5H8.5V8.5H4.5V12.5H1.5V6.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-                      </svg>
-                      Save here
-                      <span class="sq-col-badge">Selected</span>
-                    </div>
-                    <div class="sq-col-empty">No sub-collections</div>
-                  </div>
-                </div>
-                <div class="sq-field">
-                  <label class="sq-label">Default Visualization</label>
-                  <div class="qb-select-wrap" style="border-radius:8px;">
-                    <svg class="qb-select-ico" width="13" height="13" viewBox="0 0 13 13" fill="none">
                       <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
                       <path d="M1 4.5h11M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.2"/>
                     </svg>
-                    <select class="qb-select" id="sq-viz">
-                      <option>Table</option><option>Bar Chart</option><option>Pie Chart</option><option>Line Chart</option>
-                    </select>
-                    <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                  </div>
-                </div>
-                <div class="sq-field">
-                  <div class="sq-cache-hd">
+                    Table
+                  </button>
+                  <button class="ge-viz-btn" onclick="geSetViz(this,'bar')">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                      <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.2"/>
-                      <path d="M6.5 3.5v3l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      <path d="M1 11h11M3 11V6.5M6.5 11V3M10 11V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                     </svg>
-                    Cache Settings
-                  </div>
-                  <div class="sq-cache-row">
-                    <div>
-                      <div class="sq-cache-title">Enable Caching</div>
-                      <div class="sq-cache-sub">Cache results for faster repeat queries</div>
-                    </div>
-                    <div class="sq-toggle active" id="sq-cache-toggle" onclick="toggleSqCache()">
-                      <div class="sq-toggle-knob"></div>
-                    </div>
-                  </div>
-                  <div class="sq-cache-row" id="sq-dur-row">
-                    <span class="sq-cache-title">Cache Duration</span>
-                    <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:flex-end;">
-                      <input type="range" class="sq-slider" id="sq-dur" min="15" max="240" value="60" step="15" oninput="updateCacheDur(this.value)" />
-                      <span class="sq-dur-label" id="sq-dur-label">1 hour</span>
-                    </div>
-                  </div>
+                    Bar
+                  </button>
+                  <button class="ge-viz-btn" onclick="geSetViz(this,'line')">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M1 9L4.5 5.5L7.5 8L12 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Line
+                  </button>
+                  <button class="ge-viz-btn" onclick="geSetViz(this,'pie')">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M6.5 6.5V1A5.5 5.5 0 1 0 12 6.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                      <path d="M6.5 1A5.5 5.5 0 0 1 12 6.5" stroke="currentColor" stroke-width="1.2"/>
+                    </svg>
+                    Pie
+                  </button>
                 </div>
-                <div class="sq-share-hint">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
-                    <path d="M6 5.5v3.5M6 3.5h.01" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="qb-search-box">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.2"/>
+                      <path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <input placeholder="Search..." id="qb-search" oninput="qbFilterRows(this.value)" />
+                  </div>
+                  <div class="qb-limit-wrap">
+                    <span>Limit:</span>
+                    <select id="qb-limit">
+                      <option>100</option><option>200</option><option>500</option>
+                    </select>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </div>
+                  <button class="qb-export-btn" id="qb-export-btn" onclick="qbExport()" disabled>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M6.5 1v7M3.5 5l3 3L10 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M1 10h11v2H1z" fill="currentColor" opacity=".25"/>
+                    </svg>
+                    Export
+                  </button>
+                  <button class="nq-run-btn" onclick="qbRunQuery()">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M3 2l7 4-7 4V2Z" fill="white"/>
+                    </svg>
+                    Run Query
+                  </button>
+                </div>
+              </div>
+
+              <!-- Preview meta bar -->
+              <div class="ge-preview-meta-bar">
+                <div class="qb-preview-title">
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+                    <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M1 4.5h12M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.3"/>
                   </svg>
-                  You can share this question with others after saving
-                </div>
-                <div class="qb-save-view-footer">
-                  <button class="sq-cancel-btn" onclick="closeSaveModal()">Cancel</button>
-                  <button class="sq-save-btn" onclick="saveQueryNow()">Save</button>
+                  Data Preview
+                  <span class="qb-preview-meta" id="qb-preview-meta"></span>
                 </div>
               </div>
 
-            </div>
-
-          </div><!-- /nq-panels -->
-
-          </div><!-- /nq-main-area -->
-
-          <!-- Column 3: AI Assistant (toggleable) -->
-          <div class="nq-col-ai" id="nq-col-ai">
-            <div class="nq-col-hd">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor" style="color:var(--teal);flex-shrink:0;">
-                <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
-              </svg>
-              AI Assistant
-            </div>
-            <div class="nq-col-ai-body">
-              <!-- Contextual nudge card — auto-populated by QB activity -->
-              <div class="nq-nudge-card" id="nq-nudge-card" style="display:none;">
-                <div class="nq-nudge-label">
-                  <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
-                  KapAI
+              <!-- Preview body -->
+              <div class="qb-preview-body" id="qb-preview-body">
+                <div class="qb-empty-preview" id="qb-empty-preview">
+                  <svg id="qb-spinner" width="28" height="28" viewBox="0 0 28 28" fill="none" style="display:none;animation:spin 0.8s linear infinite">
+                    <circle cx="14" cy="14" r="11" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="55" stroke-dashoffset="20"/>
+                  </svg>
+                  <svg id="qb-empty-ico" width="42" height="42" viewBox="0 0 42 42" fill="none">
+                    <rect x="3" y="3" width="36" height="36" rx="6" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+                    <path d="M3 12h36M12 12v27" stroke="currentColor" stroke-width="1.5" opacity=".25" stroke-linecap="round"/>
+                  </svg>
+                  <p id="qb-empty-msg">Select a data source, schema, and table to get started</p>
                 </div>
-                <div class="nq-nudge-text" id="nq-nudge-text"></div>
-                <div class="nq-nudge-actions" id="nq-nudge-actions"></div>
+                <div class="qb-table-scroll" id="qb-table-scroll" style="display:none">
+                  <table class="qb-data-table" id="qb-data-table"></table>
+                </div>
               </div>
-              <!-- Conversation history -->
-              <div class="nq-ai-conv" id="nq-ai-conv"></div>
-              <div class="nq-ai-sep" id="nq-ai-sep" style="display:none;">· · ·</div>
-              <!-- Manual prompt section -->
-              <div class="nq-ai-sub" id="nq-ai-sub">Describe what you want in plain language</div>
-              <textarea class="nq-ai-textarea" id="nq-ai-textarea"
-                placeholder="e.g. Show top 10 agents by resolved tickets this month, grouped by queue..."></textarea>
-              <div class="nq-ai-chips-label" id="nq-ai-chips-label">Try a prompt:</div>
-              <div class="nq-ai-chips" id="nq-ai-chips">
-                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Agent ticket counts by status this week</button>
-                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Email sent vs delivered last 30 days</button>
-                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Top 10 agents by resolved tickets</button>
-                <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Queue ageing by folder and priority</button>
+            </div><!-- /#qb-preview-section -->
+
+            <!-- Save view (shown when saving) -->
+            <div id="qb-save-view" style="display:none;flex:1;flex-direction:column;overflow-y:auto;padding:18px 20px;gap:16px;background:#fff;">
+              <div class="sq-field">
+                <label class="sq-label">Question Name</label>
+                <input class="sq-input" id="sq-name" value="Untitled Query" onfocus="showAiNudge('nameField')" />
               </div>
-              <button class="nq-generate-btn" id="nq-generate-btn" onclick="generateFromAI()">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-                  <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+              <div class="sq-field">
+                <label class="sq-label">Description</label>
+                <textarea class="sq-textarea" id="sq-desc" placeholder="Describe what this question answers..."></textarea>
+              </div>
+              <div class="sq-field">
+                <label class="sq-label">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M2 3.5L6.5 1L11 3.5V9.5L6.5 12L2 9.5V3.5Z" stroke="currentColor" stroke-width="1.2"/>
+                  </svg>
+                  Save to Collection
+                </label>
+                <div class="sq-collection">
+                  <div class="sq-col-root">Root</div>
+                  <div class="sq-col-item sq-col-item--selected">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M1.5 6.5L6.5 1.5L11.5 6.5V12.5H8.5V8.5H4.5V12.5H1.5V6.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                    </svg>
+                    Save here
+                    <span class="sq-col-badge">Selected</span>
+                  </div>
+                  <div class="sq-col-empty">No sub-collections</div>
+                </div>
+              </div>
+              <div class="sq-field">
+                <label class="sq-label">Default Visualization</label>
+                <div class="qb-select-wrap" style="border-radius:8px;">
+                  <svg class="qb-select-ico" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M1 4.5h11M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.2"/>
+                  </svg>
+                  <select class="qb-select" id="sq-viz">
+                    <option>Table</option><option>Bar Chart</option><option>Pie Chart</option><option>Line Chart</option>
+                  </select>
+                  <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+              <div class="sq-field">
+                <div class="sq-cache-hd">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M6.5 3.5v3l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  </svg>
+                  Cache Settings
+                </div>
+                <div class="sq-cache-row">
+                  <div>
+                    <div class="sq-cache-title">Enable Caching</div>
+                    <div class="sq-cache-sub">Cache results for faster repeat queries</div>
+                  </div>
+                  <div class="sq-toggle active" id="sq-cache-toggle" onclick="toggleSqCache()">
+                    <div class="sq-toggle-knob"></div>
+                  </div>
+                </div>
+                <div class="sq-cache-row" id="sq-dur-row">
+                  <span class="sq-cache-title">Cache Duration</span>
+                  <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:flex-end;">
+                    <input type="range" class="sq-slider" id="sq-dur" min="15" max="240" value="60" step="15" oninput="updateCacheDur(this.value)" />
+                    <span class="sq-dur-label" id="sq-dur-label">1 hour</span>
+                  </div>
+                </div>
+              </div>
+              <div class="sq-share-hint">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M6 5.5v3.5M6 3.5h.01" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                 </svg>
-                <span id="nq-generate-btn-label">Ask KapAI</span>
-              </button>
+                You can share this question with others after saving
+              </div>
+              <div class="qb-save-view-footer">
+                <button class="sq-cancel-btn" onclick="closeSaveModal()">Cancel</button>
+                <button class="sq-save-btn" onclick="saveQueryNow()">Save</button>
+              </div>
             </div>
-          </div>
 
-        </div><!-- /nq-body -->
+          </div><!-- /ge-canvas -->
+
+        </div><!-- /ge-layout -->
       </div><!-- /ds-new-question -->
 
 
@@ -3647,6 +3860,13 @@ function openSaveModal() {
   document.getElementById('qb-sql-area').style.display      = 'none';
   document.getElementById('qb-preview-section').style.display = 'none';
   document.getElementById('qb-save-view').style.display     = 'flex';
+  // Also collapse advanced builder if open
+  const advArea = document.getElementById('ge-adv-area');
+  if (advArea && advArea.style.display !== 'none') {
+    advArea.style.display = 'none';
+    const advBtn = document.getElementById('ge-adv-toggle');
+    if (advBtn) advBtn.classList.remove('active');
+  }
   kapAiState.dismissed.delete('saveOpen');
   kapAiState.dismissed.delete('nameField');
   setTimeout(() => showAiNudge('saveOpen'), 300);
@@ -3663,6 +3883,27 @@ function closeSaveModal() {
   document.getElementById('qb-sql-area').style.display      = sqlActive ? 'flex' : 'none';
   dismissNudge('saveOpen');
   dismissNudge('nameField');
+}
+function geToggleAdvanced() {
+  const area = document.getElementById('ge-adv-area');
+  const btn  = document.getElementById('ge-adv-toggle');
+  const isOpen = area.style.display !== 'none';
+  area.style.display = isOpen ? 'none' : 'flex';
+  if (btn) btn.classList.toggle('active', !isOpen);
+  if (!isOpen) {
+    const sqlActive = document.getElementById('qbtab-sql')?.classList.contains('active');
+    document.getElementById('qb-visual-area').style.display = sqlActive ? 'none' : 'flex';
+    document.getElementById('qb-sql-area').style.display    = sqlActive ? 'flex'  : 'none';
+  }
+}
+function geSetViz(btn, type) {
+  document.querySelectorAll('.ge-viz-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const sel = document.getElementById('sq-viz');
+  if (sel) {
+    const map = { table: 'Table', bar: 'Bar Chart', line: 'Line Chart', pie: 'Pie Chart' };
+    sel.value = map[type] || 'Table';
+  }
 }
 function toggleSqCache() {
   const t = document.getElementById('sq-cache-toggle');
