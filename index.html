@@ -501,13 +501,13 @@
     }
     .send-btn img { width: 18px; height: 18px; }
     .quick-actions-wrapper { display: flex; flex-direction: column; gap: var(--space-12); align-items: center; width: 100%; }
-    .quick-actions { display: flex; align-items: center; gap: var(--space-5); width: 100%; flex-wrap: wrap; }
+    .quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); width: 100%; }
     .pill-btn {
-      display: flex; align-items: center; gap: var(--space-2);
-      height: 36px; padding: 0 var(--space-7) 0 36px;
+      display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+      height: 36px; padding: 0 var(--space-5);
       border-radius: 9999px; background: var(--teal); border: 1px solid var(--teal);
       color: #fff; font-size: var(--font-sm); font-weight: var(--weight-semibold);
-      font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+      font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       position: relative; transition: background 0.2s, box-shadow 0.2s;
       box-shadow: 0 2px 4px rgba(77, 182, 172, 0.2);
     }
@@ -1020,7 +1020,7 @@
       .content-inner { width: calc(100% - 28px); gap: var(--space-10); }
       .hero-heading { font-size: 20px; line-height: 28px; }
       .quick-actions { gap: var(--space-3); }
-      .pill-btn { flex: 1; min-width: 140px; justify-content: center; }
+      .pill-btn { min-width: 120px; }
 
       /* Action bar stacks */
       .action-bar {
@@ -2795,7 +2795,7 @@
 
         <div class="quick-actions-wrapper">
           <div class="quick-actions">
-            <button class="pill-btn" style="width:204px;" onclick="navigate('data-studio')">
+            <button class="pill-btn" onclick="navigate('data-studio')">
               <svg class="pill-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor"/>
                 <rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/>
@@ -2804,7 +2804,7 @@
               </svg>
               Build a custom dashboard
             </button>
-            <button class="pill-btn" style="width:163px;">
+            <button class="pill-btn">
               <svg class="pill-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <rect x="2" y="11" width="3" height="3" fill="currentColor"/>
                 <rect x="6.5" y="8" width="3" height="6" fill="currentColor"/>
@@ -2812,7 +2812,7 @@
               </svg>
               Analyze my tickets
             </button>
-            <button class="pill-btn" style="width:196px;">
+            <button class="pill-btn">
               <svg class="pill-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M2 2h12c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1zm0 2v8h12V4H2z"/>
                 <path d="M4 7h8v1H4zM4 9h8v1H4z"/>
