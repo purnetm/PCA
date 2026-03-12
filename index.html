@@ -2539,6 +2539,155 @@
     .ge-preview-section .qb-empty-preview p { font-size: var(--font-base); color: var(--cutty-sark); text-align: center; max-width: 280px; }
     .ge-preview-section .qb-table-scroll { overflow: auto; min-height: 240px; }
 
+    /* ╔═════════════════════════════════════════════════════════════╗
+       ║           ITERATION B: HYBRID QUERY BUILDER LAYOUT           ║
+       ║  Left Config Panel | Top Chips | Center Preview | SQL + AI   ║
+       ╚═════════════════════════════════════════════════════════════╝ */
+
+    /* 3-column layout wrapper */
+    .ib-layout { display: flex; flex-direction: row; gap: var(--space-6); overflow: hidden; flex: 1; min-height: 0; }
+
+    /* ── Left Config Sidebar ──────────────────────────────────────── */
+    .ib-config-sidebar {
+      flex: 0 0 280px; background: var(--surface); border-radius: var(--radius-md);
+      border: 1.5px solid var(--nebula); overflow-y: auto;
+      display: flex; flex-direction: column; gap: 0; padding: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .ib-config-section {
+      padding: var(--space-5) var(--space-6); border-bottom: 1.5px solid var(--nebula);
+      display: flex; flex-direction: column; gap: var(--space-4); flex-shrink: 0;
+    }
+    .ib-config-section:last-child { border-bottom: none; }
+    .ib-config-label {
+      font-size: var(--font-xs); font-weight: var(--weight-semibold);
+      text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--cutty-sark); opacity: 0.8;
+    }
+    .ib-select-wrap, .ib-input-wrap {
+      display: flex; align-items: center;
+      border: 1.5px solid var(--nebula); border-radius: var(--radius-sm);
+      background: #fff; overflow: hidden; position: relative;
+    }
+    .ib-select, .ib-input {
+      flex: 1; border: none; outline: none; padding: var(--space-2) var(--space-3);
+      font-size: var(--font-sm); font-family: 'Inter', sans-serif;
+      background: transparent; color: var(--dark-teal);
+    }
+    .ib-select { appearance: none; padding-right: 24px; }
+    .ib-select-chevron {
+      position: absolute; right: 8px; pointer-events: none;
+      width: 12px; height: 12px; color: var(--cutty-sark);
+    }
+    .ib-filter-add-btn {
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);
+      border: 1.5px dashed var(--nebula); background: transparent;
+      font-size: var(--font-xs); font-weight: var(--weight-medium);
+      color: var(--teal); cursor: pointer; transition: all 0.12s;
+      font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 4px;
+    }
+    .ib-filter-add-btn:hover { border-color: var(--teal); background: var(--teal-10); }
+    .ib-filter-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--teal-10); border: 1px solid var(--teal-20);
+      padding: 3px 8px; border-radius: 12px;
+      font-size: 11px; color: var(--teal); font-weight: var(--weight-medium);
+    }
+    .ib-filter-tag-remove {
+      background: none; border: none; cursor: pointer;
+      padding: 0 2px; color: var(--teal); font-weight: bold;
+    }
+
+    /* ── Center Content Area ──────────────────────────────────────── */
+    .ib-center-pane {
+      flex: 1; display: flex; flex-direction: column; gap: var(--space-6);
+      min-width: 0; overflow: hidden;
+    }
+
+    /* Top chips bar with selected items + Show Preview button */
+    .ib-chips-bar {
+      background: #fff; border: 1.5px solid var(--nebula);
+      border-radius: var(--radius-md); padding: var(--space-5) var(--space-6);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-5); flex-shrink: 0; flex-wrap: wrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .ib-chips-list {
+      display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+      flex: 1;
+    }
+    .ib-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--teal-10); border: 1px solid var(--teal-20);
+      padding: 5px 12px; border-radius: 20px;
+      font-size: var(--font-xs); color: var(--dark-teal); font-weight: var(--weight-medium);
+      white-space: nowrap;
+    }
+    .ib-chip-remove {
+      background: none; border: none; cursor: pointer; padding: 0 2px;
+      color: var(--teal); font-weight: bold; display: flex; align-items: center;
+    }
+    .ib-show-preview-btn {
+      padding: 8px 16px; background: var(--teal); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      font-size: var(--font-sm); font-weight: var(--weight-medium);
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.12s; flex-shrink: 0;
+    }
+    .ib-show-preview-btn:hover { background: var(--dark-teal); }
+
+    /* Center preview area */
+    .ib-preview-container {
+      flex: 1; display: flex; flex-direction: column;
+      background: #fff; border: 1.5px solid var(--nebula);
+      border-radius: var(--radius-md); overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .ib-preview-header {
+      padding: var(--space-5) var(--space-6); border-bottom: 1.5px solid var(--nebula);
+      display: flex; align-items: center; gap: var(--space-4); flex-shrink: 0;
+      font-size: var(--font-md); font-weight: var(--weight-semibold);
+      color: var(--dark-teal);
+    }
+    .ib-preview-body {
+      flex: 1; overflow-y: auto; padding: var(--space-5) var(--space-6);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cutty-sark); font-size: var(--font-sm);
+    }
+    .ib-preview-empty {
+      text-align: center; opacity: 0.7;
+      display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+    }
+
+    /* ── Right Sidebar: SQL + KapAI ──────────────────────────────── */
+    .ib-right-sidebar {
+      flex: 0 0 340px; display: flex; flex-direction: column; gap: var(--space-6);
+      overflow: hidden;
+    }
+    .ib-sql-panel {
+      flex: 1; background: #fff; border: 1.5px solid var(--nebula);
+      border-radius: var(--radius-md); overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .ib-sql-header {
+      padding: var(--space-5) var(--space-6); border-bottom: 1.5px solid var(--nebula);
+      display: flex; align-items: center; gap: var(--space-3); flex-shrink: 0;
+      font-size: var(--font-sm); font-weight: var(--weight-semibold);
+      color: var(--dark-teal);
+    }
+    .ib-sql-editor-wrapper {
+      flex: 1; overflow: hidden; display: flex; flex-direction: column;
+      padding: var(--space-4) var(--space-6);
+    }
+    .ib-sql-editor {
+      flex: 1; border: 1px solid var(--nebula); border-radius: 4px;
+      padding: var(--space-3); font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px; color: #424242; background: var(--aqua-haze);
+      resize: none; outline: none;
+    }
+
     /* ── Create Dashboard Modal (two-column) ────────────────────── */
     .cdm-body { display: flex; flex-direction: row; height: 380px; overflow: hidden; }
     .cdm-left {
@@ -3224,9 +3373,215 @@
       </div>
 
       <!-- ── New Query page ───────────────────────────────────── -->
-      <div id="ds-new-question" style="display:none; flex:1; flex-direction:row; min-height:0; overflow:hidden;">
+      <div id="ds-new-question" style="display:none; flex:1; flex-direction:column; min-height:0; overflow:hidden;">
 
-        <div class="ge-main-pane">
+        <!-- ── ITERATION B: Hybrid Query Builder ────────────────── -->
+        <div class="ge-topbar">
+          <div class="ge-topbar-brand">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="1" y="1" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+              <rect x="11.5" y="1" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+              <rect x="1" y="11.5" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+              <rect x="11.5" y="11.5" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
+            </svg>
+            <div>
+              <div class="ge-topbar-title">Build Your Report</div>
+              <div class="ge-topbar-sub">Configure data, preview results, and refine with SQL</div>
+            </div>
+          </div>
+          <div class="ge-topbar-actions">
+            <button class="qb-reset-btn" onclick="qbReset()" title="Start over">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="qb-save-btn" onclick="openSaveModal()">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
+              </svg>
+              Save Query
+            </button>
+          </div>
+        </div>
+
+        <!-- Main 3-column layout -->
+        <div class="ib-layout" style="padding: var(--space-6); gap: var(--space-6);">
+
+          <!-- LEFT: Config Sidebar -->
+          <div class="ib-config-sidebar">
+            <div class="ib-config-section">
+              <div class="ib-config-label">📊 What to Report On</div>
+              <div class="ib-select-wrap">
+                <select class="ib-select" id="ib-report-type" onchange="ibUpdateChips()">
+                  <option value="">Select report type...</option>
+                  <option value="tickets">Ticket Metrics</option>
+                  <option value="agents">Agent Performance</option>
+                  <option value="queue">Queue Analysis</option>
+                  <option value="sla">SLA Compliance</option>
+                </select>
+                <svg class="ib-select-chevron" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+
+            <div class="ib-config-section">
+              <div class="ib-config-label">📋 Columns</div>
+              <div class="ib-input-wrap">
+                <input type="text" class="ib-input" id="ib-columns" placeholder="Select columns..." readonly onclick="showColumnPicker()" style="cursor:pointer;" />
+              </div>
+              <button class="ib-filter-add-btn" onclick="showColumnPicker()">
+                <span>+</span> Add/Edit
+              </button>
+            </div>
+
+            <div class="ib-config-section">
+              <div class="ib-config-label">📅 Date Range</div>
+              <div style="display:flex;gap:var(--space-2);flex-direction:column;">
+                <input type="date" class="ib-input" id="ib-date-from" onchange="ibUpdateChips()" style="padding:var(--space-2) var(--space-3);border:1.5px solid var(--nebula);border-radius:var(--radius-sm);background:#fff;"/>
+                <input type="date" class="ib-input" id="ib-date-to" onchange="ibUpdateChips()" style="padding:var(--space-2) var(--space-3);border:1.5px solid var(--nebula);border-radius:var(--radius-sm);background:#fff;"/>
+              </div>
+            </div>
+
+            <div class="ib-config-section">
+              <div class="ib-config-label">🔍 Filters</div>
+              <div id="ib-filters" style="display:flex;flex-direction:column;gap:var(--space-2);"></div>
+              <button class="ib-filter-add-btn" onclick="showAddFilter()">
+                <span>+</span> Add Filter
+              </button>
+            </div>
+
+            <div class="ib-config-section">
+              <div class="ib-config-label">📈 Grouping</div>
+              <div class="ib-select-wrap">
+                <select class="ib-select" id="ib-groupby" onchange="ibUpdateChips()">
+                  <option value="">None</option>
+                  <option value="status">By Status</option>
+                  <option value="priority">By Priority</option>
+                  <option value="agent">By Agent</option>
+                  <option value="queue">By Queue</option>
+                </select>
+                <svg class="ib-select-chevron" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTER: Preview + Chips -->
+          <div class="ib-center-pane">
+            <!-- Top chips bar -->
+            <div class="ib-chips-bar">
+              <div class="ib-chips-list" id="ib-chips-list">
+                <!-- Chips populate here -->
+              </div>
+              <button class="ib-show-preview-btn" onclick="ibShowPreview()">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M7 2C4.5 2 2.5 4 1 6c1.5 2 3.5 4 6 4s4.5-2 6-4c-1.5-2-3.5-4-6-4zm0 6.5c-1.4 0-2.5-1.1-2.5-2.5S5.6 3.5 7 3.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z" fill="currentColor"/>
+                </svg>
+                Show Preview
+              </button>
+            </div>
+
+            <!-- Data preview -->
+            <div class="ib-preview-container">
+              <div class="ib-preview-header">
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+                  <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M1 4.5h12M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+                Data Preview
+                <span id="ib-preview-meta" style="margin-left:auto;font-size:11px;opacity:0.65;font-weight:normal;"></span>
+              </div>
+              <div class="ib-preview-body" id="ib-preview-body">
+                <div class="ib-preview-empty">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" opacity="0.3">
+                    <rect x="5" y="5" width="30" height="30" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <path d="M5 12h30M12 12v23" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                  <span>Configure settings and click "Show Preview" to see results</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: SQL Console + KapAI -->
+          <div class="ib-right-sidebar">
+            <!-- SQL Console -->
+            <div class="ib-sql-panel">
+              <div class="ib-sql-header">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                SQL Console
+              </div>
+              <div class="ib-sql-editor-wrapper">
+                <textarea class="ib-sql-editor" id="ib-sql-editor" readonly placeholder="-- SQL will generate here"></textarea>
+              </div>
+            </div>
+
+            <!-- KapAI Panel (retain from Iteration A) -->
+            <div class="ge-step-card ge-step-card-ai" style="margin-top:var(--space-6);" id="nq-col-ai-ib">
+              <div class="ge-step-hd" style="justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div class="ge-step-badge ge-step-badge-ai">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
+                      <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+                    </svg>
+                  </div>
+                  <div class="ge-step-title">KapAI</div>
+                </div>
+              </div>
+              <div class="ge-step-body">
+                <div class="ge-ai-scroll">
+                  <div class="nq-nudge-card" id="nq-nudge-card-ib" style="display:none;">
+                    <div class="nq-nudge-label">
+                      <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
+                      KapAI
+                    </div>
+                    <div class="nq-nudge-text" id="nq-nudge-text-ib"></div>
+                    <div class="nq-nudge-actions" id="nq-nudge-actions-ib"></div>
+                  </div>
+                  <div class="nq-ai-conv" id="nq-ai-conv-ib"></div>
+                  <div class="nq-ai-sep" id="nq-ai-sep-ib" style="display:none;">· · ·</div>
+                  <div class="nq-ai-sub" id="nq-ai-sub-ib" style="display:none;">Ask me anything about your data</div>
+                  <div class="ge-ai-prompts">
+                    <div class="nq-ai-chips-label" id="nq-ai-chips-label-ib">Try a prompt:</div>
+                    <div class="nq-ai-chips" id="nq-ai-chips-ib">
+                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Summarize this data</button>
+                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Find trends</button>
+                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Compare groups</button>
+                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Highlight outliers</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ge-ai-input-footer">
+                  <div class="ge-ai-input-row">
+                    <button class="ge-ai-attach-btn" title="Attach file">
+                      <svg width="11" height="20" viewBox="0 0 11.5 21.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.5 15.75V6.75C11.5 6.335 11.165 6 10.75 6C10.335 6 10 6.335 10 6.75V15.75C10 18.095 8.095 20 5.75 20C3.405 20 1.5 18.095 1.5 15.75V4.25C1.5 2.735 2.735 1.5 4.25 1.5C5.765 1.5 7 2.735 7 4.25V15C7 15.69 6.44 16.25 5.75 16.25C5.06 16.25 4.5 15.69 4.5 15V5.25C4.5 4.835 4.165 4.5 3.75 4.5C3.335 4.5 3 4.835 3 5.25V15C3 16.515 4.235 17.75 5.75 17.75C7.265 17.75 8.5 16.515 8.5 15V4.25C8.5 1.905 6.595 0 4.25 0C1.905 0 0 1.905 0 4.25V15.75C0 18.92 2.58 21.5 5.75 21.5C8.92 21.5 11.5 18.92 11.5 15.75Z" fill="currentColor"/>
+                      </svg>
+                    </button>
+                    <input type="text" class="ge-ai-input" id="nq-ai-textarea-ib" placeholder="Ask KapAI..." onkeydown="if(event.key==='Enter'){event.preventDefault();generateFromAI();}"/>
+                    <button class="ge-ai-mic-btn" title="Voice input">
+                      <svg width="14" height="19" viewBox="0 0 14.3298 20.0001" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.90891 4.25532C2.90891 1.90517 4.81408 0 7.16423 0C9.51436 0 11.4195 1.90517 11.4195 4.25532V8.93617C11.4195 11.2863 9.51436 13.1915 7.16423 13.1915C4.81408 13.1915 2.90891 11.2863 2.90891 8.93617V4.25532Z" fill="currentColor"/>
+                        <path d="M7.16933 14.8936C7.16763 14.8936 7.16593 14.8936 7.16423 14.8936C7.16253 14.8936 7.16082 14.8936 7.15912 14.8936C4.66275 14.8912 2.5239 13.3532 1.64017 11.17C1.46381 10.7344 0.967641 10.5242 0.531956 10.7005C0.0962711 10.8769 -0.113959 11.373 0.0624074 11.8087C1.09637 14.3631 3.4694 16.2344 6.31317 16.5489V19.1489C6.31317 19.619 6.69419 20 7.16423 20C7.63427 20 8.01529 19.619 8.01529 19.1489V16.5491C10.8596 16.2349 13.2333 14.3634 14.2674 11.8087C14.4437 11.373 14.2335 10.8769 13.7978 10.7005C13.3621 10.5242 12.8659 10.7344 12.6896 11.17C11.8058 13.3536 9.66627 14.8918 7.16933 14.8936Z" fill="currentColor"/>
+                      </svg>
+                    </button>
+                    <button class="ge-ai-send-btn" id="nq-generate-btn-ib" onclick="generateFromAI()" title="Ask KapAI">
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.1424 6.26772L2.29238 1.4628C2.20767 1.42148 2.11465 1.4 2.02039 1.4C1.67776 1.4 1.4 1.67776 1.4 2.02039V2.03829C1.4 2.12154 1.41021 2.20448 1.4304 2.28524L2.37526 6.06465C2.40106 6.16789 2.48834 6.24415 2.59409 6.25591L6.74703 6.71735C6.89106 6.73334 7 6.85506 7 7C7 7.14494 6.89106 7.26666 6.74703 7.28265L2.59409 7.74409C2.48834 7.75585 2.40106 7.83211 2.37526 7.93535L1.4304 11.7147C1.41021 11.7955 1.4 11.8785 1.4 11.9617V11.9796C1.4 12.3222 1.67776 12.6 2.02039 12.6C2.11465 12.6 2.20767 12.5785 2.29238 12.5372L12.1424 7.73228C12.4224 7.59574 12.6 7.31151 12.6 7C12.6 6.68849 12.4224 6.40426 12.1424 6.26772Z" fill="white"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden: Save modal, advanced builder etc (kept for compatibility) -->
+        <div class="ge-main-pane" style="display:none;">
 
         <!-- ── Topbar ──────────────────────────────────────────────── -->
         <div class="ge-topbar">
@@ -6138,6 +6493,229 @@ function setSubnavActive(section) {
   const map = { home: 'home', 'new-question': 'new-question' };
   const el = document.getElementById('subnav-' + (map[section] || section));
   if (el) el.classList.add('active');
+}
+
+/* ── Iteration B: Hybrid Query Builder ──────────────────────────── */
+
+let ibFilters = [];
+
+function ibUpdateChips() {
+  const reportType = document.getElementById('ib-report-type').value;
+  const dateFrom = document.getElementById('ib-date-from').value;
+  const dateTo = document.getElementById('ib-date-to').value;
+  const groupBy = document.getElementById('ib-groupby').value;
+
+  const chipsList = document.getElementById('ib-chips-list');
+  chipsList.innerHTML = '';
+
+  // Add report type chip
+  if (reportType) {
+    const reportLabels = { tickets: 'Ticket Metrics', agents: 'Agent Performance', queue: 'Queue Analysis', sla: 'SLA Compliance' };
+    addChip(chipsList, reportLabels[reportType] || reportType, 'report');
+  }
+
+  // Add date range chip
+  if (dateFrom || dateTo) {
+    const dateLabel = (dateFrom ? dateFrom : '—') + ' to ' + (dateTo ? dateTo : '—');
+    addChip(chipsList, dateLabel, 'date');
+  }
+
+  // Add grouping chip
+  if (groupBy) {
+    const groupLabels = { status: 'Group by Status', priority: 'Group by Priority', agent: 'Group by Agent', queue: 'Group by Queue' };
+    addChip(chipsList, groupLabels[groupBy] || groupBy, 'group');
+  }
+
+  // Add filter chips
+  ibFilters.forEach((f, idx) => {
+    addChip(chipsList, f.label, 'filter', () => removeFilter(idx));
+  });
+
+  ibGenerateSql();
+}
+
+function addChip(container, label, type, onRemove) {
+  const chip = document.createElement('span');
+  chip.className = 'ib-chip ib-chip-' + type;
+  chip.style.cssText = `
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--teal-10); color: var(--teal);
+    padding: 4px 10px; border-radius: 16px; font-size: 12px;
+    white-space: nowrap;
+  `;
+
+  const text = document.createElement('span');
+  text.textContent = label;
+  chip.appendChild(text);
+
+  if (onRemove) {
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '×';
+    closeBtn.style.cssText = 'background: none; border: none; color: var(--teal); cursor: pointer; font-size: 16px; padding: 0; line-height: 1;';
+    closeBtn.onclick = onRemove;
+    chip.appendChild(closeBtn);
+  }
+
+  container.appendChild(chip);
+}
+
+function removeFilter(idx) {
+  ibFilters.splice(idx, 1);
+  ibUpdateChips();
+}
+
+function showColumnPicker() {
+  showToast('Column picker coming soon — currently supports all columns from selected report type');
+}
+
+function showAddFilter() {
+  const filterName = prompt('Filter field (e.g., "status", "priority", "agent"):', '');
+  if (!filterName) return;
+
+  const filterOp = prompt('Operator (e.g., "equals", "contains", "greater than"):', 'equals');
+  if (!filterOp) return;
+
+  const filterVal = prompt('Value:', '');
+  if (!filterVal) return;
+
+  ibFilters.push({
+    field: filterName,
+    operator: filterOp,
+    value: filterVal,
+    label: `${filterName} ${filterOp} "${filterVal}"`
+  });
+
+  ibUpdateChips();
+  showToast('Filter added');
+}
+
+function ibGenerateSql() {
+  const reportType = document.getElementById('ib-report-type').value;
+  const dateFrom = document.getElementById('ib-date-from').value;
+  const dateTo = document.getElementById('ib-date-to').value;
+  const groupBy = document.getElementById('ib-groupby').value;
+
+  let sql = '';
+
+  if (!reportType) {
+    sql = '-- Select a report type to generate SQL';
+  } else {
+    // Generate SELECT clause based on report type
+    const selectClauses = {
+      tickets: 'SELECT status, COUNT(*) as count, AVG(resolution_time) as avg_time FROM tickets',
+      agents: 'SELECT agent_id, agent_name, COUNT(*) as tickets_handled, AVG(rating) as avg_rating FROM tickets',
+      queue: 'SELECT queue_name, COUNT(*) as queue_size, AVG(wait_time) as avg_wait FROM tickets',
+      sla: 'SELECT sla_tier, COUNT(*) as total, SUM(CASE WHEN met THEN 1 ELSE 0 END) as met FROM tickets'
+    };
+
+    sql = selectClauses[reportType] || 'SELECT * FROM tickets';
+
+    // Add WHERE clause for date range
+    const whereClauses = [];
+    if (dateFrom) whereClauses.push(`created_at >= '${dateFrom}'`);
+    if (dateTo) whereClauses.push(`created_at <= '${dateTo}'`);
+    ibFilters.forEach(f => {
+      whereClauses.push(`${f.field} ${f.operator} '${f.value}'`);
+    });
+
+    if (whereClauses.length > 0) {
+      sql += ' WHERE ' + whereClauses.join(' AND ');
+    }
+
+    // Add GROUP BY clause
+    const groupByClauses = {
+      status: ' GROUP BY status',
+      priority: ' GROUP BY priority',
+      agent: ' GROUP BY agent_id, agent_name',
+      queue: ' GROUP BY queue_name',
+      sla: ' GROUP BY sla_tier'
+    };
+
+    if (groupBy && groupByClauses[groupBy]) {
+      sql += groupByClauses[groupBy];
+    }
+
+    sql += ';';
+  }
+
+  document.getElementById('ib-sql-editor').value = sql;
+}
+
+function ibShowPreview() {
+  const reportType = document.getElementById('ib-report-type').value;
+
+  if (!reportType) {
+    showToast('Please select a report type first');
+    return;
+  }
+
+  const previewBody = document.getElementById('ib-preview-body');
+
+  // Generate mock data based on report type
+  let html = '';
+  const mockData = generateMockReportData(reportType);
+
+  if (mockData && mockData.length > 0) {
+    // Create table
+    const headers = Object.keys(mockData[0]);
+    html = '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<thead><tr style="background:var(--aqua-haze);border-bottom:1.5px solid var(--nebula);">';
+    headers.forEach(h => {
+      html += `<th style="padding:8px;text-align:left;font-weight:600;color:var(--dark-teal);">${h}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    mockData.forEach((row, idx) => {
+      html += `<tr style="border-bottom:1px solid var(--nebula);background:${idx % 2 === 0 ? '#fff' : 'var(--bg-light)'};">`;
+      headers.forEach(h => {
+        html += `<td style="padding:8px;">${row[h]}</td>`;
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+
+    // Update meta info
+    document.getElementById('ib-preview-meta').textContent = `${mockData.length} rows`;
+  } else {
+    html = '<div class="ib-preview-empty"><span>No data available for selected criteria</span></div>';
+  }
+
+  previewBody.innerHTML = html;
+  showToast('Preview loaded');
+}
+
+function generateMockReportData(reportType) {
+  switch (reportType) {
+    case 'tickets':
+      return [
+        { Status: 'Open', Count: 24, 'Avg Time (hrs)': 4.2 },
+        { Status: 'In Progress', Count: 18, 'Avg Time (hrs)': 2.8 },
+        { Status: 'Resolved', Count: 156, 'Avg Time (hrs)': 6.5 },
+        { Status: 'Closed', Count: 89, 'Avg Time (hrs)': 8.1 }
+      ];
+    case 'agents':
+      return [
+        { 'Agent Name': 'Alice Chen', 'Tickets Handled': 42, 'Avg Rating': 4.8 },
+        { 'Agent Name': 'Bob Kumar', 'Tickets Handled': 38, 'Avg Rating': 4.6 },
+        { 'Agent Name': 'Carol White', 'Tickets Handled': 35, 'Avg Rating': 4.9 },
+        { 'Agent Name': 'David Brown', 'Tickets Handled': 31, 'Avg Rating': 4.5 }
+      ];
+    case 'queue':
+      return [
+        { 'Queue Name': 'Support', 'Queue Size': 12, 'Avg Wait (min)': 3.2 },
+        { 'Queue Name': 'Billing', 'Queue Size': 8, 'Avg Wait (min)': 2.5 },
+        { 'Queue Name': 'Technical', 'Queue Size': 15, 'Avg Wait (min)': 4.1 }
+      ];
+    case 'sla':
+      return [
+        { 'SLA Tier': 'Gold', Total: 42, Met: 40, 'Compliance %': '95%' },
+        { 'SLA Tier': 'Silver', Total: 58, Met: 54, 'Compliance %': '93%' },
+        { 'SLA Tier': 'Bronze', Total: 30, Met: 27, 'Compliance %': '90%' }
+      ];
+    default:
+      return [];
+  }
 }
 
 /* ── Keyboard: Esc closes sidebar ───────────────────────────────── */
