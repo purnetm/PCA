@@ -2756,8 +2756,7 @@
 <div class="bg-layer"></div>
 <!-- ── Sidebar overlay (mobile/tablet) ──────────────────────────── -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-<img class="bg-wave"
-  src="https://www.figma.com/api/mcp/asset/0117ebd8-928e-4eeb-a8bd-70605a75aaa3" alt="" />
+<img class="bg-wave" src="./wave.svg" alt="" />
 
 <!-- ── Sidebar ──────────────────────────────────────────────────── -->
 <aside class="sidebar">
@@ -3021,6 +3020,20 @@
         </nav>
       </div>
       <div class="topbar-right">
+        <button class="qb-reset-btn" id="ib-reset-btn" onclick="qbReset()" title="Start over" style="display:none;">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="qb-save-btn" id="ib-save-btn" onclick="openSaveModal()" style="display:none;">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
+          </svg>
+          Save Query
+        </button>
         <button class="nq-ai-toggle-btn" id="dash-ai-toggle-btn" onclick="toggleDashAiPanel()" title="Toggle AI Assistant" style="display:none;">
           <svg width="11" height="11" viewBox="0 0 13 13" fill="currentColor">
             <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
@@ -3374,38 +3387,6 @@
 
       <!-- ── New Query page ───────────────────────────────────── -->
       <div id="ds-new-question" style="display:none; flex:1; flex-direction:column; min-height:0; overflow:hidden;">
-
-        <!-- ── ITERATION B: Hybrid Query Builder ────────────────── -->
-        <div class="ge-topbar">
-          <div class="ge-topbar-brand">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="1" y="1" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
-              <rect x="11.5" y="1" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
-              <rect x="1" y="11.5" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
-              <rect x="11.5" y="11.5" width="7.5" height="7.5" rx="1.5" stroke="var(--teal)" stroke-width="1.5"/>
-            </svg>
-            <div>
-              <div class="ge-topbar-title">Build Your Report</div>
-              <div class="ge-topbar-sub">Configure data, preview results, and refine with SQL</div>
-            </div>
-          </div>
-          <div class="ge-topbar-actions">
-            <button class="qb-reset-btn" onclick="qbReset()" title="Start over">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <button class="qb-save-btn" onclick="openSaveModal()">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-                <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
-                <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
-              </svg>
-              Save Query
-            </button>
-          </div>
-        </div>
 
         <!-- Main 3-column layout -->
         <div class="ib-layout" style="padding: var(--space-6); gap: var(--space-6);">
@@ -4471,12 +4452,17 @@ function setDsSection(section) {
 
   const aiBtn = document.getElementById('nq-ai-toggle-btn');
 
+  const ibResetBtn = document.getElementById('ib-reset-btn');
+  const ibSaveBtn  = document.getElementById('ib-save-btn');
+
   // Hide all content areas (including dashboard view)
   const dashView = document.getElementById('dashboard-view');
   if (dashView) dashView.style.display = 'none';
   [header, manualMode, aiMode, actionBar, dsHome, dsNewQ].forEach(el => { if (el) el.style.display = 'none'; });
   if (backBtn) backBtn.style.display = 'none';
   if (aiBtn) aiBtn.style.display = 'none';
+  if (ibResetBtn) ibResetBtn.style.display = 'none';
+  if (ibSaveBtn)  ibSaveBtn.style.display  = 'none';
 
   if (section === 'home') {
     if (dsBody) dsBody.style.display = 'none';  // prevent flex-1 competition
@@ -4487,6 +4473,8 @@ function setDsSection(section) {
     dsNewQ.style.display = 'flex';
     if (backBtn) backBtn.style.display = 'none';
     if (aiBtn) aiBtn.style.display = '';
+    if (ibResetBtn) ibResetBtn.style.display = '';
+    if (ibSaveBtn)  ibSaveBtn.style.display  = '';
     document.getElementById('topbar-ds-name').style.display       = 'none';
     document.getElementById('topbar-ds-breadcrumb').style.display = 'none';
     document.getElementById('topbar-nq-breadcrumb').style.display = 'flex';
