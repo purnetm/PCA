@@ -2626,28 +2626,67 @@
       min-width: 0; overflow: hidden;
     }
 
-    /* Top chips bar with selected items + Show Preview button */
-    .ib-chips-bar {
-      background: #fff; border: 1.5px solid var(--nebula);
-      border-radius: var(--radius-md); padding: var(--space-5) var(--space-6);
+    /* ── Right panel tab switch ────────────────────────────────── */
+    .ib-panel-tabs {
+      display: flex; flex-shrink: 0; border-bottom: 1.5px solid var(--nebula);
+      background: var(--aqua-haze);
+    }
+    .ib-panel-tab {
+      flex: 1; padding: 10px 8px; border: none; background: transparent;
+      cursor: pointer; font-size: var(--font-sm); font-weight: var(--weight-medium);
+      color: var(--cutty-sark); font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      border-bottom: 2px solid transparent; margin-bottom: -1.5px;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .ib-panel-tab:hover { background: var(--teal-10); color: var(--dark-teal); }
+    .ib-panel-tab.active {
+      color: var(--teal); border-bottom-color: var(--teal);
+      background: #fff; font-weight: var(--weight-semibold);
+    }
+
+    /* ── Visual Builder ─────────────────────────────────────────── */
+    .ib-visual-body {
+      flex: 1; overflow-y: auto; padding: var(--space-5) var(--space-6);
+      display: flex; flex-direction: column; gap: var(--space-5);
+    }
+    .ib-vb-section { display: flex; flex-direction: column; gap: var(--space-2); }
+    .ib-vb-label {
+      font-size: 10px; font-weight: var(--weight-semibold);
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--cutty-sark);
+    }
+    .ib-vb-table {
+      display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+      background: var(--teal-10); border: 1.5px solid var(--teal-20);
+      border-radius: var(--radius-sm); font-size: var(--font-sm);
+      font-weight: var(--weight-medium); color: var(--teal);
+    }
+    .ib-vb-cols { display: flex; flex-wrap: wrap; gap: 5px; }
+    .ib-vb-chip {
+      display: inline-flex; align-items: center; padding: 3px 9px;
+      background: var(--aqua-haze); border: 1px solid var(--nebula);
+      border-radius: 12px; font-size: 11px; color: var(--dark-teal);
+      font-family: 'Monaco', 'Courier New', monospace;
+    }
+    .ib-vb-filter {
+      padding: 6px 10px; background: #FFF7ED; border: 1px solid #FED7AA;
+      border-radius: var(--radius-sm); font-size: 11px; color: #92400E;
+      font-family: 'Monaco', 'Courier New', monospace;
       display: flex; align-items: center; justify-content: space-between;
-      gap: var(--space-5); flex-shrink: 0; flex-wrap: wrap;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
-    .ib-chips-list {
-      display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
-      flex: 1;
+    .ib-vb-filter-remove {
+      background: none; border: none; cursor: pointer; color: #B45309;
+      font-size: 14px; line-height: 1; padding: 0 0 0 8px;
     }
-    .ib-chip {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: var(--teal-10); border: 1px solid var(--teal-20);
-      padding: 5px 12px; border-radius: 20px;
-      font-size: var(--font-xs); color: var(--dark-teal); font-weight: var(--weight-medium);
-      white-space: nowrap;
+    .ib-vb-group {
+      padding: 6px 12px; background: var(--teal-10); border: 1.5px solid var(--teal-20);
+      border-radius: var(--radius-sm); font-size: var(--font-sm); color: var(--teal);
+      font-weight: var(--weight-medium);
     }
-    .ib-chip-remove {
-      background: none; border: none; cursor: pointer; padding: 0 2px;
-      color: var(--teal); font-weight: bold; display: flex; align-items: center;
+    .ib-vb-empty {
+      text-align: center; color: var(--cutty-sark); font-size: var(--font-sm);
+      padding: var(--space-10) var(--space-4); opacity: 0.7;
+      display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
     }
     .ib-show-preview-btn {
       padding: 8px 16px; background: var(--teal); color: #fff;
@@ -2693,12 +2732,6 @@
       display: flex; flex-direction: column;
       box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
-    .ib-sql-header {
-      padding: var(--space-5) var(--space-6); border-bottom: 1.5px solid var(--nebula);
-      display: flex; align-items: center; gap: var(--space-3); flex-shrink: 0;
-      font-size: var(--font-sm); font-weight: var(--weight-semibold);
-      color: var(--dark-teal);
-    }
     .ib-sql-editor-wrapper {
       flex: 1; overflow: hidden; display: flex; flex-direction: column;
       padding: var(--space-4) var(--space-6);
@@ -2709,6 +2742,75 @@
       font-size: 12px; color: #424242; background: var(--aqua-haze);
       resize: none; outline: none;
     }
+
+    /* ── Date Picker Button (Iteration B sidebar) ────────────────── */
+    .ib-date-picker-wrap { position: relative; }
+    .ib-date-btn {
+      width: 100%; display: flex; align-items: center; gap: 8px;
+      padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);
+      border: 1.5px solid var(--nebula); background: #fff;
+      font-size: var(--font-sm); font-family: 'Inter', sans-serif;
+      color: var(--dark-teal); cursor: pointer; transition: border-color 0.12s;
+    }
+    .ib-date-btn:hover { border-color: var(--teal-30); }
+    .ib-date-btn.open { border-color: var(--teal-50); background: var(--teal-10); }
+    .ib-date-btn-label { flex: 1; text-align: left; font-size: var(--font-sm); }
+    .ib-date-panel {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: #fff; border: 1.5px solid var(--nebula);
+      border-radius: var(--radius-sm); overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.10); z-index: 50; display: none;
+    }
+    .ib-date-panel.open { display: block; }
+    .ib-date-preset {
+      width: 100%; text-align: left; padding: 7px 12px;
+      border: none; background: transparent; cursor: pointer;
+      font-size: var(--font-sm); color: var(--dark-teal);
+      font-family: 'Inter', sans-serif; transition: background 0.1s;
+    }
+    .ib-date-preset:hover { background: var(--aqua-haze); }
+    .ib-date-preset.active { color: var(--teal); font-weight: var(--weight-semibold); background: var(--teal-10); }
+    .ib-date-sep { height: 1px; background: var(--nebula); margin: 3px 0; }
+    .ib-date-custom-label {
+      font-size: 10px; font-weight: var(--weight-semibold); text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--cutty-sark); padding: 6px 12px 2px;
+    }
+    .ib-date-custom-fields { padding: 4px 10px 10px; display: flex; flex-direction: column; gap: 5px; }
+    .ib-date-custom-input {
+      width: 100%; padding: 5px 8px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--nebula); font-size: var(--font-sm);
+      font-family: 'Inter', sans-serif; color: var(--dark-teal);
+      background: var(--aqua-haze); outline: none;
+    }
+    .ib-date-custom-input:focus { border-color: var(--teal-50); background: #fff; }
+
+    /* ── KapAI Floating Action Button ────────────────────────────── */
+    .ib-ai-fab {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--dark-teal) 100%);
+      color: #fff; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(77,182,172,0.45), 0 2px 6px rgba(0,0,0,0.14);
+      z-index: 200; transition: transform 0.2s, box-shadow 0.2s;
+      overflow: visible;
+    }
+    .ib-ai-fab:hover { transform: scale(1.06); box-shadow: 0 6px 22px rgba(77,182,172,0.55); }
+    .ib-ai-fab-close { display: none; }
+    .ib-ai-fab.open .ib-ai-fab-open { display: none; }
+    .ib-ai-fab.open .ib-ai-fab-close { display: block; }
+    .ib-ai-floating {
+      position: fixed; bottom: 88px; right: 24px;
+      width: 360px; max-height: 560px;
+      display: flex; flex-direction: column;
+      background: #fff; border: 1.5px solid var(--nebula);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(77,182,172,0.12);
+      z-index: 199;
+      opacity: 0; pointer-events: none; transform: translateY(12px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .ib-ai-floating.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
     /* ── Create Dashboard Modal (two-column) ────────────────────── */
     .cdm-body { display: flex; flex-direction: row; height: 380px; overflow: hidden; }
@@ -3420,7 +3522,7 @@
             <div class="ib-config-section">
               <div class="ib-config-label">📊 What to Report On</div>
               <div class="ib-select-wrap">
-                <select class="ib-select" id="ib-report-type" onchange="ibUpdateChips()">
+                <select class="ib-select" id="ib-report-type" onchange="ibOnReportTypeChange()">
                   <option value="">Select report type...</option>
                   <option value="tickets">Ticket Metrics</option>
                   <option value="agents">Agent Performance</option>
@@ -3433,19 +3535,54 @@
 
             <div class="ib-config-section">
               <div class="ib-config-label">📋 Columns</div>
-              <div class="ib-input-wrap">
-                <input type="text" class="ib-input" id="ib-columns" placeholder="Select columns..." readonly onclick="showColumnPicker()" style="cursor:pointer;" />
+              <div class="ib-date-picker-wrap" id="ib-col-picker-wrap">
+                <button class="ib-date-btn" id="ib-col-btn" onclick="ibToggleColPicker(event)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <rect x="0.5" y="0.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M3 4h6M3 6.5h4M3 9h5" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".7"/>
+                  </svg>
+                  <span class="ib-date-btn-label" id="ib-col-display">All columns</span>
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;">
+                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <div class="ib-date-panel" id="ib-col-panel" style="min-width:220px;">
+                  <div id="ib-col-list" style="max-height:200px;overflow-y:auto;padding:4px 0;"></div>
+                  <div class="ib-date-sep"></div>
+                  <div style="padding:4px 8px 8px;display:flex;gap:6px;">
+                    <button class="ib-filter-add-btn" style="flex:1;justify-content:center;" onclick="ibSelectAllCols()">All</button>
+                    <button class="ib-filter-add-btn" style="flex:1;justify-content:center;" onclick="ibClearAllCols()">Clear</button>
+                  </div>
+                </div>
               </div>
-              <button class="ib-filter-add-btn" onclick="showColumnPicker()">
-                <span>+</span> Add/Edit
-              </button>
             </div>
 
             <div class="ib-config-section">
               <div class="ib-config-label">📅 Date Range</div>
-              <div style="display:flex;gap:var(--space-2);flex-direction:column;">
-                <input type="date" class="ib-input" id="ib-date-from" onchange="ibUpdateChips()" style="padding:var(--space-2) var(--space-3);border:1.5px solid var(--nebula);border-radius:var(--radius-sm);background:#fff;"/>
-                <input type="date" class="ib-input" id="ib-date-to" onchange="ibUpdateChips()" style="padding:var(--space-2) var(--space-3);border:1.5px solid var(--nebula);border-radius:var(--radius-sm);background:#fff;"/>
+              <div class="ib-date-picker-wrap" id="ib-date-picker-wrap">
+                <button class="ib-date-btn" id="ib-date-btn" onclick="ibToggleDatePicker(event)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <rect x="0.5" y="1.5" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M4 0.5v2M8 0.5v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M3.5 6.5h5M3.5 8.5h3" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+                  </svg>
+                  <span class="ib-date-btn-label" id="ib-date-display">Select range</span>
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;">
+                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <div class="ib-date-panel" id="ib-date-panel">
+                  <button class="ib-date-preset" id="ibpreset-today" onclick="ibSetDatePreset('today','Today')">Today</button>
+                  <button class="ib-date-preset" id="ibpreset-7d" onclick="ibSetDatePreset('7d','Last 7 Days')">Last 7 Days</button>
+                  <button class="ib-date-preset" id="ibpreset-30d" onclick="ibSetDatePreset('30d','Last 30 Days')">Last 30 Days</button>
+                  <button class="ib-date-preset" id="ibpreset-90d" onclick="ibSetDatePreset('90d','Last 90 Days')">Last 90 Days</button>
+                  <div class="ib-date-sep"></div>
+                  <div class="ib-date-custom-label">Custom range</div>
+                  <div class="ib-date-custom-fields">
+                    <input type="date" class="ib-date-custom-input" id="ib-date-from" oninput="ibOnCustomDateChange()" placeholder="From" />
+                    <input type="date" class="ib-date-custom-input" id="ib-date-to" oninput="ibOnCustomDateChange()" placeholder="To" />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -3472,21 +3609,8 @@
             </div>
           </div>
 
-          <!-- CENTER: Preview + Chips -->
+          <!-- CENTER: Preview -->
           <div class="ib-center-pane">
-            <!-- Top chips bar -->
-            <div class="ib-chips-bar">
-              <div class="ib-chips-list" id="ib-chips-list">
-                <!-- Chips populate here -->
-              </div>
-              <button class="ib-show-preview-btn" onclick="ibShowPreview()">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 2C4.5 2 2.5 4 1 6c1.5 2 3.5 4 6 4s4.5-2 6-4c-1.5-2-3.5-4-6-4zm0 6.5c-1.4 0-2.5-1.1-2.5-2.5S5.6 3.5 7 3.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z" fill="currentColor"/>
-                </svg>
-                Show Preview
-              </button>
-            </div>
-
             <!-- Data preview -->
             <div class="ib-preview-container">
               <div class="ib-preview-header">
@@ -3495,7 +3619,13 @@
                   <path d="M1 4.5h12M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.3"/>
                 </svg>
                 Data Preview
-                <span id="ib-preview-meta" style="margin-left:auto;font-size:11px;opacity:0.65;font-weight:normal;"></span>
+                <span id="ib-preview-meta" style="font-size:11px;opacity:0.65;font-weight:normal;"></span>
+                <button class="ib-show-preview-btn" onclick="ibShowPreview()" style="margin-left:auto;padding:6px 12px;">
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+                    <path d="M7 2C4.5 2 2.5 4 1 6c1.5 2 3.5 4 6 4s4.5-2 6-4c-1.5-2-3.5-4-6-4zm0 6.5c-1.4 0-2.5-1.1-2.5-2.5S5.6 3.5 7 3.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z" fill="currentColor"/>
+                  </svg>
+                  Run Preview
+                </button>
               </div>
               <div class="ib-preview-body" id="ib-preview-body">
                 <div class="ib-preview-empty">
@@ -3509,81 +3639,137 @@
             </div>
           </div>
 
-          <!-- RIGHT: SQL Console + KapAI -->
+          <!-- RIGHT: Visual Builder / SQL Console (tabbed) -->
           <div class="ib-right-sidebar">
-            <!-- SQL Console -->
             <div class="ib-sql-panel">
-              <div class="ib-sql-header">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                SQL Console
+              <!-- Tab strip -->
+              <div class="ib-panel-tabs">
+                <button class="ib-panel-tab active" id="ib-tab-visual" onclick="ibSwitchTab('visual')">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <rect x="1" y="1" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                    <rect x="6.5" y="1" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                    <rect x="1" y="6.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                    <rect x="6.5" y="6.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                  </svg>
+                  Visual
+                </button>
+                <button class="ib-panel-tab" id="ib-tab-sql" onclick="ibSwitchTab('sql')">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  SQL
+                </button>
               </div>
-              <div class="ib-sql-editor-wrapper">
+              <!-- Visual Builder pane -->
+              <div class="ib-visual-body" id="ib-visual-body">
+                <div class="ib-vb-empty" id="ib-vb-empty">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" opacity="0.4">
+                    <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="18" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="2" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <rect x="18" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                  <span>Select a report type to see the visual query</span>
+                </div>
+              </div>
+              <!-- SQL pane (hidden by default) -->
+              <div class="ib-sql-editor-wrapper" id="ib-sql-wrapper" style="display:none;">
                 <textarea class="ib-sql-editor" id="ib-sql-editor" readonly placeholder="-- SQL will generate here"></textarea>
-              </div>
-            </div>
-
-            <!-- KapAI Panel (retain from Iteration A) -->
-            <div class="ge-step-card ge-step-card-ai" style="margin-top:var(--space-6);" id="nq-col-ai-ib">
-              <div class="ge-step-hd" style="justify-content:space-between;">
-                <div style="display:flex;align-items:center;gap:12px;">
-                  <div class="ge-step-badge ge-step-badge-ai">
-                    <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
-                      <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
-                    </svg>
-                  </div>
-                  <div class="ge-step-title">KapAI</div>
-                </div>
-              </div>
-              <div class="ge-step-body">
-                <div class="ge-ai-scroll">
-                  <div class="nq-nudge-card" id="nq-nudge-card-ib" style="display:none;">
-                    <div class="nq-nudge-label">
-                      <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
-                      KapAI
-                    </div>
-                    <div class="nq-nudge-text" id="nq-nudge-text-ib"></div>
-                    <div class="nq-nudge-actions" id="nq-nudge-actions-ib"></div>
-                  </div>
-                  <div class="nq-ai-conv" id="nq-ai-conv-ib"></div>
-                  <div class="nq-ai-sep" id="nq-ai-sep-ib" style="display:none;">· · ·</div>
-                  <div class="nq-ai-sub" id="nq-ai-sub-ib" style="display:none;">Ask me anything about your data</div>
-                  <div class="ge-ai-prompts">
-                    <div class="nq-ai-chips-label" id="nq-ai-chips-label-ib">Try a prompt:</div>
-                    <div class="nq-ai-chips" id="nq-ai-chips-ib">
-                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Summarize this data</button>
-                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Find trends</button>
-                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Compare groups</button>
-                      <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Highlight outliers</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="ge-ai-input-footer">
-                  <div class="ge-ai-input-row">
-                    <button class="ge-ai-attach-btn" title="Attach file">
-                      <svg width="11" height="20" viewBox="0 0 11.5 21.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.5 15.75V6.75C11.5 6.335 11.165 6 10.75 6C10.335 6 10 6.335 10 6.75V15.75C10 18.095 8.095 20 5.75 20C3.405 20 1.5 18.095 1.5 15.75V4.25C1.5 2.735 2.735 1.5 4.25 1.5C5.765 1.5 7 2.735 7 4.25V15C7 15.69 6.44 16.25 5.75 16.25C5.06 16.25 4.5 15.69 4.5 15V5.25C4.5 4.835 4.165 4.5 3.75 4.5C3.335 4.5 3 4.835 3 5.25V15C3 16.515 4.235 17.75 5.75 17.75C7.265 17.75 8.5 16.515 8.5 15V4.25C8.5 1.905 6.595 0 4.25 0C1.905 0 0 1.905 0 4.25V15.75C0 18.92 2.58 21.5 5.75 21.5C8.92 21.5 11.5 18.92 11.5 15.75Z" fill="currentColor"/>
-                      </svg>
-                    </button>
-                    <input type="text" class="ge-ai-input" id="nq-ai-textarea-ib" placeholder="Ask KapAI..." onkeydown="if(event.key==='Enter'){event.preventDefault();generateFromAI();}"/>
-                    <button class="ge-ai-mic-btn" title="Voice input">
-                      <svg width="14" height="19" viewBox="0 0 14.3298 20.0001" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.90891 4.25532C2.90891 1.90517 4.81408 0 7.16423 0C9.51436 0 11.4195 1.90517 11.4195 4.25532V8.93617C11.4195 11.2863 9.51436 13.1915 7.16423 13.1915C4.81408 13.1915 2.90891 11.2863 2.90891 8.93617V4.25532Z" fill="currentColor"/>
-                        <path d="M7.16933 14.8936C7.16763 14.8936 7.16593 14.8936 7.16423 14.8936C7.16253 14.8936 7.16082 14.8936 7.15912 14.8936C4.66275 14.8912 2.5239 13.3532 1.64017 11.17C1.46381 10.7344 0.967641 10.5242 0.531956 10.7005C0.0962711 10.8769 -0.113959 11.373 0.0624074 11.8087C1.09637 14.3631 3.4694 16.2344 6.31317 16.5489V19.1489C6.31317 19.619 6.69419 20 7.16423 20C7.63427 20 8.01529 19.619 8.01529 19.1489V16.5491C10.8596 16.2349 13.2333 14.3634 14.2674 11.8087C14.4437 11.373 14.2335 10.8769 13.7978 10.7005C13.3621 10.5242 12.8659 10.7344 12.6896 11.17C11.8058 13.3536 9.66627 14.8918 7.16933 14.8936Z" fill="currentColor"/>
-                      </svg>
-                    </button>
-                    <button class="ge-ai-send-btn" id="nq-generate-btn-ib" onclick="generateFromAI()" title="Ask KapAI">
-                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.1424 6.26772L2.29238 1.4628C2.20767 1.42148 2.11465 1.4 2.02039 1.4C1.67776 1.4 1.4 1.67776 1.4 2.02039V2.03829C1.4 2.12154 1.41021 2.20448 1.4304 2.28524L2.37526 6.06465C2.40106 6.16789 2.48834 6.24415 2.59409 6.25591L6.74703 6.71735C6.89106 6.73334 7 6.85506 7 7C7 7.14494 6.89106 7.26666 6.74703 7.28265L2.59409 7.74409C2.48834 7.75585 2.40106 7.83211 2.37526 7.93535L1.4304 11.7147C1.41021 11.7955 1.4 11.8785 1.4 11.9617V11.9796C1.4 12.3222 1.67776 12.6 2.02039 12.6C2.11465 12.6 2.20767 12.5785 2.29238 12.5372L12.1424 7.73228C12.4224 7.59574 12.6 7.31151 12.6 7C12.6 6.68849 12.4224 6.40426 12.1424 6.26772Z" fill="white"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- KapAI Floating Panel -->
+        <!-- KapAI Floating Panel — canonical AI container for Iteration B -->
+        <div class="ib-ai-floating" id="ib-ai-floating">
+          <div class="ge-step-hd" style="justify-content:space-between;background:#fff;border-bottom:1.5px solid var(--nebula);padding:0 16px;height:52px;flex-shrink:0;display:flex;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="ge-step-badge ge-step-badge-ai" style="width:26px;height:26px;">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
+                  <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+                </svg>
+              </div>
+              <div class="ge-step-title">KapAI</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <!-- Pulsing badge shown when AI has suggestions and panel is closed -->
+              <div class="ge-ai-badge" id="ge-ai-badge" style="display:none;" title="KapAI has suggestions">
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
+              </div>
+              <button onclick="ibToggleAiFab()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--cutty-sark);display:flex;align-items:center;border-radius:6px;transition:background 0.12s;" title="Close">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="ge-step-body" style="flex:1;min-height:0;overflow:hidden;padding:0;display:flex;flex-direction:column;">
+            <div class="ge-ai-scroll">
+              <div class="nq-nudge-card" id="nq-nudge-card" style="display:none;">
+                <div class="nq-nudge-label">
+                  <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
+                  KapAI
+                </div>
+                <div class="nq-nudge-text" id="nq-nudge-text"></div>
+                <div class="nq-nudge-actions" id="nq-nudge-actions"></div>
+              </div>
+              <div class="nq-ai-conv" id="nq-ai-conv"></div>
+              <div class="nq-ai-sep" id="nq-ai-sep" style="display:none;">· · ·</div>
+              <div class="nq-ai-sub" id="nq-ai-sub" style="display:none;">Describe what you want in plain language</div>
+              <div class="ge-ai-prompts">
+                <div class="nq-ai-chips-label" id="nq-ai-chips-label">Try a prompt:</div>
+                <div class="nq-ai-chips" id="nq-ai-chips">
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Agent ticket counts by status this week</button>
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Email sent vs delivered last 30 days</button>
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Top 10 agents by resolved tickets</button>
+                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Queue ageing by folder and priority</button>
+                </div>
+              </div>
+            </div>
+            <div class="ge-ai-input-footer">
+              <div class="ge-ai-input-row">
+                <button class="ge-ai-attach-btn" title="Attach file">
+                  <svg width="11" height="20" viewBox="0 0 11.5 21.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.5 15.75V6.75C11.5 6.335 11.165 6 10.75 6C10.335 6 10 6.335 10 6.75V15.75C10 18.095 8.095 20 5.75 20C3.405 20 1.5 18.095 1.5 15.75V4.25C1.5 2.735 2.735 1.5 4.25 1.5C5.765 1.5 7 2.735 7 4.25V15C7 15.69 6.44 16.25 5.75 16.25C5.06 16.25 4.5 15.69 4.5 15V5.25C4.5 4.835 4.165 4.5 3.75 4.5C3.335 4.5 3 4.835 3 5.25V15C3 16.515 4.235 17.75 5.75 17.75C7.265 17.75 8.5 16.515 8.5 15V4.25C8.5 1.905 6.595 0 4.25 0C1.905 0 0 1.905 0 4.25V15.75C0 18.92 2.58 21.5 5.75 21.5C8.92 21.5 11.5 18.92 11.5 15.75Z" fill="currentColor"/>
+                  </svg>
+                </button>
+                <input type="text" class="ge-ai-input" id="nq-ai-textarea"
+                  placeholder="Type here..."
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();generateFromAI();}"/>
+                <button class="ge-ai-mic-btn" title="Voice input">
+                  <svg width="14" height="19" viewBox="0 0 14.3298 20.0001" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.90891 4.25532C2.90891 1.90517 4.81408 0 7.16423 0C9.51436 0 11.4195 1.90517 11.4195 4.25532V8.93617C11.4195 11.2863 9.51436 13.1915 7.16423 13.1915C4.81408 13.1915 2.90891 11.2863 2.90891 8.93617V4.25532Z" fill="currentColor"/>
+                    <path d="M7.16933 14.8936C7.16763 14.8936 7.16593 14.8936 7.16423 14.8936C7.16253 14.8936 7.16082 14.8936 7.15912 14.8936C4.66275 14.8912 2.5239 13.3532 1.64017 11.17C1.46381 10.7344 0.967641 10.5242 0.531956 10.7005C0.0962711 10.8769 -0.113959 11.373 0.0624074 11.8087C1.09637 14.3631 3.4694 16.2344 6.31317 16.5489V19.1489C6.31317 19.619 6.69419 20 7.16423 20C7.63427 20 8.01529 19.619 8.01529 19.1489V16.5491C10.8596 16.2349 13.2333 14.3634 14.2674 11.8087C14.4437 11.373 14.2335 10.8769 13.7978 10.7005C13.3621 10.5242 12.8659 10.7344 12.6896 11.17C11.8058 13.3536 9.66627 14.8918 7.16933 14.8936Z" fill="currentColor"/>
+                  </svg>
+                </button>
+                <button class="ge-ai-send-btn" id="nq-generate-btn" onclick="generateFromAI()" title="Ask KapAI">
+                  <span id="nq-generate-btn-label" style="display:none;">Ask KapAI</span>
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.1424 6.26772L2.29238 1.4628C2.20767 1.42148 2.11465 1.4 2.02039 1.4C1.67776 1.4 1.4 1.67776 1.4 2.02039V2.03829C1.4 2.12154 1.41021 2.20448 1.4304 2.28524L2.37526 6.06465C2.40106 6.16789 2.48834 6.24415 2.59409 6.25591L6.74703 6.71735C6.89106 6.73334 7 6.85506 7 7C7 7.14494 6.89106 7.26666 6.74703 7.28265L2.59409 7.74409C2.48834 7.75585 2.40106 7.83211 2.37526 7.93535L1.4304 11.7147C1.41021 11.7955 1.4 11.8785 1.4 11.9617V11.9796C1.4 12.3222 1.67776 12.6 2.02039 12.6C2.11465 12.6 2.20767 12.5785 2.29238 12.5372L12.1424 7.73228C12.4224 7.59574 12.6 7.31151 12.6 7C12.6 6.68849 12.4224 6.40426 12.1424 6.26772Z" fill="white"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KapAI FAB — notification dot appears when panel is closed and AI has suggestions -->
+        <button class="ib-ai-fab" id="ib-ai-fab" onclick="ibToggleAiFab()" title="Ask KapAI">
+          <svg class="ib-ai-fab-open" width="22" height="22" viewBox="0 0 13 13" fill="currentColor">
+            <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
+          </svg>
+          <svg class="ib-ai-fab-close" width="18" height="18" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <!-- Notification dot -->
+          <span id="ib-ai-fab-dot" style="
+            display:none; position:absolute; top:2px; right:2px;
+            width:12px; height:12px; border-radius:50%;
+            background:#FF5252; border:2px solid #fff;
+            animation: ge-pulse 1.5s ease-in-out infinite;
+          "></span>
+        </button>
 
         <!-- Hidden: Save modal, advanced builder etc (kept for compatibility) -->
         <div class="ge-main-pane" style="display:none;">
@@ -3917,78 +4103,6 @@
 
         </div><!-- /ge-main-scroll -->
         </div><!-- /ge-main-pane -->
-
-        <!-- AI side panel — independent full-height panel, right side -->
-        <div class="ge-step-card ge-step-card-ai" id="nq-col-ai">
-          <div class="ge-step-hd" style="justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div class="ge-step-badge ge-step-badge-ai">
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
-                  <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
-                </svg>
-              </div>
-              <div class="ge-step-title">KapAI</div>
-            </div>
-            <!-- Pulsing badge shown when AI has suggestions -->
-            <div class="ge-ai-badge" id="ge-ai-badge" style="display:none;" title="KapAI has suggestions">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
-            </div>
-          </div>
-          <div class="ge-step-body">
-            <!-- ── Scrollable conversation zone ── -->
-            <div class="ge-ai-scroll">
-              <div class="nq-nudge-card" id="nq-nudge-card" style="display:none;">
-                <div class="nq-nudge-label">
-                  <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
-                  KapAI
-                </div>
-                <div class="nq-nudge-text" id="nq-nudge-text"></div>
-                <div class="nq-nudge-actions" id="nq-nudge-actions"></div>
-              </div>
-              <div class="nq-ai-conv" id="nq-ai-conv"></div>
-              <div class="nq-ai-sep" id="nq-ai-sep" style="display:none;">· · ·</div>
-              <div class="nq-ai-sub" id="nq-ai-sub" style="display:none;">Describe what you want in plain language</div>
-              <!-- ── Prompt chips pinned to bottom of scroll area ── -->
-              <div class="ge-ai-prompts">
-                <div class="nq-ai-chips-label" id="nq-ai-chips-label">Try a prompt:</div>
-                <div class="nq-ai-chips" id="nq-ai-chips">
-                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Agent ticket counts by status this week</button>
-                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Email sent vs delivered last 30 days</button>
-                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Top 10 agents by resolved tickets</button>
-                  <button class="nq-ai-chip" onclick="fillAiPrompt(this.textContent)">Queue ageing by folder and priority</button>
-                </div>
-              </div>
-            </div>
-            <!-- ── Input-only footer: white bg, separated by border ── -->
-            <div class="ge-ai-input-footer">
-              <div class="ge-ai-input-row">
-              <button class="ge-ai-attach-btn" title="Attach file">
-                <!-- fi_2908214 from component library -->
-                <svg width="11" height="20" viewBox="0 0 11.5 21.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M11.5 15.75V6.75C11.5 6.335 11.165 6 10.75 6C10.335 6 10 6.335 10 6.75V15.75C10 18.095 8.095 20 5.75 20C3.405 20 1.5 18.095 1.5 15.75V4.25C1.5 2.735 2.735 1.5 4.25 1.5C5.765 1.5 7 2.735 7 4.25V15C7 15.69 6.44 16.25 5.75 16.25C5.06 16.25 4.5 15.69 4.5 15V5.25C4.5 4.835 4.165 4.5 3.75 4.5C3.335 4.5 3 4.835 3 5.25V15C3 16.515 4.235 17.75 5.75 17.75C7.265 17.75 8.5 16.515 8.5 15V4.25C8.5 1.905 6.595 0 4.25 0C1.905 0 0 1.905 0 4.25V15.75C0 18.92 2.58 21.5 5.75 21.5C8.92 21.5 11.5 18.92 11.5 15.75Z" fill="currentColor"/>
-                </svg>
-              </button>
-              <input type="text" class="ge-ai-input" id="nq-ai-textarea"
-                placeholder="Type here..."
-                onkeydown="if(event.key==='Enter'){event.preventDefault();generateFromAI();}">
-              <button class="ge-ai-mic-btn" title="Voice input">
-                <!-- fi_7175253 from component library -->
-                <svg width="14" height="19" viewBox="0 0 14.3298 20.0001" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M2.90891 4.25532C2.90891 1.90517 4.81408 0 7.16423 0C9.51436 0 11.4195 1.90517 11.4195 4.25532V8.93617C11.4195 11.2863 9.51436 13.1915 7.16423 13.1915C4.81408 13.1915 2.90891 11.2863 2.90891 8.93617V4.25532Z" fill="currentColor"/>
-                  <path d="M7.16933 14.8936C7.16763 14.8936 7.16593 14.8936 7.16423 14.8936C7.16253 14.8936 7.16082 14.8936 7.15912 14.8936C4.66275 14.8912 2.5239 13.3532 1.64017 11.17C1.46381 10.7344 0.967641 10.5242 0.531956 10.7005C0.0962711 10.8769 -0.113959 11.373 0.0624074 11.8087C1.09637 14.3631 3.4694 16.2344 6.31317 16.5489V19.1489C6.31317 19.619 6.69419 20 7.16423 20C7.63427 20 8.01529 19.619 8.01529 19.1489V16.5491C10.8596 16.2349 13.2333 14.3634 14.2674 11.8087C14.4437 11.373 14.2335 10.8769 13.7978 10.7005C13.3621 10.5242 12.8659 10.7344 12.6896 11.17C11.8058 13.3536 9.66627 14.8918 7.16933 14.8936Z" fill="currentColor"/>
-                </svg>
-              </button>
-              <button class="ge-ai-send-btn" id="nq-generate-btn" onclick="generateFromAI()" title="Ask KapAI">
-                <span id="nq-generate-btn-label" style="display:none;">Ask KapAI</span>
-                <!-- fi_10322482 from component library -->
-                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12.1424 6.26772L2.29238 1.4628C2.20767 1.42148 2.11465 1.4 2.02039 1.4C1.67776 1.4 1.4 1.67776 1.4 2.02039V2.03829C1.4 2.12154 1.41021 2.20448 1.4304 2.28524L2.37526 6.06465C2.40106 6.16789 2.48834 6.24415 2.59409 6.25591L6.74703 6.71735C6.89106 6.73334 7 6.85506 7 7C7 7.14494 6.89106 7.26666 6.74703 7.28265L2.59409 7.74409C2.48834 7.75585 2.40106 7.83211 2.37526 7.93535L1.4304 11.7147C1.41021 11.7955 1.4 11.8785 1.4 11.9617V11.9796C1.4 12.3222 1.67776 12.6 2.02039 12.6C2.11465 12.6 2.20767 12.5785 2.29238 12.5372L12.1424 7.73228C12.4224 7.59574 12.6 7.31151 12.6 7C12.6 6.68849 12.4224 6.40426 12.1424 6.26772Z" fill="white"/>
-                </svg>
-              </button>
-              </div><!-- /ge-ai-input-row -->
-            </div><!-- /ge-ai-input-footer -->
-          </div><!-- /ge-step-body -->
-        </div><!-- /nq-col-ai -->
 
       </div><!-- /ds-new-question -->
 
@@ -4965,31 +5079,22 @@ function geSetViz(btn, type) {
     sel.value = map[type] || 'Table';
   }
 }
-function geToggleAiPanel() {
-  const body = document.querySelector('#nq-col-ai .ge-step-body');
-  const btn  = document.getElementById('ge-ai-collapse-btn');
-  if (!body) return;
-  const isCollapsed = body.style.display === 'none';
-  body.style.display = isCollapsed ? '' : 'none';
-  if (btn) btn.classList.toggle('collapsed', !isCollapsed);
-  if (isCollapsed) {
-    const badge = document.getElementById('ge-ai-badge');
-    if (badge) badge.style.display = 'none';
-  }
-}
+function geToggleAiPanel() { ibToggleAiFab(); }
 function setAiDot(show) {
-  const btn = document.getElementById('nq-ai-toggle-btn');
-  if (btn) btn.classList.toggle('has-suggestion', show);
+  // Show/hide notification dot on the FAB
+  const dot = document.getElementById('ib-ai-fab-dot');
+  if (dot) dot.style.display = show ? 'block' : 'none';
+  // Also show/hide badge inside the floating panel header
+  const badge = document.getElementById('ge-ai-badge');
+  if (badge) badge.style.display = show ? 'flex' : 'none';
 }
 function updateAiBadge() {
-  const badge = document.getElementById('ge-ai-badge');
-  if (!badge) return;
-  const body = document.querySelector('#nq-col-ai .ge-step-body');
-  const isCollapsed = body && body.style.display === 'none';
+  const panel = document.getElementById('ib-ai-floating');
+  const isPanelClosed = !panel || !panel.classList.contains('open');
   const nudge = document.getElementById('nq-nudge-card');
   const conv  = document.getElementById('nq-ai-conv');
   const hasSuggestions = (nudge && nudge.style.display !== 'none') || (conv && conv.children.length > 0);
-  badge.style.display = (isCollapsed && hasSuggestions) ? 'flex' : 'none';
+  setAiDot(isPanelClosed && hasSuggestions);
 }
 function toggleSqCache() {
   const t = document.getElementById('sq-cache-toggle');
@@ -5844,11 +5949,15 @@ function showAiNudge(nudgeId) {
       : `<button class="nq-nudge-accept" onclick="${a.fn}">${a.label}</button>`
   ).join('');
   card.style.display = 'flex';
-  updateAiBadge();
-  const aiPanel = document.getElementById('nq-col-ai');
-  if (aiPanel && aiPanel.style.display === 'none') setAiDot(true);
   const sub = document.getElementById('nq-ai-sub');
   if (sub) sub.textContent = 'Or describe what you want:';
+  // If FAB panel is closed, show notification dot; if open, no dot needed
+  const fabPanel = document.getElementById('ib-ai-floating');
+  if (fabPanel && !fabPanel.classList.contains('open')) {
+    setAiDot(true);
+  } else {
+    updateAiBadge();
+  }
 }
 
 function dismissNudge(nudgeId) {
@@ -5984,13 +6093,7 @@ function onSqlEditorInput() {
   _sqlNudgeTimer = setTimeout(() => showAiNudge('sqlEdited'), 1500);
 }
 
-function toggleAiPanel() {
-  const ai = document.getElementById('nq-col-ai');
-  const btn = document.getElementById('nq-ai-toggle-btn');
-  const isVisible = ai.style.display !== 'none';
-  ai.style.display = isVisible ? 'none' : '';
-  btn.classList.toggle('off', isVisible);
-}
+function toggleAiPanel() { ibToggleAiFab(); }
 
 function toggleDashAiPanel() {
   const ai  = document.getElementById('dash-col-ai');
@@ -6510,65 +6613,197 @@ function setSubnavActive(section) {
 /* ── Iteration B: Hybrid Query Builder ──────────────────────────── */
 
 let ibFilters = [];
+let ibDatePreset = null; // current date preset key
+let ibSelectedCols = new Set(); // currently selected column names
 
 function ibUpdateChips() {
-  const reportType = document.getElementById('ib-report-type').value;
-  const dateFrom = document.getElementById('ib-date-from').value;
-  const dateTo = document.getElementById('ib-date-to').value;
-  const groupBy = document.getElementById('ib-groupby').value;
-
-  const chipsList = document.getElementById('ib-chips-list');
-  chipsList.innerHTML = '';
-
-  // Add report type chip
-  if (reportType) {
-    const reportLabels = { tickets: 'Ticket Metrics', agents: 'Agent Performance', queue: 'Queue Analysis', sla: 'SLA Compliance' };
-    addChip(chipsList, reportLabels[reportType] || reportType, 'report');
-  }
-
-  // Add date range chip
-  if (dateFrom || dateTo) {
-    const dateLabel = (dateFrom ? dateFrom : '—') + ' to ' + (dateTo ? dateTo : '—');
-    addChip(chipsList, dateLabel, 'date');
-  }
-
-  // Add grouping chip
-  if (groupBy) {
-    const groupLabels = { status: 'Group by Status', priority: 'Group by Priority', agent: 'Group by Agent', queue: 'Group by Queue' };
-    addChip(chipsList, groupLabels[groupBy] || groupBy, 'group');
-  }
-
-  // Add filter chips
-  ibFilters.forEach((f, idx) => {
-    addChip(chipsList, f.label, 'filter', () => removeFilter(idx));
-  });
-
+  ibRenderVisual();
   ibGenerateSql();
 }
 
-function addChip(container, label, type, onRemove) {
-  const chip = document.createElement('span');
-  chip.className = 'ib-chip ib-chip-' + type;
-  chip.style.cssText = `
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--teal-10); color: var(--teal);
-    padding: 4px 10px; border-radius: 16px; font-size: 12px;
-    white-space: nowrap;
-  `;
+/* ── Date Picker ──────────────────────────────────────────────── */
+function ibToggleDatePicker(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('ib-date-panel');
+  const btn = document.getElementById('ib-date-btn');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
 
-  const text = document.createElement('span');
-  text.textContent = label;
-  chip.appendChild(text);
+function ibSetDatePreset(preset, label) {
+  ibDatePreset = preset;
+  document.getElementById('ib-date-display').textContent = label;
 
-  if (onRemove) {
-    const closeBtn = document.createElement('button');
-    closeBtn.innerHTML = '×';
-    closeBtn.style.cssText = 'background: none; border: none; color: var(--teal); cursor: pointer; font-size: 16px; padding: 0; line-height: 1;';
-    closeBtn.onclick = onRemove;
-    chip.appendChild(closeBtn);
+  // Mark active preset
+  ['today','7d','30d','90d'].forEach(p => {
+    const el = document.getElementById('ibpreset-' + p);
+    if (el) el.classList.toggle('active', p === preset);
+  });
+
+  // Compute actual dates for SQL
+  const today = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  const daysAgo = n => { const d = new Date(today); d.setDate(d.getDate() - n); return d; };
+
+  const ranges = {
+    today: [fmt(today), fmt(today)],
+    '7d':  [fmt(daysAgo(6)), fmt(today)],
+    '30d': [fmt(daysAgo(29)), fmt(today)],
+    '90d': [fmt(daysAgo(89)), fmt(today)]
+  };
+  if (ranges[preset]) {
+    document.getElementById('ib-date-from').value = ranges[preset][0];
+    document.getElementById('ib-date-to').value   = ranges[preset][1];
   }
 
-  container.appendChild(chip);
+  // Close panel
+  document.getElementById('ib-date-panel').classList.remove('open');
+  document.getElementById('ib-date-btn').classList.remove('open');
+  ibUpdateChips();
+}
+
+function ibOnCustomDateChange() {
+  ibDatePreset = null;
+  ['today','7d','30d','90d'].forEach(p => {
+    const el = document.getElementById('ibpreset-' + p);
+    if (el) el.classList.remove('active');
+  });
+  const from = document.getElementById('ib-date-from').value;
+  const to   = document.getElementById('ib-date-to').value;
+  if (from || to) {
+    document.getElementById('ib-date-display').textContent = (from || '—') + ' → ' + (to || '—');
+  }
+  ibUpdateChips();
+}
+
+/* ── KapAI FAB ────────────────────────────────────────────────── */
+function ibToggleAiFab() {
+  const fab = document.getElementById('ib-ai-fab');
+  const panel = document.getElementById('ib-ai-floating');
+  if (!fab || !panel) return;
+  const isOpen = panel.classList.contains('open');
+  fab.classList.toggle('open', !isOpen);
+  panel.classList.toggle('open', !isOpen);
+  // Opening: clear the notification dot
+  if (!isOpen) setAiDot(false);
+}
+
+// Close date picker, column picker, and AI panel on outside click
+document.addEventListener('click', function(e) {
+  // Date picker
+  const dateWrap = document.getElementById('ib-date-picker-wrap');
+  if (dateWrap && !dateWrap.contains(e.target)) {
+    const panel = document.getElementById('ib-date-panel');
+    const btn   = document.getElementById('ib-date-btn');
+    if (panel) panel.classList.remove('open');
+    if (btn)   btn.classList.remove('open');
+  }
+  // Column picker
+  const colWrap = document.getElementById('ib-col-picker-wrap');
+  if (colWrap && !colWrap.contains(e.target)) {
+    const panel = document.getElementById('ib-col-panel');
+    const btn   = document.getElementById('ib-col-btn');
+    if (panel) panel.classList.remove('open');
+    if (btn)   btn.classList.remove('open');
+  }
+});
+
+/* ── Tab switch ───────────────────────────────────────────────── */
+function ibSwitchTab(tab) {
+  const isVisual = tab === 'visual';
+  document.getElementById('ib-tab-visual').classList.toggle('active', isVisual);
+  document.getElementById('ib-tab-sql').classList.toggle('active', !isVisual);
+  document.getElementById('ib-visual-body').style.display = isVisual ? 'flex' : 'none';
+  document.getElementById('ib-sql-wrapper').style.display = isVisual ? 'none' : 'flex';
+}
+
+/* ── Visual Builder renderer ──────────────────────────────────── */
+function ibRenderVisual() {
+  const reportType = document.getElementById('ib-report-type').value;
+  const dateFrom   = document.getElementById('ib-date-from').value;
+  const dateTo     = document.getElementById('ib-date-to').value;
+  const groupBy    = document.getElementById('ib-groupby').value;
+  const body       = document.getElementById('ib-visual-body');
+  if (!body) return;
+
+  if (!reportType) {
+    body.innerHTML = `<div class="ib-vb-empty" id="ib-vb-empty">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" opacity="0.4">
+        <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="18" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="2" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="18" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <span>Select a report type to see the visual query</span>
+    </div>`;
+    return;
+  }
+
+  const tableNames = {
+    tickets: 'act_ticket_level_report',
+    agents:  'employee_report',
+    queue:   'queue_report',
+    sla:     'act_ticket_level_report'
+  };
+  const reportLabels = { tickets: 'Ticket Metrics', agents: 'Agent Performance', queue: 'Queue Analysis', sla: 'SLA Compliance' };
+  const tableName = tableNames[reportType];
+  const allCols = IB_REPORT_COLS[reportType] || [];
+  const activeCols = ibSelectedCols.size > 0 ? Array.from(ibSelectedCols) : allCols.map(c => c.n);
+
+  // FROM section
+  let html = `
+    <div class="ib-vb-section">
+      <div class="ib-vb-label">From</div>
+      <div class="ib-vb-table">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <rect x="0.5" y="0.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M0.5 3.5h11M3.5 3.5v7.5" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+        <span>adjetter.<strong>${tableName}</strong></span>
+      </div>
+    </div>`;
+
+  // SELECT section
+  html += `<div class="ib-vb-section">
+    <div class="ib-vb-label">Select columns</div>
+    <div class="ib-vb-cols">`;
+  activeCols.forEach(col => {
+    html += `<span class="ib-vb-chip">${col}</span>`;
+  });
+  html += `</div></div>`;
+
+  // WHERE section
+  const dateDisplay = document.getElementById('ib-date-display');
+  const hasDate = dateFrom || dateTo;
+  if (hasDate || ibFilters.length > 0) {
+    html += `<div class="ib-vb-section"><div class="ib-vb-label">Where</div>`;
+    if (hasDate) {
+      const dateCol = reportType === 'agents' ? 'login_time' : 'create_date';
+      const label = (dateDisplay && dateDisplay.textContent !== 'Select range')
+        ? `${dateCol}: ${dateDisplay.textContent}`
+        : `${dateCol}: ${dateFrom || '—'} → ${dateTo || '—'}`;
+      html += `<div class="ib-vb-filter" style="justify-content:flex-start;">${label}</div>`;
+    }
+    ibFilters.forEach((f, idx) => {
+      html += `<div class="ib-vb-filter">
+        <span>${f.field} ${f.operator} "${f.value}"</span>
+        <button class="ib-vb-filter-remove" onclick="removeFilter(${idx})" title="Remove filter">×</button>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // GROUP BY section
+  if (groupBy) {
+    const groupLabels = { status: 'status', priority: 'priority', agent: 'agent_id, agent_name', queue: 'queue_name', sla: 'sla_tier' };
+    html += `<div class="ib-vb-section">
+      <div class="ib-vb-label">Group by</div>
+      <div class="ib-vb-group">${groupLabels[groupBy] || groupBy}</div>
+    </div>`;
+  }
+
+  body.innerHTML = html;
 }
 
 function removeFilter(idx) {
@@ -6576,9 +6811,138 @@ function removeFilter(idx) {
   ibUpdateChips();
 }
 
-function showColumnPicker() {
-  showToast('Column picker coming soon — currently supports all columns from selected report type');
+/* ── Column Picker ────────────────────────────────────────────── */
+const IB_REPORT_COLS = {
+  tickets: [
+    { n:'ticket_id',    t:'varchar'  },
+    { n:'task_id',      t:'bigint'   },
+    { n:'cm_id',        t:'bigint'   },
+    { n:'folder_name',  t:'varchar'  },
+    { n:'agent_name',   t:'varchar'  },
+    { n:'status',       t:'varchar'  },
+    { n:'sub_status',   t:'varchar'  },
+    { n:'create_date',  t:'datetime' },
+    { n:'close_date',   t:'datetime' },
+    { n:'priority',     t:'varchar'  }
+  ],
+  agents: [
+    { n:'emp_id',           t:'bigint'   },
+    { n:'emp_name',         t:'varchar'  },
+    { n:'login_time',       t:'datetime' },
+    { n:'logout_time',      t:'datetime' },
+    { n:'break_time',       t:'int'      },
+    { n:'tickets_handled',  t:'int'      },
+    { n:'status',           t:'varchar'  }
+  ],
+  queue: [
+    { n:'queue_id',    t:'bigint'   },
+    { n:'queue_name',  t:'varchar'  },
+    { n:'ticket_id',   t:'varchar'  },
+    { n:'entered_at',  t:'datetime' },
+    { n:'exited_at',   t:'datetime' },
+    { n:'wait_time',   t:'int'      },
+    { n:'agent_name',  t:'varchar'  }
+  ],
+  sla: [
+    { n:'ticket_id',   t:'varchar'  },
+    { n:'task_id',     t:'bigint'   },
+    { n:'folder_name', t:'varchar'  },
+    { n:'agent_name',  t:'varchar'  },
+    { n:'status',      t:'varchar'  },
+    { n:'create_date', t:'datetime' },
+    { n:'close_date',  t:'datetime' },
+    { n:'priority',    t:'varchar'  }
+  ]
+};
+
+function ibOnReportTypeChange() {
+  // Reset column selection to "all" whenever report type changes
+  const reportType = document.getElementById('ib-report-type').value;
+  const cols = reportType ? IB_REPORT_COLS[reportType] || [] : [];
+  ibSelectedCols = new Set(cols.map(c => c.n));
+  ibRenderColList();
+  ibUpdateColDisplay();
+  ibUpdateChips();
 }
+
+function ibToggleColPicker(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('ib-col-panel');
+  const btn   = document.getElementById('ib-col-btn');
+  const isOpen = panel.classList.contains('open');
+  // Close date picker if open
+  document.getElementById('ib-date-panel').classList.remove('open');
+  document.getElementById('ib-date-btn').classList.remove('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  if (!isOpen) ibRenderColList(); // refresh list when opening
+}
+
+function ibRenderColList() {
+  const reportType = document.getElementById('ib-report-type').value;
+  const cols = reportType ? IB_REPORT_COLS[reportType] || [] : [];
+  const list = document.getElementById('ib-col-list');
+  if (!list) return;
+
+  if (!reportType) {
+    list.innerHTML = '<div style="padding:10px 12px;font-size:12px;color:var(--cutty-sark);">Select a report type first</div>';
+    return;
+  }
+
+  list.innerHTML = cols.map(col => {
+    const checked = ibSelectedCols.has(col.n);
+    return `<label style="display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:var(--font-sm);color:var(--dark-teal);transition:background 0.1s;" onmouseover="this.style.background='var(--aqua-haze)'" onmouseout="this.style.background=''"  >
+      <input type="checkbox" style="accent-color:var(--teal);width:14px;height:14px;flex-shrink:0;" ${checked ? 'checked' : ''} onchange="ibToggleCol('${col.n}',this.checked)" onclick="event.stopPropagation()" />
+      <span style="flex:1;">${col.n}</span>
+      <span style="font-size:10px;color:var(--cutty-sark);font-family:monospace;">${col.t}</span>
+    </label>`;
+  }).join('');
+}
+
+function ibToggleCol(colName, checked) {
+  if (checked) {
+    ibSelectedCols.add(colName);
+  } else {
+    ibSelectedCols.delete(colName);
+  }
+  ibUpdateColDisplay();
+  ibUpdateChips();
+}
+
+function ibUpdateColDisplay() {
+  const reportType = document.getElementById('ib-report-type').value;
+  const total = reportType ? (IB_REPORT_COLS[reportType] || []).length : 0;
+  const selected = ibSelectedCols.size;
+  const display = document.getElementById('ib-col-display');
+  if (!display) return;
+  if (!reportType) {
+    display.textContent = 'All columns';
+  } else if (selected === 0) {
+    display.textContent = 'No columns selected';
+  } else if (selected === total) {
+    display.textContent = 'All columns (' + total + ')';
+  } else {
+    display.textContent = selected + ' of ' + total + ' columns';
+  }
+}
+
+function ibSelectAllCols() {
+  const reportType = document.getElementById('ib-report-type').value;
+  const cols = reportType ? IB_REPORT_COLS[reportType] || [] : [];
+  ibSelectedCols = new Set(cols.map(c => c.n));
+  ibRenderColList();
+  ibUpdateColDisplay();
+  ibUpdateChips();
+}
+
+function ibClearAllCols() {
+  ibSelectedCols.clear();
+  ibRenderColList();
+  ibUpdateColDisplay();
+  ibUpdateChips();
+}
+
+function showColumnPicker() { ibToggleColPicker(event); }
 
 function showAddFilter() {
   const filterName = prompt('Filter field (e.g., "status", "priority", "agent"):', '');
@@ -6612,20 +6976,30 @@ function ibGenerateSql() {
   if (!reportType) {
     sql = '-- Select a report type to generate SQL';
   } else {
-    // Generate SELECT clause based on report type
-    const selectClauses = {
-      tickets: 'SELECT status, COUNT(*) as count, AVG(resolution_time) as avg_time FROM tickets',
-      agents: 'SELECT agent_id, agent_name, COUNT(*) as tickets_handled, AVG(rating) as avg_rating FROM tickets',
-      queue: 'SELECT queue_name, COUNT(*) as queue_size, AVG(wait_time) as avg_wait FROM tickets',
-      sla: 'SELECT sla_tier, COUNT(*) as total, SUM(CASE WHEN met THEN 1 ELSE 0 END) as met FROM tickets'
+    // Table names per report type
+    const tableNames = {
+      tickets: 'adjetter.act_ticket_level_report',
+      agents:  'adjetter.employee_report',
+      queue:   'adjetter.queue_report',
+      sla:     'adjetter.act_ticket_level_report'
     };
+    const tableName = tableNames[reportType] || 'tickets';
 
-    sql = selectClauses[reportType] || 'SELECT * FROM tickets';
+    // Build SELECT clause from selected columns (or * if none/all)
+    const allCols = IB_REPORT_COLS[reportType] || [];
+    let selectPart;
+    if (ibSelectedCols.size === 0 || ibSelectedCols.size === allCols.length) {
+      selectPart = '*';
+    } else {
+      selectPart = Array.from(ibSelectedCols).join(', ');
+    }
+    sql = `SELECT ${selectPart}\nFROM ${tableName}`;
 
     // Add WHERE clause for date range
+    const dateCol = (reportType === 'agents') ? 'login_time' : 'create_date';
     const whereClauses = [];
-    if (dateFrom) whereClauses.push(`created_at >= '${dateFrom}'`);
-    if (dateTo) whereClauses.push(`created_at <= '${dateTo}'`);
+    if (dateFrom) whereClauses.push(`${dateCol} >= '${dateFrom}'`);
+    if (dateTo) whereClauses.push(`${dateCol} <= '${dateTo}'`);
     ibFilters.forEach(f => {
       whereClauses.push(`${f.field} ${f.operator} '${f.value}'`);
     });
