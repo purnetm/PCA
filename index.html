@@ -216,6 +216,8 @@
       font-size: var(--font-subtitle); font-weight: var(--weight-bold);
       color: var(--cutty-sark); line-height: 1.3;
       letter-spacing: var(--letter-tight);
+      white-space: nowrap; overflow: hidden; max-width: 200px;
+      transition: max-width 0.22s ease, opacity 0.22s ease, padding 0.22s ease;
     }
     .sidebar-nav {
       flex: 1; overflow-y: auto; padding: var(--space-3);
@@ -265,6 +267,75 @@
     .nav-subitem.active .nav-subitem-dot { opacity: 1; }
 
     .sidebar-footer { position: relative; flex-shrink: 0; padding: var(--space-3); }
+
+    /* ── Sidebar collapse ───────────────────────────────────────── */
+    .sidebar { transition: width 0.22s ease, min-width 0.22s ease; }
+    .sidebar-header { display: flex; align-items: center; justify-content: space-between; }
+    .sidebar-collapse-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
+      border: none; background: transparent; cursor: pointer;
+      color: var(--cutty-sark); transition: background 0.15s, color 0.15s;
+    }
+    .sidebar-collapse-btn:hover { background: var(--teal-20); color: var(--teal); }
+    .sidebar-collapse-btn .icon-sb-expand { display: none; }
+    .sidebar.collapsed .sidebar-collapse-btn .icon-sb-collapse { display: none; }
+    .sidebar.collapsed .sidebar-collapse-btn .icon-sb-expand { display: block; }
+
+    /* Only width changes — all vertical rhythm stays identical */
+    .sidebar.collapsed { width: 56px; min-width: 56px; }
+    /* Fade + shrink title width — height stays in layout so no vertical jump */
+    .sidebar.collapsed .sidebar-title {
+      max-width: 0; opacity: 0; padding-left: 0; padding-right: 0;
+    }
+    .sidebar.collapsed .sidebar-header { justify-content: center; }
+    .sidebar.collapsed .nav-label,
+    .sidebar.collapsed .nav-chevron { display: none; }
+    /* Nav: keep same vertical padding/gap, only remove horizontal indent */
+    .sidebar.collapsed .sidebar-nav {
+      padding-left: 0; padding-right: 0; overflow: visible; align-items: center;
+    }
+    /* Items: icon-only, same height (32px) as expanded */
+    .sidebar.collapsed .nav-item {
+      justify-content: center; padding: 0; width: 36px; height: 32px; gap: 0;
+    }
+    /* Footer: keep same height, only zero out horizontal padding */
+    .sidebar.collapsed .user-info,
+    .sidebar.collapsed #user-menu-chevron { display: none; }
+    .sidebar.collapsed .user-menu-btn {
+      justify-content: center; padding: 0; width: 36px; height: 48px; gap: 0;
+    }
+    .sidebar.collapsed .sidebar-footer { display: flex; justify-content: center; padding-left: 0; padding-right: 0; }
+    /* Data Studio flyout in collapsed mode */
+    .sidebar.collapsed .nav-subnav { display: none !important; }
+    .sidebar.collapsed .nav-ds-group { position: relative; }
+    .sidebar.collapsed .nav-ds-group .nav-subnav {
+      position: absolute; left: calc(100% + 8px); top: 0;
+      background: #fff; border: 1px solid var(--nebula);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 200; padding: 4px; min-width: 160px;
+      flex-direction: column;
+    }
+    /* Transparent bridge covers the 8px gap — hover stays active when moving to flyout */
+    .sidebar.collapsed .nav-ds-group .nav-subnav::before {
+      content: ''; position: absolute; right: 100%; top: 0; width: 8px; height: 100%;
+    }
+    .sidebar.collapsed .nav-ds-group:hover .nav-subnav { display: flex !important; }
+    .sidebar.collapsed .nav-ds-group .nav-subitem { padding-left: var(--space-3); }
+
+    /* Tooltip in collapsed mode */
+    .sidebar.collapsed [data-tooltip] { position: relative; }
+    .sidebar.collapsed [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%);
+      background: var(--dark-teal); color: #fff;
+      padding: 5px 10px; border-radius: 6px;
+      font-size: var(--font-sm); font-weight: var(--weight-medium);
+      white-space: nowrap; pointer-events: none;
+      opacity: 0; transition: opacity 0.15s; z-index: 200;
+    }
+    .sidebar.collapsed [data-tooltip]:hover::after { opacity: 1; }
 
     /* User menu trigger button */
     .user-menu-btn {
@@ -2628,21 +2699,26 @@
 
     /* ── Right panel tab switch ────────────────────────────────── */
     .ib-panel-tabs {
-      display: flex; flex-shrink: 0; border-bottom: 1.5px solid var(--nebula);
-      background: var(--aqua-haze);
+      display: flex; align-items: center;
+      flex-shrink: 0; padding: 8px 12px;
+      border-bottom: 1px solid var(--nebula); background: #fff;
+    }
+    .ib-panel-tab-group {
+      display: flex; align-items: center; gap: 2px;
+      background: var(--aqua-haze); border-radius: 8px; padding: 3px;
     }
     .ib-panel-tab {
-      flex: 1; padding: 10px 8px; border: none; background: transparent;
-      cursor: pointer; font-size: var(--font-sm); font-weight: var(--weight-medium);
-      color: var(--cutty-sark); font-family: 'Inter', sans-serif;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      border-bottom: 2px solid transparent; margin-bottom: -1.5px;
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 6px;
+      border: none; background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-regular);
+      color: var(--cutty-sark); white-space: nowrap;
+      transition: background 0.12s, color 0.12s;
     }
-    .ib-panel-tab:hover { background: var(--teal-10); color: var(--dark-teal); }
+    .ib-panel-tab:hover { color: var(--dark-teal); }
     .ib-panel-tab.active {
-      color: var(--teal); border-bottom-color: var(--teal);
-      background: #fff; font-weight: var(--weight-semibold);
+      background: #fff; color: var(--dark-teal); font-weight: var(--weight-medium);
+      box-shadow: 0 1px 3px rgba(31,65,65,0.1);
     }
 
     /* ── Visual Builder ─────────────────────────────────────────── */
@@ -2706,11 +2782,48 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
     .ib-preview-header {
-      padding: var(--space-5) var(--space-6); border-bottom: 1.5px solid var(--nebula);
+      padding: 0 var(--space-6); border-bottom: 1.5px solid var(--nebula);
       display: flex; align-items: center; gap: var(--space-4); flex-shrink: 0;
       font-size: var(--font-md); font-weight: var(--weight-semibold);
-      color: var(--dark-teal);
+      color: var(--dark-teal); height: 52px;
     }
+    .ib-preview-header-actions { display: flex; align-items: center; gap: var(--space-3); margin-left: auto; }
+    .ib-preview-search {
+      display: flex; align-items: center; gap: 6px;
+      border: 1px solid var(--nebula); border-radius: 7px;
+      padding: 4px 10px; background: var(--aqua-haze); width: 160px;
+    }
+    .ib-preview-search input {
+      border: none; background: transparent; outline: none;
+      font-family: 'Inter', sans-serif; font-size: var(--font-sm);
+      color: var(--dark-teal); width: 100%;
+    }
+    .ib-preview-search input::placeholder { color: var(--cutty-sark); opacity: 0.7; }
+    .ib-preview-limit {
+      display: flex; align-items: center; gap: 5px;
+      font-size: var(--font-sm); color: var(--cutty-sark);
+    }
+    .ib-preview-limit select {
+      border: none; background: transparent; outline: none;
+      font-family: 'Inter', sans-serif; font-size: var(--font-sm);
+      color: var(--dark-teal); cursor: pointer;
+    }
+    .ib-preview-export {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 12px; border-radius: 7px;
+      border: 1px solid var(--nebula); background: transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: var(--font-sm);
+      color: var(--cutty-sark); transition: background 0.15s; opacity: 0.55;
+    }
+    .ib-preview-export:not(:disabled):hover { background: var(--aqua-haze); opacity: 1; }
+    .ib-run-query-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 8px;
+      border: none; background: var(--teal); color: #fff; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: var(--font-sm);
+      font-weight: var(--weight-medium); transition: opacity 0.15s; white-space: nowrap;
+    }
+    .ib-run-query-btn:hover { opacity: 0.88; }
     .ib-preview-body {
       flex: 1; overflow-y: auto; padding: var(--space-5) var(--space-6);
       display: flex; align-items: center; justify-content: center;
@@ -2785,32 +2898,12 @@
     .ib-date-custom-input:focus { border-color: var(--teal-50); background: #fff; }
 
     /* ── KapAI Floating Action Button ────────────────────────────── */
-    .ib-ai-fab {
-      position: fixed; bottom: 24px; right: 24px;
-      width: 52px; height: 52px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--teal) 0%, var(--dark-teal) 100%);
-      color: #fff; border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 16px rgba(77,182,172,0.45), 0 2px 6px rgba(0,0,0,0.14);
-      z-index: 200; transition: transform 0.2s, box-shadow 0.2s;
-      overflow: visible;
-    }
-    .ib-ai-fab:hover { transform: scale(1.06); box-shadow: 0 6px 22px rgba(77,182,172,0.55); }
-    .ib-ai-fab-close { display: none; }
-    .ib-ai-fab.open .ib-ai-fab-open { display: none; }
-    .ib-ai-fab.open .ib-ai-fab-close { display: block; }
     .ib-ai-floating {
-      position: fixed; bottom: 88px; right: 24px;
-      width: 360px; max-height: 560px;
-      display: flex; flex-direction: column;
+      flex: 0 0 300px; display: flex; flex-direction: column;
       background: #fff; border: 1.5px solid var(--nebula);
-      border-radius: 14px; overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(77,182,172,0.12);
-      z-index: 199;
-      opacity: 0; pointer-events: none; transform: translateY(12px);
-      transition: opacity 0.2s, transform 0.2s;
+      border-radius: var(--radius-md); overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
-    .ib-ai-floating.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
     /* ── Create Dashboard Modal (two-column) ────────────────────── */
     .cdm-body { display: flex; flex-direction: row; height: 380px; overflow: hidden; }
@@ -2886,11 +2979,23 @@
 <aside class="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">Post Call Analysis</div>
+    <button class="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" title="Toggle sidebar">
+      <!-- Collapse icon: shown when sidebar is expanded -->
+      <svg class="icon-sb-collapse" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 1V17M1 3C1 2.46957 1.21071 1.96086 1.58579 1.58579C1.96086 1.21071 2.46957 1 3 1H15C15.5304 1 16.0391 1.21071 16.4142 1.58579C16.7893 1.96086 17 2.46957 17 3V15C17 15.5304 16.7893 16.0391 16.4142 16.4142C16.0391 16.7893 15.5304 17 15 17H3C2.46957 17 1.96086 16.7893 1.58579 16.4142C1.21071 16.0391 1 15.5304 1 15V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 7L10 9L12 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <!-- Expand icon: shown when sidebar is collapsed -->
+      <svg class="icon-sb-expand" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1V17M1 3C1 2.46957 1.21071 1.96086 1.58579 1.58579C1.96086 1.21071 2.46957 1 3 1H15C15.5304 1 16.0391 1.21071 16.4142 1.58579C16.7893 1.96086 17 2.46957 17 3V15C17 15.5304 16.7893 16.0391 16.4142 16.4142C16.0391 16.7893 15.5304 17 15 17H3C2.46957 17 1.96086 16.7893 1.58579 16.4142C1.21071 16.0391 1 15.5304 1 15V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6 7L8 9L6 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
   </div>
 
   <nav class="sidebar-nav">
     <!-- Kap AI -->
-    <button class="nav-item active" data-nav="kap-ai">
+    <button class="nav-item active" data-nav="kap-ai" data-tooltip="Kap AI">
       <svg class="nav-icon" viewBox="0 0 22 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M11 5V1H7"/>
         <path d="M17 5H5C3.895 5 3 5.895 3 7V15C3 16.105 3.895 17 5 17H17C18.105 17 19 16.105 19 15V7C19 5.895 18.105 5 17 5Z"/>
@@ -2900,7 +3005,8 @@
     </button>
 
     <!-- Data Studio — expandable -->
-    <button class="nav-item" id="nav-data-studio" onclick="toggleDsExpand()">
+    <div class="nav-ds-group">
+    <button class="nav-item" id="nav-data-studio" data-tooltip="Data Studio" onclick="toggleDsExpand()">
       <svg class="nav-icon" viewBox="0 0 18 18" fill="none">
         <path d="M11 6C10.7167 6 10.4793 5.904 10.288 5.712C10.0967 5.52 10.0007 5.28267 10 5V1C10 0.716667 10.096 0.479333 10.288 0.288C10.48 0.0966668 10.7173 0.000666667 11 0H17C17.2833 0 17.521 0.0960001 17.713 0.288C17.905 0.48 18.0007 0.717333 18 1V5C18 5.28333 17.904 5.521 17.712 5.713C17.52 5.905 17.2827 6.00067 17 6H11ZM1 10C0.716667 10 0.479333 9.904 0.288 9.712C0.0966668 9.52 0.000666667 9.28267 0 9V1C0 0.716667 0.0960001 0.479333 0.288 0.288C0.48 0.0966668 0.717333 0.000666667 1 0H7C7.28333 0 7.521 0.0960001 7.713 0.288C7.905 0.48 8.00067 0.717333 8 1V9C8 9.28333 7.904 9.521 7.712 9.713C7.52 9.905 7.28267 10.0007 7 10H1ZM11 18C10.7167 18 10.4793 17.904 10.288 17.712C10.0967 17.52 10.0007 17.2827 10 17V9C10 8.71667 10.096 8.47933 10.288 8.288C10.48 8.09667 10.7173 8.00067 11 8H17C17.2833 8 17.521 8.096 17.713 8.288C17.905 8.48 18.0007 8.71733 18 9V17C18 17.2833 17.904 17.521 17.712 17.713C17.52 17.905 17.2827 18.0007 17 18H11ZM1 18C0.716667 18 0.479333 17.904 0.288 17.712C0.0966668 17.52 0.000666667 17.2827 0 17V13C0 12.7167 0.0960001 12.4793 0.288 12.288C0.48 12.0967 0.717333 12.0007 1 12H7C7.28333 12 7.521 12.096 7.713 12.288C7.905 12.48 8.00067 12.7173 8 13V17C8 17.2833 7.904 17.521 7.712 17.713C7.52 17.905 7.28267 18.0007 7 18H1Z" fill="currentColor"/>
       </svg>
@@ -2919,9 +3025,10 @@
         New Query
       </button>
     </div>
+    </div><!-- /nav-ds-group -->
 
     <!-- Intelligence -->
-    <div class="nav-item" style="font-size:15.2px;">
+    <div class="nav-item" style="font-size:15.2px;" data-tooltip="Intelligence">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
         <path d="M7.27273 2.72727L9.54545 7.72727L14.5455 10L9.54545 12.2727L7.27273 17.2727L5 12.2727L0 10L5 7.72727L7.27273 2.72727ZM7.27273 7.11818L6.36364 9.09091L4.39091 10L6.36364 10.9091L7.27273 12.8818L8.18182 10.9091L10.1545 10L8.18182 9.09091L7.27273 7.11818ZM16.3636 7.27273L15.2182 4.78182L12.7273 3.63636L15.2182 2.5L16.3636 0L17.5 2.5L20 3.63636L17.5 4.78182L16.3636 7.27273ZM16.3636 20L15.2182 17.5091L12.7273 16.3636L15.2182 15.2273L16.3636 12.7273L17.5 15.2273L20 16.3636L17.5 17.5091L16.3636 20Z" fill="currentColor"/>
       </svg>
@@ -2932,7 +3039,7 @@
     </div>
 
     <!-- Configuration -->
-    <div class="nav-item" style="font-size:15.2px;">
+    <div class="nav-item" style="font-size:15.2px;" data-tooltip="Configuration">
       <svg class="nav-icon" viewBox="0 0 19.8 19.8" fill="none">
         <path d="M11.7 2.0421C11.7 1.4112 11.1888 0.9 10.5579 0.9H9.243C8.6112 0.9 8.1 1.4112 8.1 2.0421C8.1 2.5623 7.7436 3.0087 7.2585 3.1995C7.1817 3.2307 7.1058 3.2625 7.0308 3.2949C6.5529 3.5019 5.985 3.4389 5.616 3.0708C5.40172 2.85701 5.11139 2.73694 4.8087 2.73694C4.50601 2.73694 4.21568 2.85701 4.0014 3.0708L3.0708 4.0014C2.85701 4.21568 2.73694 4.50601 2.73694 4.8087C2.73694 5.11139 2.85701 5.40172 3.0708 5.616C3.4398 5.985 3.5028 6.552 3.294 7.0308C3.2612 7.10616 3.2297 7.18207 3.1995 7.2585C3.0087 7.7436 2.5623 8.1 2.0421 8.1C1.4112 8.1 0.9 8.6112 0.9 9.2421V10.5579C0.9 11.1888 1.4112 11.7 2.0421 11.7C2.5623 11.7 3.0087 12.0564 3.1995 12.5415C3.2307 12.6183 3.2622 12.6942 3.294 12.7692C3.5019 13.2471 3.4389 13.815 3.0708 14.184C2.85701 14.3983 2.73694 14.6886 2.73694 14.9913C2.73694 15.294 2.85701 15.5843 3.0708 15.7986L4.0014 16.7292C4.21568 16.943 4.50601 17.0631 4.8087 17.0631C5.11139 17.0631 5.40172 16.943 5.616 16.7292C5.985 16.3602 6.552 16.2972 7.0308 16.5051C7.1058 16.5381 7.1817 16.5699 7.2585 16.6005C7.7436 16.7913 8.1 17.2377 8.1 17.7579C8.1 18.3888 8.6112 18.9 9.2421 18.9H10.5579C11.1888 18.9 11.7 18.3888 11.7 17.7579C11.7 17.2377 12.0564 16.7913 12.5415 16.5996C12.6183 16.5696 12.6942 16.5384 12.7692 16.506C13.2471 16.2972 13.815 16.3611 14.1831 16.7292C14.3974 16.9433 14.6879 17.0635 14.9908 17.0635C15.2938 17.0635 15.5843 16.9433 15.7986 16.7292L16.7292 15.7986C16.943 15.5843 17.0631 15.294 17.0631 14.9913C17.0631 14.6886 16.943 14.3983 16.7292 14.184C16.3602 13.815 16.2972 13.248 16.5051 12.7692C16.5381 12.6942 16.5699 12.6183 16.6005 12.5415C16.7913 12.0564 17.2377 11.7 17.7579 11.7C18.3888 11.7 18.9 11.1888 18.9 10.5579V9.243C18.9 8.6121 18.3888 8.1009 17.7579 8.1009C17.2377 8.1009 16.7913 7.7445 16.5996 7.2594C16.5694 7.18297 16.5379 7.10705 16.5051 7.0317C16.2981 6.5538 16.3611 5.9859 16.7292 5.6169C16.943 5.40262 17.0631 5.11229 17.0631 4.8096C17.0631 4.50691 16.943 4.21658 16.7292 4.0023L15.7986 3.0717C15.5843 2.85791 15.294 2.73784 14.9913 2.73784C14.6886 2.73784 14.3983 2.85791 14.184 3.0717C13.815 3.4407 13.248 3.5037 12.7692 3.2958C12.6939 3.2627 12.6179 3.2309 12.5415 3.2004C12.0564 3.0087 11.7 2.5614 11.7 2.0421Z" stroke="currentColor" stroke-width="1.8"/>
         <path d="M13.5 9.9C13.5 10.8548 13.1207 11.7705 12.4456 12.4456C11.7705 13.1207 10.8548 13.5 9.9 13.5C8.94522 13.5 8.02955 13.1207 7.35442 12.4456C6.67928 11.7705 6.3 10.8548 6.3 9.9C6.3 8.94522 6.67928 8.02955 7.35442 7.35442C8.02955 6.67928 8.94522 6.3 9.9 6.3C10.8548 6.3 11.7705 6.67928 12.4456 7.35442C13.1207 8.02955 13.5 8.94522 13.5 9.9Z" stroke="currentColor" stroke-width="1.8"/>
@@ -2944,7 +3051,7 @@
     </div>
 
     <!-- Help Center -->
-    <button class="nav-item" data-nav="">
+    <button class="nav-item" data-nav="" data-tooltip="Help Center">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
         <path d="M10.838 15.638C11.0793 15.396 11.2 15.1 11.2 14.75C11.2 14.4 11.0793 14.104 10.838 13.862C10.5967 13.62 10.3007 13.4993 9.95 13.5C9.59933 13.5007 9.30367 13.6217 9.063 13.863C8.82233 14.1043 8.70133 14.4 8.7 14.75C8.69867 15.1 8.81967 15.396 9.063 15.638C9.30633 15.88 9.602 16.0007 9.95 16C10.298 15.9993 10.594 15.8783 10.838 15.637M10 20C8.61667 20 7.31667 19.7373 6.1 19.212C4.88334 18.6867 3.825 17.9743 2.925 17.075C2.025 16.1757 1.31267 15.1173 0.788001 13.9C0.263335 12.6827 0.000667932 11.3827 1.26582e-06 10C-0.000665401 8.61733 0.262001 7.31733 0.788001 6.1C1.314 4.88267 2.02633 3.82433 2.925 2.925C3.82367 2.02567 4.882 1.31333 6.1 0.788C7.318 0.262667 8.618 0 10 0C11.382 0 12.682 0.262667 13.9 0.788C15.118 1.31333 16.1763 2.02567 17.075 2.925C17.9737 3.82433 18.6863 4.88267 19.213 6.1C19.7397 7.31733 20.002 8.61733 20 10C19.998 11.3827 19.7353 12.6827 19.212 13.9C18.6887 15.1173 17.9763 16.1757 17.075 17.075C16.1737 17.9743 15.1153 18.687 13.9 19.213C12.6847 19.739 11.3847 20.0013 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18ZM10.1 5.7C10.5167 5.7 10.8793 5.83333 11.188 6.1C11.4967 6.36667 11.6507 6.7 11.65 7.1C11.65 7.46667 11.5377 7.79167 11.313 8.075C11.0883 8.35833 10.834 8.625 10.55 8.875C10.1667 9.20833 9.82933 9.575 9.538 9.975C9.24667 10.375 9.10067 10.825 9.1 11.325C9.1 11.5583 9.18767 11.7543 9.363 11.913C9.53833 12.0717 9.74233 12.1507 9.975 12.15C10.225 12.15 10.4377 12.0667 10.613 11.9C10.7883 11.7333 10.9007 11.525 10.95 11.275C11.0167 10.925 11.1667 10.6127 11.4 10.338C11.6333 10.0633 11.8833 9.80067 12.15 9.55C12.5333 9.18333 12.8627 8.78333 13.138 8.35C13.4133 7.91667 13.5507 7.43333 13.55 6.9C13.55 6.05 13.2043 5.35433 12.513 4.813C11.8217 4.27167 11.0173 4.00067 10.1 4C9.46667 4 8.86267 4.13333 8.288 4.4C7.71333 4.66667 7.27567 5.075 6.975 5.625C6.85834 5.825 6.821 6.03767 6.863 6.263C6.905 6.48833 7.01733 6.659 7.2 6.775C7.43333 6.90833 7.675 6.95 7.925 6.9C8.175 6.85 8.38333 6.70833 8.55 6.475C8.73333 6.225 8.96267 6.03333 9.238 5.9C9.51333 5.76667 9.80067 5.7 10.1 5.7Z" fill="currentColor"/>
       </svg>
@@ -2983,7 +3090,7 @@
     </div>
 
     <!-- Trigger button -->
-    <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
+    <button class="user-menu-btn" id="user-menu-btn" data-tooltip="Wellness Forever" onclick="toggleUserMenu()">
       <div class="user-avatar">W</div>
       <div class="user-info">
         <div class="user-name">Wellness Forever</div>
@@ -3146,13 +3253,13 @@
         </nav>
       </div>
       <div class="topbar-right">
-        <button class="qb-reset-btn" id="ib-reset-btn" onclick="qbReset()" title="Start over" style="display:none;">
+        <button class="qb-reset-btn" id="ib-reset-btn" onclick="ibReset()" title="Start over" style="display:none;">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
             <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
             <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <button class="qb-save-btn" id="ib-save-btn" onclick="openSaveModal()" style="display:none;">
+        <button class="qb-save-btn" id="ib-save-btn" onclick="ibOpenSaveModal()" style="display:none;">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
             <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
             <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
@@ -3166,7 +3273,7 @@
           </svg>
           AI
         </button>
-        <button class="nq-ai-toggle-btn off" id="nq-ai-toggle-btn" onclick="toggleAiPanel()" title="Toggle AI Assistant" style="display:none;">
+        <button class="nq-ai-toggle-btn" id="nq-ai-toggle-btn" onclick="toggleAiPanel()" title="Toggle AI Assistant" style="display:none;">
           <svg width="11" height="11" viewBox="0 0 13 13" fill="currentColor">
             <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
           </svg>
@@ -3520,14 +3627,29 @@
           <!-- LEFT: Config Sidebar -->
           <div class="ib-config-sidebar">
             <div class="ib-config-section">
-              <div class="ib-config-label">📊 What to Report On</div>
+              <div class="ib-config-label">🗄 Data Source</div>
               <div class="ib-select-wrap">
-                <select class="ib-select" id="ib-report-type" onchange="ibOnReportTypeChange()">
-                  <option value="">Select report type...</option>
-                  <option value="tickets">Ticket Metrics</option>
-                  <option value="agents">Agent Performance</option>
-                  <option value="queue">Queue Analysis</option>
-                  <option value="sla">SLA Compliance</option>
+                <select class="ib-select" id="ib-ds" onchange="ibSelectDs(this.value)">
+                  <option value="">Select source...</option>
+                  <option value="StarRocks">StarRocks</option>
+                </select>
+                <svg class="ib-select-chevron" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="ib-config-section" id="ibs-schema" style="display:none">
+              <div class="ib-config-label">🗂 Schema</div>
+              <div class="ib-select-wrap">
+                <select class="ib-select" id="ib-schema" onchange="ibSelectSchema(this.value)">
+                  <option value="">Select schema...</option>
+                </select>
+                <svg class="ib-select-chevron" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="ib-config-section" id="ibs-table" style="display:none">
+              <div class="ib-config-label">📋 Dataset</div>
+              <div class="ib-select-wrap">
+                <select class="ib-select" id="ib-table" onchange="ibSelectTable(this.value)">
+                  <option value="">Select table...</option>
                 </select>
                 <svg class="ib-select-chevron" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
               </div>
@@ -3594,15 +3716,11 @@
               </button>
             </div>
 
-            <div class="ib-config-section">
+            <div class="ib-config-section" id="ibs-groupby" style="display:none">
               <div class="ib-config-label">📈 Grouping</div>
               <div class="ib-select-wrap">
-                <select class="ib-select" id="ib-groupby" onchange="ibUpdateChips()">
+                <select class="ib-select" id="ib-groupby" onfocus="showAiNudge('groupByOpen')" onchange="ibUpdateChips()">
                   <option value="">None</option>
-                  <option value="status">By Status</option>
-                  <option value="priority">By Priority</option>
-                  <option value="agent">By Agent</option>
-                  <option value="queue">By Queue</option>
                 </select>
                 <svg class="ib-select-chevron" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
               </div>
@@ -3612,29 +3730,89 @@
           <!-- CENTER: Preview -->
           <div class="ib-center-pane">
             <!-- Data preview -->
-            <div class="ib-preview-container">
+            <div class="ib-preview-container" id="ib-preview-container">
               <div class="ib-preview-header">
                 <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
                   <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
                   <path d="M1 4.5h12M4.5 4.5v7.5" stroke="currentColor" stroke-width="1.3"/>
                 </svg>
                 Data Preview
-                <span id="ib-preview-meta" style="font-size:11px;opacity:0.65;font-weight:normal;"></span>
-                <button class="ib-show-preview-btn" onclick="ibShowPreview()" style="margin-left:auto;padding:6px 12px;">
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M7 2C4.5 2 2.5 4 1 6c1.5 2 3.5 4 6 4s4.5-2 6-4c-1.5-2-3.5-4-6-4zm0 6.5c-1.4 0-2.5-1.1-2.5-2.5S5.6 3.5 7 3.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z" fill="currentColor"/>
-                  </svg>
-                  Run Preview
-                </button>
+                <span id="ib-preview-meta" style="font-size:11px;opacity:0.65;font-weight:normal;margin-left:4px;"></span>
+                <div class="ib-preview-header-actions">
+                  <!-- Search -->
+                  <div class="ib-preview-search">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.2"/>
+                      <path d="M7.5 7.5L10 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                    <input id="ib-preview-search-input" placeholder="Search..." oninput="ibFilterPreview(this.value)" />
+                  </div>
+                  <!-- Limit -->
+                  <div class="ib-preview-limit">
+                    <span>Limit:</span>
+                    <select id="ib-preview-limit">
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                      <option value="100" selected>100</option>
+                      <option value="500">500</option>
+                    </select>
+                  </div>
+                  <!-- Export -->
+                  <button class="ib-preview-export" onclick="ibExportPreview()">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M6 1v6M3.5 4.5L6 7l2.5-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M1 9.5V11h10V9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                    Export
+                  </button>
+                  <!-- Run Query -->
+                  <button class="ib-run-query-btn" onclick="ibShowPreview()">
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor">
+                      <path d="M2.5 1.5l7 4-7 4V1.5z"/>
+                    </svg>
+                    Run Query
+                  </button>
+                </div>
               </div>
               <div class="ib-preview-body" id="ib-preview-body">
                 <div class="ib-preview-empty">
-                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" opacity="0.3">
-                    <rect x="5" y="5" width="30" height="30" rx="4" stroke="currentColor" stroke-width="2"/>
-                    <path d="M5 12h30M12 12v23" stroke="currentColor" stroke-width="2"/>
+                  <svg width="42" height="42" viewBox="0 0 42 42" fill="none" opacity="0.3">
+                    <rect x="5" y="5" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <path d="M5 13h32M13 13v24" stroke="currentColor" stroke-width="2"/>
                   </svg>
-                  <span>Configure settings and click "Show Preview" to see results</span>
+                  <span>Click Run Query to see results</span>
                 </div>
+              </div>
+            </div>
+            <!-- IB Save view — shown in place of preview when saving -->
+            <div id="ib-save-view" style="display:none;flex-direction:column;gap:16px;padding:24px;flex:1;overflow-y:auto;">
+              <div class="sq-field">
+                <label class="sq-label">Question Name</label>
+                <input class="sq-input" id="ib-sq-name" value="Untitled Query" />
+              </div>
+              <div class="sq-field">
+                <label class="sq-label">Description</label>
+                <textarea class="sq-textarea" id="ib-sq-desc" placeholder="Describe what this question answers..."></textarea>
+              </div>
+              <div class="sq-field">
+                <label class="sq-label">Default Visualization</label>
+                <div class="qb-select-wrap" style="border-radius:8px;">
+                  <select class="qb-select" id="ib-sq-viz">
+                    <option>Table</option><option>Bar Chart</option><option>Pie Chart</option><option>Line Chart</option>
+                  </select>
+                  <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px;">
+                <button class="sq-cancel-btn" onclick="ibCloseSaveModal()">Cancel</button>
+                <button class="sq-save-btn" onclick="ibSaveFinal()">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                    <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
+                  </svg>
+                  Save Query
+                </button>
               </div>
             </div>
           </div>
@@ -3644,21 +3822,23 @@
             <div class="ib-sql-panel">
               <!-- Tab strip -->
               <div class="ib-panel-tabs">
-                <button class="ib-panel-tab active" id="ib-tab-visual" onclick="ibSwitchTab('visual')">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <rect x="1" y="1" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
-                    <rect x="6.5" y="1" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
-                    <rect x="1" y="6.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
-                    <rect x="6.5" y="6.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
-                  </svg>
-                  Visual
-                </button>
-                <button class="ib-panel-tab" id="ib-tab-sql" onclick="ibSwitchTab('sql')">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  SQL
-                </button>
+                <div class="ib-panel-tab-group">
+                  <button class="ib-panel-tab active" id="ib-tab-visual" onclick="ibSwitchTab('visual')">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <rect x="1" y="1" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                      <rect x="6.5" y="1" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                      <rect x="1" y="6.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                      <rect x="6.5" y="6.5" width="4.5" height="4.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                    </svg>
+                    Visual Builder
+                  </button>
+                  <button class="ib-panel-tab" id="ib-tab-sql" onclick="ibSwitchTab('sql')">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    SQL Console
+                  </button>
+                </div>
               </div>
               <!-- Visual Builder pane -->
               <div class="ib-visual-body" id="ib-visual-body">
@@ -3674,36 +3854,23 @@
               </div>
               <!-- SQL pane (hidden by default) -->
               <div class="ib-sql-editor-wrapper" id="ib-sql-wrapper" style="display:none;">
-                <textarea class="ib-sql-editor" id="ib-sql-editor" readonly placeholder="-- SQL will generate here"></textarea>
+                <textarea class="ib-sql-editor" id="ib-sql-editor" placeholder="-- SQL will generate here" oninput="ibOnSqlInput()"></textarea>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- KapAI Floating Panel -->
-        <!-- KapAI Floating Panel — canonical AI container for Iteration B -->
-        <div class="ib-ai-floating" id="ib-ai-floating">
-          <div class="ge-step-hd" style="justify-content:space-between;background:#fff;border-bottom:1.5px solid var(--nebula);padding:0 16px;height:52px;flex-shrink:0;display:flex;align-items:center;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="ge-step-badge ge-step-badge-ai" style="width:26px;height:26px;">
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
-                  <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
-                </svg>
+          <!-- KapAI Panel — permanent right column -->
+          <div class="ib-ai-floating" id="ib-ai-floating">
+            <div class="ge-step-hd" style="justify-content:space-between;background:#fff;border-bottom:1.5px solid var(--nebula);padding:0 16px;height:52px;flex-shrink:0;display:flex;align-items:center;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="ge-step-badge ge-step-badge-ai" style="width:26px;height:26px;">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor">
+                    <path d="M6 0L7 3.5L11 6L7 8.5L6 12L5 8.5L1 6L5 3.5L6 0Z"/>
+                  </svg>
+                </div>
+                <div class="ge-step-title">KapAI</div>
               </div>
-              <div class="ge-step-title">KapAI</div>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <!-- Pulsing badge shown when AI has suggestions and panel is closed -->
-              <div class="ge-ai-badge" id="ge-ai-badge" style="display:none;" title="KapAI has suggestions">
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L5.9 3.2L9.5 5L5.9 6.8L5 10L4.1 6.8L0.5 5L4.1 3.2L5 0Z"/></svg>
-              </div>
-              <button onclick="ibToggleAiFab()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--cutty-sark);display:flex;align-items:center;border-radius:6px;transition:background 0.12s;" title="Close">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </button>
-            </div>
-          </div>
           <div class="ge-step-body" style="flex:1;min-height:0;overflow:hidden;padding:0;display:flex;flex-direction:column;">
             <div class="ge-ai-scroll">
               <div class="nq-nudge-card" id="nq-nudge-card" style="display:none;">
@@ -3754,23 +3921,6 @@
           </div>
         </div>
 
-        <!-- KapAI FAB — notification dot appears when panel is closed and AI has suggestions -->
-        <button class="ib-ai-fab" id="ib-ai-fab" onclick="ibToggleAiFab()" title="Ask KapAI">
-          <svg class="ib-ai-fab-open" width="22" height="22" viewBox="0 0 13 13" fill="currentColor">
-            <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
-          </svg>
-          <svg class="ib-ai-fab-close" width="18" height="18" viewBox="0 0 14 14" fill="none">
-            <path d="M2 2l10 10M12 2L2 12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <!-- Notification dot -->
-          <span id="ib-ai-fab-dot" style="
-            display:none; position:absolute; top:2px; right:2px;
-            width:12px; height:12px; border-radius:50%;
-            background:#FF5252; border:2px solid #fff;
-            animation: ge-pulse 1.5s ease-in-out infinite;
-          "></span>
-        </button>
-
         <!-- Hidden: Save modal, advanced builder etc (kept for compatibility) -->
         <div class="ge-main-pane" style="display:none;">
 
@@ -3789,7 +3939,7 @@
             </div>
           </div>
           <div class="ge-topbar-actions">
-            <button class="qb-reset-btn" onclick="qbReset()" title="Start over">
+            <button class="qb-reset-btn" onclick="ibReset()" title="Start over">
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                 <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -5081,16 +5231,16 @@ function geSetViz(btn, type) {
 }
 function geToggleAiPanel() { ibToggleAiFab(); }
 function setAiDot(show) {
-  // Show/hide notification dot on the FAB
-  const dot = document.getElementById('ib-ai-fab-dot');
-  if (dot) dot.style.display = show ? 'block' : 'none';
-  // Also show/hide badge inside the floating panel header
+  // Toggle red dot on the AI toggle button in the topbar
+  const btn = document.getElementById('nq-ai-toggle-btn');
+  if (btn) btn.classList.toggle('has-suggestion', show);
+  // Also update badge inside the panel header
   const badge = document.getElementById('ge-ai-badge');
   if (badge) badge.style.display = show ? 'flex' : 'none';
 }
 function updateAiBadge() {
   const panel = document.getElementById('ib-ai-floating');
-  const isPanelClosed = !panel || !panel.classList.contains('open');
+  const isPanelClosed = !panel || panel.style.display === 'none';
   const nudge = document.getElementById('nq-nudge-card');
   const conv  = document.getElementById('nq-ai-conv');
   const hasSuggestions = (nudge && nudge.style.display !== 'none') || (conv && conv.children.length > 0);
@@ -5951,12 +6101,12 @@ function showAiNudge(nudgeId) {
   card.style.display = 'flex';
   const sub = document.getElementById('nq-ai-sub');
   if (sub) sub.textContent = 'Or describe what you want:';
-  // If FAB panel is closed, show notification dot; if open, no dot needed
-  const fabPanel = document.getElementById('ib-ai-floating');
-  if (fabPanel && !fabPanel.classList.contains('open')) {
+  // Show red dot on toggle button only when the AI panel is hidden
+  const aiPanel = document.getElementById('ib-ai-floating');
+  if (aiPanel && aiPanel.style.display === 'none') {
     setAiDot(true);
   } else {
-    updateAiBadge();
+    setAiDot(false);
   }
 }
 
@@ -6093,6 +6243,7 @@ function onSqlEditorInput() {
   _sqlNudgeTimer = setTimeout(() => showAiNudge('sqlEdited'), 1500);
 }
 
+function ibOnSqlInput() { onSqlEditorInput(); }
 function toggleAiPanel() { ibToggleAiFab(); }
 
 function toggleDashAiPanel() {
@@ -6558,6 +6709,27 @@ function navigate(view) {
   closeSidebar();
 }
 
+/* ── Sidebar collapse ────────────────────────────────────────────── */
+function toggleSidebarCollapse() {
+  const sidebar = document.querySelector('.sidebar');
+  const isCollapsed = sidebar.classList.toggle('collapsed');
+  localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
+  // Close subnav when collapsing
+  if (isCollapsed) {
+    const subnav = document.getElementById('ds-subnav');
+    const btn = document.getElementById('nav-data-studio');
+    if (subnav) subnav.classList.remove('open');
+    if (btn) btn.classList.remove('expanded');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('sidebarCollapsed') === '1') {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) sidebar.classList.add('collapsed');
+  }
+});
+
 /* ── Data Studio sidebar expand / sub-item navigation ───────────── */
 function toggleDsExpand() {
   const btn    = document.getElementById('nav-data-studio');
@@ -6613,12 +6785,209 @@ function setSubnavActive(section) {
 /* ── Iteration B: Hybrid Query Builder ──────────────────────────── */
 
 let ibFilters = [];
-let ibDatePreset = null; // current date preset key
-let ibSelectedCols = new Set(); // currently selected column names
+let ibDatePreset = null;
+let ibSelectedCols = new Set();
+let ibManualColChanges = 0;   // tracks manual column toggles for nudge trigger
+const ibState = { ds: '', schema: '', table: '' };
+
+/* ── Data Source → Schema → Table cascade ───────────────────────── */
+function ibSelectDs(val) {
+  ibState.ds = val;
+  ibState.schema = '';
+  ibState.table = '';
+  ibSelectedCols.clear();
+
+  const schemaEl  = document.getElementById('ibs-schema');
+  const tableEl   = document.getElementById('ibs-table');
+  const groupbyEl = document.getElementById('ibs-groupby');
+  tableEl.style.display  = 'none';
+  groupbyEl.style.display = 'none';
+
+  if (val) {
+    const schemas = QB_DATA[val]?.schemas || [];
+    const sel = document.getElementById('ib-schema');
+    sel.innerHTML = '<option value="">Select schema...</option>' +
+      schemas.map(s => `<option value="${s}">${s}</option>`).join('');
+    schemaEl.style.display = '';
+  } else {
+    schemaEl.style.display = 'none';
+  }
+  ibResetPreview('Select a data source to get started');
+  ibRenderColList(); ibUpdateColDisplay(); ibUpdateChips();
+}
+
+function ibSelectSchema(val) {
+  ibState.schema = val;
+  ibState.table = '';
+  ibSelectedCols.clear();
+
+  const tableEl   = document.getElementById('ibs-table');
+  const groupbyEl = document.getElementById('ibs-groupby');
+  groupbyEl.style.display = 'none';
+
+  if (val) {
+    const tables = QB_DATA[ibState.ds]?.[val] || {};
+    const sel = document.getElementById('ib-table');
+    sel.innerHTML = '<option value="">Select table...</option>' +
+      Object.entries(tables).map(([name, def]) =>
+        `<option value="${name}">${name}${def.type === 'View' ? ' (View)' : ''}</option>`
+      ).join('');
+    tableEl.style.display = '';
+  } else {
+    tableEl.style.display = 'none';
+  }
+  ibResetPreview('Select a table to get started');
+  ibRenderColList(); ibUpdateColDisplay(); ibUpdateChips();
+}
+
+function ibSelectTable(val) {
+  ibState.table = val;
+  ibSelectedCols.clear();
+
+  const groupbyEl = document.getElementById('ibs-groupby');
+
+  if (val) {
+    const tblDef = QB_DATA[ibState.ds]?.[ibState.schema]?.[val];
+    const cols   = tblDef?.cols || [];
+
+    // Select all columns by default
+    ibSelectedCols = new Set(cols.map(c => c.n));
+
+    // Populate group-by from table columns
+    const gbSel = document.getElementById('ib-groupby');
+    gbSel.innerHTML = '<option value="">None</option>' +
+      cols.map(c => `<option value="${c.n}">${c.n}</option>`).join('');
+    groupbyEl.style.display = '';
+
+    // Reset preview
+    ibResetPreview('Click "Run Preview" to see results');
+
+    // Reset manual column counter and re-enable column + groupby nudges for new table
+    ibManualColChanges = 0;
+    kapAiState.dismissed.delete('tableSelected');
+    kapAiState.dismissed.delete('columnsSelected');
+    kapAiState.dismissed.delete('groupByOpen');
+    setTimeout(() => showAiNudge('tableSelected'), 400);
+  } else {
+    groupbyEl.style.display = 'none';
+    ibResetPreview('Select a table to get started');
+  }
+  ibRenderColList(); ibUpdateColDisplay(); ibUpdateChips();
+}
+
+function ibResetPreview(msg) {
+  const meta = document.getElementById('ib-preview-meta');
+  const body = document.getElementById('ib-preview-body');
+  if (meta) meta.textContent = '';
+  if (body) body.innerHTML = `<div class="ib-preview-empty">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" opacity="0.3">
+      <rect x="5" y="5" width="30" height="30" rx="4" stroke="currentColor" stroke-width="2"/>
+      <path d="M5 12h30M12 12v23" stroke="currentColor" stroke-width="2"/>
+    </svg>
+    <span>${msg}</span>
+  </div>`;
+}
+
+function ibReset() {
+  // Reset state
+  ibState.ds = '';
+  ibState.schema = '';
+  ibState.table = '';
+  ibSelectedCols.clear();
+  ibManualColChanges = 0;
+  ibFilters = [];
+  ibDatePreset = null;
+
+  // Reset dropdowns
+  const dsEl = document.getElementById('ib-ds');
+  if (dsEl) dsEl.value = '';
+  ['ibs-schema','ibs-table','ibs-groupby'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  // Reset date range
+  const dateFrom = document.getElementById('ib-date-from');
+  const dateTo   = document.getElementById('ib-date-to');
+  const dateDsp  = document.getElementById('ib-date-display');
+  if (dateFrom) dateFrom.value = '';
+  if (dateTo)   dateTo.value   = '';
+  if (dateDsp)  dateDsp.textContent = 'Select range';
+  ['today','7d','30d','90d'].forEach(p => {
+    document.getElementById('ibpreset-' + p)?.classList.remove('active');
+  });
+
+  // Reset group by
+  const gbSel = document.getElementById('ib-groupby');
+  if (gbSel) gbSel.innerHTML = '<option value="">None</option>';
+
+  // Reset column picker display
+  ibUpdateColDisplay();
+
+  // Reset filters UI
+  const filtersEl = document.getElementById('ib-filters');
+  if (filtersEl) filtersEl.innerHTML = '';
+
+  // Reset SQL editor
+  const sqlEl = document.getElementById('ib-sql-editor');
+  if (sqlEl) sqlEl.value = '-- Select a data source, schema, and table to generate SQL';
+
+  // Reset preview
+  ibResetPreview('Select a data source to get started');
+
+  // Reset AI panel
+  kapAiState.activeNudge = null;
+  kapAiState.runCount    = 0;
+  kapAiState.dismissed.clear();
+  const card       = document.getElementById('nq-nudge-card');
+  const conv       = document.getElementById('nq-ai-conv');
+  const sep        = document.getElementById('nq-ai-sep');
+  const sub        = document.getElementById('nq-ai-sub');
+  const ta         = document.getElementById('nq-ai-textarea');
+  const chipsLabel = document.getElementById('nq-ai-chips-label');
+  const chips      = document.getElementById('nq-ai-chips');
+  if (card)       card.style.display  = 'none';
+  if (conv)       conv.innerHTML      = '';
+  if (sep)        sep.style.display   = 'none';
+  if (sub)        sub.textContent     = 'Describe what you want in plain language';
+  if (ta)         ta.value            = '';
+  if (chipsLabel) chipsLabel.style.display = '';
+  if (chips)      chips.style.display      = '';
+
+  // Re-render visual builder (shows empty state)
+  ibRenderVisual();
+}
 
 function ibUpdateChips() {
   ibRenderVisual();
   ibGenerateSql();
+}
+
+/* ── IB Save Modal ────────────────────────────────────────────── */
+function ibOpenSaveModal() {
+  const nameEl = document.getElementById('ib-sq-name');
+  if (nameEl) {
+    const suggested = ibState.table ? `${ibState.table} Query` : 'Untitled Query';
+    nameEl.value = suggested;
+  }
+  document.getElementById('ib-preview-container').style.display = 'none';
+  document.getElementById('ib-save-view').style.display = 'flex';
+  // Update save button to active state
+  const saveBtn = document.getElementById('ib-save-btn');
+  if (saveBtn) saveBtn.style.background = 'var(--teal-20)';
+}
+
+function ibCloseSaveModal() {
+  document.getElementById('ib-preview-container').style.display = '';
+  document.getElementById('ib-save-view').style.display = 'none';
+  const saveBtn = document.getElementById('ib-save-btn');
+  if (saveBtn) saveBtn.style.background = '';
+}
+
+function ibSaveFinal() {
+  const name = document.getElementById('ib-sq-name')?.value?.trim() || 'Untitled Query';
+  showToast(`Query "${name}" saved successfully`);
+  ibCloseSaveModal();
 }
 
 /* ── Date Picker ──────────────────────────────────────────────── */
@@ -6677,16 +7046,16 @@ function ibOnCustomDateChange() {
   ibUpdateChips();
 }
 
-/* ── KapAI FAB ────────────────────────────────────────────────── */
+/* ── KapAI Panel toggle ───────────────────────────────────────── */
 function ibToggleAiFab() {
-  const fab = document.getElementById('ib-ai-fab');
   const panel = document.getElementById('ib-ai-floating');
-  if (!fab || !panel) return;
-  const isOpen = panel.classList.contains('open');
-  fab.classList.toggle('open', !isOpen);
-  panel.classList.toggle('open', !isOpen);
-  // Opening: clear the notification dot
-  if (!isOpen) setAiDot(false);
+  const btn   = document.getElementById('nq-ai-toggle-btn');
+  if (!panel) return;
+  const willHide = panel.style.display !== 'none';
+  panel.style.display = willHide ? 'none' : '';
+  if (btn) btn.classList.toggle('off', willHide);
+  // Clear dot when panel opens
+  if (!willHide) setAiDot(false);
 }
 
 // Close date picker, column picker, and AI panel on outside click
@@ -6716,18 +7085,16 @@ function ibSwitchTab(tab) {
   document.getElementById('ib-tab-sql').classList.toggle('active', !isVisual);
   document.getElementById('ib-visual-body').style.display = isVisual ? 'flex' : 'none';
   document.getElementById('ib-sql-wrapper').style.display = isVisual ? 'none' : 'flex';
+  if (!isVisual) { ibGenerateSql(); showAiNudge('sqlOpen'); }
 }
 
 /* ── Visual Builder renderer ──────────────────────────────────── */
 function ibRenderVisual() {
-  const reportType = document.getElementById('ib-report-type').value;
-  const dateFrom   = document.getElementById('ib-date-from').value;
-  const dateTo     = document.getElementById('ib-date-to').value;
-  const groupBy    = document.getElementById('ib-groupby').value;
-  const body       = document.getElementById('ib-visual-body');
+  const body = document.getElementById('ib-visual-body');
   if (!body) return;
+  const { ds, schema, table } = ibState;
 
-  if (!reportType) {
+  if (!table) {
     body.innerHTML = `<div class="ib-vb-empty" id="ib-vb-empty">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" opacity="0.4">
         <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
@@ -6735,73 +7102,105 @@ function ibRenderVisual() {
         <rect x="2" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
         <rect x="18" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
       </svg>
-      <span>Select a report type to see the visual query</span>
+      <span>Select a data source, schema, and table to see the visual query</span>
     </div>`;
     return;
   }
 
-  const tableNames = {
-    tickets: 'act_ticket_level_report',
-    agents:  'employee_report',
-    queue:   'queue_report',
-    sla:     'act_ticket_level_report'
-  };
-  const reportLabels = { tickets: 'Ticket Metrics', agents: 'Agent Performance', queue: 'Queue Analysis', sla: 'SLA Compliance' };
-  const tableName = tableNames[reportType];
-  const allCols = IB_REPORT_COLS[reportType] || [];
+  const tblDef    = QB_DATA[ds]?.[schema]?.[table];
+  const allCols   = tblDef?.cols || [];
   const activeCols = ibSelectedCols.size > 0 ? Array.from(ibSelectedCols) : allCols.map(c => c.n);
+  const colDisplay = activeCols.length > 3
+    ? activeCols.slice(0, 3).join(', ') + ` … (+${activeCols.length - 3})`
+    : activeCols.join(', ') || '*';
 
-  // FROM section
-  let html = `
-    <div class="ib-vb-section">
-      <div class="ib-vb-label">From</div>
-      <div class="ib-vb-table">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <rect x="0.5" y="0.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M0.5 3.5h11M3.5 3.5v7.5" stroke="currentColor" stroke-width="1.2"/>
+  const dateFrom    = document.getElementById('ib-date-from').value;
+  const dateTo      = document.getElementById('ib-date-to').value;
+  const groupBy     = document.getElementById('ib-groupby').value;
+  const hasWhere    = dateFrom || dateTo || ibFilters.length > 0;
+  const dateDisplay = document.getElementById('ib-date-display')?.textContent;
+  const dateCol     = allCols.find(c => c.n.includes('date') || c.n.includes('time') || c.n.includes('at'))?.n || 'date';
+
+  const connector = `<div class="qb-flow-connector"></div><div class="qb-flow-dot"></div><div class="qb-flow-connector"></div>`;
+
+  let html = `<div class="qb-flow">
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico ico-blue">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect x="1.5" y="1.5" width="15" height="15" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M1.5 5.5h15M5.5 5.5v10" stroke="currentColor" stroke-width="1.5"/>
         </svg>
-        <span>adjetter.<strong>${tableName}</strong></span>
+      </div>
+      <div>
+        <div class="qb-flow-node-label">SOURCE TABLE</div>
+        <div class="qb-flow-node-val">${schema}.${table}</div>
+      </div>
+    </div>
+    ${connector}
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico ico-green">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3 5h12M3 9h8M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="qb-flow-node-label">SELECT COLUMNS</div>
+        <div class="qb-flow-node-val">${colDisplay}</div>
       </div>
     </div>`;
 
-  // SELECT section
-  html += `<div class="ib-vb-section">
-    <div class="ib-vb-label">Select columns</div>
-    <div class="ib-vb-cols">`;
-  activeCols.forEach(col => {
-    html += `<span class="ib-vb-chip">${col}</span>`;
-  });
-  html += `</div></div>`;
-
-  // WHERE section
-  const dateDisplay = document.getElementById('ib-date-display');
-  const hasDate = dateFrom || dateTo;
-  if (hasDate || ibFilters.length > 0) {
-    html += `<div class="ib-vb-section"><div class="ib-vb-label">Where</div>`;
-    if (hasDate) {
-      const dateCol = reportType === 'agents' ? 'login_time' : 'create_date';
-      const label = (dateDisplay && dateDisplay.textContent !== 'Select range')
-        ? `${dateCol}: ${dateDisplay.textContent}`
-        : `${dateCol}: ${dateFrom || '—'} → ${dateTo || '—'}`;
-      html += `<div class="ib-vb-filter" style="justify-content:flex-start;">${label}</div>`;
-    }
-    ibFilters.forEach((f, idx) => {
-      html += `<div class="ib-vb-filter">
-        <span>${f.field} ${f.operator} "${f.value}"</span>
-        <button class="ib-vb-filter-remove" onclick="removeFilter(${idx})" title="Remove filter">×</button>
-      </div>`;
-    });
-    html += `</div>`;
-  }
-
-  // GROUP BY section
-  if (groupBy) {
-    const groupLabels = { status: 'status', priority: 'priority', agent: 'agent_id, agent_name', queue: 'queue_name', sla: 'sla_tier' };
-    html += `<div class="ib-vb-section">
-      <div class="ib-vb-label">Group by</div>
-      <div class="ib-vb-group">${groupLabels[groupBy] || groupBy}</div>
+  if (hasWhere) {
+    const hasDateRange = dateFrom || dateTo;
+    const whereStr = hasDateRange
+      ? `${dateCol}: ${dateDisplay !== 'Select range' ? dateDisplay : (dateFrom || '—') + ' → ' + (dateTo || '—')}`
+      : ibFilters.map(f => `${f.field} ${f.operator} "${f.value}"`).join(', ');
+    html += `${connector}
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico" style="background:#FFF3E0;color:#E65100;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3 4h12l-4.5 5.5v5l-3-1.5V9.5L3 4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="qb-flow-node-label">WHERE</div>
+        <div class="qb-flow-node-val">${whereStr}</div>
+      </div>
     </div>`;
   }
+
+  if (groupBy) {
+    html += `${connector}
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico" style="background:#E8EAF6;color:#3949AB;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="5" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="13" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="13" cy="13" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M7.5 9h3M7.5 8.5L10.5 5M7.5 9.5L10.5 13" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="qb-flow-node-label">GROUP BY</div>
+        <div class="qb-flow-node-val">${groupBy}</div>
+      </div>
+    </div>`;
+  }
+
+  html += `${connector}
+    <div class="qb-flow-node">
+      <div class="qb-flow-node-ico ico-purple">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect x="2" y="5" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M5 3h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M6 9.5h6M6 12h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="qb-flow-node-label">RESULT</div>
+        <div class="qb-flow-node-val">LIMIT 100</div>
+      </div>
+    </div>
+  </div>`;
 
   body.innerHTML = html;
 }
@@ -6856,13 +7255,7 @@ const IB_REPORT_COLS = {
 };
 
 function ibOnReportTypeChange() {
-  // Reset column selection to "all" whenever report type changes
-  const reportType = document.getElementById('ib-report-type').value;
-  const cols = reportType ? IB_REPORT_COLS[reportType] || [] : [];
-  ibSelectedCols = new Set(cols.map(c => c.n));
-  ibRenderColList();
-  ibUpdateColDisplay();
-  ibUpdateChips();
+  // Legacy shim — no-op, cascade now handled by ibSelectDs/Schema/Table
 }
 
 function ibToggleColPicker(e) {
@@ -6879,19 +7272,20 @@ function ibToggleColPicker(e) {
 }
 
 function ibRenderColList() {
-  const reportType = document.getElementById('ib-report-type').value;
-  const cols = reportType ? IB_REPORT_COLS[reportType] || [] : [];
-  const list = document.getElementById('ib-col-list');
+  const { ds, schema, table } = ibState;
+  const tblDef = table ? QB_DATA[ds]?.[schema]?.[table] : null;
+  const cols   = tblDef?.cols || [];
+  const list   = document.getElementById('ib-col-list');
   if (!list) return;
 
-  if (!reportType) {
-    list.innerHTML = '<div style="padding:10px 12px;font-size:12px;color:var(--cutty-sark);">Select a report type first</div>';
+  if (!table) {
+    list.innerHTML = '<div style="padding:10px 12px;font-size:12px;color:var(--cutty-sark);">Select a table first</div>';
     return;
   }
 
   list.innerHTML = cols.map(col => {
     const checked = ibSelectedCols.has(col.n);
-    return `<label style="display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:var(--font-sm);color:var(--dark-teal);transition:background 0.1s;" onmouseover="this.style.background='var(--aqua-haze)'" onmouseout="this.style.background=''"  >
+    return `<label style="display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:var(--font-sm);color:var(--dark-teal);transition:background 0.1s;" onmouseover="this.style.background='var(--aqua-haze)'" onmouseout="this.style.background=''">
       <input type="checkbox" style="accent-color:var(--teal);width:14px;height:14px;flex-shrink:0;" ${checked ? 'checked' : ''} onchange="ibToggleCol('${col.n}',this.checked)" onclick="event.stopPropagation()" />
       <span style="flex:1;">${col.n}</span>
       <span style="font-size:10px;color:var(--cutty-sark);font-family:monospace;">${col.t}</span>
@@ -6900,46 +7294,37 @@ function ibRenderColList() {
 }
 
 function ibToggleCol(colName, checked) {
-  if (checked) {
-    ibSelectedCols.add(colName);
-  } else {
-    ibSelectedCols.delete(colName);
-  }
+  if (checked) ibSelectedCols.add(colName);
+  else         ibSelectedCols.delete(colName);
+  ibManualColChanges++;
+  if (ibManualColChanges === 2) showAiNudge('columnsSelected');
   ibUpdateColDisplay();
   ibUpdateChips();
 }
 
 function ibUpdateColDisplay() {
-  const reportType = document.getElementById('ib-report-type').value;
-  const total = reportType ? (IB_REPORT_COLS[reportType] || []).length : 0;
+  const { ds, schema, table } = ibState;
+  const tblDef  = table ? QB_DATA[ds]?.[schema]?.[table] : null;
+  const total   = tblDef?.cols?.length || 0;
   const selected = ibSelectedCols.size;
-  const display = document.getElementById('ib-col-display');
+  const display  = document.getElementById('ib-col-display');
   if (!display) return;
-  if (!reportType) {
-    display.textContent = 'All columns';
-  } else if (selected === 0) {
-    display.textContent = 'No columns selected';
-  } else if (selected === total) {
-    display.textContent = 'All columns (' + total + ')';
-  } else {
-    display.textContent = selected + ' of ' + total + ' columns';
-  }
+  if (!table)              display.textContent = 'All columns';
+  else if (selected === 0) display.textContent = 'No columns selected';
+  else if (selected === total) display.textContent = `All columns (${total})`;
+  else                     display.textContent = `${selected} of ${total} columns`;
 }
 
 function ibSelectAllCols() {
-  const reportType = document.getElementById('ib-report-type').value;
-  const cols = reportType ? IB_REPORT_COLS[reportType] || [] : [];
-  ibSelectedCols = new Set(cols.map(c => c.n));
-  ibRenderColList();
-  ibUpdateColDisplay();
-  ibUpdateChips();
+  const { ds, schema, table } = ibState;
+  const tblDef = table ? QB_DATA[ds]?.[schema]?.[table] : null;
+  ibSelectedCols = new Set((tblDef?.cols || []).map(c => c.n));
+  ibRenderColList(); ibUpdateColDisplay(); ibUpdateChips();
 }
 
 function ibClearAllCols() {
   ibSelectedCols.clear();
-  ibRenderColList();
-  ibUpdateColDisplay();
-  ibUpdateChips();
+  ibRenderColList(); ibUpdateColDisplay(); ibUpdateChips();
 }
 
 function showColumnPicker() { ibToggleColPicker(event); }
@@ -6966,109 +7351,96 @@ function showAddFilter() {
 }
 
 function ibGenerateSql() {
-  const reportType = document.getElementById('ib-report-type').value;
-  const dateFrom = document.getElementById('ib-date-from').value;
-  const dateTo = document.getElementById('ib-date-to').value;
-  const groupBy = document.getElementById('ib-groupby').value;
+  const el = document.getElementById('ib-sql-editor');
+  if (!el) return;
+  const { ds, schema, table } = ibState;
 
-  let sql = '';
-
-  if (!reportType) {
-    sql = '-- Select a report type to generate SQL';
-  } else {
-    // Table names per report type
-    const tableNames = {
-      tickets: 'adjetter.act_ticket_level_report',
-      agents:  'adjetter.employee_report',
-      queue:   'adjetter.queue_report',
-      sla:     'adjetter.act_ticket_level_report'
-    };
-    const tableName = tableNames[reportType] || 'tickets';
-
-    // Build SELECT clause from selected columns (or * if none/all)
-    const allCols = IB_REPORT_COLS[reportType] || [];
-    let selectPart;
-    if (ibSelectedCols.size === 0 || ibSelectedCols.size === allCols.length) {
-      selectPart = '*';
-    } else {
-      selectPart = Array.from(ibSelectedCols).join(', ');
-    }
-    sql = `SELECT ${selectPart}\nFROM ${tableName}`;
-
-    // Add WHERE clause for date range
-    const dateCol = (reportType === 'agents') ? 'login_time' : 'create_date';
-    const whereClauses = [];
-    if (dateFrom) whereClauses.push(`${dateCol} >= '${dateFrom}'`);
-    if (dateTo) whereClauses.push(`${dateCol} <= '${dateTo}'`);
-    ibFilters.forEach(f => {
-      whereClauses.push(`${f.field} ${f.operator} '${f.value}'`);
-    });
-
-    if (whereClauses.length > 0) {
-      sql += ' WHERE ' + whereClauses.join(' AND ');
-    }
-
-    // Add GROUP BY clause
-    const groupByClauses = {
-      status: ' GROUP BY status',
-      priority: ' GROUP BY priority',
-      agent: ' GROUP BY agent_id, agent_name',
-      queue: ' GROUP BY queue_name',
-      sla: ' GROUP BY sla_tier'
-    };
-
-    if (groupBy && groupByClauses[groupBy]) {
-      sql += groupByClauses[groupBy];
-    }
-
-    sql += ';';
-  }
-
-  document.getElementById('ib-sql-editor').value = sql;
-}
-
-function ibShowPreview() {
-  const reportType = document.getElementById('ib-report-type').value;
-
-  if (!reportType) {
-    showToast('Please select a report type first');
+  if (!table) {
+    el.value = '-- Select a data source, schema, and table to generate SQL';
     return;
   }
 
+  const dateFrom = document.getElementById('ib-date-from').value;
+  const dateTo   = document.getElementById('ib-date-to').value;
+  const groupBy  = document.getElementById('ib-groupby').value;
+
+  const tblDef  = QB_DATA[ds]?.[schema]?.[table];
+  const allCols = tblDef?.cols || [];
+  const selectPart = (ibSelectedCols.size === 0 || ibSelectedCols.size === allCols.length)
+    ? '*'
+    : Array.from(ibSelectedCols).join(', ');
+
+  let sql = `SELECT ${selectPart}\nFROM ${schema}.${table}`;
+
+  const dateCol = allCols.find(c => c.n.includes('date') || c.n.includes('time') || c.n.includes('at'))?.n;
+  const whereClauses = [];
+  if (dateFrom && dateCol) whereClauses.push(`${dateCol} >= '${dateFrom}'`);
+  if (dateTo   && dateCol) whereClauses.push(`${dateCol} <= '${dateTo}'`);
+  ibFilters.forEach(f => whereClauses.push(`${f.field} ${f.operator} '${f.value}'`));
+  if (whereClauses.length > 0) sql += '\nWHERE ' + whereClauses.join('\n  AND ');
+  if (groupBy) sql += `\nGROUP BY ${groupBy}`;
+  sql += '\nLIMIT 100;';
+
+  el.value = sql;
+}
+
+function ibShowPreview() {
+  const { ds, schema, table } = ibState;
+  if (!table) { showToast('Please select a table first'); return; }
+
   const previewBody = document.getElementById('ib-preview-body');
+  previewBody.innerHTML = `<div class="ib-preview-empty">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" opacity="0.5" style="animation:spin 1s linear infinite;">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-dasharray="20 40"/>
+    </svg>
+    <span>Running query…</span>
+  </div>`;
 
-  // Generate mock data based on report type
-  let html = '';
-  const mockData = generateMockReportData(reportType);
+  setTimeout(() => {
+    const tblDef    = QB_DATA[ds]?.[schema]?.[table];
+    const allCols   = tblDef?.cols || [];
+    const activeCols = ibSelectedCols.size > 0 ? allCols.filter(c => ibSelectedCols.has(c.n)) : allCols;
+    const limit = parseInt(document.getElementById('ib-preview-limit')?.value || '100', 10);
+    let baseRows = QB_MOCK_ROWS[table] ? [...QB_MOCK_ROWS[table]] : generateMockRows(activeCols, 8);
+    const rows = baseRows.slice(0, limit);
 
-  if (mockData && mockData.length > 0) {
-    // Create table
-    const headers = Object.keys(mockData[0]);
-    html = '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    if (!rows.length) {
+      previewBody.innerHTML = '<div class="ib-preview-empty"><span>No data available</span></div>';
+      return;
+    }
+
+    const headers = activeCols.map(c => c.n);
+    let html = '<div style="overflow:auto;flex:1;min-height:0;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
     html += '<thead><tr style="background:var(--aqua-haze);border-bottom:1.5px solid var(--nebula);">';
-    headers.forEach(h => {
-      html += `<th style="padding:8px;text-align:left;font-weight:600;color:var(--dark-teal);">${h}</th>`;
-    });
+    headers.forEach(h => html += `<th style="padding:8px;text-align:left;font-weight:600;color:var(--dark-teal);white-space:nowrap;">${h}</th>`);
     html += '</tr></thead><tbody>';
-
-    mockData.forEach((row, idx) => {
-      html += `<tr style="border-bottom:1px solid var(--nebula);background:${idx % 2 === 0 ? '#fff' : 'var(--bg-light)'};">`;
-      headers.forEach(h => {
-        html += `<td style="padding:8px;">${row[h]}</td>`;
-      });
+    rows.forEach((row, idx) => {
+      html += `<tr style="border-bottom:1px solid var(--nebula);background:${idx%2===0?'#fff':'var(--bg-light)'};">`;
+      headers.forEach(h => html += `<td style="padding:8px;white-space:nowrap;">${row[h] ?? ''}</td>`);
       html += '</tr>';
     });
+    html += '</tbody></table></div>';
+    previewBody.innerHTML = html;
+    document.getElementById('ib-preview-meta').textContent = `${rows.length} rows`;
 
-    html += '</tbody></table>';
+    kapAiState.runCount++;
+    if (kapAiState.runCount > 1) { kapAiState.dismissed.delete('refineQuery'); showAiNudge('refineQuery'); }
+    else showAiNudge('queryRun');
+    showToast('Preview loaded');
+  }, 680);
+}
 
-    // Update meta info
-    document.getElementById('ib-preview-meta').textContent = `${mockData.length} rows`;
-  } else {
-    html = '<div class="ib-preview-empty"><span>No data available for selected criteria</span></div>';
-  }
+function ibFilterPreview(query) {
+  const rows = document.querySelectorAll('#ib-preview-body tbody tr');
+  const q = query.toLowerCase();
+  rows.forEach(row => {
+    row.style.display = !q || row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
 
-  previewBody.innerHTML = html;
-  showToast('Preview loaded');
+function ibExportPreview() {
+  if (!ibState.table) { showToast('Run a query first to export'); return; }
+  showToast('Exporting to CSV…');
 }
 
 function generateMockReportData(reportType) {
