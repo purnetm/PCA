@@ -36,7 +36,11 @@
       "Bash(powershell.exe -ExecutionPolicy Bypass -File tokenize2.ps1)",
       "Bash(powershell.exe -ExecutionPolicy Bypass -File verify.ps1)",
       "Bash(powershell.exe -ExecutionPolicy Bypass -File verify2.ps1)",
-      "Bash(powershell.exe -ExecutionPolicy Bypass -File tokenize3.ps1)"
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File tokenize3.ps1)",
+      "Bash(start \"http://localhost:3000/#figmacapture=950a4b8c-cde9-435c-a845-2b4253d6c1a8&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F950a4b8c-cde9-435c-a845-2b4253d6c1a8%2Fsubmit&figmadelay=1000\")",
+      "Bash(xxd)",
+      "Bash(start \"http://localhost:3000/#figmacapture=f8ac96ac-ab00-4db6-8065-df7a9e3908e1&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2Ff8ac96ac-ab00-4db6-8065-df7a9e3908e1%2Fsubmit&figmadelay=1000\")",
+      "Bash(start \"\" \"http://localhost:3000/#figmacapture=4c9c4b28-ef15-4cf0-b2de-de1fda123806&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F4c9c4b28-ef15-4cf0-b2de-de1fda123806%2Fsubmit&figmadelay=1000\")"
     ]
   }
 }
