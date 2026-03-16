@@ -2718,6 +2718,31 @@
     .nqb-ai-send-btn { padding: 8px 14px; border-radius: var(--radius-sm); border: none; background: var(--teal); color: #fff; cursor: pointer; font-size: var(--font-sm); font-family: 'Inter', sans-serif; transition: opacity 0.15s; }
     .nqb-ai-send-btn:hover { opacity: 0.88; }
 
+    /* NQB: SQL Console pane */
+    .nqb-sql-pane { flex-shrink: 0; display: flex; flex-direction: column; border-top: 1px solid var(--nebula); max-height: 220px; background: #fafbfc; }
+    .nqb-sql-pane-hd { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-8); border-bottom: 1px solid var(--nebula); background: #fff; flex-shrink: 0; }
+    .nqb-sql-pane-title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); display: flex; align-items: center; gap: var(--space-2); }
+    .nqb-sql-pane-close { background: none; border: none; cursor: pointer; color: var(--cutty-sark); font-size: 18px; line-height: 1; padding: 0; opacity: 0.55; font-family: 'Inter', sans-serif; }
+    .nqb-sql-pane-close:hover { opacity: 1; }
+    .nqb-sql-editor { flex: 1; min-height: 80px; padding: var(--space-4) var(--space-8); font-family: 'Menlo', 'Monaco', 'Consolas', monospace; font-size: 12px; color: var(--dark-teal); border: none; outline: none; resize: none; background: #fafbfc; line-height: 1.65; }
+    .nqb-sql-ai-nudge { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); background: var(--teal-10); border-top: 1px solid var(--teal-20); font-size: var(--font-sm); flex-shrink: 0; flex-wrap: wrap; }
+    .nqb-sql-nudge-text { flex: 1; color: var(--dark-teal); }
+    .nqb-sql-nudge-text b { color: var(--teal); }
+    .nqb-sql-nudge-btn { padding: 4px 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--teal-30); background: #fff; font-size: var(--font-sm); color: var(--teal); cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; transition: all 0.15s; }
+    .nqb-sql-nudge-btn:hover { background: var(--teal-10); border-color: var(--teal); }
+    .nqb-sql-nudge-dismiss { padding: 4px 8px; border-radius: var(--radius-sm); border: none; background: transparent; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; font-family: 'Inter', sans-serif; opacity: 0.65; }
+    .nqb-sql-btn { display: flex; align-items: center; gap: var(--space-2); padding: 6px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: all 0.15s; }
+    .nqb-sql-btn:hover { border-color: var(--teal-30); color: var(--dark-teal); }
+    .nqb-sql-btn.active { border-color: var(--teal-50); color: var(--teal); background: var(--teal-10); }
+
+    /* NQB: step dots are clickable when done */
+    .nqb-step-dot.done { cursor: pointer; }
+    .nqb-step-dot.done:hover { background: var(--teal-20); border-color: var(--teal); }
+    .nqb-step-item.done-step { cursor: pointer; }
+
+    /* NQB: right panel collapse */
+    .nqb-right.collapsed { flex: 0 0 0; overflow: hidden; border-left: none; }
+
     /* keep a stub rule so any stray .ib-layout refs don't break layout */
     .ib-layout { display: flex; flex-direction: row; overflow: hidden; flex: 1; min-height: 0; }
 
@@ -3829,6 +3854,25 @@
                 </div>
               </div>
 
+              <!-- SQL Console pane (collapsible) -->
+              <div class="nqb-sql-pane" id="nqb-sql-pane" style="display:none;">
+                <div class="nqb-sql-pane-hd">
+                  <span class="nqb-sql-pane-title">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    SQL Console
+                  </span>
+                  <button class="nqb-sql-pane-close" onclick="nqbToggleSql()" title="Close SQL">&times;</button>
+                </div>
+                <textarea class="nqb-sql-editor" id="nqb-sql-editor" spellcheck="false" placeholder="-- SQL will generate from your selections above" oninput="nqbOnSqlEdit()"></textarea>
+                <div class="nqb-sql-ai-nudge" id="nqb-sql-nudge" style="display:none;">
+                  <span class="nqb-sql-nudge-text"><b>✦ KapAI:</b> Prefer to describe the change? I'll write the SQL for you.</span>
+                  <button class="nqb-sql-nudge-btn" onclick="nqbSqlDescribe()">Describe change</button>
+                  <button class="nqb-sql-nudge-dismiss" onclick="document.getElementById('nqb-sql-nudge').style.display='none'">Dismiss</button>
+                </div>
+              </div>
+
               <!-- Summary bar -->
               <div class="nqb-summary" id="nqb-summary">
                 <span class="nqb-summary-empty" id="nqb-summary-empty">Your query will appear here as you build it.</span>
@@ -3836,8 +3880,14 @@
 
               <!-- Action bar -->
               <div class="nqb-actions">
-                <div>
+                <div style="display:flex; gap:var(--space-3); align-items:center;">
                   <button class="nqb-back-btn" id="nqb-back-btn" style="display:none;" onclick="nqbGoToStep(nqbState.step - 1)">&larr; Back</button>
+                  <button class="nqb-sql-btn" id="nqb-sql-toggle-btn" onclick="nqbToggleSql()">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                      <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    SQL
+                  </button>
                 </div>
                 <div style="display:flex; gap:var(--space-3);">
                   <button class="nqb-continue-btn" id="nqb-continue-btn" onclick="nqbGoToStep(nqbState.step + 1)">Continue &rarr;</button>
@@ -3885,6 +3935,69 @@
         </button>
       </div>
     </div>
+
+  <!-- NQB Save Query Modal -->
+  <div class="sq-overlay" id="nqb-save-overlay" onclick="if(event.target===this)nqbCloseSaveModal()" style="display:none;">
+    <div class="sq-modal" style="width:480px; max-width:94vw;">
+      <div class="sq-modal-hd">
+        <div class="sq-modal-hd-left">
+          <div class="sq-modal-hd-icon">
+            <svg width="18" height="18" viewBox="0 0 13 13" fill="none">
+              <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="var(--teal)" stroke-width="1.3"/>
+              <path d="M4 1.5v3h5V1.5" stroke="var(--teal)" stroke-width="1.3" stroke-linejoin="round"/>
+              <path d="M2.5 8.5h8v3H2.5z" fill="var(--teal)" opacity=".25"/>
+            </svg>
+          </div>
+          <div>
+            <div class="sq-modal-title">Save Question</div>
+            <div class="sq-modal-sub">This question will appear in your library for use in dashboards.</div>
+          </div>
+        </div>
+        <button class="sq-modal-close" onclick="nqbCloseSaveModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="sq-modal-body">
+        <div class="sq-field">
+          <label class="sq-label">Question name</label>
+          <input class="sq-input" id="nqb-sq-name" placeholder="e.g. Ticket volume by agent last 30 days" />
+        </div>
+        <div class="sq-field">
+          <label class="sq-label">Description <span style="opacity:0.5;font-weight:normal;">(optional)</span></label>
+          <textarea class="sq-textarea" id="nqb-sq-desc" rows="2" placeholder="What does this question answer?"></textarea>
+        </div>
+        <div class="sq-field">
+          <label class="sq-label">Default visualization</label>
+          <div class="qb-select-wrap" style="border-radius:8px;">
+            <select class="qb-select" id="nqb-sq-viz">
+              <option value="Table">Table</option>
+              <option value="Bar Chart">Bar Chart</option>
+              <option value="Line Chart">Line Chart</option>
+              <option value="Pie Chart">Pie Chart</option>
+            </select>
+            <svg class="qb-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <!-- KapAI name suggestion nudge -->
+        <div id="nqb-save-ai-nudge" style="display:none; padding:var(--space-4) var(--space-5); background:var(--teal-10); border-radius:var(--radius-sm); border:1px solid var(--teal-20); display:flex; align-items:center; gap:var(--space-3);">
+          <span style="font-size:var(--font-sm); color:var(--dark-teal); flex:1;"><b style="color:var(--teal);">✦ KapAI:</b> Want me to suggest a name &amp; description based on your query?</span>
+          <button class="nqb-sql-nudge-btn" onclick="nqbAiSuggestName()">Suggest</button>
+          <button class="nqb-sql-nudge-dismiss" onclick="document.getElementById('nqb-save-ai-nudge').style.display='none'">Dismiss</button>
+        </div>
+      </div>
+      <div class="sq-modal-ft">
+        <button class="sq-cancel-btn" onclick="nqbCloseSaveModal()">Cancel</button>
+        <button class="sq-save-btn" onclick="nqbSaveFinal()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
+          </svg>
+          Save Question
+        </button>
+      </div>
+    </div>
+  </div>
 
   </div><!-- /view-data-studio -->
 
@@ -5836,7 +5949,13 @@ function onSqlEditorInput() {
 }
 
 function ibOnSqlInput() { onSqlEditorInput(); }
-function toggleAiPanel() { ibToggleAiFab(); }
+function toggleAiPanel() {
+  const right = document.querySelector('.nqb-right');
+  const btn   = document.getElementById('nq-ai-toggle-btn');
+  if (!right) return;
+  const collapsed = right.classList.toggle('collapsed');
+  if (btn) btn.classList.toggle('active', !collapsed);
+}
 
 function toggleDashAiPanel() {
   const ai  = document.getElementById('dash-col-ai');
@@ -6418,9 +6537,20 @@ let nqbState = {
 
 function nqbInit() {
   nqbState = { step: 1, question: '', dataArea: '', selectedCols: new Set(), timeRange: '30d', filters: [] };
+  nqbSqlManuallyEdited = false;
   // Reset textarea
   const ta = document.getElementById('nqb-question');
   if (ta) ta.value = '';
+  // Close SQL pane
+  const pane = document.getElementById('nqb-sql-pane');
+  const sqlBtn = document.getElementById('nqb-sql-toggle-btn');
+  if (pane) pane.style.display = 'none';
+  if (sqlBtn) sqlBtn.classList.remove('active');
+  // Restore AI panel if collapsed
+  const right = document.querySelector('.nqb-right');
+  const aiBtn = document.getElementById('nq-ai-toggle-btn');
+  if (right) right.classList.remove('collapsed');
+  if (aiBtn) aiBtn.classList.remove('active');
   nqbSyncUI();
   nqbUpdateAI(1);
 }
@@ -6449,14 +6579,22 @@ function nqbSyncUI() {
     if (panel) panel.style.display = i === step ? 'flex' : 'none';
   }
 
-  // Step dots + labels
+  // Step dots + labels — completed steps are clickable
   for (let i = 1; i <= 4; i++) {
     const dot  = document.getElementById('nqb-dot-' + i);
     const item = document.getElementById('nqb-step-item-' + i);
     if (!dot || !item) continue;
-    dot.className   = 'nqb-step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
-    dot.textContent = i < step ? '\u2713' : String(i);
-    item.className  = 'nqb-step-item' + (i === step ? ' active' : '');
+    const isDone   = i < step;
+    const isActive = i === step;
+    dot.className   = 'nqb-step-dot' + (isDone ? ' done' : isActive ? ' active' : '');
+    dot.textContent = isDone ? '\u2713' : String(i);
+    item.className  = 'nqb-step-item' + (isActive ? ' active' : '') + (isDone ? ' done-step' : '');
+    // Make completed steps navigate back when clicked
+    if (isDone) {
+      item.onclick = (function(stepNum) { return function() { nqbGoToStep(stepNum); }; })(i);
+    } else {
+      item.onclick = null;
+    }
   }
 
   // Connectors
@@ -6631,6 +6769,11 @@ function nqbRunQuery() {
   if (!nqbState.question.trim()) { showToast('Please describe your question first'); return; }
   if (!nqbState.dataArea)        { showToast('Please pick a data area'); return; }
   showToast('Running query\u2026');
+  // Update SQL editor with latest state
+  if (!nqbSqlManuallyEdited) {
+    const editor = document.getElementById('nqb-sql-editor');
+    if (editor) editor.value = nqbGenerateSql();
+  }
   const body = document.getElementById('nqb-ai-body');
   if (body) {
     const area  = nqbState.dataArea.charAt(0).toUpperCase() + nqbState.dataArea.slice(1);
@@ -6664,6 +6807,129 @@ function nqbAiSend() {
 function nqbAiChipClick(btn) {
   const input = document.getElementById('nqb-ai-input');
   if (input) { input.value = btn.textContent; input.focus(); }
+}
+
+/* ── NQB: SQL Console ──────────────────────────────────────────── */
+let nqbSqlManuallyEdited = false;
+
+function nqbGenerateSql() {
+  if (!nqbState.dataArea) return '-- Select a data area first to generate SQL';
+  const area   = nqbState.dataArea;
+  const cols   = nqbState.selectedCols.size > 0
+    ? [...nqbState.selectedCols].map(c => '  ' + c.toLowerCase().replace(/\s+/g, '_')).join(',\n')
+    : '  *';
+  const timeMap = { today: "DATE(created_at) = CURDATE()", '7d': "created_at >= NOW() - INTERVAL 7 DAY",
+    '30d': "created_at >= NOW() - INTERVAL 30 DAY", '90d': "created_at >= NOW() - INTERVAL 90 DAY",
+    mtd: "MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())",
+    ytd: "YEAR(created_at) = YEAR(NOW())" };
+  const whereClauses = [];
+  if (nqbState.timeRange) whereClauses.push(timeMap[nqbState.timeRange] || '');
+  nqbState.filters.forEach(f => {
+    const op = f.operator === 'equals' ? '=' : f.operator === 'is not' ? '!=' : 'LIKE';
+    const val = op === 'LIKE' ? "'%" + f.value + "%'" : "'" + f.value + "'";
+    whereClauses.push(f.field.toLowerCase().replace(/\s+/g, '_') + ' ' + op + ' ' + val);
+  });
+  const table = { tickets: 'tickets', agents: 'agents', queues: 'queues', sla: 'sla_records', customers: 'customers', csat: 'csat_surveys' }[area] || area;
+  let sql = 'SELECT\n' + cols + '\nFROM ' + table;
+  if (whereClauses.length > 0) sql += '\nWHERE\n  ' + whereClauses.filter(Boolean).join('\n  AND ');
+  sql += '\nLIMIT 100;';
+  return sql;
+}
+
+function nqbToggleSql() {
+  const pane = document.getElementById('nqb-sql-pane');
+  const btn  = document.getElementById('nqb-sql-toggle-btn');
+  if (!pane) return;
+  const opening = pane.style.display === 'none';
+  pane.style.display = opening ? 'flex' : 'none';
+  pane.style.flexDirection = 'column';
+  if (btn) btn.classList.toggle('active', opening);
+  if (opening) {
+    nqbSqlManuallyEdited = false;
+    const editor = document.getElementById('nqb-sql-editor');
+    if (editor && !nqbSqlManuallyEdited) editor.value = nqbGenerateSql();
+    // Show AI nudge after brief delay (Flow step 6)
+    setTimeout(() => {
+      const nudge = document.getElementById('nqb-sql-nudge');
+      if (nudge) nudge.style.display = 'flex';
+    }, 800);
+  }
+}
+
+function nqbOnSqlEdit() {
+  nqbSqlManuallyEdited = true;
+  // After user has typed, hide the initial nudge and show review nudge (Flow step 7)
+  const nudge = document.getElementById('nqb-sql-nudge');
+  if (nudge) {
+    nudge.querySelector('.nqb-sql-nudge-text').innerHTML = '<b style="color:var(--teal);">✦ KapAI:</b> I spotted a potential issue in this query. Want me to review it?';
+    nudge.style.display = 'flex';
+  }
+}
+
+function nqbSqlDescribe() {
+  const msg = prompt('Describe the change you want to make to the SQL:');
+  if (!msg) return;
+  showToast('KapAI is updating your SQL…');
+  // Simulate AI updating SQL
+  setTimeout(() => {
+    const editor = document.getElementById('nqb-sql-editor');
+    if (editor) {
+      editor.value = nqbGenerateSql() + '\n-- Applied: ' + msg;
+      showToast('SQL updated by KapAI');
+    }
+    const nudge = document.getElementById('nqb-sql-nudge');
+    if (nudge) nudge.style.display = 'none';
+  }, 800);
+}
+
+/* ── NQB: Reset & Save wiring ──────────────────────────────────── */
+function ibReset() { nqbInit(); }
+
+function ibOpenSaveModal() { nqbOpenSaveModal(); }
+
+function nqbOpenSaveModal() {
+  const overlay = document.getElementById('nqb-save-overlay');
+  if (!overlay) return;
+  // Pre-fill name from question text
+  const nameEl = document.getElementById('nqb-sq-name');
+  if (nameEl) nameEl.value = nqbState.question || 'Untitled Query';
+  // Show AI nudge for name suggestion (Flow step 9)
+  const nudge = document.getElementById('nqb-save-ai-nudge');
+  if (nudge) nudge.style.display = 'flex';
+  overlay.style.display = 'flex';
+  overlay.classList.add('open');
+  setTimeout(() => { if (nameEl) { nameEl.focus(); nameEl.select(); } }, 50);
+}
+
+function nqbCloseSaveModal() {
+  const overlay = document.getElementById('nqb-save-overlay');
+  if (overlay) { overlay.classList.remove('open'); overlay.style.display = 'none'; }
+}
+
+function nqbAiSuggestName() {
+  const area = nqbState.dataArea ? (nqbState.dataArea.charAt(0).toUpperCase() + nqbState.dataArea.slice(1)) : 'Data';
+  const labels = { today: 'Today', '7d': 'Last 7 Days', '30d': 'Last 30 Days', '90d': 'Last 90 Days', mtd: 'This Month', ytd: 'This Year' };
+  const time   = labels[nqbState.timeRange] || '';
+  const cols   = nqbState.selectedCols.size > 0 ? ' — ' + [...nqbState.selectedCols].slice(0, 2).join(', ') : '';
+  const suggested = area + ' Analysis' + (time ? ' · ' + time : '') + cols;
+  const descSuggested = (nqbState.question || ('Summary of ' + area.toLowerCase() + ' data')) + (time ? ' for ' + time.toLowerCase() : '');
+  const nameEl = document.getElementById('nqb-sq-name');
+  const descEl = document.getElementById('nqb-sq-desc');
+  if (nameEl) nameEl.value = suggested;
+  if (descEl) descEl.value = descSuggested;
+  const nudge = document.getElementById('nqb-save-ai-nudge');
+  if (nudge) nudge.style.display = 'none';
+  showToast('Name & description suggested by KapAI');
+}
+
+function nqbSaveFinal() {
+  const name = (document.getElementById('nqb-sq-name')?.value || '').trim() || 'Untitled Query';
+  const desc = document.getElementById('nqb-sq-desc')?.value || '';
+  const viz  = document.getElementById('nqb-sq-viz')?.value || 'Table';
+  nqbCloseSaveModal();
+  showToast('"' + name + '" saved successfully');
+  // Reset for fresh query
+  setTimeout(() => nqbInit(), 400);
 }
 
 /* ── Keyboard: Esc closes sidebar ───────────────────────────────── */
