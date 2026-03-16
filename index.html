@@ -2717,12 +2717,6 @@
     .nqb-nudge-dismiss:hover { opacity: 1; }
 
     /* NQB: Ask KapAI bar (inline chat, above summary) */
-    .nqb-ask-ai { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); border-top: 1px solid var(--nebula); background: #fff; }
-    .nqb-ask-ai-avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--teal-10); border: 1.5px solid var(--teal-30); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--teal); flex-shrink: 0; }
-    .nqb-ask-ai-input { flex: 1; padding: 7px 12px; border: 1.5px solid var(--nebula); border-radius: 20px; font-family: 'Inter', sans-serif; font-size: var(--font-sm); color: var(--dark-teal); outline: none; transition: border-color 0.15s; background: var(--surface); }
-    .nqb-ask-ai-input:focus { border-color: var(--teal-50); background: #fff; }
-    .nqb-ask-ai-send { width: 28px; height: 28px; border-radius: 50%; border: none; background: var(--teal); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s; flex-shrink: 0; }
-    .nqb-ask-ai-send:hover { opacity: 0.88; }
 
     /* NQB: AI conversation thread (expandable, above the ask bar) */
     .nqb-ai-thread { flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4) var(--space-8); border-top: 1px solid var(--nebula); background: #fff; max-height: 180px; overflow-y: auto; }
@@ -3966,13 +3960,6 @@
 
               <!-- Ask KapAI: always-visible inline chat bar -->
               <div class="nqb-ai-thread" id="nqb-ai-thread" style="display:none;"></div>
-              <div class="nqb-ask-ai" id="nqb-ask-ai-bar">
-                <div class="nqb-ask-ai-avatar">✦</div>
-                <input class="nqb-ask-ai-input" id="nqb-ai-input" placeholder="Ask KapAI anything about your query…" onkeydown="if(event.key==='Enter')nqbAiSend()">
-                <button class="nqb-ask-ai-send" onclick="nqbAiSend()" title="Send">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M5 1l4 4-4 4M1 5h8"/></svg>
-                </button>
-              </div>
 
               <!-- Summary bar -->
               <div class="nqb-summary" id="nqb-summary">
