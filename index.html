@@ -2635,8 +2635,8 @@
     /* ── NQB: 4-Step Conversational Query Builder ─────────────────── */
     .nqb-page { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
     .nqb-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
-    .nqb-left { flex: 1; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--nebula); }
-    .nqb-right { flex: 0 0 320px; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
+    .nqb-left { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .nqb-right { display: none; }
 
     /* Step indicator row */
     .nqb-steps-row { display: flex; align-items: center; padding: var(--space-5) var(--space-8); border-bottom: 1px solid var(--nebula); flex-shrink: 0; }
@@ -2705,18 +2705,46 @@
     .nqb-run-btn:hover { opacity: 0.88; }
 
     /* Right panel: KapAI assistant */
-    .nqb-ai-hd { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-5) var(--space-6); border-bottom: 1px solid var(--nebula); background: #fff; }
-    .nqb-ai-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--teal-10); border: 1.5px solid var(--teal-30); display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--teal); }
-    .nqb-ai-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
-    .nqb-ai-body { flex: 1; overflow-y: auto; padding: var(--space-5) var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
-    .nqb-ai-bubble { background: var(--teal-10); border: 1px solid var(--teal-20); border-radius: 4px var(--radius-md) var(--radius-md) var(--radius-md); padding: var(--space-4) var(--space-5); font-size: var(--font-sm); color: var(--dark-teal); line-height: 1.55; }
-    .nqb-ai-suggest-chip { display: block; width: 100%; padding: 6px 12px; margin-top: var(--space-2); border-radius: 20px; border: 1.5px solid var(--teal-30); background: #fff; font-size: var(--font-sm); color: var(--teal); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; text-align: left; box-sizing: border-box; }
-    .nqb-ai-suggest-chip:hover { background: var(--teal-10); border-color: var(--teal); }
-    .nqb-ai-input-row { flex-shrink: 0; display: flex; gap: var(--space-2); padding: var(--space-4) var(--space-6); border-top: 1px solid var(--nebula); }
-    .nqb-ai-input { flex: 1; padding: 8px 12px; border: 1.5px solid var(--nebula); border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: var(--font-sm); color: var(--dark-teal); outline: none; transition: border-color 0.15s; }
-    .nqb-ai-input:focus { border-color: var(--teal-50); }
-    .nqb-ai-send-btn { padding: 8px 14px; border-radius: var(--radius-sm); border: none; background: var(--teal); color: #fff; cursor: pointer; font-size: var(--font-sm); font-family: 'Inter', sans-serif; transition: opacity 0.15s; }
-    .nqb-ai-send-btn:hover { opacity: 0.88; }
+    /* NQB: inline AI nudge card within step panels */
+    .nqb-inline-nudge { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4) var(--space-5); background: var(--teal-10); border: 1px solid var(--teal-20); border-radius: var(--radius-sm); flex-shrink: 0; animation: fadeIn 0.2s ease; }
+    .nqb-inline-nudge-icon { font-size: 14px; color: var(--teal); margin-top: 1px; flex-shrink: 0; }
+    .nqb-inline-nudge-body { flex: 1; display: flex; flex-direction: column; gap: var(--space-2); }
+    .nqb-inline-nudge-text { font-size: var(--font-sm); color: var(--dark-teal); line-height: 1.5; }
+    .nqb-inline-nudge-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nqb-nudge-action-btn { padding: 4px 12px; border-radius: 20px; border: 1.5px solid var(--teal-30); background: #fff; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--teal); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .nqb-nudge-action-btn:hover { background: var(--teal-10); border-color: var(--teal); }
+    .nqb-nudge-dismiss { padding: 4px 8px; border-radius: 20px; border: none; background: transparent; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; font-family: 'Inter', sans-serif; opacity: 0.65; }
+    .nqb-nudge-dismiss:hover { opacity: 1; }
+
+    /* NQB: Ask KapAI bar (inline chat, above summary) */
+    .nqb-ask-ai { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); border-top: 1px solid var(--nebula); background: #fff; }
+    .nqb-ask-ai-avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--teal-10); border: 1.5px solid var(--teal-30); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--teal); flex-shrink: 0; }
+    .nqb-ask-ai-input { flex: 1; padding: 7px 12px; border: 1.5px solid var(--nebula); border-radius: 20px; font-family: 'Inter', sans-serif; font-size: var(--font-sm); color: var(--dark-teal); outline: none; transition: border-color 0.15s; background: var(--surface); }
+    .nqb-ask-ai-input:focus { border-color: var(--teal-50); background: #fff; }
+    .nqb-ask-ai-send { width: 28px; height: 28px; border-radius: 50%; border: none; background: var(--teal); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s; flex-shrink: 0; }
+    .nqb-ask-ai-send:hover { opacity: 0.88; }
+
+    /* NQB: AI conversation thread (expandable, above the ask bar) */
+    .nqb-ai-thread { flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4) var(--space-8); border-top: 1px solid var(--nebula); background: #fff; max-height: 180px; overflow-y: auto; }
+    .nqb-ai-bubble { background: var(--teal-10); border: 1px solid var(--teal-20); border-radius: 4px var(--radius-md) var(--radius-md) var(--radius-md); padding: var(--space-3) var(--space-4); font-size: var(--font-sm); color: var(--dark-teal); line-height: 1.55; max-width: 85%; }
+    .nqb-user-bubble { background: var(--dark-teal); border-radius: var(--radius-md) 4px var(--radius-md) var(--radius-md); padding: var(--space-3) var(--space-4); font-size: var(--font-sm); color: #fff; line-height: 1.55; max-width: 75%; align-self: flex-end; }
+
+    /* NQB: Results table */
+    .nqb-results { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .nqb-results-hd { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: var(--space-5) var(--space-8); border-bottom: 1px solid var(--nebula); background: #fff; }
+    .nqb-results-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .nqb-results-meta { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; margin-top: 2px; }
+    .nqb-results-back { padding: 6px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: var(--space-2); }
+    .nqb-results-back:hover { border-color: var(--teal-30); color: var(--dark-teal); }
+    .nqb-results-nudge { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-8); background: var(--teal-10); border-bottom: 1px solid var(--teal-20); flex-wrap: wrap; }
+    .nqb-results-nudge-text { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); }
+    .nqb-results-body { flex: 1; overflow: auto; padding: var(--space-5) var(--space-8); }
+    .nqb-results-table { width: 100%; border-collapse: collapse; font-size: var(--font-sm); }
+    .nqb-results-table th { padding: 9px 12px; text-align: left; font-size: 11px; font-weight: var(--weight-semibold); color: var(--cutty-sark); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--nebula); white-space: nowrap; background: var(--surface); }
+    .nqb-results-table td { padding: 10px 12px; border-bottom: 1px solid var(--nebula); color: var(--dark-teal); white-space: nowrap; }
+    .nqb-results-table tr:last-child td { border-bottom: none; }
+    .nqb-results-table tr:hover td { background: var(--teal-10); }
+    .nqb-results-count { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.65; padding: var(--space-3) var(--space-8) var(--space-4); flex-shrink: 0; }
 
     /* NQB: SQL Console pane */
     .nqb-sql-pane { flex-shrink: 0; display: flex; flex-direction: column; border-top: 1px solid var(--nebula); max-height: 220px; background: #fafbfc; }
@@ -3781,36 +3809,47 @@
                   <div class="nqb-step-sub">Pick the area that best matches your question.</div>
                 </div>
                 <div class="nqb-data-grid" id="nqb-data-grid">
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea('tickets')">
+                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘tickets’)">
                     <span class="nqb-data-btn-icon">&#127915;</span>
                     <span class="nqb-data-btn-label">Tickets</span>
                     <span class="nqb-data-btn-sub">Support &amp; service requests</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea('agents')">
+                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘agents’)">
                     <span class="nqb-data-btn-icon">&#128100;</span>
                     <span class="nqb-data-btn-label">Agents</span>
                     <span class="nqb-data-btn-sub">Team &amp; individual performance</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea('queues')">
+                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘queues’)">
                     <span class="nqb-data-btn-icon">&#128203;</span>
                     <span class="nqb-data-btn-label">Queues</span>
                     <span class="nqb-data-btn-sub">Queue load &amp; wait times</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea('sla')">
+                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘sla’)">
                     <span class="nqb-data-btn-icon">&#9201;</span>
                     <span class="nqb-data-btn-label">SLA</span>
                     <span class="nqb-data-btn-sub">SLA compliance &amp; breaches</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea('customers')">
+                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘customers’)">
                     <span class="nqb-data-btn-icon">&#127962;</span>
                     <span class="nqb-data-btn-label">Customers</span>
                     <span class="nqb-data-btn-sub">Accounts &amp; contacts</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea('csat')">
+                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘csat’)">
                     <span class="nqb-data-btn-icon">&#11088;</span>
                     <span class="nqb-data-btn-label">CSAT</span>
                     <span class="nqb-data-btn-sub">Satisfaction scores &amp; feedback</span>
                   </button>
+                </div>
+                <!-- Inline KapAI nudge: Flow step 1 — suggests columns after data area selected -->
+                <div class="nqb-inline-nudge" id="nqb-nudge-2" style="display:none;">
+                  <span class="nqb-inline-nudge-icon">✦</span>
+                  <div class="nqb-inline-nudge-body">
+                    <span class="nqb-inline-nudge-text" id="nqb-nudge-2-text">Data detected. Want me to suggest the most useful columns &amp; filters for your question?</span>
+                    <div class="nqb-inline-nudge-actions">
+                      <button class="nqb-nudge-action-btn" onclick="nqbNudgeAutoColumns()">Yes, suggest columns</button>
+                      <button class="nqb-nudge-dismiss" onclick="nqbDismissNudge(‘nqb-nudge-2’)">Dismiss</button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -3821,11 +3860,22 @@
                   <div class="nqb-step-sub">We’ve pre-selected the most useful ones — tweak as needed.</div>
                 </div>
                 <div style="display:flex; gap:var(--space-3); align-items:center;">
-                  <button style="font-size:var(--font-sm); color:var(--teal); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; padding:0;" onclick="nqbSelectAllCols()">Select all</button>
+                  <button style="font-size:var(--font-sm); color:var(--teal); background:none; border:none; cursor:pointer; font-family:’Inter’,sans-serif; padding:0;" onclick="nqbSelectAllCols()">Select all</button>
                   <span style="color:var(--nebula); user-select:none;">&middot;</span>
-                  <button style="font-size:var(--font-sm); color:var(--cutty-sark); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; padding:0;" onclick="nqbClearAllCols()">Clear all</button>
+                  <button style="font-size:var(--font-sm); color:var(--cutty-sark); background:none; border:none; cursor:pointer; font-family:’Inter’,sans-serif; padding:0;" onclick="nqbClearAllCols()">Clear all</button>
                 </div>
                 <div class="nqb-col-grid" id="nqb-col-grid"></div>
+                <!-- Inline KapAI nudge: Flow step 2 — complete column selection after 2+ picks -->
+                <div class="nqb-inline-nudge" id="nqb-nudge-3" style="display:none;">
+                  <span class="nqb-inline-nudge-icon">✦</span>
+                  <div class="nqb-inline-nudge-body">
+                    <span class="nqb-inline-nudge-text">I can predict the remaining columns you’ll need based on your question. Complete the selection for you?</span>
+                    <div class="nqb-inline-nudge-actions">
+                      <button class="nqb-nudge-action-btn" onclick="nqbNudgeCompleteColumns()">Complete selection</button>
+                      <button class="nqb-nudge-dismiss" onclick="nqbDismissNudge(‘nqb-nudge-3’)">Dismiss</button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <!-- Step 4: Filters -->
@@ -3834,15 +3884,26 @@
                   <div class="nqb-step-title">Any filters?</div>
                   <div class="nqb-step-sub">Narrow your data down. All filters are optional.</div>
                 </div>
+                <!-- Inline KapAI nudge: Flow step 3 — describe grouping & filters in plain English -->
+                <div class="nqb-inline-nudge" id="nqb-nudge-4">
+                  <span class="nqb-inline-nudge-icon">✦</span>
+                  <div class="nqb-inline-nudge-body">
+                    <span class="nqb-inline-nudge-text">Describe what you want to see — I’ll set the grouping &amp; filters. <em>e.g. "by agent, last 7 days"</em></span>
+                    <div class="nqb-inline-nudge-actions">
+                      <button class="nqb-nudge-action-btn" onclick="nqbNudgeDescribeFilters()">Describe it</button>
+                      <button class="nqb-nudge-dismiss" onclick="nqbDismissNudge(‘nqb-nudge-4’)">Set manually</button>
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <div style="font-size:var(--font-sm); font-weight:var(--weight-semibold); color:var(--dark-teal); margin-bottom:var(--space-3);">Time range</div>
                   <div class="nqb-time-row" id="nqb-time-row">
-                    <button class="nqb-time-btn" onclick="nqbSelectTime('today')">Today</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime('7d')">Last 7 days</button>
-                    <button class="nqb-time-btn selected" onclick="nqbSelectTime('30d')">Last 30 days</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime('90d')">Last 90 days</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime('mtd')">This month</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime('ytd')">This year</button>
+                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘today’)">Today</button>
+                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘7d’)">Last 7 days</button>
+                    <button class="nqb-time-btn selected" onclick="nqbSelectTime(‘30d’)">Last 30 days</button>
+                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘90d’)">Last 90 days</button>
+                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘mtd’)">This month</button>
+                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘ytd’)">This year</button>
                   </div>
                 </div>
                 <div>
@@ -3852,6 +3913,36 @@
                     <span>+</span> Add a filter
                   </button>
                 </div>
+              </div>
+
+              <!-- Results view (shown after Run Query) -->
+              <div class="nqb-results" id="nqb-results" style="display:none;">
+                <div class="nqb-results-hd">
+                  <div>
+                    <div class="nqb-results-title" id="nqb-results-title">Query Results</div>
+                    <div class="nqb-results-meta" id="nqb-results-meta"></div>
+                  </div>
+                  <div style="display:flex; gap:var(--space-3); align-items:center;">
+                    <button class="nqb-results-back" onclick="nqbBackToBuilder()">
+                      <svg width="11" height="11" viewBox="0 0 13 13" fill="none"><path d="M8.5 10.5L4.5 6.5l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      Edit query
+                    </button>
+                  </div>
+                </div>
+                <!-- KapAI nudge: Flow step 4 — summarise or refine -->
+                <div class="nqb-results-nudge" id="nqb-results-nudge">
+                  <span class="nqb-inline-nudge-icon">✦</span>
+                  <span class="nqb-results-nudge-text">Want a plain-English summary of this data, or need to refine the query?</span>
+                  <div style="display:flex; gap:var(--space-2);">
+                    <button class="nqb-nudge-action-btn" onclick="nqbSummariseResults()">Summarise</button>
+                    <button class="nqb-nudge-action-btn" onclick="nqbRefineQuery()">Refine</button>
+                    <button class="nqb-nudge-dismiss" onclick="document.getElementById(‘nqb-results-nudge’).style.display=’none’">Dismiss</button>
+                  </div>
+                </div>
+                <div class="nqb-results-body">
+                  <table class="nqb-results-table" id="nqb-results-table"></table>
+                </div>
+                <div class="nqb-results-count" id="nqb-results-count"></div>
               </div>
 
               <!-- SQL Console pane (collapsible) -->
@@ -3873,13 +3964,23 @@
                 </div>
               </div>
 
+              <!-- Ask KapAI: always-visible inline chat bar -->
+              <div class="nqb-ai-thread" id="nqb-ai-thread" style="display:none;"></div>
+              <div class="nqb-ask-ai" id="nqb-ask-ai-bar">
+                <div class="nqb-ask-ai-avatar">✦</div>
+                <input class="nqb-ask-ai-input" id="nqb-ai-input" placeholder="Ask KapAI anything about your query…" onkeydown="if(event.key==='Enter')nqbAiSend()">
+                <button class="nqb-ask-ai-send" onclick="nqbAiSend()" title="Send">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M5 1l4 4-4 4M1 5h8"/></svg>
+                </button>
+              </div>
+
               <!-- Summary bar -->
               <div class="nqb-summary" id="nqb-summary">
                 <span class="nqb-summary-empty" id="nqb-summary-empty">Your query will appear here as you build it.</span>
               </div>
 
               <!-- Action bar -->
-              <div class="nqb-actions">
+              <div class="nqb-actions" id="nqb-actions-bar">
                 <div style="display:flex; gap:var(--space-3); align-items:center;">
                   <button class="nqb-back-btn" id="nqb-back-btn" style="display:none;" onclick="nqbGoToStep(nqbState.step - 1)">&larr; Back</button>
                   <button class="nqb-sql-btn" id="nqb-sql-toggle-btn" onclick="nqbToggleSql()">
@@ -3896,19 +3997,6 @@
               </div>
 
             </div><!-- /nqb-left -->
-
-            <!-- RIGHT: KapAI assistant -->
-            <div class="nqb-right">
-              <div class="nqb-ai-hd">
-                <div class="nqb-ai-avatar">&#10022;</div>
-                <span class="nqb-ai-name">KapAI</span>
-              </div>
-              <div class="nqb-ai-body" id="nqb-ai-body"></div>
-              <div class="nqb-ai-input-row">
-                <input class="nqb-ai-input" id="nqb-ai-input" placeholder="Ask KapAI anything&hellip;" onkeydown="if(event.key==='Enter')nqbAiSend()">
-                <button class="nqb-ai-send-btn" onclick="nqbAiSend()">&uarr;</button>
-              </div>
-            </div><!-- /nqb-right -->
 
           </div><!-- /nqb-body -->
         </div><!-- /nqb-page -->
@@ -4481,7 +4569,7 @@ function setDsSection(section) {
     if (dsBody) dsBody.style.display = 'flex';
     dsNewQ.style.display = 'flex';
     if (backBtn) backBtn.style.display = 'none';
-    if (aiBtn) aiBtn.style.display = '';
+    if (aiBtn) aiBtn.style.display = 'none'; // AI is now inline in centre panel
     if (ibResetBtn) ibResetBtn.style.display = '';
     if (ibSaveBtn)  ibSaveBtn.style.display  = '';
     document.getElementById('topbar-ds-name').style.display       = 'none';
@@ -5950,11 +6038,11 @@ function onSqlEditorInput() {
 
 function ibOnSqlInput() { onSqlEditorInput(); }
 function toggleAiPanel() {
-  const right = document.querySelector('.nqb-right');
-  const btn   = document.getElementById('nq-ai-toggle-btn');
-  if (!right) return;
-  const collapsed = right.classList.toggle('collapsed');
-  if (btn) btn.classList.toggle('active', !collapsed);
+  // AI is now inline — toggle the thread visibility instead
+  const thread = document.getElementById('nqb-ai-thread');
+  if (thread && thread.childElementCount > 0) {
+    thread.style.display = thread.style.display === 'none' ? 'flex' : 'none';
+  }
 }
 
 function toggleDashAiPanel() {
@@ -6513,17 +6601,45 @@ const NQB_DEFAULT_COLS = {
   csat:      new Set(['Agent', 'Score', 'Comment', 'Submitted At'])
 };
 
-const NQB_AI_MESSAGES = {
-  1: {
-    bubble: "Hi! I\u2019m KapAI. Tell me what you\u2019d like to find out about your data \u2014 in plain English.",
-    chips: ["Show ticket trends over time", "Compare agent performance", "Find SLA breaches this month"]
-  },
-  2: { bubble: "Great question! Which area of your data does it relate to?", chips: null },
-  3: { bubble: "Here are the columns available. I\u2019ve pre-selected the most relevant ones for your question.", chips: null },
-  4: {
-    bubble: "Almost there! Do you want to filter by a specific time range or add extra conditions?",
-    chips: ["Last 30 days is fine", "Add a status filter", "No filters needed"]
-  }
+/* NQB mock result rows per data area */
+const NQB_MOCK_ROWS = {
+  tickets: [
+    { 'Ticket ID':'TKT-1042','Subject':'Login issue on mobile','Status':'Resolved','Priority':'High','Agent':'Priya S.','Queue':'General','Created At':'2026-03-10','Resolved At':'2026-03-10','Resolution Time (hrs)':'4.2','CSAT Score':'4.8' },
+    { 'Ticket ID':'TKT-1041','Subject':'Billing discrepancy','Status':'Open','Priority':'Medium','Agent':'Rahul M.','Queue':'Billing','Created At':'2026-03-09','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' },
+    { 'Ticket ID':'TKT-1040','Subject':'Feature request: export','Status':'Closed','Priority':'Low','Agent':'Aisha K.','Queue':'Product','Created At':'2026-03-08','Resolved At':'2026-03-09','Resolution Time (hrs)':'18.5','CSAT Score':'4.5' },
+    { 'Ticket ID':'TKT-1039','Subject':'API integration failing','Status':'Resolved','Priority':'Critical','Agent':'Priya S.','Queue':'Technical','Created At':'2026-03-07','Resolved At':'2026-03-07','Resolution Time (hrs)':'1.8','CSAT Score':'5.0' },
+    { 'Ticket ID':'TKT-1038','Subject':'Password reset loop','Status':'Pending','Priority':'High','Agent':'Dev T.','Queue':'General','Created At':'2026-03-06','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' }
+  ],
+  agents: [
+    { 'Agent Name':'Priya S.','Email':'priya@example.com','Queue':'General','Tickets Handled':'124','Avg Resolution Time':'3.8h','CSAT Score':'4.7','First Response Time':'12 min','Tickets Open':'8' },
+    { 'Agent Name':'Rahul M.','Email':'rahul@example.com','Queue':'Billing','Tickets Handled':'98','Avg Resolution Time':'5.2h','CSAT Score':'4.5','First Response Time':'18 min','Tickets Open':'12' },
+    { 'Agent Name':'Aisha K.','Email':'aisha@example.com','Queue':'Product','Tickets Handled':'87','Avg Resolution Time':'6.1h','CSAT Score':'4.9','First Response Time':'9 min','Tickets Open':'5' },
+    { 'Agent Name':'Dev T.','Email':'dev@example.com','Queue':'Technical','Tickets Handled':'112','Avg Resolution Time':'4.5h','CSAT Score':'4.6','First Response Time':'14 min','Tickets Open':'9' }
+  ],
+  queues: [
+    { 'Queue Name':'General','Total Tickets':'312','Open Tickets':'24','Avg Wait Time (min)':'8','Avg Handle Time (min)':'32','SLA Breaches':'3' },
+    { 'Queue Name':'Billing','Total Tickets':'189','Open Tickets':'17','Avg Wait Time (min)':'12','Avg Handle Time (min)':'48','SLA Breaches':'7' },
+    { 'Queue Name':'Technical','Total Tickets':'241','Open Tickets':'31','Avg Wait Time (min)':'15','Avg Handle Time (min)':'65','SLA Breaches':'12' },
+    { 'Queue Name':'Product','Total Tickets':'98','Open Tickets':'9','Avg Wait Time (min)':'5','Avg Handle Time (min)':'25','SLA Breaches':'1' }
+  ],
+  sla: [
+    { 'SLA Tier':'Critical (1h)','Total Tickets':'45','Met':'38','Breached':'7','Compliance %':'84.4%','Avg Response Time':'52 min' },
+    { 'SLA Tier':'High (4h)','Total Tickets':'132','Met':'118','Breached':'14','Compliance %':'89.4%','Avg Response Time':'3.1h' },
+    { 'SLA Tier':'Medium (8h)','Total Tickets':'287','Met':'271','Breached':'16','Compliance %':'94.4%','Avg Response Time':'5.8h' },
+    { 'SLA Tier':'Low (24h)','Total Tickets':'198','Met':'195','Breached':'3','Compliance %':'98.5%','Avg Response Time':'11.2h' }
+  ],
+  customers: [
+    { 'Customer Name':'Acme Corp','Account ID':'ACC-001','Open Tickets':'5','Resolved Tickets':'48','CSAT Score':'4.6','Last Interaction':'2026-03-15' },
+    { 'Customer Name':'Globex Ltd','Account ID':'ACC-002','Open Tickets':'2','Resolved Tickets':'31','CSAT Score':'4.9','Last Interaction':'2026-03-14' },
+    { 'Customer Name':'Initech','Account ID':'ACC-003','Open Tickets':'8','Resolved Tickets':'67','CSAT Score':'4.2','Last Interaction':'2026-03-13' },
+    { 'Customer Name':'Umbrella Inc','Account ID':'ACC-004','Open Tickets':'1','Resolved Tickets':'22','CSAT Score':'5.0','Last Interaction':'2026-03-16' }
+  ],
+  csat: [
+    { 'Survey ID':'CST-201','Ticket ID':'TKT-1042','Agent':'Priya S.','Score':'5','Comment':'Resolved super fast!','Submitted At':'2026-03-10' },
+    { 'Survey ID':'CST-200','Ticket ID':'TKT-1040','Agent':'Aisha K.','Score':'4','Comment':'Good follow-up','Submitted At':'2026-03-09' },
+    { 'Survey ID':'CST-199','Ticket ID':'TKT-1039','Agent':'Priya S.','Score':'5','Comment':'Excellent!','Submitted At':'2026-03-07' },
+    { 'Survey ID':'CST-198','Ticket ID':'TKT-1036','Agent':'Dev T.','Score':'3','Comment':'Took too long','Submitted At':'2026-03-05' }
+  ]
 };
 
 let nqbState = {
@@ -6538,6 +6654,7 @@ let nqbState = {
 function nqbInit() {
   nqbState = { step: 1, question: '', dataArea: '', selectedCols: new Set(), timeRange: '30d', filters: [] };
   nqbSqlManuallyEdited = false;
+  nqbManualColPicks = 0;
   // Reset textarea
   const ta = document.getElementById('nqb-question');
   if (ta) ta.value = '';
@@ -6546,13 +6663,13 @@ function nqbInit() {
   const sqlBtn = document.getElementById('nqb-sql-toggle-btn');
   if (pane) pane.style.display = 'none';
   if (sqlBtn) sqlBtn.classList.remove('active');
-  // Restore AI panel if collapsed
-  const right = document.querySelector('.nqb-right');
-  const aiBtn = document.getElementById('nq-ai-toggle-btn');
-  if (right) right.classList.remove('collapsed');
-  if (aiBtn) aiBtn.classList.remove('active');
+  // Clear AI thread
+  const thread = document.getElementById('nqb-ai-thread');
+  if (thread) { thread.innerHTML = ''; thread.style.display = 'none'; }
+  // Hide results
+  const results = document.getElementById('nqb-results');
+  if (results) results.style.display = 'none';
   nqbSyncUI();
-  nqbUpdateAI(1);
 }
 
 function nqbGoToStep(n) {
@@ -6620,20 +6737,7 @@ function nqbSyncUI() {
   nqbRenderSummary();
 }
 
-function nqbUpdateAI(step) {
-  const body = document.getElementById('nqb-ai-body');
-  if (!body) return;
-  const msg = NQB_AI_MESSAGES[step];
-  if (!msg) return;
-  let html = '<div class="nqb-ai-bubble">' + msg.bubble + '</div>';
-  if (msg.chips) {
-    msg.chips.forEach(c => {
-      html += '<button class="nqb-ai-suggest-chip" onclick="nqbAiChipClick(this)">' + c + '</button>';
-    });
-  }
-  body.innerHTML = html;
-  body.scrollTop = body.scrollHeight;
-}
+function nqbUpdateAI() { /* AI now lives inline — no-op */ }
 
 function nqbRenderSummary() {
   const summary = document.getElementById('nqb-summary');
@@ -6685,6 +6789,12 @@ function nqbSelectDataArea(area) {
     b.classList.toggle('selected', b.getAttribute('onclick').includes("'" + area + "'"));
   });
   nqbRenderSummary();
+  // Flow step 1: nudge to suggest columns after data area selected
+  const areaLabel = area.charAt(0).toUpperCase() + area.slice(1);
+  const nudgeText = document.getElementById('nqb-nudge-2-text');
+  if (nudgeText) nudgeText.textContent = areaLabel + ' data detected. Want me to suggest the most useful columns & filters for your question?';
+  const nudge = document.getElementById('nqb-nudge-2');
+  if (nudge) { nudge.style.display = 'flex'; }
 }
 
 function nqbRenderColumns() {
@@ -6699,6 +6809,7 @@ function nqbRenderColumns() {
   }).join('');
 }
 
+let nqbManualColPicks = 0;
 function nqbToggleCol(el, col) {
   if (nqbState.selectedCols.has(col)) {
     nqbState.selectedCols.delete(col);
@@ -6712,6 +6823,12 @@ function nqbToggleCol(el, col) {
     chk.className = 'nqb-col-check';
     chk.textContent = '\u2714';
     el.prepend(chk);
+    nqbManualColPicks++;
+    // Flow step 2: nudge to complete selection after 2+ manual picks
+    if (nqbManualColPicks === 2) {
+      const nudge = document.getElementById('nqb-nudge-3');
+      if (nudge) nudge.style.display = 'flex';
+    }
   }
   nqbRenderSummary();
 }
@@ -6768,45 +6885,161 @@ function nqbRenderFilters() {
 function nqbRunQuery() {
   if (!nqbState.question.trim()) { showToast('Please describe your question first'); return; }
   if (!nqbState.dataArea)        { showToast('Please pick a data area'); return; }
-  showToast('Running query\u2026');
+
   // Update SQL editor with latest state
   if (!nqbSqlManuallyEdited) {
     const editor = document.getElementById('nqb-sql-editor');
     if (editor) editor.value = nqbGenerateSql();
   }
-  const body = document.getElementById('nqb-ai-body');
-  if (body) {
-    const area  = nqbState.dataArea.charAt(0).toUpperCase() + nqbState.dataArea.slice(1);
-    const cols  = nqbState.selectedCols.size;
-    const labels = { today: 'Today', '7d': 'Last 7 days', '30d': 'Last 30 days', '90d': 'Last 90 days', mtd: 'This month', ytd: 'This year' };
-    const time  = labels[nqbState.timeRange] || nqbState.timeRange;
-    body.innerHTML += '<div class="nqb-ai-bubble" style="margin-top:8px;">'
-      + 'Running your query on <strong>' + area + '</strong> data \u2014 '
-      + cols + ' column' + (cols !== 1 ? 's' : '') + ', ' + time + '. Results loading\u2026'
-      + '</div>';
-    body.scrollTop = body.scrollHeight;
+
+  // Build columns to show: selected cols or all cols for this area
+  const allCols  = NQB_COLS[nqbState.dataArea] || [];
+  const showCols = nqbState.selectedCols.size > 0 ? [...nqbState.selectedCols] : allCols;
+  const allRows  = NQB_MOCK_ROWS[nqbState.dataArea] || [];
+
+  // Filter rows by selected columns only
+  const rows = allRows.map(row => {
+    const r = {};
+    showCols.forEach(c => { if (row[c] !== undefined) r[c] = row[c]; });
+    return r;
+  });
+
+  // Build table HTML
+  const thead = '<thead><tr>' + showCols.map(c => '<th>' + c + '</th>').join('') + '</tr></thead>';
+  const tbody = '<tbody>' + rows.map(row =>
+    '<tr>' + showCols.map(c => '<td>' + (row[c] !== undefined ? row[c] : '—') + '</td>').join('') + '</tr>'
+  ).join('') + '</tbody>';
+
+  const table = document.getElementById('nqb-results-table');
+  if (table) table.innerHTML = thead + tbody;
+
+  // Update results header
+  const labels = { today: 'Today', '7d': 'Last 7 days', '30d': 'Last 30 days', '90d': 'Last 90 days', mtd: 'This month', ytd: 'This year' };
+  const area   = nqbState.dataArea.charAt(0).toUpperCase() + nqbState.dataArea.slice(1);
+  const time   = labels[nqbState.timeRange] || nqbState.timeRange;
+  const titleEl = document.getElementById('nqb-results-title');
+  const metaEl  = document.getElementById('nqb-results-meta');
+  const countEl = document.getElementById('nqb-results-count');
+  if (titleEl) titleEl.textContent = nqbState.question.length > 60 ? nqbState.question.substring(0,60) + '…' : nqbState.question || (area + ' Results');
+  if (metaEl)  metaEl.textContent  = area + ' · ' + showCols.length + ' columns · ' + time;
+  if (countEl) countEl.textContent = rows.length + ' rows (sample)';
+
+  // Show results, hide step UI
+  for (let i = 1; i <= 4; i++) {
+    const p = document.getElementById('nqb-panel-' + i);
+    if (p) p.style.display = 'none';
   }
+  const sqlPane    = document.getElementById('nqb-sql-pane');
+  const actionsBar = document.getElementById('nqb-actions-bar');
+  const stepsRow   = document.querySelector('.nqb-steps-row');
+  if (sqlPane)    sqlPane.style.display    = 'none';
+  if (actionsBar) actionsBar.style.display = 'none';
+  if (stepsRow)   stepsRow.style.display   = 'none';
+
+  const resultsEl = document.getElementById('nqb-results');
+  if (resultsEl) resultsEl.style.display = 'flex';
+
+  // Restore results nudge visibility
+  const rNudge = document.getElementById('nqb-results-nudge');
+  if (rNudge) rNudge.style.display = 'flex';
+}
+
+function nqbBackToBuilder() {
+  const results    = document.getElementById('nqb-results');
+  const actionsBar = document.getElementById('nqb-actions-bar');
+  const stepsRow   = document.querySelector('.nqb-steps-row');
+  if (results)    results.style.display    = 'none';
+  if (actionsBar) actionsBar.style.display = '';
+  if (stepsRow)   stepsRow.style.display   = '';
+  nqbSyncUI();
+}
+
+function nqbSummariseResults() {
+  const area = nqbState.dataArea.charAt(0).toUpperCase() + nqbState.dataArea.slice(1);
+  const labels = { today: 'Today', '7d': 'Last 7 days', '30d': 'Last 30 days', '90d': 'Last 90 days', mtd: 'This month', ytd: 'This year' };
+  const time = labels[nqbState.timeRange] || nqbState.timeRange;
+  const summary = 'Your ' + area + ' data for ' + time + ' shows '
+    + (NQB_MOCK_ROWS[nqbState.dataArea] || []).length + ' records. '
+    + (nqbState.dataArea === 'sla'     ? 'SLA compliance is strong for lower tiers but Critical tickets show an 84% pass rate — worth monitoring.' :
+       nqbState.dataArea === 'agents'  ? 'Aisha K. has the highest CSAT (4.9) while Rahul M. carries the most open tickets (12).' :
+       nqbState.dataArea === 'tickets' ? '3 out of 5 tickets are resolved. 2 remain open or pending — check Billing and General queues.' :
+       'The data looks healthy. No major anomalies detected in this sample.');
+  nqbAddAiMessage(summary, false);
+  document.getElementById('nqb-results-nudge').style.display = 'none';
+}
+
+function nqbRefineQuery() {
+  nqbBackToBuilder();
+  nqbGoToStep(4);
+  setTimeout(() => {
+    const input = document.getElementById('nqb-ai-input');
+    if (input) { input.focus(); input.placeholder = 'Tell KapAI what to change…'; }
+  }, 100);
+}
+
+function nqbAddAiMessage(text, isUser) {
+  const thread = document.getElementById('nqb-ai-thread');
+  if (!thread) return;
+  thread.style.display = 'flex';
+  const div = document.createElement('div');
+  div.className = isUser ? 'nqb-user-bubble' : 'nqb-ai-bubble';
+  div.textContent = text;
+  thread.appendChild(div);
+  thread.scrollTop = thread.scrollHeight;
 }
 
 function nqbAiSend() {
   const input = document.getElementById('nqb-ai-input');
-  const body  = document.getElementById('nqb-ai-body');
   if (!input || !input.value.trim()) return;
   const msg = input.value.trim();
   input.value = '';
-  if (body) {
-    body.innerHTML += '<div class="nqb-ai-bubble" style="background:#fff; border:1.5px solid var(--nebula); border-radius:var(--radius-md) 4px var(--radius-md) var(--radius-md); margin-left:auto; max-width:85%;">' + msg + '</div>';
-    setTimeout(() => {
-      body.innerHTML += '<div class="nqb-ai-bubble">Got it! I\u2019ll factor that into your query.</div>';
-      body.scrollTop = body.scrollHeight;
-    }, 600);
-    body.scrollTop = body.scrollHeight;
-  }
+  input.placeholder = 'Ask KapAI anything about your query\u2026';
+  nqbAddAiMessage(msg, true);
+  setTimeout(() => nqbAddAiMessage('Got it! I\u2019ll factor that into your query.', false), 600);
 }
 
 function nqbAiChipClick(btn) {
   const input = document.getElementById('nqb-ai-input');
   if (input) { input.value = btn.textContent; input.focus(); }
+}
+
+/* ── NQB inline nudge helpers ──────────────────────────────────── */
+function nqbDismissNudge(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function nqbNudgeAutoColumns() {
+  // Accept KapAI column suggestion — use smart defaults and advance to step 3
+  nqbDismissNudge('nqb-nudge-2');
+  nqbAddAiMessage('Suggesting columns based on your question and data area.', false);
+  nqbGoToStep(3);
+}
+
+function nqbNudgeCompleteColumns() {
+  // KapAI selects all columns
+  nqbSelectAllCols();
+  nqbDismissNudge('nqb-nudge-3');
+  nqbAddAiMessage('I\u2019ve completed the column selection based on your question.', false);
+  showToast('KapAI completed column selection');
+}
+
+function nqbNudgeDescribeFilters() {
+  const desc = prompt('Describe your filters (e.g. "by agent, last 7 days, status open"):');
+  if (!desc) return;
+  nqbDismissNudge('nqb-nudge-4');
+  // Parse simple patterns
+  const lower = desc.toLowerCase();
+  if (lower.includes('7 day') || lower.includes('week')) nqbSelectTime('7d');
+  else if (lower.includes('30 day') || lower.includes('month')) nqbSelectTime('30d');
+  else if (lower.includes('today')) nqbSelectTime('today');
+  if (lower.includes('open')) {
+    nqbState.filters.push({ field: 'Status', operator: 'equals', value: 'Open', label: 'Status equals Open' });
+    nqbRenderFilters();
+    nqbRenderSummary();
+  }
+  nqbAddAiMessage('Done! I\u2019ve set up your filters based on: \u201c' + desc + '\u201d', false);
+  showToast('Filters applied by KapAI');
 }
 
 /* ── NQB: SQL Console ──────────────────────────────────────────── */
