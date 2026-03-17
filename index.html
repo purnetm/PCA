@@ -2656,8 +2656,8 @@
     .nqb-textarea { width: 100%; min-height: 100px; padding: var(--space-5); border: 1.5px solid var(--nebula); border-radius: var(--radius-md); font-family: 'Inter', sans-serif; font-size: var(--font-base); color: var(--dark-teal); resize: vertical; outline: none; transition: border-color 0.15s; background: #fff; box-sizing: border-box; line-height: 1.5; }
     .nqb-textarea:focus { border-color: var(--teal-50); }
     .nqb-example-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-    .nqb-example-chip { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--nebula); background: #fff; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
-    .nqb-example-chip:hover { border-color: var(--teal-30); background: var(--teal-10); color: var(--teal); }
+    .nqb-example-chip { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--nebula); background: #fff; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; transition: border-color 0.15s, color 0.15s, background-color 0.15s; font-family: 'Inter', sans-serif; }
+    .nqb-example-chip:hover { border-color: var(--teal-30); background: var(--aqua-haze); color: var(--teal); }
 
     /* Step 2: Data area grid */
     .nqb-data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
@@ -2695,7 +2695,7 @@
     .nqb-summary-empty { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; font-style: italic; }
 
     /* Action bar */
-    .nqb-actions { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-8); border-top: 1px solid var(--nebula); background: #fff; }
+    .nqb-actions { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-6); margin: 0 40px 16px; border-radius: var(--radius-md); border: 1px solid var(--nebula); background: #fff; box-shadow: 0 4px 16px rgba(77,182,172,0.10), 0 1px 4px rgba(0,0,0,0.06); }
     .nqb-back-btn { padding: 8px 20px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: all 0.15s; }
     .nqb-back-btn:hover { border-color: var(--teal-30); color: var(--dark-teal); }
     .nqb-continue-btn { padding: 8px 24px; border-radius: var(--radius-sm); border: none; background: var(--teal); font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-semibold); color: #fff; cursor: pointer; transition: opacity 0.15s; }
@@ -2734,10 +2734,28 @@
     .nqb-results-nudge-text { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); }
     .nqb-results-body { flex: 1; overflow: auto; padding: var(--space-5) var(--space-8); }
     .nqb-results-table { width: 100%; border-collapse: collapse; font-size: var(--font-sm); }
-    .nqb-results-table th { padding: 9px 12px; text-align: left; font-size: 11px; font-weight: var(--weight-semibold); color: var(--cutty-sark); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--nebula); white-space: nowrap; background: var(--surface); }
-    .nqb-results-table td { padding: 10px 12px; border-bottom: 1px solid var(--nebula); color: var(--dark-teal); white-space: nowrap; }
+    .nqb-results-table thead { position: sticky; top: 0; z-index: 1; }
+    .nqb-results-table th { padding: 10px 14px; text-align: left; font-size: 10px; font-weight: var(--weight-semibold); color: var(--cutty-sark); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid var(--nebula); white-space: nowrap; background: var(--surface); }
+    .nqb-results-table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+    .nqb-results-table th:last-child  { border-radius: 0 var(--radius-sm) 0 0; }
+    .nqb-results-table td { padding: 11px 14px; border-bottom: 1px solid var(--nebula); color: var(--dark-teal); white-space: nowrap; line-height: 1.4; }
+    .nqb-results-table tbody tr:nth-child(even) td { background: var(--surface); }
+    .nqb-results-table tbody tr:nth-child(odd)  td { background: #fff; }
+    .nqb-results-table tbody tr:hover td { background: var(--aqua-haze) !important; }
     .nqb-results-table tr:last-child td { border-bottom: none; }
-    .nqb-results-table tr:hover td { background: var(--teal-10); }
+    /* Status badges in results table */
+    .nqb-status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: var(--weight-semibold); white-space: nowrap; }
+    .nqb-status-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .nqb-status-resolved  { background: #D1FAE5; color: #065F46; }
+    .nqb-status-resolved::before  { background: #10B981; }
+    .nqb-status-open      { background: #DBEAFE; color: #1E40AF; }
+    .nqb-status-open::before      { background: #3B82F6; }
+    .nqb-status-pending   { background: #FEF3C7; color: #92400E; }
+    .nqb-status-pending::before   { background: #F59E0B; }
+    .nqb-status-closed    { background: var(--surface); color: var(--cutty-sark); border: 1px solid var(--nebula); }
+    .nqb-status-closed::before    { background: var(--nebula); }
+    .nqb-status-critical  { background: #FEE2E2; color: #991B1B; }
+    .nqb-status-critical::before  { background: #EF4444; }
     .nqb-results-count { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.65; padding: var(--space-3) var(--space-8) var(--space-4); flex-shrink: 0; }
 
     /* NQB: SQL Console pane */
@@ -2764,6 +2782,21 @@
 
     /* NQB: right panel collapse */
     .nqb-right.collapsed { flex: 0 0 0; overflow: hidden; border-left: none; }
+    /* Post-save dashboard choice modal */
+    .nqb-post-save-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .nqb-post-save-overlay.open { display: flex; animation: fadeIn 0.18s ease; }
+    .nqb-post-save-card { background: #fff; border-radius: var(--radius-lg); padding: var(--space-8); width: 440px; max-width: 94vw; display: flex; flex-direction: column; gap: var(--space-6); box-shadow: 0 20px 60px rgba(0,0,0,0.18); animation: modalSlideIn 0.2s ease; }
+    .nqb-post-save-icon { width: 44px; height: 44px; border-radius: 50%; background: #D1FAE5; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .nqb-post-save-title { font-size: var(--font-lg); font-weight: var(--weight-bold); color: var(--dark-teal); margin-top: var(--space-1); }
+    .nqb-post-save-sub { font-size: var(--font-sm); color: var(--cutty-sark); margin-top: 4px; line-height: 1.5; }
+    .nqb-post-save-choices { display: flex; flex-direction: column; gap: var(--space-3); }
+    .nqb-post-save-choice { display: flex; align-items: center; gap: var(--space-5); padding: var(--space-5); border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .nqb-post-save-choice:hover { border-color: var(--teal-50); background: var(--surface); }
+    .nqb-post-save-choice-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--aqua-haze); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .nqb-post-save-choice-title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .nqb-post-save-choice-sub { font-size: 11px; color: var(--cutty-sark); opacity: 0.8; margin-top: 2px; }
+    .nqb-post-save-skip { text-align: center; font-size: var(--font-sm); color: var(--cutty-sark); background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; opacity: 0.65; padding: var(--space-1); }
+    .nqb-post-save-skip:hover { opacity: 1; }
 
     /* keep a stub rule so any stray .ib-layout refs don't break layout */
     .ib-layout { display: flex; flex-direction: row; overflow: hidden; flex: 1; min-height: 0; }
@@ -3387,6 +3420,12 @@
             <path d="M2 3v3.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
+        <button class="nqb-sql-btn" id="ib-sql-btn" onclick="nqbToggleSql()" style="display:none;">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          SQL
+        </button>
         <button class="qb-save-btn" id="ib-save-btn" onclick="ibOpenSaveModal()" style="display:none;">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
             <rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
@@ -3803,32 +3842,32 @@
                   <div class="nqb-step-sub">Pick the area that best matches your question.</div>
                 </div>
                 <div class="nqb-data-grid" id="nqb-data-grid">
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘tickets’)">
+                  <button class="nqb-data-btn" data-area="tickets" onclick="nqbSelectDataArea(‘tickets’)">
                     <span class="nqb-data-btn-icon">&#127915;</span>
                     <span class="nqb-data-btn-label">Tickets</span>
                     <span class="nqb-data-btn-sub">Support &amp; service requests</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘agents’)">
+                  <button class="nqb-data-btn" data-area="agents" onclick="nqbSelectDataArea(‘agents’)">
                     <span class="nqb-data-btn-icon">&#128100;</span>
                     <span class="nqb-data-btn-label">Agents</span>
                     <span class="nqb-data-btn-sub">Team &amp; individual performance</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘queues’)">
+                  <button class="nqb-data-btn" data-area="queues" onclick="nqbSelectDataArea(‘queues’)">
                     <span class="nqb-data-btn-icon">&#128203;</span>
                     <span class="nqb-data-btn-label">Queues</span>
                     <span class="nqb-data-btn-sub">Queue load &amp; wait times</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘sla’)">
+                  <button class="nqb-data-btn" data-area="sla" onclick="nqbSelectDataArea(‘sla’)">
                     <span class="nqb-data-btn-icon">&#9201;</span>
                     <span class="nqb-data-btn-label">SLA</span>
                     <span class="nqb-data-btn-sub">SLA compliance &amp; breaches</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘customers’)">
+                  <button class="nqb-data-btn" data-area="customers" onclick="nqbSelectDataArea(‘customers’)">
                     <span class="nqb-data-btn-icon">&#127962;</span>
                     <span class="nqb-data-btn-label">Customers</span>
                     <span class="nqb-data-btn-sub">Accounts &amp; contacts</span>
                   </button>
-                  <button class="nqb-data-btn" onclick="nqbSelectDataArea(‘csat’)">
+                  <button class="nqb-data-btn" data-area="csat" onclick="nqbSelectDataArea(‘csat’)">
                     <span class="nqb-data-btn-icon">&#11088;</span>
                     <span class="nqb-data-btn-label">CSAT</span>
                     <span class="nqb-data-btn-sub">Satisfaction scores &amp; feedback</span>
@@ -3968,14 +4007,8 @@
 
               <!-- Action bar -->
               <div class="nqb-actions" id="nqb-actions-bar">
-                <div style="display:flex; gap:var(--space-3); align-items:center;">
+                <div>
                   <button class="nqb-back-btn" id="nqb-back-btn" style="display:none;" onclick="nqbGoToStep(nqbState.step - 1)">&larr; Back</button>
-                  <button class="nqb-sql-btn" id="nqb-sql-toggle-btn" onclick="nqbToggleSql()">
-                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                      <path d="M3.5 4L1.5 6l2 2M8.5 4l2 2-2 2M5.5 9l1-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    SQL
-                  </button>
                 </div>
                 <div style="display:flex; gap:var(--space-3);">
                   <button class="nqb-continue-btn" id="nqb-continue-btn" onclick="nqbGoToStep(nqbState.step + 1)">Continue &rarr;</button>
@@ -4010,6 +4043,34 @@
         </button>
       </div>
     </div>
+
+  <!-- NQB Post-save: Add to dashboard choice -->
+  <div class="nqb-post-save-overlay" id="nqb-post-save-overlay">
+    <div class="nqb-post-save-card">
+      <div>
+        <div class="nqb-post-save-icon">✓</div>
+        <div class="nqb-post-save-title">Question saved!</div>
+        <div class="nqb-post-save-sub" id="nqb-post-save-sub">Your question is now in your library. Where would you like to use it?</div>
+      </div>
+      <div class="nqb-post-save-choices">
+        <button class="nqb-post-save-choice" onclick="nqbPostSaveAddToExisting()">
+          <div class="nqb-post-save-choice-icon">📊</div>
+          <div>
+            <div class="nqb-post-save-choice-title">Add to existing dashboard</div>
+            <div class="nqb-post-save-choice-sub">Pick a dashboard from your library and drop this question in</div>
+          </div>
+        </button>
+        <button class="nqb-post-save-choice" onclick="nqbPostSaveNewDashboard()">
+          <div class="nqb-post-save-choice-icon">✚</div>
+          <div>
+            <div class="nqb-post-save-choice-title">Create a new dashboard</div>
+            <div class="nqb-post-save-choice-sub">Start a fresh dashboard with this question as the first card</div>
+          </div>
+        </button>
+      </div>
+      <button class="nqb-post-save-skip" onclick="nqbPostSaveSkip()">Not now — I'll do this later</button>
+    </div>
+  </div>
 
   <!-- NQB Save Query Modal -->
   <div class="sq-overlay" id="nqb-save-overlay" onclick="if(event.target===this)nqbCloseSaveModal()" style="display:none;">
@@ -4538,15 +4599,17 @@ function setDsSection(section) {
 
   const ibResetBtn = document.getElementById('ib-reset-btn');
   const ibSaveBtn  = document.getElementById('ib-save-btn');
+  const ibSqlBtn   = document.getElementById('ib-sql-btn');
 
   // Hide all content areas (including dashboard view)
   const dashView = document.getElementById('dashboard-view');
   if (dashView) dashView.style.display = 'none';
   [header, manualMode, aiMode, actionBar, dsHome, dsNewQ].forEach(el => { if (el) el.style.display = 'none'; });
-  if (backBtn) backBtn.style.display = 'none';
-  if (aiBtn) aiBtn.style.display = 'none';
+  if (backBtn)   backBtn.style.display   = 'none';
+  if (aiBtn)     aiBtn.style.display     = 'none';
   if (ibResetBtn) ibResetBtn.style.display = 'none';
   if (ibSaveBtn)  ibSaveBtn.style.display  = 'none';
+  if (ibSqlBtn)   ibSqlBtn.style.display   = 'none';
 
   if (section === 'home') {
     if (dsBody) dsBody.style.display = 'none';  // prevent flex-1 competition
@@ -4556,9 +4619,10 @@ function setDsSection(section) {
     if (dsBody) dsBody.style.display = 'flex';
     dsNewQ.style.display = 'flex';
     if (backBtn) backBtn.style.display = 'none';
-    if (aiBtn) aiBtn.style.display = 'none'; // AI is now inline in centre panel
+    if (aiBtn)   aiBtn.style.display   = 'none';
     if (ibResetBtn) ibResetBtn.style.display = '';
     if (ibSaveBtn)  ibSaveBtn.style.display  = '';
+    if (ibSqlBtn)   ibSqlBtn.style.display   = '';
     document.getElementById('topbar-ds-name').style.display       = 'none';
     document.getElementById('topbar-ds-breadcrumb').style.display = 'none';
     document.getElementById('topbar-nq-breadcrumb').style.display = 'flex';
@@ -6647,9 +6711,9 @@ function nqbInit() {
   if (ta) ta.value = '';
   // Close SQL pane
   const pane = document.getElementById('nqb-sql-pane');
-  const sqlBtn = document.getElementById('nqb-sql-toggle-btn');
+  const sqlTopBtn = document.getElementById('ib-sql-btn');
   if (pane) pane.style.display = 'none';
-  if (sqlBtn) sqlBtn.classList.remove('active');
+  if (sqlTopBtn) sqlTopBtn.classList.remove('active');
   // Clear AI thread
   const thread = document.getElementById('nqb-ai-thread');
   if (thread) { thread.innerHTML = ''; thread.style.display = 'none'; }
@@ -6772,8 +6836,9 @@ function nqbUseExample(btn) {
 function nqbSelectDataArea(area) {
   nqbState.dataArea = area;
   nqbState.selectedCols = new Set(NQB_DEFAULT_COLS[area] || []);
+  // Use data-area attribute for reliable selection (not onclick string parsing)
   document.querySelectorAll('.nqb-data-btn').forEach(b => {
-    b.classList.toggle('selected', b.getAttribute('onclick').includes("'" + area + "'"));
+    b.classList.toggle('selected', b.dataset.area === area);
   });
   nqbRenderSummary();
   // Flow step 1: nudge to suggest columns after data area selected
@@ -6891,10 +6956,22 @@ function nqbRunQuery() {
     return r;
   });
 
+  // Columns that contain status values
+  const statusCols = new Set(['Status', 'Priority']);
+  const numericCols = new Set(['Tickets Handled','Open Tickets','Resolved Tickets','Total Tickets','Met','Breached','SLA Breaches','Tickets Open','Score']);
+  function nqbCellValue(col, val) {
+    if (val === undefined || val === '—') return '<span style="color:var(--cutty-sark);opacity:0.4;">—</span>';
+    if (statusCols.has(col)) {
+      const cls = { 'Resolved':'resolved','Open':'open','Pending':'pending','Closed':'closed','Critical':'critical','High':'pending','Medium':'open','Low':'closed' }[val] || 'closed';
+      return '<span class="nqb-status-badge nqb-status-' + cls + '">' + val + '</span>';
+    }
+    if (numericCols.has(col)) return '<span style="font-variant-numeric:tabular-nums;font-weight:var(--weight-medium);">' + val + '</span>';
+    return String(val);
+  }
   // Build table HTML
   const thead = '<thead><tr>' + showCols.map(c => '<th>' + c + '</th>').join('') + '</tr></thead>';
   const tbody = '<tbody>' + rows.map(row =>
-    '<tr>' + showCols.map(c => '<td>' + (row[c] !== undefined ? row[c] : '—') + '</td>').join('') + '</tr>'
+    '<tr>' + showCols.map(c => '<td>' + nqbCellValue(c, row[c]) + '</td>').join('') + '</tr>'
   ).join('') + '</tbody>';
 
   const table = document.getElementById('nqb-results-table');
@@ -7057,13 +7134,13 @@ function nqbGenerateSql() {
 }
 
 function nqbToggleSql() {
-  const pane = document.getElementById('nqb-sql-pane');
-  const btn  = document.getElementById('nqb-sql-toggle-btn');
+  const pane      = document.getElementById('nqb-sql-pane');
+  const topbarBtn = document.getElementById('ib-sql-btn');
   if (!pane) return;
   const opening = pane.style.display === 'none';
   pane.style.display = opening ? 'flex' : 'none';
   pane.style.flexDirection = 'column';
-  if (btn) btn.classList.toggle('active', opening);
+  if (topbarBtn) topbarBtn.classList.toggle('active', opening);
   if (opening) {
     nqbSqlManuallyEdited = false;
     const editor = document.getElementById('nqb-sql-editor');
@@ -7142,14 +7219,43 @@ function nqbAiSuggestName() {
   showToast('Name & description suggested by KapAI');
 }
 
+let nqbLastSavedName = '';
 function nqbSaveFinal() {
   const name = (document.getElementById('nqb-sq-name')?.value || '').trim() || 'Untitled Query';
-  const desc = document.getElementById('nqb-sq-desc')?.value || '';
-  const viz  = document.getElementById('nqb-sq-viz')?.value || 'Table';
+  nqbLastSavedName = name;
   nqbCloseSaveModal();
   showToast('"' + name + '" saved successfully');
-  // Reset for fresh query
-  setTimeout(() => nqbInit(), 400);
+  // Show post-save dashboard choice
+  const sub = document.getElementById('nqb-post-save-sub');
+  if (sub) sub.textContent = '"' + name + '" is now in your library. Where would you like to use it?';
+  const overlay = document.getElementById('nqb-post-save-overlay');
+  if (overlay) { overlay.style.display = 'flex'; overlay.classList.add('open'); }
+}
+
+function nqbPostSaveAddToExisting() {
+  const overlay = document.getElementById('nqb-post-save-overlay');
+  if (overlay) { overlay.classList.remove('open'); overlay.style.display = 'none'; }
+  // Add saved question to a new temporary query entry and open dashboard picker
+  const tmpId = 'nqb-' + Date.now();
+  QUERIES.push({ id: tmpId, name: nqbLastSavedName, chartType: 'Table', dataset: 'adjetter.kapture', updated: 'just now' });
+  showCreateDashboardModal([tmpId]);
+  setTimeout(() => nqbInit(), 100);
+}
+
+function nqbPostSaveNewDashboard() {
+  const overlay = document.getElementById('nqb-post-save-overlay');
+  if (overlay) { overlay.classList.remove('open'); overlay.style.display = 'none'; }
+  const tmpId = 'nqb-' + Date.now();
+  QUERIES.push({ id: tmpId, name: nqbLastSavedName, chartType: 'Table', dataset: 'adjetter.kapture', updated: 'just now' });
+  // Pre-select the saved question and open create dashboard modal
+  showCreateDashboardModal([tmpId]);
+  setTimeout(() => nqbInit(), 100);
+}
+
+function nqbPostSaveSkip() {
+  const overlay = document.getElementById('nqb-post-save-overlay');
+  if (overlay) { overlay.classList.remove('open'); overlay.style.display = 'none'; }
+  nqbInit();
 }
 
 /* ── Keyboard: Esc closes sidebar ───────────────────────────────── */
