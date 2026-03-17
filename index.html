@@ -2690,14 +2690,16 @@
     .nqb-add-filter-btn:hover { border-color: var(--teal-30); color: var(--teal); background: var(--teal-10); }
 
     /* Summary bar */
-    .nqb-summary { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); border-top: 1px solid var(--nebula); background: var(--aqua-haze); flex-wrap: wrap; min-height: 44px; }
+    .nqb-summary { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-6) var(--space-3); flex-wrap: wrap; min-height: 0; }
     .nqb-chip { display: flex; align-items: center; gap: var(--space-2); padding: 4px 10px; border-radius: 20px; background: var(--teal-10); border: 1px solid var(--teal-30); font-size: var(--font-sm); color: var(--dark-teal); }
     .nqb-chip-icon { font-size: 11px; }
     .nqb-chip-label { font-weight: var(--weight-medium); }
     .nqb-summary-empty { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; font-style: italic; }
 
     /* Action bar */
-    .nqb-actions { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-6); margin: 0 40px 16px; border-radius: var(--radius-md); border: 1px solid var(--nebula); background: #fff; box-shadow: 0 4px 16px rgba(77,182,172,0.10), 0 1px 4px rgba(0,0,0,0.06); }
+    .nqb-actions { flex-shrink: 0; display: flex; flex-direction: column; margin: 0 40px 16px; border-radius: var(--radius-md); border: 1px solid var(--nebula); background: #fff; box-shadow: 0 4px 16px rgba(77,182,172,0.10), 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+    .nqb-actions-nav { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-6) var(--space-4); border-top: 1px solid var(--nebula); }
+    .nqb-actions.is-empty .nqb-actions-nav { border-top: none; padding-top: var(--space-4); }
     .nqb-back-btn { padding: 8px 20px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: border-color 0.15s, color 0.15s; }
     .nqb-back-btn:hover { border-color: var(--teal-30); color: var(--dark-teal); }
     .nqb-continue-btn { padding: 8px 24px; border-radius: var(--radius-sm); border: none; background: var(--teal); font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-semibold); color: #fff; cursor: pointer; transition: opacity 0.15s; }
@@ -4013,19 +4015,19 @@
               <!-- Ask KapAI: always-visible inline chat bar -->
               <div class="nqb-ai-thread" id="nqb-ai-thread" style="display:none;"></div>
 
-              <!-- Summary bar -->
-              <div class="nqb-summary" id="nqb-summary">
-                <span class="nqb-summary-empty" id="nqb-summary-empty">Your query will appear here as you build it.</span>
-              </div>
-
-              <!-- Action bar -->
-              <div class="nqb-actions" id="nqb-actions-bar">
-                <div>
-                  <button class="nqb-back-btn" id="nqb-back-btn" style="display:none;" onclick="nqbGoToStep(nqbState.step - 1)">&larr; Back</button>
+              <!-- Floating bottom card: summary chips + nav buttons -->
+              <div class="nqb-actions is-empty" id="nqb-actions-bar">
+                <!-- Summary chips -->
+                <div class="nqb-summary" id="nqb-summary">
+                  <span class="nqb-summary-empty" id="nqb-summary-empty">Your query will appear here as you build it.</span>
                 </div>
-                <div style="display:flex; gap:var(--space-3);">
-                  <button class="nqb-continue-btn" id="nqb-continue-btn" onclick="nqbGoToStep(nqbState.step + 1)">Continue &rarr;</button>
-                  <button class="nqb-run-btn" id="nqb-run-btn" style="display:none;" onclick="nqbRunQuery()">&#9654; Run Query</button>
+                <!-- Divider + nav buttons -->
+                <div class="nqb-actions-nav">
+                  <button class="nqb-back-btn" id="nqb-back-btn" style="display:none;" onclick="nqbGoToStep(nqbState.step - 1)">&larr; Back</button>
+                  <div style="display:flex; gap:var(--space-3);">
+                    <button class="nqb-continue-btn" id="nqb-continue-btn" onclick="nqbGoToStep(nqbState.step + 1)">Continue &rarr;</button>
+                    <button class="nqb-run-btn" id="nqb-run-btn" style="display:none;" onclick="nqbRunQuery()">&#9654; Run Query</button>
+                  </div>
                 </div>
               </div>
 
@@ -6824,11 +6826,14 @@ function nqbRenderSummary() {
   }
   nqbState.filters.forEach(f => chips.push({ icon: '\uD83D\uDD0D', label: f.label }));
 
+  const actionsBar = document.getElementById('nqb-actions-bar');
   if (chips.length === 0) {
     if (empty) empty.style.display = '';
     summary.querySelectorAll('.nqb-chip').forEach(c => c.remove());
+    if (actionsBar) actionsBar.classList.add('is-empty');
     return;
   }
+  if (actionsBar) actionsBar.classList.remove('is-empty');
   if (empty) empty.style.display = 'none';
   summary.querySelectorAll('.nqb-chip').forEach(c => c.remove());
   chips.forEach(c => {
