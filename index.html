@@ -89,28 +89,28 @@
 
     /* ── Design tokens ──────────────────────────────────────────── */
     :root {
-      --teal:       #8B5CF6;
-      --teal-10:    rgba(139, 92, 246, 0.10);
-      --teal-15:    rgba(139, 92, 246, 0.15);
-      --teal-20:    rgba(139, 92, 246, 0.20);
-      --teal-30:    rgba(139, 92, 246, 0.30);
-      --teal-50:    rgba(139, 92, 246, 0.50);
-      --teal-80:    rgba(139, 92, 246, 0.80);
-      --cutty-sark: #6D28D9;
-      --dark-teal:  #2E1065;
-      --aqua-haze:  #F3E8FF;
-      --nebula:     #DDD6FE;
-      --surface:    #FAF5FF;
-      --bg-light:   #FDFCFF;
-      --bg-gradient-top: #F5F0FF;
-      --bg-gradient-mid: rgba(245, 240, 255, 0.92);
-      --bg-gradient-bot: rgba(233, 213, 255, 0.90);
+      --teal:       #4DB6AC;
+      --teal-10:    rgba(77, 182, 172, 0.10);
+      --teal-15:    rgba(77, 182, 172, 0.15);
+      --teal-20:    rgba(77, 182, 172, 0.20);
+      --teal-30:    rgba(77, 182, 172, 0.30);
+      --teal-50:    rgba(77, 182, 172, 0.50);
+      --teal-80:    rgba(77, 182, 172, 0.80);
+      --cutty-sark: #4C6A69;
+      --dark-teal:  #1F4141;
+      --aqua-haze:  #ECF4F2;
+      --nebula:     #C7D9D6;
+      --surface:    #F5FAF8;
+      --bg-light:   #F8FDFC;
+      --bg-gradient-top: #EFF6F5;
+      --bg-gradient-mid: rgba(241, 236, 239, 0.92);
+      --bg-gradient-bot: rgba(216, 188, 196, 0.90);
       --radius-sm:  8px;
       --radius-md:  12px;
       --radius-lg:  20px;
       /* Status */
       --status-negative: #DC2626;
-      --status-positive: #8B5CF6;
+      --status-positive: #4DB6AC;
       --color-disabled:  #9E9E9E;
       /* Accent colors */
       --accent-success:  #10B981;
@@ -118,8 +118,8 @@
       --accent-info:     #3B82F6;
       --accent-neutral:  #6B7280;
       /* Category tag backgrounds */
-      --tag-volume:      rgba(139, 92, 246, 0.12);
-      --tag-performance: rgba(139, 92, 246, 0.12);
+      --tag-volume:      rgba(77, 182, 172, 0.12);
+      --tag-performance: rgba(77, 182, 172, 0.12);
       --tag-compliance:  rgba(229, 115, 115, 0.12);
       --tag-experience:  rgba(100, 181, 246, 0.12);
       --tag-quality:     rgba(186, 104, 200, 0.12);
@@ -164,10 +164,9 @@
       --opacity-placeholder: 0.55;
       --opacity-muted:       0.6;
       /* Shadows */
-      --stroke-0:       #ffffff;
-      --shadow-card:    0px 10px 15px rgba(139, 92, 246, 0.10), 0px 4px 6px rgba(139, 92, 246, 0.08);
-      --shadow-card-sm: 0px 4px 6px rgba(139, 92, 246, 0.08);
-      --shadow-topbar:  0 1px 0 rgba(221, 214, 254, 0.60);
+      --shadow-card:    0px 10px 15px rgba(77, 182, 172, 0.10), 0px 4px 6px rgba(77, 182, 172, 0.08);
+      --shadow-card-sm: 0px 4px 6px rgba(77, 182, 172, 0.08);
+      --shadow-topbar:  0 1px 0 rgba(199, 217, 214, 0.60);
     }
 
     /* ── Root shell ─────────────────────────────────────────────── */
@@ -566,7 +565,7 @@
       padding: 3px;
       border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: 0px 10px 15px rgba(139,92,246,0.12), 0px 4px 6px rgba(139,92,246,0.10);
+      box-shadow: 0px 10px 15px rgba(77,182,172,0.12), 0px 4px 6px rgba(77,182,172,0.10);
     }
     .input-card-border::before {
       content: '';
@@ -604,11 +603,11 @@
       color: #fff; font-size: var(--font-sm); font-weight: var(--weight-semibold);
       font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
       transition: background 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+      box-shadow: 0 2px 4px rgba(77, 182, 172, 0.2);
     }
     .pill-btn:hover {
-      background: #7c3aed;
-      box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+      background: #3da39f;
+      box-shadow: 0 4px 8px rgba(77, 182, 172, 0.3);
     }
     .pill-btn:active { opacity: 0.85; }
     .pill-icon {
@@ -627,9 +626,9 @@
       font-weight: var(--weight-medium);
       transition: background 0.2s, border-color 0.2s;
     }
-    .insight-row.level-1 { background: rgba(139,92,246,0.82); border: 1px solid rgba(139,92,246,0.35); color: #fff; }
-    .insight-row.level-2 { background: rgba(139,92,246,0.42); border: 1px solid rgba(139,92,246,0.20); color: var(--dark-teal); }
-    .insight-row.level-3 { background: rgba(139,92,246,0.16); border: 1px solid rgba(139,92,246,0.10); color: var(--dark-teal); }
+    .insight-row.level-1 { background: rgba(77,182,172,0.82); border: 1px solid rgba(77,182,172,0.35); color: #fff; }
+    .insight-row.level-2 { background: rgba(77,182,172,0.42); border: 1px solid rgba(77,182,172,0.20); color: var(--dark-teal); }
+    .insight-row.level-3 { background: rgba(77,182,172,0.16); border: 1px solid rgba(77,182,172,0.10); color: var(--dark-teal); }
     .insight-dot { width: 6px; height: 6px; border-radius: 3px; background: currentColor; flex-shrink: 0; opacity: 0.75; }
     .insight-text { font-size: var(--font-sm); font-weight: var(--weight-medium); color: inherit; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -673,12 +672,12 @@
     .mode-btn.active {
       background: #fff;
       color: var(--dark-teal);
-      box-shadow: 0 1px 4px rgba(139,92,246,0.18), 0 0 0 0.5px var(--nebula);
+      box-shadow: 0 1px 4px rgba(77,182,172,0.18), 0 0 0 0.5px var(--nebula);
     }
     .mode-btn svg { flex-shrink: 0; }
     .mode-btn .sparkle-badge {
       font-size: 10px; font-weight: var(--weight-semibold);
-      color: var(--teal); background: rgba(139,92,246,0.12);
+      color: var(--teal); background: rgba(77,182,172,0.12);
       padding: 1px var(--space-2); border-radius: 20px; line-height: 16px;
     }
 
@@ -722,7 +721,7 @@
     }
     .ds-search:focus-within {
       border-color: var(--teal);
-      box-shadow: 0 0 0 3px rgba(139,92,246,0.12);
+      box-shadow: 0 0 0 3px rgba(77,182,172,0.12);
     }
     .ds-search svg { flex-shrink: 0; color: var(--cutty-sark); opacity: var(--opacity-muted); }
     .ds-search input {
@@ -756,12 +755,12 @@
     }
     .ds-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(139,92,246,0.16);
+      box-shadow: 0 8px 24px rgba(77,182,172,0.16);
       border-color: var(--teal-30);
     }
     .ds-card.selected {
       border-color: var(--teal);
-      box-shadow: 0 4px 16px rgba(139,92,246,0.22);
+      box-shadow: 0 4px 16px rgba(77,182,172,0.22);
     }
     .ds-card.hidden-card { display: none; }
 
@@ -779,7 +778,7 @@
     /* Preview area */
     .card-preview {
       height: 90px; padding: var(--space-5) var(--space-7) var(--space-3);
-      background: rgba(139,92,246,0.04);
+      background: rgba(77,182,172,0.04);
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
     }
@@ -805,7 +804,7 @@
       padding: 2px 7px; border-radius: 20px;
       white-space: nowrap; flex-shrink: 0; line-height: 16px;
     }
-    .cat-badge.Volume      { background: rgba(139,92,246,0.14); color: #5B21B6; }
+    .cat-badge.Volume      { background: rgba(77,182,172,0.14); color: #2E7D72; }
     .cat-badge.Performance { background: rgba(76,106,105,0.12); color: #4C6A69; }
     .cat-badge.Experience  { background: rgba(99,102,241,0.10); color: #4F46E5; }
     .cat-badge.Compliance  { background: rgba(180,83,9,0.10);   color: #B45309; }
@@ -841,18 +840,18 @@
     .chip {
       display: flex; align-items: center; gap: 5px;
       padding: var(--space-1) var(--space-4) var(--space-1) var(--space-4); border-radius: 20px;
-      background: var(--teal-15); border: 1px solid rgba(139,92,246,0.35);
+      background: var(--teal-15); border: 1px solid rgba(77,182,172,0.35);
       font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--dark-teal);
     }
     .chip-remove {
       display: flex; align-items: center; justify-content: center;
       width: 14px; height: 14px; border-radius: 50%;
-      background: rgba(139,92,246,0.2); cursor: pointer;
+      background: rgba(77,182,172,0.2); cursor: pointer;
       border: none; padding: 0; color: var(--cutty-sark);
       font-family: 'Inter', sans-serif; flex-shrink: 0;
       transition: background 0.12s;
     }
-    .chip-remove:hover { background: rgba(139,92,246,0.4); }
+    .chip-remove:hover { background: rgba(77,182,172,0.4); }
 
     .add-manual-btn {
       display: flex; align-items: center; gap: 5px;
@@ -955,9 +954,9 @@
       color: #fff; font-size: var(--font-base); font-weight: var(--weight-semibold);
       font-family: 'Inter', sans-serif; cursor: pointer;
       transition: background 0.2s, box-shadow 0.2s; white-space: nowrap;
-      box-shadow: 0 2px 4px rgba(139, 92, 246, 0.15);
+      box-shadow: 0 2px 4px rgba(77, 182, 172, 0.15);
     }
-    .btn-primary:hover { background: #7c3aed; box-shadow: 0 4px 8px rgba(139, 92, 246, 0.25); }
+    .btn-primary:hover { background: #3da39f; box-shadow: 0 4px 8px rgba(77, 182, 172, 0.25); }
     .btn-primary:active { background: #328f87; }
     .btn-primary:disabled { opacity: var(--opacity-wave); cursor: not-allowed; }
 
@@ -1050,7 +1049,7 @@
         background: rgba(248, 253, 252, 0.97);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        box-shadow: 4px 0 32px rgba(139, 92, 246, 0.14);
+        box-shadow: 4px 0 32px rgba(77, 182, 172, 0.14);
       }
       .sidebar.open { transform: translateX(0); }
 
@@ -1206,7 +1205,7 @@
     }
     .query-card:hover {
       border-color: var(--teal-30);
-      box-shadow: 0 4px 16px rgba(139,92,246,0.12);
+      box-shadow: 0 4px 16px rgba(77,182,172,0.12);
     }
     .query-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
     .query-card-icon {
@@ -1436,7 +1435,7 @@
     .qb-visual-area {
       flex: 1; overflow: auto; min-height: 0;
       display: flex; align-items: center; justify-content: center;
-      background: radial-gradient(circle at 50% 40%, rgba(139,92,246,0.04) 0%, transparent 70%), var(--bg-light);
+      background: radial-gradient(circle at 50% 40%, rgba(77,182,172,0.04) 0%, transparent 70%), var(--bg-light);
     }
     .qb-sql-area {
       flex: 1; overflow: hidden; min-height: 0;
@@ -1592,7 +1591,7 @@
     .sq-modal-hd {
       display: flex; align-items: flex-start; justify-content: space-between;
       padding: 22px var(--space-9) 18px; border-bottom: 1px solid var(--nebula); flex-shrink: 0;
-      background: linear-gradient(135deg, rgba(139,92,246,0.07) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(77,182,172,0.07) 0%, transparent 60%);
     }
     .sq-modal-hd-left { display: flex; align-items: flex-start; gap: var(--space-5); }
     .sq-modal-hd-icon {
@@ -1648,7 +1647,7 @@
     .sq-col-item--selected { background: var(--teal-10); }
     .sq-col-badge {
       margin-left: auto; font-size: 10px; font-weight: var(--weight-semibold);
-      color: var(--teal); background: rgba(139,92,246,0.12);
+      color: var(--teal); background: rgba(77,182,172,0.12);
       padding: 2px 7px; border-radius: 5px;
     }
     .sq-col-empty {
@@ -1820,7 +1819,7 @@
       border-radius: var(--radius-md); padding: 18px 18px var(--space-6);
       cursor: pointer; transition: box-shadow 0.18s, border-color 0.18s;
     }
-    .dash-card:hover { border-color: var(--teal-30); box-shadow: 0 4px 16px rgba(139,92,246,0.12); }
+    .dash-card:hover { border-color: var(--teal-30); box-shadow: 0 4px 16px rgba(77,182,172,0.12); }
     .dash-card-thumb {
       height: 60px; background: var(--teal-10); border-radius: 8px;
       margin-bottom: var(--space-5); overflow: hidden;
@@ -1890,7 +1889,7 @@
     .dash-new-btn:hover { background: var(--teal-10); border-color: var(--teal-50); }
     .dash-canvas {
       flex: 1; overflow: auto; padding: var(--space-8);
-      background: radial-gradient(circle at 50% 40%, rgba(139,92,246,0.04) 0%, transparent 70%), var(--bg-light);
+      background: radial-gradient(circle at 50% 40%, rgba(77,182,172,0.04) 0%, transparent 70%), var(--bg-light);
     }
     .dash-canvas-empty {
       height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -2005,7 +2004,7 @@
       display: flex; flex-direction: column; gap: 0;
       backdrop-filter: blur(6px); transition: box-shadow 0.18s, border-color 0.18s;
     }
-    .dv-kpi-card:hover { border-color: var(--teal-30); box-shadow: 0 4px 16px rgba(139,92,246,0.10); }
+    .dv-kpi-card:hover { border-color: var(--teal-30); box-shadow: 0 4px 16px rgba(77,182,172,0.10); }
     .dv-kpi-top {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: var(--space-4);
@@ -2040,7 +2039,7 @@
       display: flex; flex-direction: column; gap: var(--space-4);
       backdrop-filter: blur(6px); transition: box-shadow 0.18s, border-color 0.18s;
     }
-    .dv-chart-card:hover { border-color: var(--teal-20); box-shadow: 0 2px 12px rgba(139,92,246,0.07); }
+    .dv-chart-card:hover { border-color: var(--teal-20); box-shadow: 0 2px 12px rgba(77,182,172,0.07); }
     .dv-chart-hd { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
     .dv-chart-title { font-size: var(--font-base); font-weight: var(--weight-semibold); color: var(--dark-teal); }
     .dv-chart-sub { font-size: var(--font-xs); color: var(--cutty-sark); margin-top: 2px; opacity: 0.8; }
@@ -2432,7 +2431,7 @@
       background: #fff;
       border: 1.5px solid var(--nebula);
       border-radius: 14px; overflow: hidden;
-      box-shadow: 0 2px 10px rgba(139,92,246,0.08), 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 10px rgba(77,182,172,0.08), 0 1px 3px rgba(0,0,0,0.04);
     }
     .ge-step-hd {
       display: flex; align-items: center; gap: var(--space-5);
@@ -2446,7 +2445,7 @@
       background: var(--teal); color: #fff;
       display: flex; align-items: center; justify-content: center;
       font-size: var(--font-base); font-weight: var(--weight-bold); flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(139,92,246,0.30);
+      box-shadow: 0 2px 6px rgba(77,182,172,0.30);
     }
     /* AI badge: soft teal tint (matches tone of numbered badges, stays branded) */
     .ge-step-badge-ai { background: var(--teal-15); color: var(--teal); box-shadow: none; }
@@ -2573,8 +2572,8 @@
       animation: ge-pulse 1.5s ease-in-out infinite;
     }
     @keyframes ge-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.5); }
-      50% { box-shadow: 0 0 0 5px rgba(139,92,246,0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(77,182,172,0.5); }
+      50% { box-shadow: 0 0 0 5px rgba(77,182,172,0); }
     }
     /* AI panel collapse button */
     .ge-ai-collapse-btn {
@@ -2698,7 +2697,7 @@
     .nqb-summary-empty { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; font-style: italic; }
 
     /* Action bar */
-    .nqb-actions { flex-shrink: 0; display: flex; flex-direction: column; margin: 0 40px 16px; border-radius: var(--radius-md); border: 1px solid var(--nebula); background: #fff; box-shadow: 0 4px 16px rgba(139,92,246,0.10), 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+    .nqb-actions { flex-shrink: 0; display: flex; flex-direction: column; margin: 0 40px 16px; border-radius: var(--radius-md); border: 1px solid var(--nebula); background: #fff; box-shadow: 0 4px 16px rgba(77,182,172,0.10), 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
     .nqb-actions-nav { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-6) var(--space-4); border-top: 1px solid var(--nebula); }
     .nqb-actions.is-empty .nqb-actions-nav { border-top: none; padding-top: var(--space-4); }
     .nqb-back-btn { padding: 8px 20px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: border-color 0.15s, color 0.15s; }
@@ -4344,7 +4343,7 @@
 <!-- Toast -->
 <div class="toast" id="toast">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <circle cx="8" cy="8" r="7" fill="#8B5CF6"/>
+    <circle cx="8" cy="8" r="7" fill="#4DB6AC"/>
     <path d="M5 8l2.5 2.5L11 5.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
   <span id="toast-msg">Dashboard created successfully!</span>
@@ -4356,14 +4355,14 @@ const SVGS = {
   bar: `<svg width="100%" height="66" viewBox="0 0 180 66" preserveAspectRatio="none">
     <rect x="5"   y="40" width="20" height="26" rx="3" fill="#3B82F6" opacity="0.75"/>
     <rect x="33"  y="26" width="20" height="40" rx="3" fill="#10B981" opacity="0.80"/>
-    <rect x="61"  y="10" width="20" height="56" rx="3" fill="#8B5CF6"/>
+    <rect x="61"  y="10" width="20" height="56" rx="3" fill="#4DB6AC"/>
     <rect x="89"  y="18" width="20" height="48" rx="3" fill="#F59E0B" opacity="0.85"/>
     <rect x="117" y="4"  width="20" height="62" rx="3" fill="#A78BFA"/>
     <rect x="145" y="22" width="20" height="44" rx="3" fill="#F87171" opacity="0.80"/>
   </svg>`,
 
   bar2: `<svg width="100%" height="66" viewBox="0 0 180 66" preserveAspectRatio="none">
-    <rect x="5"   y="20" width="20" height="46" rx="3" fill="#8B5CF6"/>
+    <rect x="5"   y="20" width="20" height="46" rx="3" fill="#4DB6AC"/>
     <rect x="33"  y="30" width="20" height="36" rx="3" fill="#A78BFA" opacity="0.85"/>
     <rect x="61"  y="14" width="20" height="52" rx="3" fill="#3B82F6" opacity="0.80"/>
     <rect x="89"  y="36" width="20" height="30" rx="3" fill="#10B981" opacity="0.85"/>
@@ -4374,8 +4373,8 @@ const SVGS = {
   area: `<svg width="100%" height="66" viewBox="0 0 200 66" preserveAspectRatio="none">
     <defs>
       <linearGradient id="ag1" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.28"/>
-        <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.02"/>
+        <stop offset="0%" stop-color="#4DB6AC" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#4DB6AC" stop-opacity="0.02"/>
       </linearGradient>
       <linearGradient id="ag1b" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.16"/>
@@ -4387,8 +4386,8 @@ const SVGS = {
       stroke="#3B82F6" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="5 3" opacity="0.55"/>
     <path d="M0 55 C30 50 50 36 70 40 C90 44 120 20 155 14 L200 8 L200 66 L0 66 Z" fill="url(#ag1)"/>
     <path d="M0 55 C30 50 50 36 70 40 C90 44 120 20 155 14 L200 8"
-      stroke="#8B5CF6" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <circle cx="200" cy="8" r="3.5" fill="#8B5CF6"/>
+      stroke="#4DB6AC" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="200" cy="8" r="3.5" fill="#4DB6AC"/>
     <circle cx="200" cy="30" r="2.5" fill="#3B82F6" opacity="0.70"/>
   </svg>`,
 
@@ -4399,7 +4398,7 @@ const SVGS = {
         <stop offset="100%" stop-color="#A78BFA" stop-opacity="0.12"/>
       </linearGradient>
     </defs>
-    <line x1="0" y1="63" x2="200" y2="63" stroke="rgba(139,92,246,0.22)" stroke-width="1"/>
+    <line x1="0" y1="63" x2="200" y2="63" stroke="rgba(77,182,172,0.22)" stroke-width="1"/>
     <rect x="4"   y="44" width="18" height="19" rx="2" fill="url(#cb2)"/>
     <rect x="28"  y="30" width="18" height="33" rx="2" fill="url(#cb2)"/>
     <rect x="52"  y="38" width="18" height="25" rx="2" fill="url(#cb2)"/>
@@ -4409,9 +4408,9 @@ const SVGS = {
     <rect x="148" y="22" width="18" height="41" rx="2" fill="url(#cb2)"/>
     <rect x="172" y="8"  width="20" height="55" rx="2" fill="url(#cb2)"/>
     <path d="M13 44 C20 38 28 30 37 30 C46 30 52 38 61 38 C70 38 76 18 85 18 C94 18 100 26 109 26 C118 26 124 12 133 12 C142 12 148 22 157 22 C166 22 172 8 182 8"
-      stroke="#8B5CF6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="133" cy="12" r="3"   fill="#8B5CF6"/>
-    <circle cx="182" cy="8"  r="3.5" fill="#8B5CF6"/>
+      stroke="#4DB6AC" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="133" cy="12" r="3"   fill="#4DB6AC"/>
+    <circle cx="182" cy="8"  r="3.5" fill="#4DB6AC"/>
   </svg>`,
 
   donut73: `<svg width="100%" height="60" viewBox="0 0 290 60" preserveAspectRatio="none">
@@ -4420,15 +4419,15 @@ const SVGS = {
     <text x="39" y="44" text-anchor="middle" font-size="9" font-weight="600" fill="#4C6A69" font-family="Inter,sans-serif" opacity="0.75" letter-spacing="1">CSAT</text>
     <line x1="83" y1="8" x2="83" y2="52" stroke="rgba(199,217,214,0.8)" stroke-width="1"/>
     <text x="92" y="20" font-size="8.5" fill="#4C6A69" font-family="Inter,sans-serif" opacity="0.70">NPS</text>
-    <rect x="116" y="13" width="155" height="7" rx="3.5" fill="rgba(139,92,246,0.10)"/>
+    <rect x="116" y="13" width="155" height="7" rx="3.5" fill="rgba(77,182,172,0.10)"/>
     <rect x="116" y="13" width="96" height="7" rx="3.5" fill="#3B82F6" opacity="0.75"/>
     <text x="276" y="20" text-anchor="end" font-size="8.5" fill="#3B82F6" font-family="Inter,sans-serif" font-weight="600">62%</text>
     <text x="92" y="36" font-size="8.5" fill="#4C6A69" font-family="Inter,sans-serif" opacity="0.70">Quality</text>
-    <rect x="116" y="29" width="155" height="7" rx="3.5" fill="rgba(139,92,246,0.10)"/>
-    <rect x="116" y="29" width="136" height="7" rx="3.5" fill="#8B5CF6" opacity="0.80"/>
-    <text x="276" y="36" text-anchor="end" font-size="8.5" fill="#8B5CF6" font-family="Inter,sans-serif" font-weight="600">88%</text>
+    <rect x="116" y="29" width="155" height="7" rx="3.5" fill="rgba(77,182,172,0.10)"/>
+    <rect x="116" y="29" width="136" height="7" rx="3.5" fill="#4DB6AC" opacity="0.80"/>
+    <text x="276" y="36" text-anchor="end" font-size="8.5" fill="#4DB6AC" font-family="Inter,sans-serif" font-weight="600">88%</text>
     <text x="92" y="52" font-size="8.5" fill="#4C6A69" font-family="Inter,sans-serif" opacity="0.70">FCR</text>
-    <rect x="116" y="45" width="155" height="7" rx="3.5" fill="rgba(139,92,246,0.10)"/>
+    <rect x="116" y="45" width="155" height="7" rx="3.5" fill="rgba(77,182,172,0.10)"/>
     <rect x="116" y="45" width="114" height="7" rx="3.5" fill="#A78BFA" opacity="0.75"/>
     <text x="276" y="52" text-anchor="end" font-size="8.5" fill="#A78BFA" font-family="Inter,sans-serif" font-weight="600">74%</text>
   </svg>`,
@@ -4442,44 +4441,44 @@ const SVGS = {
   </svg>`,
 
   hbar: `<svg width="100%" height="66" viewBox="0 0 180 66" preserveAspectRatio="none">
-    <line x1="30" y1="2" x2="30" y2="64" stroke="rgba(139,92,246,0.18)" stroke-width="1"/>
-    <rect x="32" y="5"  width="118" height="10" rx="2.5" fill="#8B5CF6"/>
+    <line x1="30" y1="2" x2="30" y2="64" stroke="rgba(77,182,172,0.18)" stroke-width="1"/>
+    <rect x="32" y="5"  width="118" height="10" rx="2.5" fill="#4DB6AC"/>
     <rect x="32" y="20" width="82"  height="10" rx="2.5" fill="#3B82F6" opacity="0.85"/>
     <rect x="32" y="35" width="104" height="10" rx="2.5" fill="#10B981" opacity="0.85"/>
     <rect x="32" y="50" width="58"  height="10" rx="2.5" fill="#A78BFA" opacity="0.80"/>
-    <rect x="2" y="7"  width="22" height="4" rx="2" fill="rgba(139,92,246,0.20)"/>
+    <rect x="2" y="7"  width="22" height="4" rx="2" fill="rgba(77,182,172,0.20)"/>
     <rect x="2" y="22" width="18" height="4" rx="2" fill="rgba(59,130,246,0.18)"/>
     <rect x="2" y="37" width="20" height="4" rx="2" fill="rgba(16,185,129,0.18)"/>
     <rect x="2" y="52" width="16" height="4" rx="2" fill="rgba(167,139,250,0.18)"/>
   </svg>`,
 
   scatter: `<svg width="100%" height="60" viewBox="0 0 290 60" preserveAspectRatio="none">
-    <line x1="0" y1="15" x2="290" y2="15" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
-    <line x1="0" y1="30" x2="290" y2="30" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
-    <line x1="0" y1="45" x2="290" y2="45" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
+    <line x1="0" y1="15" x2="290" y2="15" stroke="rgba(77,182,172,0.07)" stroke-width="1"/>
+    <line x1="0" y1="30" x2="290" y2="30" stroke="rgba(77,182,172,0.07)" stroke-width="1"/>
+    <line x1="0" y1="45" x2="290" y2="45" stroke="rgba(77,182,172,0.07)" stroke-width="1"/>
     <circle cx="29"  cy="45" r="5"   fill="#A78BFA" opacity="0.70"/>
     <circle cx="68"  cy="34" r="7.5" fill="#3B82F6" opacity="0.75"/>
     <circle cx="100" cy="51" r="3.5" fill="#F87171" opacity="0.65"/>
-    <circle cx="129" cy="18" r="9"   fill="#8B5CF6" opacity="0.88"/>
+    <circle cx="129" cy="18" r="9"   fill="#4DB6AC" opacity="0.88"/>
     <circle cx="164" cy="39" r="5.5" fill="#F59E0B" opacity="0.75"/>
     <circle cx="193" cy="9"  r="7.5" fill="#10B981" opacity="0.80"/>
     <circle cx="226" cy="27" r="4"   fill="#3B82F6" opacity="0.60"/>
     <circle cx="258" cy="45" r="6"   fill="#A78BFA" opacity="0.80"/>
-    <circle cx="277" cy="16" r="3"   fill="#8B5CF6" opacity="0.65"/>
+    <circle cx="277" cy="16" r="3"   fill="#4DB6AC" opacity="0.65"/>
   </svg>`,
 
   multiline: `<svg width="100%" height="66" viewBox="0 0 200 66" preserveAspectRatio="none">
-    <line x1="0" y1="22" x2="200" y2="22" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
-    <line x1="0" y1="44" x2="200" y2="44" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
+    <line x1="0" y1="22" x2="200" y2="22" stroke="rgba(77,182,172,0.07)" stroke-width="1"/>
+    <line x1="0" y1="44" x2="200" y2="44" stroke="rgba(77,182,172,0.07)" stroke-width="1"/>
     <path d="M0 50 C30 47 52 34 82 28 C112 23 132 38 162 20 L200 13"
-      stroke="#8B5CF6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      stroke="#4DB6AC" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M0 58 C28 54 46 49 76 44 C102 39 132 53 166 38 L200 33"
       stroke="#3B82F6" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="5 3" opacity="0.70"/>
     <path d="M0 42 C32 38 60 52 90 36 C118 22 148 44 200 24"
       stroke="#A78BFA" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.60"/>
-    <circle cx="82"  cy="28" r="2.5" fill="#8B5CF6"/>
-    <circle cx="162" cy="20" r="2.5" fill="#8B5CF6"/>
-    <circle cx="200" cy="13" r="3"   fill="#8B5CF6"/>
+    <circle cx="82"  cy="28" r="2.5" fill="#4DB6AC"/>
+    <circle cx="162" cy="20" r="2.5" fill="#4DB6AC"/>
+    <circle cx="200" cy="13" r="3"   fill="#4DB6AC"/>
     <circle cx="76"  cy="44" r="2"   fill="#3B82F6" opacity="0.70"/>
     <circle cx="200" cy="33" r="2"   fill="#3B82F6" opacity="0.70"/>
   </svg>`,
@@ -5308,7 +5307,7 @@ function setHomeTab(tab) {
 
 /* Per-dashboard config data */
 /* ── Chart colour palette ─────────────────────────────────────── */
-const CHART_PALETTE = ['#8B5CF6','#3B82F6','#10B981','#F59E0B','#A78BFA','#F87171'];
+const CHART_PALETTE = ['#4DB6AC','#3B82F6','#10B981','#F59E0B','#A78BFA','#F87171'];
 
 const DV_CONFIGS = {
   default: {
@@ -5321,7 +5320,7 @@ const DV_CONFIGS = {
     areaTitle:'Ticket Volume Over Time', areaSub:'Daily intake vs previous period · all channels',
     donutTitle:'Channel Breakdown', donutSub:'Tickets by source channel',
     donutData:[
-      { label:'Chat',  val:'42%', color:'#8B5CF6' },
+      { label:'Chat',  val:'42%', color:'#4DB6AC' },
       { label:'Email', val:'28%', color:'#3B82F6' },
       { label:'Voice', val:'18%', color:'#10B981' },
       { label:'Other', val:'12%', color:'#A78BFA' },
@@ -5348,7 +5347,7 @@ const DV_CONFIGS = {
     donutTitle:'Resolution Method', donutSub:'Auto-resolved vs handoff breakdown',
     donutData:[
       { label:'AI Resolved',  val:'57%', color:'#10B981' },
-      { label:'Human Handoff',val:'25%', color:'#8B5CF6' },
+      { label:'Human Handoff',val:'25%', color:'#4DB6AC' },
       { label:'Hybrid',       val:'13%', color:'#3B82F6' },
       { label:'Escalated',    val:'5%',  color:'#F87171' },
     ],
@@ -5373,7 +5372,7 @@ const DV_CONFIGS = {
     areaTitle:'Combined Volume Trend', areaSub:'Manual + AI ticket flow over time',
     donutTitle:'Handling Mode Split', donutSub:'How tickets were resolved this period',
     donutData:[
-      { label:'Manual',  val:'38%', color:'#8B5CF6' },
+      { label:'Manual',  val:'38%', color:'#4DB6AC' },
       { label:'AI Auto', val:'35%', color:'#A78BFA' },
       { label:'Hybrid',  val:'20%', color:'#3B82F6' },
       { label:'Pending', val:'7%',  color:'#F59E0B' },
@@ -5409,7 +5408,7 @@ function dvKpiIcon(type) {
 }
 
 function dvSparkline(data, up) {
-  const color = up ? '#8B5CF6' : '#DC2626';
+  const color = up ? '#4DB6AC' : '#DC2626';
   const mn = Math.min(...data), mx = Math.max(...data), rng = mx - mn || 1;
   const h = 36, w = 72;
   const pts = data.map((v, i) => {
@@ -5429,18 +5428,18 @@ function dvAreaChart(xLabels) {
   return `<svg width="100%" viewBox="0 0 560 118" style="display:block;overflow:visible">
     <defs>
       <linearGradient id="dvg1" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.28"/>
-        <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.01"/>
+        <stop offset="0%" stop-color="#4DB6AC" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#4DB6AC" stop-opacity="0.01"/>
       </linearGradient>
       <linearGradient id="dvg2" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.08"/>
         <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
       </linearGradient>
     </defs>
-    <line x1="0" y1="24" x2="556" y2="24" stroke="rgba(139,92,246,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
-    <line x1="0" y1="48" x2="556" y2="48" stroke="rgba(139,92,246,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
-    <line x1="0" y1="72" x2="556" y2="72" stroke="rgba(139,92,246,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
-    <line x1="0" y1="96" x2="556" y2="96" stroke="rgba(139,92,246,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="0" y1="24" x2="556" y2="24" stroke="rgba(77,182,172,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="0" y1="48" x2="556" y2="48" stroke="rgba(77,182,172,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="0" y1="72" x2="556" y2="72" stroke="rgba(77,182,172,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="0" y1="96" x2="556" y2="96" stroke="rgba(77,182,172,0.08)" stroke-width="1" stroke-dasharray="4 3"/>
     <!-- Previous period -->
     <path d="M0 78 C70 70 130 60 200 66 C270 72 330 50 400 54 C450 57 510 42 556 46 L556 110 L0 110 Z" fill="url(#dvg2)"/>
     <path d="M0 78 C70 70 130 60 200 66 C270 72 330 50 400 54 C450 57 510 42 556 46"
@@ -5448,15 +5447,15 @@ function dvAreaChart(xLabels) {
     <!-- Current period -->
     <path d="M0 72 C70 60 130 40 200 46 C270 52 330 24 400 28 C450 31 510 12 556 14 L556 110 L0 110 Z" fill="url(#dvg1)"/>
     <path d="M0 72 C70 60 130 40 200 46 C270 52 330 24 400 28 C450 31 510 12 556 14"
-      stroke="#8B5CF6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      stroke="#4DB6AC" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     <!-- Dots on current line -->
-    <circle cx="0"   cy="72" r="3.5" fill="#8B5CF6" stroke="white" stroke-width="1.5"/>
-    <circle cx="93"  cy="48" r="3.5" fill="#8B5CF6" stroke="white" stroke-width="1.5"/>
-    <circle cx="186" cy="46" r="3.5" fill="#8B5CF6" stroke="white" stroke-width="1.5"/>
-    <circle cx="279" cy="24" r="3.5" fill="#8B5CF6" stroke="white" stroke-width="1.5"/>
-    <circle cx="371" cy="28" r="3.5" fill="#8B5CF6" stroke="white" stroke-width="1.5"/>
-    <circle cx="464" cy="12" r="3.5" fill="#8B5CF6" stroke="white" stroke-width="1.5"/>
-    <circle cx="556" cy="14" r="4"   fill="#8B5CF6" stroke="white" stroke-width="2"/>
+    <circle cx="0"   cy="72" r="3.5" fill="#4DB6AC" stroke="white" stroke-width="1.5"/>
+    <circle cx="93"  cy="48" r="3.5" fill="#4DB6AC" stroke="white" stroke-width="1.5"/>
+    <circle cx="186" cy="46" r="3.5" fill="#4DB6AC" stroke="white" stroke-width="1.5"/>
+    <circle cx="279" cy="24" r="3.5" fill="#4DB6AC" stroke="white" stroke-width="1.5"/>
+    <circle cx="371" cy="28" r="3.5" fill="#4DB6AC" stroke="white" stroke-width="1.5"/>
+    <circle cx="464" cy="12" r="3.5" fill="#4DB6AC" stroke="white" stroke-width="1.5"/>
+    <circle cx="556" cy="14" r="4"   fill="#4DB6AC" stroke="white" stroke-width="2"/>
   </svg>
   <div class="dv-chart-xaxis">
     ${xLabels.map(l => `<span>${l}</span>`).join('')}
@@ -5477,7 +5476,7 @@ function dvDonutChart(donutData) {
   }).join('');
   return `<div class="dv-donut-wrap">
     <svg width="128" height="128" viewBox="0 0 128 128">
-      <circle cx="64" cy="64" r="48" fill="none" stroke="rgba(139,92,246,0.07)" stroke-width="18"/>
+      <circle cx="64" cy="64" r="48" fill="none" stroke="rgba(77,182,172,0.07)" stroke-width="18"/>
       ${segs}
       <text x="64" y="59" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4141" font-family="Inter,sans-serif">2,847</text>
       <text x="64" y="74" text-anchor="middle" font-size="9.5" fill="#4C6A69" font-family="Inter,sans-serif">total tickets</text>
@@ -5564,7 +5563,7 @@ function renderDashboardView(d) {
           <div class="dv-chart-actions">
             <div class="dv-legend">
               <div class="dv-legend-item">
-                <span class="dv-legend-line" style="background:#8B5CF6"></span>This period
+                <span class="dv-legend-line" style="background:#4DB6AC"></span>This period
               </div>
               <div class="dv-legend-item">
                 <span class="dv-legend-dashed" style="border-color:rgba(59,130,246,0.50)"></span>Last period
