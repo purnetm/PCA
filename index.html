@@ -1424,7 +1424,7 @@
     .qb-reset-btn:hover { background: var(--aqua-haze); border-color: var(--teal-30); color: var(--dark-teal); }
     .qb-save-btn {
       display: flex; align-items: center; gap: var(--space-2);
-      padding: 7px var(--space-6); border-radius: 7px;
+      height: 32px; padding: 0 var(--space-6); border-radius: 7px;
       border: 1.5px solid var(--teal); background: var(--teal); cursor: pointer;
       font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-semibold);
       color: #fff; transition: all 0.12s;
@@ -2635,11 +2635,11 @@
     /* ── NQB: 4-Step Conversational Query Builder ─────────────────── */
     .nqb-page { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
     .nqb-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
-    .nqb-left { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .nqb-left { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
     .nqb-right { display: none; }
 
     /* Step indicator row */
-    .nqb-steps-row { display: flex; align-items: center; padding: var(--space-5) var(--space-8); border-bottom: 1px solid var(--nebula); flex-shrink: 0; }
+    .nqb-steps-row { display: flex; align-items: center; padding: var(--space-4) var(--space-8); margin: var(--space-5) 80px 24px; border: 1px solid var(--nebula); border-radius: 999px; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); flex-shrink: 0; box-shadow: var(--shadow-card-sm); }
     .nqb-step-item { display: flex; align-items: center; gap: var(--space-3); }
     .nqb-step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-sm); font-weight: var(--weight-semibold); flex-shrink: 0; border: 2px solid var(--nebula); background: #fff; color: var(--cutty-sark); transition: background 0.2s, border-color 0.2s, color 0.2s; }
     .nqb-step-dot.active { background: var(--teal); border-color: var(--teal); color: #fff; }
@@ -2662,8 +2662,8 @@
     /* Step 2: Data area grid */
     .nqb-data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
     .nqb-data-btn { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: var(--space-5); border: 1.5px solid var(--nebula); border-radius: var(--radius-md); background: #fff; cursor: pointer; transition: border-color 0.15s, background 0.15s; font-family: 'Inter', sans-serif; text-align: center; pointer-events: auto; position: relative; z-index: 1; }
-    .nqb-data-btn:hover { border-color: var(--teal-30); background: var(--teal-10); }
-    .nqb-data-btn.selected { border-color: var(--teal); background: var(--teal-10); }
+    .nqb-data-btn:hover { border-color: var(--teal-30); background: #e8f5f3; }
+    .nqb-data-btn.selected { border-color: var(--teal); background: #e0f2ef; }
     .nqb-data-btn-icon { width: 24px; height: 24px; color: var(--cutty-sark); flex-shrink: 0; transition: color 0.15s; pointer-events: none; }
     .nqb-data-btn:hover .nqb-data-btn-icon,
     .nqb-data-btn.selected .nqb-data-btn-icon { color: var(--teal); }
@@ -2689,6 +2689,28 @@
     .nqb-add-filter-btn { display: flex; align-items: center; gap: var(--space-2); padding: 7px 14px; border-radius: 20px; border: 1.5px dashed var(--nebula); background: transparent; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color 0.15s, color 0.15s, background 0.15s; }
     .nqb-add-filter-btn:hover { border-color: var(--teal-30); color: var(--teal); background: var(--teal-10); }
 
+    /* Describe-it pill bar (standalone, below nudge) */
+    .nqb-describe-bar { animation: fadeIn 0.15s ease; }
+    .nqb-describe-bar-inner { display: inline-flex; align-items: center; gap: var(--space-2); background: #fff; border: 1.5px solid var(--teal-30); border-radius: 40px; padding: 5px 8px 5px 14px; box-shadow: 0 2px 8px rgba(77,182,172,0.12); max-width: 440px; width: 100%; }
+    .nqb-describe-bar-icon { color: var(--teal); font-size: 13px; flex-shrink: 0; line-height: 1; }
+    .nqb-describe-input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: var(--font-sm); font-family: 'Inter', sans-serif; color: var(--dark-teal); padding: 3px 0; }
+    .nqb-describe-input::placeholder { color: var(--cutty-sark); opacity: 0.55; font-style: italic; }
+    /* Summary card (below results table after Summarise) */
+    .nqb-summary-card { flex-shrink: 0; display: flex; align-items: flex-start; gap: var(--space-4); margin: 16px 28px 24px; padding: 16px 20px 16px 18px; background: #ffffff; border: 1px solid var(--teal-20); border-left: 3px solid var(--teal); border-radius: 14px; box-shadow: 0 4px 18px rgba(77,182,172,0.10), 0 1px 4px rgba(0,0,0,0.05); animation: fadeIn 0.2s ease; }
+    .nqb-summary-card-body { flex: 1; display: flex; flex-direction: column; gap: var(--space-2); }
+    .nqb-summary-card-label { font-size: 10px; font-weight: var(--weight-bold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--teal); }
+    .nqb-summary-card-text { font-size: var(--font-sm); color: var(--dark-teal); line-height: 1.65; }
+
+    /* Inline add-filter form */
+    .nqb-filter-form { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5); border-radius: var(--radius-sm); border: 1.5px solid var(--teal-30); background: var(--surface); animation: fadeIn 0.15s ease; }
+    .nqb-filter-form-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nqb-filter-sel { flex: 1; min-width: 110px; border: 1.5px solid var(--nebula); border-radius: var(--radius-sm); padding: 6px var(--space-3); font-size: var(--font-sm); font-family: 'Inter', sans-serif; color: var(--dark-teal); background: #fff; outline: none; cursor: pointer; transition: border-color 0.15s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B9E98' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+    .nqb-filter-sel:focus { border-color: var(--teal); }
+    .nqb-filter-val-input { flex: 2; min-width: 120px; border: 1.5px solid var(--nebula); border-radius: var(--radius-sm); padding: 6px var(--space-4); font-size: var(--font-sm); font-family: 'Inter', sans-serif; color: var(--dark-teal); background: #fff; outline: none; transition: border-color 0.15s; }
+    .nqb-filter-val-input:focus { border-color: var(--teal); }
+    .nqb-filter-val-input::placeholder { color: var(--cutty-sark); opacity: 0.55; }
+    .nqb-filter-form-actions { display: flex; gap: var(--space-2); align-items: center; }
+
     /* Summary bar */
     .nqb-summary { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-6) var(--space-3); flex-wrap: wrap; min-height: 0; }
     .nqb-chip { display: flex; align-items: center; gap: var(--space-2); padding: 4px 10px; border-radius: 20px; background: var(--teal-10); border: 1px solid var(--teal-30); font-size: var(--font-sm); color: var(--dark-teal); }
@@ -2710,13 +2732,13 @@
 
     /* Right panel: KapAI assistant */
     /* NQB: inline AI nudge card within step panels */
-    .nqb-inline-nudge { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4) var(--space-5); background: var(--teal-15); border: 1px solid var(--teal-30); border-radius: var(--radius-sm); flex-shrink: 0; animation: fadeIn 0.2s ease; }
+    .nqb-inline-nudge { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4) var(--space-5); background: #e0f2f0; border: 1px solid var(--teal-30); border-radius: var(--radius-sm); flex-shrink: 0; animation: fadeIn 0.2s ease; }
     .nqb-inline-nudge-icon { font-size: 14px; color: var(--teal); margin-top: 1px; flex-shrink: 0; }
     .nqb-inline-nudge-body { flex: 1; display: flex; flex-direction: column; gap: var(--space-2); }
     .nqb-inline-nudge-text { font-size: var(--font-sm); color: var(--dark-teal); line-height: 1.5; }
     .nqb-inline-nudge-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
     .nqb-nudge-action-btn { padding: 4px 12px; border-radius: 20px; border: 1.5px solid var(--teal-30); background: #fff; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--teal); cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color 0.15s, background 0.15s; }
-    .nqb-nudge-action-btn:hover { background: var(--teal-10); border-color: var(--teal); }
+    .nqb-nudge-action-btn:hover { background: #e0f2f0; border-color: var(--teal); }
     .nqb-nudge-dismiss { padding: 6px 12px; border-radius: 20px; border: none; background: transparent; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; font-family: 'Inter', sans-serif; }
     .nqb-nudge-dismiss:hover { color: var(--dark-teal); }
 
@@ -2728,25 +2750,27 @@
     .nqb-user-bubble { background: var(--dark-teal); border-radius: var(--radius-md) 4px var(--radius-md) var(--radius-md); padding: var(--space-3) var(--space-4); font-size: var(--font-sm); color: #fff; line-height: 1.55; max-width: 75%; align-self: flex-end; }
 
     /* NQB: Results table */
-    .nqb-results { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .nqb-results { flex: 0 0 auto; display: flex; flex-direction: column; overflow: visible; }
     .nqb-results-hd { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: var(--space-5) var(--space-8); border-bottom: 1px solid var(--nebula); background: #fff; }
     .nqb-results-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
     .nqb-results-meta { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; margin-top: 2px; }
     .nqb-results-back { padding: 6px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: border-color 0.15s, color 0.15s; display: flex; align-items: center; gap: var(--space-2); }
     .nqb-results-back:hover { border-color: var(--teal-30); color: var(--dark-teal); }
-    .nqb-results-nudge { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-8); background: var(--teal-10); border-bottom: 1px solid var(--teal-20); flex-wrap: wrap; }
+    .nqb-results-nudge { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-3); padding: 14px 20px; background: #e0f2f0; border: 1px solid var(--teal-30); border-radius: var(--radius-md); margin: var(--space-4) 80px var(--space-6); box-shadow: 0 4px 16px rgba(77,182,172,0.12); flex-wrap: wrap; }
     .nqb-results-nudge-text { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); }
-    .nqb-results-body { flex: 1; overflow: auto; padding: var(--space-5) var(--space-8); }
-    .nqb-results-table { width: 100%; border-collapse: collapse; font-size: var(--font-sm); }
+    .nqb-results-body { flex-shrink: 0; overflow: auto; padding: var(--space-5) var(--space-8); max-height: 524px; }
+    .nqb-results-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--font-sm); border: 1px solid var(--nebula); border-radius: var(--radius-md); overflow: hidden; }
     .nqb-results-table thead { position: sticky; top: 0; z-index: 1; }
     .nqb-results-table th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: var(--weight-semibold); color: var(--cutty-sark); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid var(--nebula); white-space: nowrap; background: var(--surface); }
-    .nqb-results-table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
-    .nqb-results-table th:last-child  { border-radius: 0 var(--radius-sm) 0 0; }
+    .nqb-results-table th:first-child { border-radius: var(--radius-md) 0 0 0; }
+    .nqb-results-table th:last-child  { border-radius: 0 var(--radius-md) 0 0; }
     .nqb-results-table td { padding: 11px 14px; border-bottom: 1px solid var(--nebula); color: var(--dark-teal); white-space: nowrap; line-height: 1.4; }
     .nqb-results-table tbody tr:nth-child(even) td { background: var(--surface); }
     .nqb-results-table tbody tr:nth-child(odd)  td { background: #fff; }
     .nqb-results-table tbody tr:hover td { background: var(--aqua-haze) !important; }
     .nqb-results-table tr:last-child td { border-bottom: none; }
+    .nqb-results-table tr:last-child td:first-child { border-radius: 0 0 0 var(--radius-md); }
+    .nqb-results-table tr:last-child td:last-child  { border-radius: 0 0 var(--radius-md) 0; }
     /* Status badges in results table */
     .nqb-status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: var(--weight-semibold); white-space: nowrap; }
     .nqb-status-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
@@ -2760,7 +2784,7 @@
     .nqb-status-closed::before    { background: var(--nebula); }
     .nqb-status-critical  { background: #FEE2E2; color: #991B1B; }
     .nqb-status-critical::before  { background: #EF4444; }
-    .nqb-results-count { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.65; padding: var(--space-3) var(--space-8) var(--space-4); flex-shrink: 0; }
+    .nqb-results-count { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.65; padding: var(--space-3) var(--space-8) 20px; flex-shrink: 0; }
 
     /* NQB: SQL Console pane */
     .nqb-sql-pane { flex-shrink: 0; display: flex; flex-direction: column; border-top: 1px solid var(--nebula); max-height: 220px; background: #fafbfc; }
@@ -2769,13 +2793,13 @@
     .nqb-sql-pane-close { background: none; border: none; cursor: pointer; color: var(--cutty-sark); font-size: 18px; line-height: 1; padding: 6px; min-width: 32px; min-height: 32px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); margin: -4px; opacity: 0.55; font-family: 'Inter', sans-serif; transition: opacity 0.15s, background 0.15s; }
     .nqb-sql-pane-close:hover { opacity: 1; background: var(--teal-10); }
     .nqb-sql-editor { flex: 1; min-height: 80px; padding: var(--space-4) var(--space-8); font-family: 'Menlo', 'Monaco', 'Consolas', monospace; font-size: 12px; color: var(--dark-teal); border: none; outline: none; resize: none; background: #fafbfc; line-height: 1.65; }
-    .nqb-sql-ai-nudge { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); background: var(--teal-10); border-top: 1px solid var(--teal-20); font-size: var(--font-sm); flex-shrink: 0; flex-wrap: wrap; }
+    .nqb-sql-ai-nudge { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); background: #e0f2f0; border-top: 1px solid var(--teal-30); font-size: var(--font-sm); flex-shrink: 0; flex-wrap: wrap; }
     .nqb-sql-nudge-text { flex: 1; color: var(--dark-teal); }
     .nqb-sql-nudge-text b { color: var(--teal); }
     .nqb-sql-nudge-btn { padding: 4px 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--teal-30); background: #fff; font-size: var(--font-sm); color: var(--teal); cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; transition: border-color 0.15s, background 0.15s; }
     .nqb-sql-nudge-btn:hover { background: var(--teal-10); border-color: var(--teal); }
     .nqb-sql-nudge-dismiss { padding: 4px 8px; border-radius: var(--radius-sm); border: none; background: transparent; font-size: var(--font-sm); color: var(--cutty-sark); cursor: pointer; font-family: 'Inter', sans-serif; opacity: 0.65; }
-    .nqb-sql-btn { display: flex; align-items: center; gap: var(--space-2); padding: 6px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+    .nqb-sql-btn { display: flex; align-items: center; gap: var(--space-2); height: 32px; padding: 0 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--nebula); background: #fff; font-family: 'Inter', sans-serif; font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
     .nqb-sql-btn:hover { border-color: var(--teal-30); color: var(--dark-teal); }
     .nqb-sql-btn.active { border-color: var(--teal-50); color: var(--teal); background: var(--teal-10); }
 
@@ -3823,7 +3847,7 @@
               <div class="nqb-steps-row">
                 <div class="nqb-step-item active" id="nqb-step-item-1">
                   <div class="nqb-step-dot active" id="nqb-dot-1">1</div>
-                  <span class="nqb-step-label">Question</span>
+                  <span class="nqb-step-label">Query</span>
                 </div>
                 <div class="nqb-step-connector" id="nqb-conn-1"></div>
                 <div class="nqb-step-item" id="nqb-step-item-2">
@@ -3842,13 +3866,13 @@
                 </div>
               </div>
 
-              <!-- Step 1: Question -->
+              <!-- Step 1: Query -->
               <div class="nqb-step-content" id="nqb-panel-1">
                 <div>
                   <div class="nqb-step-title">What do you want to know?</div>
-                  <div class="nqb-step-sub">Describe your question in plain language — no SQL needed.</div>
+                  <div class="nqb-step-sub">Describe your query in plain language — no SQL needed.</div>
                 </div>
-                <textarea class="nqb-textarea" id="nqb-question" aria-label="Describe your question in plain language" placeholder="e.g. How many tickets were resolved last month by each agent?" oninput="nqbOnQuestionInput()"></textarea>
+                <textarea class="nqb-textarea" id="nqb-question" aria-label="Describe your query in plain language" placeholder="e.g. How many tickets were resolved last month by each agent?" oninput="nqbOnQuestionInput()"></textarea>
                 <div>
                   <div style="font-size:11px; font-weight:var(--weight-semibold); color:var(--cutty-sark); opacity:0.75; letter-spacing:0.05em; margin-bottom:var(--space-2); text-transform:uppercase;">Try an example</div>
                   <div class="nqb-example-chips">
@@ -3948,27 +3972,62 @@
                   <span class="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
                   <div class="nqb-inline-nudge-body">
                     <span class="nqb-inline-nudge-text">Describe what you want to see — I’ll set the grouping &amp; filters. <em>e.g. "by agent, last 7 days"</em></span>
-                    <div class="nqb-inline-nudge-actions">
-                      <button class="nqb-nudge-action-btn" onclick="nqbNudgeDescribeFilters()">Describe it</button>
+                    <div class="nqb-inline-nudge-actions" style="margin-top:var(--space-2);">
+                      <button class="nqb-nudge-action-btn" onclick="nqbShowDescribeInput()">Describe it</button>
                       <button class="nqb-nudge-dismiss" onclick="nqbDismissNudge(‘nqb-nudge-4’)">Set manually</button>
                     </div>
+                  </div>
+                </div>
+                <!-- Describe-it pill bar — shown when user clicks "Describe it" -->
+                <div class="nqb-describe-bar" id="nqb-describe-bar" style="display:none;">
+                  <div class="nqb-describe-bar-inner">
+                    <span class="nqb-describe-bar-icon" aria-hidden="true">✦</span>
+                    <input id="nqb-describe-input" class="nqb-describe-input" type="text" placeholder=’e.g. "by agent, last 7 days, status open"’ onkeydown="if(event.key===’Enter’)nqbSubmitDescribeFilters()" />
+                    <button class="nqb-nudge-action-btn" style="border-radius:20px; flex-shrink:0;" onclick="nqbSubmitDescribeFilters()">Apply</button>
+                    <button class="nqb-nudge-dismiss" onclick="nqbCancelDescribeInput()">Cancel</button>
                   </div>
                 </div>
                 <div>
                   <div style="font-size:var(--font-sm); font-weight:var(--weight-semibold); color:var(--dark-teal); margin-bottom:var(--space-3);">Time range</div>
                   <div class="nqb-time-row" id="nqb-time-row">
-                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘today’)">Today</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘7d’)">Last 7 days</button>
-                    <button class="nqb-time-btn selected" onclick="nqbSelectTime(‘30d’)">Last 30 days</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘90d’)">Last 90 days</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘mtd’)">This month</button>
-                    <button class="nqb-time-btn" onclick="nqbSelectTime(‘ytd’)">This year</button>
+                    <button class="nqb-time-btn" data-preset="today" onclick="nqbSelectTime(‘today’)">Today</button>
+                    <button class="nqb-time-btn" data-preset="7d" onclick="nqbSelectTime(‘7d’)">Last 7 days</button>
+                    <button class="nqb-time-btn selected" data-preset="30d" onclick="nqbSelectTime(‘30d’)">Last 30 days</button>
+                    <button class="nqb-time-btn" data-preset="90d" onclick="nqbSelectTime(‘90d’)">Last 90 days</button>
+                    <button class="nqb-time-btn" data-preset="mtd" onclick="nqbSelectTime(‘mtd’)">This month</button>
+                    <button class="nqb-time-btn" data-preset="ytd" onclick="nqbSelectTime(‘ytd’)">This year</button>
                   </div>
                 </div>
                 <div>
                   <div style="font-size:var(--font-sm); font-weight:var(--weight-semibold); color:var(--dark-teal); margin-bottom:var(--space-3);">Additional filters</div>
                   <div class="nqb-filter-list" id="nqb-filter-list"></div>
-                  <button class="nqb-add-filter-btn" onclick="nqbAddFilter()">
+                  <!-- Inline add-filter form (replaces prompt dialogs) -->
+                  <div class="nqb-filter-form" id="nqb-filter-form" style="display:none;">
+                    <div class="nqb-filter-form-row">
+                      <select id="nqb-filter-field-sel" class="nqb-filter-sel">
+                        <option value="">Field…</option>
+                        <option>Status</option>
+                        <option>Priority</option>
+                        <option>Agent</option>
+                        <option>Queue</option>
+                        <option>Created At</option>
+                        <option>Resolved At</option>
+                      </select>
+                      <select id="nqb-filter-op-sel" class="nqb-filter-sel">
+                        <option value="equals">equals</option>
+                        <option value="is not">is not</option>
+                        <option value="contains">contains</option>
+                        <option value="greater than">greater than</option>
+                        <option value="less than">less than</option>
+                      </select>
+                      <input id="nqb-filter-val-inp" class="nqb-filter-val-input" type="text" placeholder="Value…" onkeydown="if(event.key==='Enter')nqbConfirmAddFilter()" />
+                    </div>
+                    <div class="nqb-filter-form-actions">
+                      <button class="nqb-nudge-action-btn" onclick="nqbConfirmAddFilter()">Add filter</button>
+                      <button class="nqb-nudge-dismiss" onclick="nqbCancelAddFilter()">Cancel</button>
+                    </div>
+                  </div>
+                  <button class="nqb-add-filter-btn" id="nqb-add-filter-btn" onclick="nqbAddFilter()">
                     <span>+</span> Add a filter
                   </button>
                 </div>
@@ -3993,7 +4052,7 @@
                 </div>
                 <div class="nqb-results-count" id="nqb-results-count"></div>
                 <!-- KapAI nudge: Flow step 4 — summarise or refine (below table) -->
-                <div class="nqb-results-nudge" id="nqb-results-nudge" style="border-top:1px solid var(--teal-20); border-bottom:none;">
+                <div class="nqb-results-nudge" id="nqb-results-nudge">
                   <span class="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
                   <span class="nqb-results-nudge-text">Want a plain-English summary of this data, or need to refine the query?</span>
                   <div style="display:flex; gap:var(--space-2);">
@@ -4001,6 +4060,15 @@
                     <button class="nqb-nudge-action-btn" onclick="nqbRefineQuery()">Refine</button>
                     <button class="nqb-nudge-dismiss" onclick="document.getElementById(‘nqb-results-nudge’).style.display=’none’">Dismiss</button>
                   </div>
+                </div>
+                <!-- Summary card — shown after clicking Summarise -->
+                <div class="nqb-summary-card" id="nqb-summary-card" style="display:none;">
+                  <span class="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
+                  <div class="nqb-summary-card-body">
+                    <div class="nqb-summary-card-label">KapAI Summary</div>
+                    <div class="nqb-summary-card-text" id="nqb-summary-card-text"></div>
+                  </div>
+                  <button class="nqb-nudge-dismiss" onclick="document.getElementById(‘nqb-summary-card’).style.display=’none’" title="Dismiss">×</button>
                 </div>
               </div>
 
@@ -4077,8 +4145,8 @@
         <div class="nqb-post-save-icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4.5 11.5l4.5 4.5 9-9" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="nqb-post-save-title" id="nqb-post-save-title">Question saved!</div>
-        <div class="nqb-post-save-sub" id="nqb-post-save-sub">Your question is now in your library. Where would you like to use it?</div>
+        <div class="nqb-post-save-title" id="nqb-post-save-title">Query saved!</div>
+        <div class="nqb-post-save-sub" id="nqb-post-save-sub">Your query is now in your library. Where would you like to use it?</div>
       </div>
       <div class="nqb-post-save-choices">
         <button class="nqb-post-save-choice" onclick="nqbPostSaveAddToExisting()">
@@ -4087,7 +4155,7 @@
           </div>
           <div>
             <div class="nqb-post-save-choice-title">Add to existing dashboard</div>
-            <div class="nqb-post-save-choice-sub">Pick a dashboard from your library and drop this question in</div>
+            <div class="nqb-post-save-choice-sub">Pick a dashboard from your library and drop this query in</div>
           </div>
         </button>
         <button class="nqb-post-save-choice" onclick="nqbPostSaveNewDashboard()">
@@ -4096,7 +4164,7 @@
           </div>
           <div>
             <div class="nqb-post-save-choice-title">Create a new dashboard</div>
-            <div class="nqb-post-save-choice-sub">Start a fresh dashboard with this question as the first card</div>
+            <div class="nqb-post-save-choice-sub">Start a fresh dashboard with this query as the first card</div>
           </div>
         </button>
       </div>
@@ -4117,8 +4185,8 @@
             </svg>
           </div>
           <div>
-            <div class="sq-modal-title" id="nqb-sq-modal-title">Save Question</div>
-            <div class="sq-modal-sub">This question will appear in your library for use in dashboards.</div>
+            <div class="sq-modal-title" id="nqb-sq-modal-title">Save Query</div>
+            <div class="sq-modal-sub">This query will appear in your library for use in dashboards.</div>
           </div>
         </div>
         <button class="sq-modal-close" onclick="nqbCloseSaveModal()">
@@ -4127,12 +4195,12 @@
       </div>
       <div class="sq-modal-body">
         <div class="sq-field">
-          <label class="sq-label">Question name</label>
+          <label class="sq-label">Query name</label>
           <input class="sq-input" id="nqb-sq-name" placeholder="e.g. Ticket volume by agent last 30 days" />
         </div>
         <div class="sq-field">
           <label class="sq-label">Description <span style="opacity:0.5;font-weight:normal;">(optional)</span></label>
-          <textarea class="sq-textarea" id="nqb-sq-desc" rows="2" placeholder="What does this question answer?"></textarea>
+          <textarea class="sq-textarea" id="nqb-sq-desc" rows="2" placeholder="What does this query answer?"></textarea>
         </div>
         <div class="sq-field">
           <label class="sq-label">Default visualization</label>
@@ -4147,7 +4215,7 @@
           </div>
         </div>
         <!-- KapAI name suggestion nudge -->
-        <div id="nqb-save-ai-nudge" style="display:none; padding:var(--space-4) var(--space-5); background:var(--teal-10); border-radius:var(--radius-sm); border:1px solid var(--teal-20); display:flex; align-items:center; gap:var(--space-3);">
+        <div id="nqb-save-ai-nudge" style="display:none; padding:var(--space-4) var(--space-5); background:#e0f2f0; border-radius:var(--radius-sm); border:1px solid var(--teal-30); display:flex; align-items:center; gap:var(--space-3);">
           <span style="font-size:var(--font-sm); color:var(--dark-teal); flex:1;"><b style="color:var(--teal);"><span aria-hidden="true">✦ </span>KapAI:</b> Want me to suggest a name &amp; description based on your query?</span>
           <button class="nqb-sql-nudge-btn" onclick="nqbAiSuggestName()">Suggest</button>
           <button class="nqb-sql-nudge-dismiss" onclick="document.getElementById('nqb-save-ai-nudge').style.display='none'">Dismiss</button>
@@ -4161,7 +4229,7 @@
             <path d="M4 1.5v3h5V1.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
             <path d="M2.5 8.5h8v3H2.5z" fill="currentColor" opacity=".2"/>
           </svg>
-          Save Question
+          Save Query
         </button>
       </div>
     </div>
@@ -6705,41 +6773,61 @@ const NQB_DEFAULT_COLS = {
 /* NQB mock result rows per data area */
 const NQB_MOCK_ROWS = {
   tickets: [
-    { 'Ticket ID':'TKT-1042','Subject':'Login issue on mobile','Status':'Resolved','Priority':'High','Agent':'Priya S.','Queue':'General','Created At':'2026-03-10','Resolved At':'2026-03-10','Resolution Time (hrs)':'4.2','CSAT Score':'4.8' },
+    { 'Ticket ID':'TKT-1042','Subject':'Login issue on mobile','Status':'Resolved','Priority':'High','Agent':'Priya S.','Queue':'General','Created At':'2026-03-10','Resolved At':'2026-03-10','Resolution Time (hrs)':'4.2','CSAT Score':'4.9' },
     { 'Ticket ID':'TKT-1041','Subject':'Billing discrepancy','Status':'Open','Priority':'Medium','Agent':'Rahul M.','Queue':'Billing','Created At':'2026-03-09','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' },
-    { 'Ticket ID':'TKT-1040','Subject':'Feature request: export','Status':'Closed','Priority':'Low','Agent':'Aisha K.','Queue':'Product','Created At':'2026-03-08','Resolved At':'2026-03-09','Resolution Time (hrs)':'18.5','CSAT Score':'4.5' },
+    { 'Ticket ID':'TKT-1040','Subject':'Feature request: export','Status':'Closed','Priority':'Low','Agent':'Aisha K.','Queue':'Product','Created At':'2026-03-08','Resolved At':'2026-03-09','Resolution Time (hrs)':'18.5','CSAT Score':'4.6' },
     { 'Ticket ID':'TKT-1039','Subject':'API integration failing','Status':'Resolved','Priority':'Critical','Agent':'Priya S.','Queue':'Technical','Created At':'2026-03-07','Resolved At':'2026-03-07','Resolution Time (hrs)':'1.8','CSAT Score':'5.0' },
-    { 'Ticket ID':'TKT-1038','Subject':'Password reset loop','Status':'Pending','Priority':'High','Agent':'Dev T.','Queue':'General','Created At':'2026-03-06','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' }
+    { 'Ticket ID':'TKT-1038','Subject':'Password reset loop','Status':'Pending','Priority':'High','Agent':'Dev T.','Queue':'General','Created At':'2026-03-06','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' },
+    { 'Ticket ID':'TKT-1037','Subject':'Dashboard not loading','Status':'Resolved','Priority':'Medium','Agent':'Aisha K.','Queue':'Technical','Created At':'2026-03-05','Resolved At':'2026-03-05','Resolution Time (hrs)':'2.1','CSAT Score':'4.3' },
+    { 'Ticket ID':'TKT-1036','Subject':'Slow report generation','Status':'Closed','Priority':'Low','Agent':'Dev T.','Queue':'Product','Created At':'2026-03-04','Resolved At':'2026-03-05','Resolution Time (hrs)':'24.0','CSAT Score':'3.8' },
+    { 'Ticket ID':'TKT-1035','Subject':'Wrong invoice amount','Status':'Open','Priority':'Critical','Agent':'Rahul M.','Queue':'Billing','Created At':'2026-03-03','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' },
+    { 'Ticket ID':'TKT-1034','Subject':'Mobile app crash on startup','Status':'Resolved','Priority':'High','Agent':'Priya S.','Queue':'Technical','Created At':'2026-03-02','Resolved At':'2026-03-02','Resolution Time (hrs)':'3.5','CSAT Score':'3.2' },
+    { 'Ticket ID':'TKT-1033','Subject':'Export to CSV missing columns','Status':'Pending','Priority':'Low','Agent':'Aisha K.','Queue':'Product','Created At':'2026-03-01','Resolved At':'—','Resolution Time (hrs)':'—','CSAT Score':'—' }
   ],
   agents: [
     { 'Agent Name':'Priya S.','Email':'priya@example.com','Queue':'General','Tickets Handled':'124','Avg Resolution Time':'3.8h','CSAT Score':'4.7','First Response Time':'12 min','Tickets Open':'8' },
-    { 'Agent Name':'Rahul M.','Email':'rahul@example.com','Queue':'Billing','Tickets Handled':'98','Avg Resolution Time':'5.2h','CSAT Score':'4.5','First Response Time':'18 min','Tickets Open':'12' },
+    { 'Agent Name':'Rahul M.','Email':'rahul@example.com','Queue':'Billing','Tickets Handled':'98','Avg Resolution Time':'5.2h','CSAT Score':'4.1','First Response Time':'18 min','Tickets Open':'12' },
     { 'Agent Name':'Aisha K.','Email':'aisha@example.com','Queue':'Product','Tickets Handled':'87','Avg Resolution Time':'6.1h','CSAT Score':'4.9','First Response Time':'9 min','Tickets Open':'5' },
-    { 'Agent Name':'Dev T.','Email':'dev@example.com','Queue':'Technical','Tickets Handled':'112','Avg Resolution Time':'4.5h','CSAT Score':'4.6','First Response Time':'14 min','Tickets Open':'9' }
+    { 'Agent Name':'Dev T.','Email':'dev@example.com','Queue':'Technical','Tickets Handled':'112','Avg Resolution Time':'4.5h','CSAT Score':'3.6','First Response Time':'14 min','Tickets Open':'9' },
+    { 'Agent Name':'Sara N.','Email':'sara@example.com','Queue':'General','Tickets Handled':'76','Avg Resolution Time':'4.1h','CSAT Score':'5.0','First Response Time':'8 min','Tickets Open':'3' },
+    { 'Agent Name':'Kiran B.','Email':'kiran@example.com','Queue':'Billing','Tickets Handled':'63','Avg Resolution Time':'6.8h','CSAT Score':'3.1','First Response Time':'22 min','Tickets Open':'15' },
+    { 'Agent Name':'Meera V.','Email':'meera@example.com','Queue':'Technical','Tickets Handled':'91','Avg Resolution Time':'3.2h','CSAT Score':'4.8','First Response Time':'10 min','Tickets Open':'6' },
+    { 'Agent Name':'Arjun P.','Email':'arjun@example.com','Queue':'Product','Tickets Handled':'54','Avg Resolution Time':'7.4h','CSAT Score':'2.9','First Response Time':'28 min','Tickets Open':'18' }
   ],
   queues: [
     { 'Queue Name':'General','Total Tickets':'312','Open Tickets':'24','Avg Wait Time (min)':'8','Avg Handle Time (min)':'32','SLA Breaches':'3' },
     { 'Queue Name':'Billing','Total Tickets':'189','Open Tickets':'17','Avg Wait Time (min)':'12','Avg Handle Time (min)':'48','SLA Breaches':'7' },
     { 'Queue Name':'Technical','Total Tickets':'241','Open Tickets':'31','Avg Wait Time (min)':'15','Avg Handle Time (min)':'65','SLA Breaches':'12' },
-    { 'Queue Name':'Product','Total Tickets':'98','Open Tickets':'9','Avg Wait Time (min)':'5','Avg Handle Time (min)':'25','SLA Breaches':'1' }
+    { 'Queue Name':'Product','Total Tickets':'98','Open Tickets':'9','Avg Wait Time (min)':'5','Avg Handle Time (min)':'25','SLA Breaches':'1' },
+    { 'Queue Name':'Enterprise','Total Tickets':'154','Open Tickets':'11','Avg Wait Time (min)':'6','Avg Handle Time (min)':'41','SLA Breaches':'4' },
+    { 'Queue Name':'Returns','Total Tickets':'73','Open Tickets':'22','Avg Wait Time (min)':'19','Avg Handle Time (min)':'55','SLA Breaches':'9' }
   ],
   sla: [
     { 'SLA Tier':'Critical (1h)','Total Tickets':'45','Met':'38','Breached':'7','Compliance %':'84.4%','Avg Response Time':'52 min' },
     { 'SLA Tier':'High (4h)','Total Tickets':'132','Met':'118','Breached':'14','Compliance %':'89.4%','Avg Response Time':'3.1h' },
     { 'SLA Tier':'Medium (8h)','Total Tickets':'287','Met':'271','Breached':'16','Compliance %':'94.4%','Avg Response Time':'5.8h' },
-    { 'SLA Tier':'Low (24h)','Total Tickets':'198','Met':'195','Breached':'3','Compliance %':'98.5%','Avg Response Time':'11.2h' }
+    { 'SLA Tier':'Low (24h)','Total Tickets':'198','Met':'195','Breached':'3','Compliance %':'98.5%','Avg Response Time':'11.2h' },
+    { 'SLA Tier':'Enterprise (2h)','Total Tickets':'61','Met':'52','Breached':'9','Compliance %':'85.2%','Avg Response Time':'1.6h' },
+    { 'SLA Tier':'Standard (12h)','Total Tickets':'210','Met':'207','Breached':'3','Compliance %':'98.6%','Avg Response Time':'7.3h' }
   ],
   customers: [
     { 'Customer Name':'Acme Corp','Account ID':'ACC-001','Open Tickets':'5','Resolved Tickets':'48','CSAT Score':'4.6','Last Interaction':'2026-03-15' },
     { 'Customer Name':'Globex Ltd','Account ID':'ACC-002','Open Tickets':'2','Resolved Tickets':'31','CSAT Score':'4.9','Last Interaction':'2026-03-14' },
     { 'Customer Name':'Initech','Account ID':'ACC-003','Open Tickets':'8','Resolved Tickets':'67','CSAT Score':'4.2','Last Interaction':'2026-03-13' },
-    { 'Customer Name':'Umbrella Inc','Account ID':'ACC-004','Open Tickets':'1','Resolved Tickets':'22','CSAT Score':'5.0','Last Interaction':'2026-03-16' }
+    { 'Customer Name':'Umbrella Inc','Account ID':'ACC-004','Open Tickets':'1','Resolved Tickets':'22','CSAT Score':'5.0','Last Interaction':'2026-03-16' },
+    { 'Customer Name':'Stark Industries','Account ID':'ACC-005','Open Tickets':'3','Resolved Tickets':'14','CSAT Score':'3.7','Last Interaction':'2026-03-12' },
+    { 'Customer Name':'Wayne Enterprises','Account ID':'ACC-006','Open Tickets':'6','Resolved Tickets':'89','CSAT Score':'4.8','Last Interaction':'2026-03-11' },
+    { 'Customer Name':'Pied Piper','Account ID':'ACC-007','Open Tickets':'12','Resolved Tickets':'33','CSAT Score':'2.8','Last Interaction':'2026-03-10' }
   ],
   csat: [
     { 'Survey ID':'CST-201','Ticket ID':'TKT-1042','Agent':'Priya S.','Score':'5','Comment':'Resolved super fast!','Submitted At':'2026-03-10' },
     { 'Survey ID':'CST-200','Ticket ID':'TKT-1040','Agent':'Aisha K.','Score':'4','Comment':'Good follow-up','Submitted At':'2026-03-09' },
     { 'Survey ID':'CST-199','Ticket ID':'TKT-1039','Agent':'Priya S.','Score':'5','Comment':'Excellent!','Submitted At':'2026-03-07' },
-    { 'Survey ID':'CST-198','Ticket ID':'TKT-1036','Agent':'Dev T.','Score':'3','Comment':'Took too long','Submitted At':'2026-03-05' }
+    { 'Survey ID':'CST-198','Ticket ID':'TKT-1036','Agent':'Dev T.','Score':'3','Comment':'Took too long','Submitted At':'2026-03-05' },
+    { 'Survey ID':'CST-197','Ticket ID':'TKT-1034','Agent':'Rahul M.','Score':'2','Comment':'No response for 2 days','Submitted At':'2026-03-03' },
+    { 'Survey ID':'CST-196','Ticket ID':'TKT-1033','Agent':'Sara N.','Score':'5','Comment':'Super helpful!','Submitted At':'2026-03-02' },
+    { 'Survey ID':'CST-195','Ticket ID':'TKT-1032','Agent':'Kiran B.','Score':'1','Comment':'Issue still not fixed','Submitted At':'2026-03-01' },
+    { 'Survey ID':'CST-194','Ticket ID':'TKT-1031','Agent':'Meera V.','Score':'4','Comment':'Quick resolution','Submitted At':'2026-02-28' }
   ]
 };
 
@@ -6774,6 +6862,19 @@ function nqbInit() {
   if (results)    results.style.display    = 'none';
   if (actionsBar) actionsBar.style.display = '';
   if (stepsRow)   stepsRow.style.display   = '';
+  // Reset nudge-4 and describe bar
+  const nudge4      = document.getElementById('nqb-nudge-4');
+  const describeBar = document.getElementById('nqb-describe-bar');
+  if (nudge4)      nudge4.style.display      = '';
+  if (describeBar) describeBar.style.display = 'none';
+  // Reset summary card
+  const summaryCard = document.getElementById('nqb-summary-card');
+  if (summaryCard) summaryCard.style.display = 'none';
+  // Reset add-filter form
+  const filterForm = document.getElementById('nqb-filter-form');
+  const filterBtn  = document.getElementById('nqb-add-filter-btn');
+  if (filterForm) filterForm.style.display = 'none';
+  if (filterBtn)  filterBtn.style.display  = '';
   nqbSyncUI();
 }
 
@@ -6912,14 +7013,15 @@ function nqbRenderColumns() {
   const cols = NQB_COLS[nqbState.dataArea] || [];
   grid.innerHTML = cols.map(col => {
     const sel = nqbState.selectedCols.has(col);
-    return '<div class="nqb-col-item' + (sel ? ' selected' : '') + '" onclick="nqbToggleCol(this,' + JSON.stringify(col) + ')">'
+    return '<div class="nqb-col-item' + (sel ? ' selected' : '') + '" data-col="' + col.replace(/"/g, '&quot;') + '" onclick="nqbToggleCol(this)">'
       + (sel ? '<span class="nqb-col-check">\u2714</span>' : '')
       + col + '</div>';
   }).join('');
 }
 
 let nqbManualColPicks = 0;
-function nqbToggleCol(el, col) {
+function nqbToggleCol(el) {
+  const col = el.dataset.col;
   if (nqbState.selectedCols.has(col)) {
     nqbState.selectedCols.delete(col);
     el.classList.remove('selected');
@@ -6963,19 +7065,43 @@ function nqbSelectTime(preset) {
 function nqbSyncTimeButtons() {
   const preset = nqbState.timeRange;
   document.querySelectorAll('.nqb-time-btn').forEach(b => {
-    b.classList.toggle('selected', (b.getAttribute('onclick') || '').includes("'" + preset + "'"));
+    b.classList.remove('selected');
+    if (b.dataset.preset === preset) b.classList.add('selected');
   });
 }
 
 function nqbAddFilter() {
-  const field = prompt('Filter field (e.g. Status, Priority, Agent):');
-  if (!field) return;
-  const operator = prompt('Operator (equals, contains, is not):') || 'equals';
-  const value = prompt('Value:');
-  if (!value) return;
+  // Populate field options from current data area
+  const fieldSel = document.getElementById('nqb-filter-field-sel');
+  if (fieldSel && nqbState.dataArea) {
+    const cols = NQB_COLS[nqbState.dataArea] || [];
+    fieldSel.innerHTML = '<option value="">Field\u2026</option>'
+      + cols.map(c => '<option value="' + escHtml(c) + '">' + escHtml(c) + '</option>').join('');
+  }
+  const form = document.getElementById('nqb-filter-form');
+  const btn  = document.getElementById('nqb-add-filter-btn');
+  if (form) { form.style.display = ''; }
+  if (btn)  { btn.style.display  = 'none'; }
+  const valInp = document.getElementById('nqb-filter-val-inp');
+  if (valInp) valInp.value = '';
+}
+
+function nqbConfirmAddFilter() {
+  const field = document.getElementById('nqb-filter-field-sel')?.value;
+  const operator = document.getElementById('nqb-filter-op-sel')?.value || 'equals';
+  const value = document.getElementById('nqb-filter-val-inp')?.value.trim();
+  if (!field || !value) { showToast('Please fill in both a field and a value'); return; }
   nqbState.filters.push({ field, operator, value, label: field + ' ' + operator + ' ' + value });
   nqbRenderFilters();
   nqbRenderSummary();
+  nqbCancelAddFilter();
+}
+
+function nqbCancelAddFilter() {
+  const form = document.getElementById('nqb-filter-form');
+  const btn  = document.getElementById('nqb-add-filter-btn');
+  if (form) form.style.display = 'none';
+  if (btn)  btn.style.display  = '';
 }
 
 function nqbRemoveFilter(idx) {
@@ -7017,14 +7143,66 @@ function nqbRunQuery() {
     return r;
   });
 
-  // Columns that contain status values
+  // Columns that contain status / priority badge values
   const statusCols = new Set(['Status', 'Priority']);
-  const numericCols = new Set(['Tickets Handled','Open Tickets','Resolved Tickets','Total Tickets','Met','Breached','SLA Breaches','Tickets Open','Score']);
+  // CSAT-style score columns (0–5 float)
+  const csatCols = new Set(['CSAT Score']);
+  // Raw integer score (1–5)
+  const scoreCols = new Set(['Score']);
+  // Compliance percentage columns
+  const complianceCols = new Set(['Compliance %']);
+  // Breach count columns
+  const breachCols = new Set(['SLA Breaches', 'Breached']);
+  // Plain numeric columns
+  const numericCols = new Set(['Tickets Handled','Open Tickets','Resolved Tickets','Total Tickets','Met','Tickets Open']);
+
+  const SCORE_BADGE = 'display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;';
+  // 5-band CSAT colour scale: deep-green / light-green / amber / orange / red
+  function nqbScoreBadge(v, hi, lo) {
+    let color, bg;
+    if      (v >= hi + 0.3)        { color = '#065F46'; bg = '#D1FAE5'; }  // ≥4.8 deep green
+    else if (v >= hi)              { color = '#059669'; bg = '#ECFDF5'; }  // 4.5–4.7 green
+    else if (v >= lo)              { color = '#D97706'; bg = '#FEF3C7'; }  // 4.0–4.4 amber
+    else if (v >= lo - 0.5)        { color = '#C2410C'; bg = '#FFEDD5'; }  // 3.5–3.9 orange
+    else                           { color = '#DC2626'; bg = '#FEE2E2'; }  // <3.5  red
+    return '<span style="' + SCORE_BADGE + 'background:' + bg + ';color:' + color + ';">' + v + '</span>';
+  }
+  // Integer score variant (1–5)
+  function nqbIntScoreBadge(n) {
+    const map = { 5:['#065F46','#D1FAE5'], 4:['#059669','#ECFDF5'], 3:['#D97706','#FEF3C7'], 2:['#C2410C','#FFEDD5'], 1:['#DC2626','#FEE2E2'] };
+    const [color, bg] = map[n] || ['#6B7280','#F3F4F6'];
+    return '<span style="' + SCORE_BADGE + 'background:' + bg + ';color:' + color + ';">' + n + '</span>';
+  }
+
   function nqbCellValue(col, val) {
     if (val === undefined || val === '—') return '<span style="color:var(--cutty-sark);opacity:0.4;">—</span>';
     if (statusCols.has(col)) {
       const cls = { 'Resolved':'resolved','Open':'open','Pending':'pending','Closed':'closed','Critical':'critical','High':'pending','Medium':'open','Low':'closed' }[val] || 'closed';
       return '<span class="nqb-status-badge nqb-status-' + cls + '">' + val + '</span>';
+    }
+    if (csatCols.has(col)) {
+      const n = parseFloat(val);
+      if (!isNaN(n)) return nqbScoreBadge(n, 4.5, 4.0);
+      return String(val);
+    }
+    if (scoreCols.has(col)) {
+      const n = parseInt(val, 10);
+      if (!isNaN(n)) return nqbIntScoreBadge(n);
+      return String(val);
+    }
+    if (complianceCols.has(col)) {
+      const n = parseFloat(val);
+      if (!isNaN(n)) return nqbScoreBadge(n, 95, 88);
+      return String(val);
+    }
+    if (breachCols.has(col)) {
+      const n = parseInt(val, 10);
+      if (!isNaN(n)) {
+        const color = n <= 3 ? '#059669' : n <= 8 ? '#D97706' : '#DC2626';
+        const bg    = n <= 3 ? '#D1FAE5' : n <= 8 ? '#FEF3C7' : '#FEE2E2';
+        return '<span style="' + SCORE_BADGE + 'background:' + bg + ';color:' + color + ';font-variant-numeric:tabular-nums;">' + n + '</span>';
+      }
+      return String(val);
     }
     if (numericCols.has(col)) return '<span style="font-variant-numeric:tabular-nums;font-weight:var(--weight-medium);">' + val + '</span>';
     return String(val);
@@ -7089,17 +7267,18 @@ function nqbSummariseResults() {
        nqbState.dataArea === 'agents'  ? 'Aisha K. has the highest CSAT (4.9) while Rahul M. carries the most open tickets (12).' :
        nqbState.dataArea === 'tickets' ? '3 out of 5 tickets are resolved. 2 remain open or pending — check Billing and General queues.' :
        'The data looks healthy. No major anomalies detected in this sample.');
-  nqbAddAiMessage(summary, false);
+  const card = document.getElementById('nqb-summary-card');
+  const cardText = document.getElementById('nqb-summary-card-text');
+  if (cardText) cardText.textContent = summary;
+  if (card) card.style.display = 'flex';
   document.getElementById('nqb-results-nudge').style.display = 'none';
 }
 
 function nqbRefineQuery() {
+  document.getElementById('nqb-results-nudge').style.display = 'none';
   nqbBackToBuilder();
   nqbGoToStep(4);
-  setTimeout(() => {
-    const input = document.getElementById('nqb-ai-input');
-    if (input) { input.focus(); input.placeholder = 'Tell KapAI what to change…'; }
-  }, 100);
+  showToast('Back to query builder — make your changes and re-run');
 }
 
 function nqbAddAiMessage(text, isUser) {
@@ -7141,28 +7320,43 @@ function nqbNudgeAutoColumns() {
 }
 
 function nqbNudgeCompleteColumns() {
-  // KapAI selects all columns
   nqbSelectAllCols();
   nqbDismissNudge('nqb-nudge-3');
-  nqbAddAiMessage('I\u2019ve completed the column selection based on your question.', false);
   showToast('KapAI completed column selection');
 }
 
-function nqbNudgeDescribeFilters() {
-  const desc = prompt('Describe your filters (e.g. "by agent, last 7 days, status open"):');
+function nqbShowDescribeInput() {
+  const nudge = document.getElementById('nqb-nudge-4');
+  const bar   = document.getElementById('nqb-describe-bar');
+  if (nudge) nudge.style.display = 'none';
+  if (bar)   bar.style.display   = '';
+  const inp = document.getElementById('nqb-describe-input');
+  if (inp) { inp.value = ''; inp.focus(); }
+}
+
+function nqbCancelDescribeInput() {
+  const nudge = document.getElementById('nqb-nudge-4');
+  const bar   = document.getElementById('nqb-describe-bar');
+  if (nudge) nudge.style.display = '';
+  if (bar)   bar.style.display   = 'none';
+}
+
+function nqbSubmitDescribeFilters() {
+  const inp = document.getElementById('nqb-describe-input');
+  const desc = inp ? inp.value.trim() : '';
   if (!desc) return;
   nqbDismissNudge('nqb-nudge-4');
   // Parse simple patterns
   const lower = desc.toLowerCase();
-  if (lower.includes('7 day') || lower.includes('week')) nqbSelectTime('7d');
+  if (lower.includes('7 day') || lower.includes('week'))       nqbSelectTime('7d');
   else if (lower.includes('30 day') || lower.includes('month')) nqbSelectTime('30d');
-  else if (lower.includes('today')) nqbSelectTime('today');
+  else if (lower.includes('90 day'))                            nqbSelectTime('90d');
+  else if (lower.includes('today'))                             nqbSelectTime('today');
   if (lower.includes('open')) {
     nqbState.filters.push({ field: 'Status', operator: 'equals', value: 'Open', label: 'Status equals Open' });
     nqbRenderFilters();
     nqbRenderSummary();
   }
-  nqbAddAiMessage('Done! I\u2019ve set up your filters based on: \u201c' + desc + '\u201d', false);
   showToast('Filters applied by KapAI');
 }
 
