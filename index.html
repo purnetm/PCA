@@ -4065,10 +4065,10 @@
                 <div class="nqb-summary-card" id="nqb-summary-card" style="display:none;">
                   <span class="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
                   <div class="nqb-summary-card-body">
-                    <div class="nqb-summary-card-label">KapAI Summary</div>
+                    <div class="nqb-summary-card-label">Kap AI Summary</div>
                     <div class="nqb-summary-card-text" id="nqb-summary-card-text"></div>
                   </div>
-                  <button class="nqb-nudge-dismiss" onclick="document.getElementById(‘nqb-summary-card’).style.display=’none’" title="Dismiss">×</button>
+                  <button class="nqb-nudge-dismiss" onclick="document.getElementById(‘nqb-summary-card’).style.display=’none’" title="Dismiss"><svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                 </div>
               </div>
 
@@ -4081,7 +4081,7 @@
                     </svg>
                     SQL Console
                   </span>
-                  <button class="nqb-sql-pane-close" onclick="nqbToggleSql()" aria-label="Close SQL console">&times;</button>
+                  <button class="nqb-sql-pane-close" onclick="nqbToggleSql()" aria-label="Close SQL console"><svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                 </div>
                 <textarea class="nqb-sql-editor" id="nqb-sql-editor" spellcheck="false" placeholder="-- SQL will generate from your selections above" oninput="nqbOnSqlEdit()"></textarea>
                 <div class="nqb-sql-ai-nudge" id="nqb-sql-nudge" style="display:none;">
@@ -4190,7 +4190,7 @@
           </div>
         </div>
         <button class="sq-modal-close" onclick="nqbCloseSaveModal()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
       <div class="sq-modal-body">
@@ -4243,7 +4243,7 @@
           <div class="nqb-post-save-title">Add to Dashboard</div>
           <div class="nqb-post-save-sub" id="nqb-existing-dash-sub">Select a dashboard to add this question to.</div>
         </div>
-        <button onclick="nqbCloseExistingDashPicker()" style="background:none;border:none;cursor:pointer;color:var(--cutty-sark);font-size:20px;line-height:1;padding:0;opacity:0.55;flex-shrink:0;">&times;</button>
+        <button onclick="nqbCloseExistingDashPicker()" style="background:none;border:none;cursor:pointer;color:var(--cutty-sark);padding:4px;opacity:0.55;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
       <div class="nqb-dash-picker-list" id="nqb-dash-picker-list">
         <!-- rendered by JS -->
@@ -4276,9 +4276,7 @@
         </div>
       </div>
       <button class="sq-close-btn" onclick="hideCreateDashboardModal()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
     <div class="cdm-body">
@@ -4321,7 +4319,7 @@
   <div class="send-modal-panel" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="send-modal-title">
     <div class="send-modal-header">
       <h3 class="send-modal-title" id="send-modal-title">Send Dashboard</h3>
-      <button class="send-modal-close" onclick="closeSendModal()" aria-label="Close">×</button>
+      <button class="send-modal-close" onclick="closeSendModal()" aria-label="Close"><svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     <div class="send-modal-body">
       <div>
@@ -4364,7 +4362,7 @@
   <div class="send-modal-panel" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="access-modal-title">
     <div class="send-modal-header">
       <h3 class="send-modal-title" id="access-modal-title">Dashboard Access</h3>
-      <button class="send-modal-close" onclick="closeAccessModal()" aria-label="Close">×</button>
+      <button class="send-modal-close" onclick="closeAccessModal()" aria-label="Close"><svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     <div class="send-modal-body">
       <div>
@@ -5834,7 +5832,7 @@ function addSendChip() {
   if (!val) return;
   const chip = document.createElement('span');
   chip.className = 'send-chip';
-  chip.innerHTML = `${escHtml(val)}<button class="send-chip-remove" onclick="this.parentElement.remove()" aria-label="Remove">×</button>`;
+  chip.innerHTML = `${escHtml(val)}<button class="send-chip-remove" onclick="this.parentElement.remove()" aria-label="Remove"><svg width="8" height="8" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
   document.getElementById('send-chips-container').appendChild(chip);
   inp.value = '';
 }
@@ -5894,7 +5892,7 @@ function handleAccessChipKey(e) {
     if (!val) return;
     const chip = document.createElement('span');
     chip.className = 'send-chip';
-    chip.innerHTML = `${escHtml(val)}<button class="send-chip-remove" onclick="this.parentElement.remove()" aria-label="Remove">×</button>`;
+    chip.innerHTML = `${escHtml(val)}<button class="send-chip-remove" onclick="this.parentElement.remove()" aria-label="Remove"><svg width="8" height="8" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
     document.getElementById('access-chips-container').appendChild(chip);
     inp.value = '';
   }
@@ -6326,7 +6324,7 @@ function renderDashTiles() {
     return `<div class="dash-tile">
       <div class="dash-tile-hd">
         <span class="dash-tile-title">${q.name}</span>
-        <button class="dash-tile-remove" onclick="dashToggleTile('${q.id}')" title="Remove">×</button>
+        <button class="dash-tile-remove" onclick="dashToggleTile('${q.id}')" title="Remove"><svg width="10" height="10" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
       <div class="dash-tile-viz"></div>
     </div>`;
@@ -6494,10 +6492,7 @@ function renderAiChips() {
       ${card.name}
       <button class="chip-remove" onclick="event.stopPropagation();removeCard('${id}')"
         title="Remove">
-        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-          <path d="M1.5 1.5l5 5M6.5 1.5l-5 5" stroke="currentColor"
-            stroke-width="1.3" stroke-linecap="round"/>
-        </svg>
+        <svg width="8" height="8" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>`;
   }).join('');
@@ -6603,7 +6598,7 @@ function renderNotifList() {
         <div class="notif-item-title">${n.title}</div>
         <div class="notif-item-desc">${n.desc}</div>
       </div>
-      <button class="notif-dismiss" onclick="dismissNotif('${n.id}')" aria-label="Dismiss">×</button>
+      <button class="notif-dismiss" onclick="dismissNotif('${n.id}')" aria-label="Dismiss"><svg width="10" height="10" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </li>`).join('');
 }
 
