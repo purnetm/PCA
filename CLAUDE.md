@@ -61,7 +61,7 @@
 3-column responsive:
 - **Left sidebar** (`.ib-config-sidebar`, 280px) — configuration controls
 - **Center pane** (`.ib-center-pane`, flex) — chips bar + data preview
-- **Right sidebar** (`.ib-right-sidebar`, 340px) — SQL Console + KapAI panel
+- **Right sidebar** (`.ib-right-sidebar`, 340px) — SQL Console + Kap AI panel
 
 ### Key JS Functions
 | Function | Purpose |
