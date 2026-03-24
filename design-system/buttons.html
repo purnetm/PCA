@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Studio — Button Components</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+
+  <style>
+    /* ── Design tokens (verbatim from :root) ─────────────────────── */
+    :root {
+      /* Teal palette */
+      --color-teal-100: #ecf4f2;
+      --color-teal-200: #c7d9d6;
+      --color-teal-300: #8ac8c1;
+      --color-teal-400: #4db6ac;
+      --color-teal-500: #4d908b;
+      --color-teal-600: #4d7d7a;
+      --color-teal-700: #4c6a69;
+      --color-teal-800: #365655;
+      --color-teal-900: #1f4141;
+      /* Red palette */
+      --color-red-100:  #fee2e2;
+      --color-red-600:  #dc2626;
+      --color-red-700:  #b91c1c;
+      --color-red-800:  #7f1d1d;
+      /* Neutral */
+      --color-neutral-0: #ffffff;
+      /* From existing tokens */
+      --teal:       #4DB6AC;
+      --dark-teal:  #1F4141;
+      --cutty-sark: #4C6A69;
+      --nebula:     #C7D9D6;
+      --surface:    #F5FAF8;
+      --aqua-haze:  #ECF4F2;
+      /* Radius */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      /* Typography */
+      --font-xs:   11px;
+      --font-sm:   12px;
+      --font-base: 13px;
+      --font-md:   14px;
+      --font-lg:   15px;
+      --weight-regular:  400;
+      --weight-medium:   500;
+      --weight-semibold: 600;
+      --weight-bold:     700;
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --letter-tight: -0.4px;
+      /* Spacing */
+      --space-1:  4px;
+      --space-2:  6px;
+      --space-3:  8px;
+      --space-4:  10px;
+      --space-5:  12px;
+      --space-6:  14px;
+      --space-7:  16px;
+      --space-8:  20px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--surface);
+      color: var(--dark-teal);
+      min-height: 100vh;
+      padding: 48px 56px;
+    }
+
+    /* ── Page header ─────────────────────────────────────────────── */
+    .page-header {
+      margin-bottom: 48px;
+    }
+    .page-label {
+      font-size: var(--font-xs);
+      font-weight: var(--weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cutty-sark);
+      opacity: 0.6;
+      margin-bottom: 6px;
+    }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--letter-tight);
+      color: var(--dark-teal);
+      line-height: 1.15;
+    }
+    .page-desc {
+      font-size: var(--font-sm);
+      color: var(--cutty-sark);
+      margin-top: 6px;
+      opacity: 0.75;
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* ── Component grid ──────────────────────────────────────────── */
+    .component-grid {
+      display: grid;
+      grid-template-columns: 80px repeat(3, 1fr);
+      gap: 0;
+      background: var(--color-neutral-0);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--nebula);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(31,65,65,0.07);
+      margin-bottom: 40px;
+    }
+
+    /* Column headers */
+    .col-header {
+      padding: 16px var(--space-8);
+      border-bottom: 1px solid var(--nebula);
+      border-right: 1px solid var(--nebula);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .col-header:last-child { border-right: none; }
+    .col-header-empty {
+      padding: 16px;
+      border-bottom: 1px solid var(--nebula);
+      border-right: 1px solid var(--nebula);
+      background: var(--surface);
+    }
+
+    .col-name {
+      font-size: var(--font-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--dark-teal);
+    }
+    .col-class {
+      font-family: 'Menlo', 'Monaco', monospace;
+      font-size: 10px;
+      color: var(--cutty-sark);
+      opacity: 0.65;
+    }
+
+    /* Row label cells */
+    .row-label {
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid var(--nebula);
+      border-bottom: 1px solid var(--nebula);
+      background: var(--surface);
+    }
+    .row-label:last-child { border-bottom: none; }
+    .row-label-text {
+      font-size: 10px;
+      font-weight: var(--weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--cutty-sark);
+      opacity: 0.6;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* Button cells */
+    .btn-cell {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--nebula);
+      border-bottom: 1px solid var(--nebula);
+      min-height: 80px;
+    }
+    .btn-cell:last-child { border-right: none; }
+    .btn-cell.last-row { border-bottom: none; }
+
+    /* ── Button styles — exact Figma spec ────────────────────────── */
+
+    /* Shared base */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 32px;
+      padding: 8px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: var(--font-body);
+      font-size: var(--font-md);
+      font-weight: var(--weight-semibold);
+      line-height: 16px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.18s, transform 0.12s;
+    }
+
+    /* ── Primary ─────────────────────────────────── */
+    .btn-primary-default {
+      background: var(--color-teal-400);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 6px 0px rgba(77,182,172,0.22);
+    }
+    .btn-primary-hover {
+      background: var(--color-teal-500);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 6px 16px 0px rgba(77,182,172,0.32);
+    }
+    .btn-primary-active {
+      background: var(--color-teal-600);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 4px 0px rgba(77,182,172,0.18);
+    }
+    .btn-primary-disabled {
+      background: var(--color-teal-200);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 6px 0px rgba(77,182,172,0.22);
+      cursor: not-allowed;
+    }
+
+    /* ── Secondary ───────────────────────────────── */
+    .btn-secondary-default {
+      background: var(--color-neutral-0);
+      color: var(--color-teal-400);
+      border: 1px solid var(--color-teal-400);
+      box-shadow: 0px 2px 6px 0px rgba(77,182,172,0.22);
+    }
+    .btn-secondary-hover {
+      background: var(--color-teal-100);
+      color: var(--color-teal-400);
+      border: 1px solid var(--color-teal-400);
+      box-shadow: 0px 2px 6px 0px rgba(77,182,172,0.22);
+    }
+    .btn-secondary-active {
+      background: var(--color-teal-200);
+      color: var(--color-teal-400);
+      border: 1px solid var(--color-teal-400);
+      box-shadow: 0px 2px 6px 0px rgba(77,182,172,0.22);
+    }
+    .btn-secondary-disabled {
+      background: var(--color-neutral-0);
+      color: var(--color-teal-200);
+      border: 1px solid var(--color-teal-200);
+      box-shadow: 0px 2px 6px 0px rgba(77,182,172,0.22);
+      cursor: not-allowed;
+    }
+
+    /* ── Warning (Red) ───────────────────────────── */
+    .btn-warning-default {
+      background: var(--color-red-600);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 6px 0px rgba(127,29,29,0.22);
+    }
+    .btn-warning-hover {
+      background: var(--color-red-700);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 6px 0px rgba(127,29,29,0.32);
+    }
+    .btn-warning-active {
+      background: var(--color-red-800);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 6px 0px rgba(127,29,29,0.18);
+    }
+    .btn-warning-disabled {
+      background: var(--color-red-100);
+      color: var(--color-neutral-0);
+      box-shadow: 0px 2px 6px 0px rgba(127,29,29,0.22);
+      cursor: not-allowed;
+    }
+
+    /* ── Icon inside button ──────────────────────── */
+    .btn-icon {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Icon variants section ───────────────────────────────────── */
+    .section {
+      background: var(--color-neutral-0);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--nebula);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(31,65,65,0.07);
+      margin-bottom: 40px;
+    }
+    .section-hd {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--nebula);
+      background: var(--surface);
+    }
+    .section-title {
+      font-size: var(--font-md);
+      font-weight: var(--weight-semibold);
+      color: var(--dark-teal);
+    }
+    .section-tag {
+      font-family: 'Menlo', 'Monaco', monospace;
+      font-size: 10px;
+      background: var(--aqua-haze);
+      color: var(--cutty-sark);
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--nebula);
+    }
+    .section-body {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .variant-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .variant-label {
+      font-size: 10px;
+      font-weight: var(--weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--cutty-sark);
+      opacity: 0.55;
+    }
+
+    /* ── Token table ─────────────────────────────────────────────── */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .token-table th {
+      font-size: 10px;
+      font-weight: var(--weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--cutty-sark);
+      opacity: 0.6;
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--nebula);
+      background: var(--surface);
+    }
+    .token-table td {
+      padding: 10px 16px;
+      font-size: var(--font-sm);
+      border-bottom: 1px solid var(--nebula);
+      vertical-align: middle;
+    }
+    .token-table tr:last-child td { border-bottom: none; }
+    .token-table tr:nth-child(even) td { background: var(--surface); }
+
+    .swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid rgba(0,0,0,0.08);
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .mono {
+      font-family: 'Menlo', 'Monaco', monospace;
+      font-size: 11px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--nebula);
+      margin: 0;
+    }
+
+    /* ── Focus ring ──────────────────────────────────────────────── */
+    .btn:focus-visible {
+      outline: 2px solid var(--color-teal-400);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-label">Design System · Components</div>
+    <div class="page-title">Button</div>
+    <div class="page-desc">3 types × 4 states. All tokens sourced from <code class="mono">:root</code> in <code class="mono">index.html</code>. Matches Figma component at <code class="mono">183:434</code>.</div>
+  </div>
+
+  <!-- Main states grid -->
+  <div class="component-grid">
+
+    <!-- Header row -->
+    <div class="col-header-empty"></div>
+    <div class="col-header">
+      <span class="col-name">Primary</span>
+      <span class="col-class">.btn-primary</span>
+    </div>
+    <div class="col-header">
+      <span class="col-name">Secondary</span>
+      <span class="col-class">.btn-secondary</span>
+    </div>
+    <div class="col-header" style="border-right:none;">
+      <span class="col-name">Warning</span>
+      <span class="col-class">.btn-warning</span>
+    </div>
+
+    <!-- Default row -->
+    <div class="row-label"><span class="row-label-text">Default</span></div>
+    <div class="btn-cell">
+      <button class="btn btn-primary-default">Button</button>
+    </div>
+    <div class="btn-cell">
+      <button class="btn btn-secondary-default">Button</button>
+    </div>
+    <div class="btn-cell" style="border-right:none;">
+      <button class="btn btn-warning-default">Button</button>
+    </div>
+
+    <!-- Hover row -->
+    <div class="row-label"><span class="row-label-text">Hover</span></div>
+    <div class="btn-cell">
+      <button class="btn btn-primary-hover">Button</button>
+    </div>
+    <div class="btn-cell">
+      <button class="btn btn-secondary-hover">Button</button>
+    </div>
+    <div class="btn-cell" style="border-right:none;">
+      <button class="btn btn-warning-hover">Button</button>
+    </div>
+
+    <!-- Active row -->
+    <div class="row-label"><span class="row-label-text">Active</span></div>
+    <div class="btn-cell">
+      <button class="btn btn-primary-active">Button</button>
+    </div>
+    <div class="btn-cell">
+      <button class="btn btn-secondary-active">Button</button>
+    </div>
+    <div class="btn-cell" style="border-right:none;">
+      <button class="btn btn-warning-active">Button</button>
+    </div>
+
+    <!-- Disabled row -->
+    <div class="row-label last-row"><span class="row-label-text">Disabled</span></div>
+    <div class="btn-cell last-row">
+      <button class="btn btn-primary-disabled" disabled>Button</button>
+    </div>
+    <div class="btn-cell last-row">
+      <button class="btn btn-secondary-disabled" disabled>Button</button>
+    </div>
+    <div class="btn-cell last-row" style="border-right:none;">
+      <button class="btn btn-warning-disabled" disabled>Button</button>
+    </div>
+
+  </div>
+
+  <!-- Icon variants -->
+  <div class="section">
+    <div class="section-hd">
+      <span class="section-title">Icon variants</span>
+      <span class="section-tag">Default state only</span>
+    </div>
+    <div class="section-body">
+      <div class="variant-col">
+        <span class="variant-label">Text only</span>
+        <button class="btn btn-primary-default">Button</button>
+      </div>
+      <div class="variant-col">
+        <span class="variant-label">Icon left</span>
+        <button class="btn btn-primary-default">
+          <svg class="btn-icon" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Button
+        </button>
+      </div>
+      <div class="variant-col">
+        <span class="variant-label">Icon right</span>
+        <button class="btn btn-primary-default">
+          Button
+          <svg class="btn-icon" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="variant-col">
+        <span class="variant-label">Icon only</span>
+        <button class="btn btn-primary-default" style="padding: 8px 10px; gap:0;">
+          <svg class="btn-icon" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div style="width:1px; height:40px; background:var(--nebula); margin: 0 8px;"></div>
+      <div class="variant-col">
+        <span class="variant-label">Secondary + icon</span>
+        <button class="btn btn-secondary-default">
+          <svg class="btn-icon" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Button
+        </button>
+      </div>
+      <div class="variant-col">
+        <span class="variant-label">Warning + icon</span>
+        <button class="btn btn-warning-default">
+          <svg class="btn-icon" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1.5v5M6 8.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M1 11L6 1l5 10H1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+          Button
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token reference -->
+  <div class="section">
+    <div class="section-hd">
+      <span class="section-title">Colour tokens</span>
+      <span class="section-tag">From Figma Primitives collection</span>
+    </div>
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Value</th>
+          <th>Used on</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mono">--color-teal-400</span></td>
+          <td><span class="swatch" style="background:#4DB6AC;"></span><span class="mono">#4DB6AC</span></td>
+          <td>Primary default · Secondary border + text</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-teal-500</span></td>
+          <td><span class="swatch" style="background:#4D908B;"></span><span class="mono">#4D908B</span></td>
+          <td>Primary hover</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-teal-600</span></td>
+          <td><span class="swatch" style="background:#4D7D7A;"></span><span class="mono">#4D7D7A</span></td>
+          <td>Primary active</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-teal-200</span></td>
+          <td><span class="swatch" style="background:#C7D9D6;"></span><span class="mono">#C7D9D6</span></td>
+          <td>Primary disabled · Secondary active bg · Secondary disabled border</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-teal-100</span></td>
+          <td><span class="swatch" style="background:#ECF4F2;"></span><span class="mono">#ECF4F2</span></td>
+          <td>Secondary hover bg</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-red-600</span></td>
+          <td><span class="swatch" style="background:#DC2626;"></span><span class="mono">#DC2626</span></td>
+          <td>Warning default</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-red-700</span></td>
+          <td><span class="swatch" style="background:#B91C1C;"></span><span class="mono">#B91C1C</span></td>
+          <td>Warning hover</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-red-800</span></td>
+          <td><span class="swatch" style="background:#7F1D1D;"></span><span class="mono">#7F1D1D</span></td>
+          <td>Warning active</td>
+        </tr>
+        <tr>
+          <td><span class="mono">--color-red-100</span></td>
+          <td><span class="swatch" style="background:#FEE2E2;"></span><span class="mono">#FEE2E2</span></td>
+          <td>Warning disabled</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
