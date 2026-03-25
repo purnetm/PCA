@@ -51,7 +51,8 @@
       "Bash(cmd /c \"wmic process where processid=36804 get name,processid,executablepath 2>nul\")",
       "Bash(chmod +x \"/c/Users/purnet.moirangthem/Documents/Claude/Data Studio v2/.git/hooks/post-commit\")",
       "Bash(curl -s \"http://localhost:3845/assets/8b0c8b0ae2b80f324d8faff8a52da4babbb4545e.svg\")",
-      "mcp__Figma__get_metadata"
+      "mcp__Figma__get_metadata",
+      "mcp__figma__get_code_connect_suggestions"
     ]
   }
 }
