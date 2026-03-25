@@ -3372,16 +3372,16 @@
     /* ── Generic Card ───────────────────────────────────────────── */
     .a-card {
       background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md);
-      box-shadow: var(--shadow-card-sm); overflow: hidden;
+      box-shadow: var(--shadow-card-sm); overflow: hidden; display: flex; flex-direction: column;
     }
     .a-card-head {
-      display: flex; align-items: flex-start; justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 18px 20px 10px;
     }
     .a-card-head-left { display: flex; flex-direction: column; gap: 4px; }
     .a-card-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
     .a-card-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); line-height: 1.55; }
-    .a-card-body { padding: 6px 20px 20px; }
+    .a-card-body { padding: 6px 20px 20px; flex: 1; display: flex; flex-direction: column; }
     .a-card-badge {
       font-size: 11px; font-weight: var(--weight-semibold); padding: 3px 9px;
       border-radius: 10px; white-space: nowrap; flex-shrink: 0;
@@ -3422,7 +3422,7 @@
     .a-bar-val { min-width: 36px; text-align: right; font-size: var(--font-sm); color: var(--cutty-sark); font-variant-numeric: tabular-nums; }
     .a-bar-pct { min-width: 36px; text-align: right; font-size: var(--font-sm); color: var(--teal); font-weight: var(--weight-semibold); }
     /* ── Intent Analysis ────────────────────────────────────────── */
-    .intent-list { display: flex; flex-direction: column; gap: 8px; }
+    .intent-list { display: flex; flex-direction: column; gap: 16px; }
     .intent-row { display: flex; align-items: center; gap: 8px; }
     .intent-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .intent-name { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); }
@@ -3431,18 +3431,20 @@
     .intent-cat-btn {
       display: inline-block; padding: 5px 14px; background: var(--teal); color: #fff;
       border-radius: 16px; font-size: var(--font-sm); font-weight: var(--weight-medium);
-      margin-bottom: 10px; cursor: pointer; border: none; font-family: var(--font-body);
+      cursor: pointer; border: none; font-family: var(--font-body); white-space: nowrap; flex-shrink: 0;
     }
     /* ── Emerging Issues ────────────────────────────────────────── */
     .emerging-item {
-      display: flex; align-items: flex-start; gap: 12px; padding: 14px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px;
       border: 1px solid var(--nebula); border-radius: var(--radius-sm);
-      background: var(--surface); margin-bottom: 10px;
+      background: var(--surface);
     }
-    .emerging-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
-    .emerging-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
-    .emerging-meta { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; margin-top: 4px; line-height: 1.5; }
-    .emerging-sentiment { font-size: 11px; font-weight: var(--weight-medium); margin-top: 4px; }
+    .emerging-item-l { display: flex; align-items: flex-start; gap: 8px; flex: 1; min-width: 0; }
+    .emerging-text { min-width: 0; flex: 1; }
+    .emerging-icon { font-size: 18px; flex-shrink: 0; }
+    .emerging-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .emerging-meta { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; margin-top: 2px; line-height: 1.5; }
+    .emerging-sentiment { font-size: 11px; font-weight: var(--weight-medium); white-space: nowrap; }
     .emerging-sentiment.neg { color: var(--status-negative); }
     .emerging-sentiment.pos { color: var(--accent-success); }
     /* ── Top Categories ─────────────────────────────────────────── */
@@ -4851,13 +4853,13 @@
                   <div class="a-card-title">Intent Analysis</div>
                   <div class="a-card-sub">Top intents by ticket volume</div>
                 </div>
+                <button class="intent-cat-btn">Customer Support &amp; General Assistance</button>
               </div>
               <div class="a-card-body">
-                <button class="intent-cat-btn">Customer Support &amp; General Assistance</button>
-                <div style="display:flex;align-items:center;gap:20px;">
+                <div style="display:flex;align-items:center;gap:16px;flex:1;margin-top:auto;margin-bottom:auto;">
                   <!-- Donut -->
                   <div style="flex-shrink:0;">
-                    <svg width="130" height="130" viewBox="0 0 130 130">
+                    <svg width="110" height="110" viewBox="0 0 130 130">
                       <circle cx="65" cy="65" r="52" fill="none" stroke="var(--aqua-haze)" stroke-width="18"/>
                       <circle cx="65" cy="65" r="52" fill="none" stroke="#4DB6AC" stroke-width="18" stroke-dasharray="131 196" stroke-dashoffset="0" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
                       <circle cx="65" cy="65" r="52" fill="none" stroke="#8B5CF6" stroke-width="18" stroke-dasharray="100 227" stroke-dashoffset="-131" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
@@ -4885,30 +4887,36 @@
                 <div class="a-card-head-left"><div class="a-card-title">Emerging Issues</div><div class="a-card-sub">Intents with sudden spikes</div></div>
                 <span class="a-card-badge alert">Alert</span>
               </div>
-              <div class="a-card-body">
+              <div class="a-card-body" style="gap:8px;">
                 <div class="emerging-item">
-                  <div class="emerging-icon">⚠️</div>
-                  <div>
-                    <div class="emerging-name">Rider Not Assigned</div>
-                    <div class="emerging-meta">1,770 tickets</div>
-                    <div class="emerging-sentiment pos">+0.04 sentiment</div>
+                  <div class="emerging-item-l">
+                    <div class="emerging-icon">⚠️</div>
+                    <div class="emerging-text">
+                      <div class="emerging-name">Rider Not Assigned</div>
+                      <div class="emerging-meta">1,770 tickets</div>
+                    </div>
                   </div>
+                  <div class="emerging-sentiment pos">+0.04 sentiment</div>
                 </div>
                 <div class="emerging-item">
-                  <div class="emerging-icon">⚠️</div>
-                  <div>
-                    <div class="emerging-name">Delivery Delay</div>
-                    <div class="emerging-meta">1,756 tickets</div>
-                    <div class="emerging-sentiment neg">-0.31 sentiment</div>
+                  <div class="emerging-item-l">
+                    <div class="emerging-icon">⚠️</div>
+                    <div class="emerging-text">
+                      <div class="emerging-name">Delivery Delay</div>
+                      <div class="emerging-meta">1,756 tickets</div>
+                    </div>
                   </div>
+                  <div class="emerging-sentiment neg">-0.31 sentiment</div>
                 </div>
                 <div class="emerging-item">
-                  <div class="emerging-icon">⚠️</div>
-                  <div>
-                    <div class="emerging-name">Product Out of Stock</div>
-                    <div class="emerging-meta">1,285 tickets</div>
-                    <div class="emerging-sentiment neg">-0.33 sentiment</div>
+                  <div class="emerging-item-l">
+                    <div class="emerging-icon">⚠️</div>
+                    <div class="emerging-text">
+                      <div class="emerging-name">Product Out of Stock</div>
+                      <div class="emerging-meta">1,285 tickets</div>
+                    </div>
                   </div>
+                  <div class="emerging-sentiment neg">-0.33 sentiment</div>
                 </div>
               </div>
             </div>
