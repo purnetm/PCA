@@ -47,7 +47,8 @@
     .nq-nudge-accept:focus-visible,
     .add-manual-btn:focus-visible,
     .chip-remove:focus-visible,
-    .bc-home:focus-visible {
+    .bc-home:focus-visible,
+    .cmg-health-card:focus-visible {
       outline: 2px solid var(--teal);
       outline-offset: 2px;
     }
@@ -2719,7 +2720,7 @@
     /* ── NQB: 4-Step Conversational Query Builder ─────────────────── */
     .nqb-page { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; position: relative; }
     .nqb-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
-    .nqb-left { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+    .nqb-left { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; scroll-padding-bottom: 120px; }
     .nqb-right { display: none; }
 
     /* Step indicator row */
@@ -2734,7 +2735,7 @@
     .nqb-step-connector.done { background: var(--teal-30); }
 
     /* Step content area */
-    .nqb-step-content { flex: 1; overflow-y: auto; padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-6); }
+    .nqb-step-content { flex: 1; min-height: 0; overflow-y: auto; padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-6); }
     .nqb-step-title { font-size: var(--font-lg); font-weight: var(--weight-semibold); color: var(--dark-teal); line-height: 1.3; }
     .nqb-step-sub { font-size: var(--font-base); color: var(--cutty-sark); margin-top: var(--space-1); }
     .nqb-textarea { width: 100%; min-height: 100px; padding: var(--space-5); border: 1.5px solid var(--nebula); border-radius: var(--radius-md); font-family: 'Plus Jakarta Sans', sans-serif; font-size: var(--font-base); color: var(--dark-teal); resize: vertical; outline: none; transition: border-color 0.15s; background: #fff; box-sizing: border-box; line-height: 1.5; }
@@ -2881,7 +2882,7 @@
     .nqb-sql-pane-title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); display: flex; align-items: center; gap: var(--space-2); }
     .nqb-sql-pane-close { background: none; border: none; cursor: pointer; color: var(--cutty-sark); font-size: 18px; line-height: 1; padding: 6px; min-width: 32px; min-height: 32px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); margin: -4px; opacity: 0.55; font-family: 'Plus Jakarta Sans', sans-serif; transition: opacity 0.15s, background 0.15s; }
     .nqb-sql-pane-close:hover { opacity: 1; background: var(--teal-10); }
-    .nqb-sql-editor { flex: 1; min-height: 80px; padding: var(--space-4) var(--space-8); font-family: 'Menlo', 'Monaco', 'Consolas', monospace; font-size: 12px; color: var(--dark-teal); border: none; outline: none; resize: none; background: #fafbfc; line-height: 1.65; }
+    .nqb-sql-editor { min-height: 80px; padding: var(--space-4) var(--space-8); font-family: 'Menlo', 'Monaco', 'Consolas', monospace; font-size: 12px; color: var(--dark-teal); border: none; outline: none; resize: none; background: #fafbfc; line-height: 1.65; }
     .nqb-sql-ai-nudge { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-8); background: #e0f2f0; border-top: 1px solid var(--teal-30); font-size: var(--font-sm); flex-shrink: 0; flex-wrap: wrap; }
     .nqb-sql-nudge-text { flex: 1; color: var(--dark-teal); }
     .nqb-sql-nudge-text b { color: var(--teal); }
@@ -3268,6 +3269,515 @@
       border: none; background: none; cursor: pointer;
       color: var(--cutty-sark); font-size: var(--font-md); line-height: 1; padding: 0;
     }
+
+    /* ── Analytics: collapsed sidebar flyout ─────────────────────── */
+    .sidebar.collapsed .nav-analytics-group { position: relative; }
+    .sidebar.collapsed .nav-analytics-group .nav-subnav {
+      position: absolute; left: calc(100% + 8px); top: 0;
+      background: #fff; border: 1px solid var(--nebula);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 200; padding: 4px; min-width: 200px;
+      flex-direction: column;
+    }
+    .sidebar.collapsed .nav-analytics-group .nav-subnav::before {
+      content: ''; position: absolute; right: 100%; top: 0; width: 8px; height: 100%;
+    }
+    .sidebar.collapsed .nav-analytics-group:hover .nav-subnav { display: flex !important; }
+    .sidebar.collapsed .nav-analytics-group .nav-subitem { padding-left: var(--space-3); }
+
+    /* ── Analytics View Layout ────────────────────────────────────── */
+    .analytics-topbar {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 28px 28px 0; flex-shrink: 0; gap: 16px;
+    }
+    .analytics-page-title {
+      font-family: var(--font-display); font-size: var(--font-2xl);
+      font-weight: var(--weight-bold); color: var(--dark-teal);
+      letter-spacing: var(--letter-tight); line-height: 1.2;
+    }
+    .analytics-page-sub {
+      font-size: var(--font-sm); color: var(--cutty-sark);
+      opacity: var(--opacity-muted); margin-top: 6px;
+      max-width: 560px; line-height: 1.65;
+    }
+    .analytics-date-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .analytics-date-group { display: flex; align-items: center; gap: 5px; }
+    .analytics-date-label { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; font-weight: var(--weight-medium); white-space: nowrap; }
+    .analytics-date-field {
+      display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border: 1px solid var(--nebula); border-radius: var(--radius-sm);
+      background: #fff; font-size: var(--font-sm); color: var(--dark-teal);
+      font-family: var(--font-body); cursor: pointer; white-space: nowrap;
+    }
+    /* ── Analytics Tab Navigation ───────────────────────────────── */
+    .analytics-tabs-wrap {
+      display: flex; align-items: center;
+      padding: 14px 28px 0; flex-shrink: 0; overflow-x: auto;
+    }
+    .analytics-tabs-wrap::-webkit-scrollbar { display: none; }
+    .a-tabs-pill {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: var(--surface); border-radius: 100px; padding: 4px;
+      border: 1px solid var(--nebula);
+    }
+    .a-tab {
+      padding: 8px 18px; border-radius: 20px; border: none;
+      font-family: var(--font-body); font-size: var(--font-sm); font-weight: var(--weight-medium);
+      color: var(--cutty-sark); background: transparent; cursor: pointer;
+      white-space: nowrap; transition: background 0.15s ease, color 0.15s ease, transform 0.1s cubic-bezier(.25, .46, .45, .94);
+    }
+    .a-tab:hover { background: var(--teal-10); color: var(--teal); }
+    .a-tab.active { background: var(--teal); color: #fff; }
+    .a-tab:active { transform: scale(0.96); }
+    .a-tab:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; border-radius: 20px; }
+    /* ── Analytics Scrollable Content ───────────────────────────── */
+    .analytics-content {
+      flex: 1; overflow-y: auto; padding: 20px 28px 48px;
+      min-height: 0; display: flex; flex-direction: column; gap: 24px;
+    }
+    .analytics-content::-webkit-scrollbar { width: 6px; }
+    .analytics-content::-webkit-scrollbar-track { background: transparent; }
+    .analytics-content::-webkit-scrollbar-thumb { background: var(--nebula); border-radius: 3px; }
+    .a-tab-content { display: none; flex-direction: column; gap: 24px; }
+    .a-tab-content.active { display: flex; }
+    /* ── Section Header ─────────────────────────────────────────── */
+    .a-section-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 14px; border-bottom: 1.5px solid var(--aqua-haze); margin-bottom: 8px;
+    }
+    .a-section-hd-left { display: flex; align-items: center; gap: 8px; }
+    .a-section-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .a-section-icon { color: var(--teal); display: flex; align-items: center; }
+    /* ── KPI Cards ──────────────────────────────────────────────── */
+    .a-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .a-kpi-row-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 16px; }
+    .a-kpi-card {
+      background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md);
+      padding: 20px; display: flex; flex-direction: column; gap: 8px;
+      box-shadow: var(--shadow-card-sm);
+    }
+    .a-kpi-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted);
+    }
+    .a-kpi-value {
+      font-family: var(--font-display); font-size: 32px; font-weight: var(--weight-bold);
+      color: var(--dark-teal); letter-spacing: var(--letter-tight); line-height: 1;
+    }
+    .a-kpi-trend { font-size: var(--font-sm); display: flex; align-items: center; gap: 4px; }
+    .a-kpi-trend.positive { color: var(--accent-success); }
+    .a-kpi-trend.negative { color: var(--status-negative); }
+    .a-kpi-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); line-height: 1.55; }
+    /* ── Generic Card ───────────────────────────────────────────── */
+    .a-card {
+      background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card-sm); overflow: hidden;
+    }
+    .a-card-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 18px 20px 10px;
+    }
+    .a-card-head-left { display: flex; flex-direction: column; gap: 4px; }
+    .a-card-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .a-card-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); line-height: 1.55; }
+    .a-card-body { padding: 0 20px 20px; }
+    .a-card-badge {
+      font-size: 11px; font-weight: var(--weight-semibold); padding: 3px 9px;
+      border-radius: 10px; white-space: nowrap; flex-shrink: 0;
+    }
+    .a-card-badge.alert  { background: rgba(220,38,38,0.10); color: var(--status-negative); }
+    .a-card-badge.teal   { background: var(--teal-10); color: var(--teal); }
+    .a-card-badge.green  { background: rgba(16,185,129,0.10); color: var(--accent-success); }
+    .a-card-badge.amber  { background: rgba(245,158,11,0.10); color: var(--accent-warning); }
+    .a-card-btn {
+      font-size: 11px; font-weight: var(--weight-semibold); padding: 5px 12px;
+      border-radius: 10px; border: 1px solid var(--nebula); background: #fff;
+      color: var(--cutty-sark); cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    }
+    .a-card-btn:hover { background: var(--teal-10); color: var(--teal); border-color: var(--teal-30); }
+    /* ── Grid layouts ───────────────────────────────────────────── */
+    .a-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .a-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .a-2col-wide { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+    .a-2col-left { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+    /* ── Donut Chart (SVG ring) ──────────────────────────────────── */
+    .a-donut-wrap { display: flex; align-items: center; justify-content: center; padding: 16px 0; }
+    .a-donut-svg { overflow: visible; }
+    .a-donut-center { text-anchor: middle; dominant-baseline: middle; }
+    /* ── Horizontal Bar ─────────────────────────────────────────── */
+    .a-bar-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+    .a-bar-name {
+      min-width: 120px; max-width: 160px; font-size: var(--font-sm); color: var(--dark-teal);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0;
+    }
+    .a-bar-track { flex: 1; height: 6px; background: var(--aqua-haze); border-radius: 3px; overflow: hidden; }
+    .a-bar-fill { height: 100%; border-radius: 3px; background: var(--teal); transition: width 0.4s; }
+    .a-bar-fill.purple { background: #8B5CF6; }
+    .a-bar-fill.coral  { background: #F97316; }
+    .a-bar-fill.amber  { background: var(--accent-warning); }
+    .a-bar-fill.blue   { background: var(--accent-info); }
+    .a-bar-fill.green  { background: var(--accent-success); }
+    .a-bar-fill.red    { background: var(--status-negative); }
+    .a-bar-val { min-width: 36px; text-align: right; font-size: var(--font-sm); color: var(--cutty-sark); font-variant-numeric: tabular-nums; }
+    .a-bar-pct { min-width: 36px; text-align: right; font-size: var(--font-sm); color: var(--teal); font-weight: var(--weight-semibold); }
+    /* ── Intent Analysis ────────────────────────────────────────── */
+    .intent-list { display: flex; flex-direction: column; gap: 8px; }
+    .intent-row { display: flex; align-items: center; gap: 8px; }
+    .intent-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .intent-name { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); }
+    .intent-count { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); min-width: 50px; text-align: right; }
+    .intent-avg { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; min-width: 42px; text-align: right; }
+    .intent-cat-btn {
+      display: inline-block; padding: 5px 14px; background: var(--teal); color: #fff;
+      border-radius: 16px; font-size: var(--font-sm); font-weight: var(--weight-medium);
+      margin-bottom: 10px; cursor: pointer; border: none; font-family: var(--font-body);
+    }
+    /* ── Emerging Issues ────────────────────────────────────────── */
+    .emerging-item {
+      display: flex; align-items: flex-start; gap: 12px; padding: 14px;
+      border: 1px solid var(--nebula); border-radius: var(--radius-sm);
+      background: var(--surface); margin-bottom: 10px;
+    }
+    .emerging-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .emerging-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .emerging-meta { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; margin-top: 4px; line-height: 1.5; }
+    .emerging-sentiment { font-size: 11px; font-weight: var(--weight-medium); margin-top: 4px; }
+    .emerging-sentiment.neg { color: var(--status-negative); }
+    .emerging-sentiment.pos { color: var(--accent-success); }
+    /* ── Top Categories ─────────────────────────────────────────── */
+    .a-cat-card { background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-card-sm); }
+    .a-cat-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .a-cat-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .a-cat-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .a-cat-vol { font-family: var(--font-display); font-size: 28px; font-weight: var(--weight-bold); color: var(--dark-teal); margin-bottom: 14px; }
+    .a-cat-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+    .a-cat-name { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .a-cat-pct { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; min-width: 34px; text-align: right; }
+    .a-cat-num { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); min-width: 36px; text-align: right; }
+    .a-cat-bar { height: 3px; background: var(--aqua-haze); border-radius: 2px; margin-top: 3px; overflow: hidden; }
+    .a-cat-bar-fill { height: 100%; border-radius: 2px; }
+    /* ── Channel Cards ──────────────────────────────────────────── */
+    .a-channel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    .a-channel-card { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .a-channel-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .a-channel-vol { font-family: var(--font-display); font-size: 20px; font-weight: var(--weight-bold); color: var(--dark-teal); }
+    .a-channel-stats { display: flex; gap: 10px; }
+    .a-channel-stat .lbl { font-size: 10px; color: var(--cutty-sark); opacity: 0.7; }
+    .a-channel-stat .val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    /* ── Bottleneck Rows ────────────────────────────────────────── */
+    .a-bottleneck-row {
+      display: flex; align-items: center; gap: 12px; padding: 11px 0;
+      border-bottom: 1px solid var(--aqua-haze);
+    }
+    .a-bottleneck-row:last-child { border-bottom: none; }
+    .a-bottleneck-color { width: 4px; height: 34px; border-radius: 2px; flex-shrink: 0; }
+    .a-bottleneck-name { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); font-weight: var(--weight-medium); line-height: 1.4; }
+    .a-bottleneck-meta { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; text-align: right; line-height: 1.55; }
+    /* ── Stat Blocks ────────────────────────────────────────────── */
+    .a-stat-val { font-family: var(--font-display); font-size: 32px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1; }
+    .a-stat-lbl { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); margin-top: 4px; line-height: 1.5; }
+    .a-stat-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; margin-top: 4px; line-height: 1.5; }
+    /* ── Phase bars ─────────────────────────────────────────────── */
+    .a-phase-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--aqua-haze); }
+    .a-phase-row:last-child { border-bottom: none; }
+    .a-phase-name { min-width: 80px; font-size: var(--font-sm); color: var(--dark-teal); }
+    .a-phase-bar { flex: 1; height: 10px; border-radius: 5px; overflow: hidden; background: var(--aqua-haze); }
+    .a-phase-fill { height: 100%; border-radius: 5px; }
+    .a-phase-pct { min-width: 36px; text-align: right; font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    /* ── Probing quality ────────────────────────────────────────── */
+    .a-probe-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 12px; }
+    .a-probe-stat { background: var(--surface); border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 10px 12px; text-align: center; }
+    .a-probe-stat.highlight { background: rgba(248,113,113,0.07); }
+    .a-probe-val { font-size: 20px; font-weight: var(--weight-bold); color: var(--dark-teal); font-family: var(--font-display); }
+    .a-probe-lbl { font-size: 10px; color: var(--cutty-sark); opacity: 0.7; margin-top: 2px; }
+    /* ── Top reasons ────────────────────────────────────────────── */
+    .a-top-reason { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid var(--aqua-haze); }
+    .a-top-reason:last-child { border-bottom: none; }
+    .a-top-reason-lbl { font-size: var(--font-sm); color: var(--dark-teal); flex: 1; }
+    .a-top-reason-val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); min-width: 32px; text-align: right; }
+    /* ── Compensation table ─────────────────────────────────────── */
+    .a-comp-table { width: 100%; border-collapse: collapse; }
+    .a-comp-table tr { border-bottom: 1px solid var(--aqua-haze); }
+    .a-comp-table tr:last-child { border-bottom: none; }
+    .a-comp-table td { padding: 6px 0; font-size: var(--font-sm); color: var(--dark-teal); vertical-align: middle; }
+    .a-comp-table td:first-child { color: var(--cutty-sark); opacity: 0.8; }
+    .a-comp-table td:last-child { text-align: right; font-weight: var(--weight-medium); }
+    .a-comp-bar { height: 3px; background: var(--teal); border-radius: 2px; margin-top: 4px; }
+    /* ── Sentiment/Journey ──────────────────────────────────────── */
+    .a-sent-split { display: flex; gap: 20px; }
+    .a-sent-item { display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border: 1px solid var(--nebula); border-radius: var(--radius-sm); flex: 1; }
+    .a-sent-item-val { font-family: var(--font-display); font-size: 22px; font-weight: var(--weight-bold); color: var(--dark-teal); }
+    .a-sent-item-lbl { font-size: 11px; color: var(--cutty-sark); opacity: 0.7; }
+    /* ── Folder Breakdown ───────────────────────────────────────── */
+    .a-folder-group { margin-bottom: 14px; }
+    .a-folder-group-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .a-folder-badge { font-size: 11px; background: var(--aqua-haze); color: var(--cutty-sark); padding: 2px 8px; border-radius: 10px; font-weight: var(--weight-medium); }
+    .a-folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; }
+    .a-folder-card { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 12px; background: var(--surface); }
+    .a-folder-card-path { font-size: 10px; color: var(--cutty-sark); opacity: 0.6; margin-bottom: 4px; }
+    .a-folder-card-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); margin-bottom: 8px; }
+    .a-folder-stats { display: flex; gap: 16px; }
+    .a-folder-stat-val { font-size: var(--font-md); font-weight: var(--weight-bold); color: var(--dark-teal); }
+    .a-folder-stat-lbl { font-size: 10px; color: var(--cutty-sark); opacity: 0.6; }
+    .a-folder-sentiment-bar { height: 4px; background: var(--aqua-haze); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+    .a-folder-sentiment-fill { height: 100%; border-radius: 2px; background: var(--teal); }
+    /* ── Recontact ──────────────────────────────────────────────── */
+    .a-recontact-split { display: flex; align-items: center; gap: 20px; }
+    .a-recontact-right { flex: 1; }
+    /* ── Placeholder / Coming Soon ──────────────────────────────── */
+    .a-placeholder {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      text-align: center; padding: 48px;
+    }
+    .a-placeholder-icon { font-size: 52px; opacity: 0.25; }
+    .a-placeholder-title { font-family: var(--font-display); font-size: var(--font-xl); font-weight: var(--weight-bold); color: var(--dark-teal); }
+    .a-placeholder-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); max-width: 300px; line-height: 1.5; }
+    /* ── Chart empty state ──────────────────────────────────────── */
+    .a-chart-empty { display: flex; align-items: center; justify-content: center; height: 100px; font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); }
+    /* ── Voicebot KPI row ───────────────────────────────────────── */
+    .vb-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+    /* ── Escalation timing ──────────────────────────────────────── */
+    .a-esc-timing-block { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 12px; }
+    .a-esc-timing-val { font-family: var(--font-display); font-size: 24px; font-weight: var(--weight-bold); color: var(--dark-teal); }
+    .a-esc-timing-lbl { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; }
+    .a-esc-timing-sub { font-size: 11px; color: var(--cutty-sark); opacity: 0.5; }
+    /* ── Agent row ──────────────────────────────────────────────── */
+    .a-agent-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--aqua-haze); }
+    .a-agent-row:last-child { border-bottom: none; }
+    .a-agent-row-lbl { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.8; }
+    .a-agent-row-val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .a-agent-bar { height: 4px; background: var(--aqua-haze); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .a-agent-bar-fill { height: 100%; border-radius: 2px; }
+    /* ── Divider line ───────────────────────────────────────────── */
+    .a-divider { height: 1px; background: var(--aqua-haze); margin: 4px 0; }
+
+    /* ══ Customer Memory Graph ══════════════════════════════════════ */
+    /* Health Scorecard Row */
+    .cmg-health-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; padding: 20px 28px 24px; flex-shrink: 0; border-bottom: 1.5px solid var(--nebula); margin-bottom: 24px; }
+    .cmg-health-card {
+      background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md);
+      padding: 18px 20px; cursor: pointer;
+      transition: box-shadow 0.18s, border-color 0.18s, transform 0.15s, background 0.18s;
+      border-left-width: 4px; display: flex; flex-direction: column; gap: 8px;
+      box-shadow: var(--shadow-card-sm); position: relative; overflow: hidden;
+    }
+    /* Bottom-bar affordance: grows on hover, fills on active */
+    .cmg-health-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 0; background: var(--teal);
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      transition: height 0.18s ease;
+    }
+    .cmg-health-card:hover {
+      box-shadow: var(--shadow-card); transform: translateY(-2px);
+      border-color: var(--teal-30); background: rgba(77,182,172,0.03);
+    }
+    .cmg-health-card:hover::after { height: 3px; }
+    .cmg-health-card.active {
+      border-color: var(--teal); background: var(--teal-15);
+      box-shadow: 0 0 0 3px var(--teal-30), var(--shadow-card);
+    }
+    .cmg-health-card.active .cmg-health-signal { color: var(--dark-teal); }
+    .cmg-health-card.active .cmg-health-section-label { opacity: 1; }
+    .cmg-health-card.active .cmg-health-label { opacity: 1; }
+    .cmg-health-card.active::after { height: 4px; }
+    .cmg-health-card.red    { border-left-color: var(--status-negative); }
+    .cmg-health-card.amber  { border-left-color: var(--accent-warning); }
+    .cmg-health-card.green  { border-left-color: var(--accent-success); }
+    .cmg-health-section { font-size: 10px; font-weight: var(--weight-bold); letter-spacing: .06em; text-transform: uppercase; opacity: .6; color: var(--cutty-sark); }
+    .cmg-health-signal { font-family: var(--font-display); font-size: 28px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1; }
+    .cmg-health-label { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); line-height: 1.55; }
+    .cmg-health-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--aqua-haze); }
+    .cmg-health-badge { font-size: 10px; font-weight: var(--weight-semibold); padding: 2px 8px; border-radius: 8px; }
+    .cmg-health-badge.red   { background: rgba(220,38,38,.10); color: var(--status-negative); }
+    .cmg-health-badge.amber { background: rgba(245,158,11,.10); color: var(--accent-warning); }
+    .cmg-health-badge.green { background: rgba(16,185,129,.10); color: var(--accent-success); }
+    .cmg-health-count { font-size: 10px; color: var(--cutty-sark); opacity: .5; }
+
+    /* CMG Tab content panes */
+    .cmg-pane { display: none; flex-direction: column; gap: 20px; }
+    .cmg-pane.active { display: flex; animation: cmg-pane-in 220ms ease-out both; }
+    @keyframes cmg-pane-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .cmg-pane.active { animation: none; } }
+
+    /* Metric grid */
+    .cmg-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; align-items: stretch; }
+    .cmg-hidden-grid { display: none; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 8px; }
+    .cmg-hidden-grid.open { display: grid; animation: cmg-pane-in 220ms cubic-bezier(.165, .84, .44, 1) both; }
+
+    /* Show-more button */
+    .cmg-show-more-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 20px; border: 1px solid var(--nebula);
+      background: #fff; font-family: var(--font-body); font-size: var(--font-sm);
+      font-weight: var(--weight-medium); color: var(--cutty-sark); cursor: pointer;
+      transition: background .15s ease, color .15s ease, border-color .15s ease, transform .1s cubic-bezier(.25, .46, .45, .94);
+    }
+    .cmg-show-more-btn:hover  { background: var(--teal-10); color: var(--teal); border-color: var(--teal-30); }
+    .cmg-show-more-btn:active { transform: scale(0.97); }
+    .cmg-show-more-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+    /* Metric Cards */
+    .cmg-card {
+      background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card-sm); display: flex; flex-direction: column;
+      overflow: hidden;
+      transition: box-shadow 0.18s, border-color 0.18s;
+    }
+    .cmg-card:hover { box-shadow: var(--shadow-card); border-color: var(--teal-20); }
+    .cmg-card-hd { display: flex; align-items: flex-start; justify-content: space-between; padding: 18px 18px 10px; gap: 10px; }
+    .cmg-card-name { font-size: var(--font-base); font-weight: var(--weight-semibold); color: var(--dark-teal); flex: 1; line-height: 1.35; }
+    .cmg-card-badge { font-size: 10px; font-weight: var(--weight-semibold); padding: 3px 9px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
+    .cmg-card-badge.red    { background: rgba(220,38,38,.10); color: var(--status-negative); }
+    .cmg-card-badge.amber  { background: rgba(245,158,11,.10); color: var(--accent-warning); }
+    .cmg-card-badge.green  { background: rgba(16,185,129,.10); color: var(--accent-success); }
+    .cmg-card-badge.teal   { background: var(--teal-10); color: var(--teal); }
+    .cmg-card-desc { font-size: 12px; color: var(--cutty-sark); opacity: .7; padding: 0 18px 14px; line-height: 1.6; }
+    .cmg-card-vis { padding: 4px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .cmg-card-footer { display: flex; justify-content: flex-end; padding: 10px 18px; border-top: 1px solid var(--aqua-haze); }
+
+    /* Detail panel */
+    .cmg-detail-btn {
+      font-size: 11px; font-weight: var(--weight-semibold); padding: 5px 12px;
+      border: 1px solid var(--nebula); border-radius: 8px; background: #fff;
+      color: var(--cutty-sark); cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s, transform .1s;
+    }
+    .cmg-detail-btn:hover  { background: var(--teal-10); color: var(--teal); border-color: var(--teal-30); }
+    .cmg-detail-btn:active { transform: scale(0.95); }
+    .cmg-detail-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    /* Filled state when panel is open */
+    .cmg-detail-btn.is-open {
+      background: var(--teal); color: #fff; border-color: var(--teal);
+    }
+    .cmg-detail-btn.is-open:hover { background: var(--dark-teal); border-color: var(--dark-teal); color: #fff; }
+    /* Grid-row accordion wrapper — injected by JS around each detail panel */
+    .cmg-detail-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      /* Opening transition (CSS uses OLD state when .open is applied): ease-in-out-quart 240ms */
+      transition: grid-template-rows 240ms cubic-bezier(.77, 0, .175, 1);
+    }
+    .cmg-detail-wrap.open {
+      grid-template-rows: 1fr;
+      /* Closing transition (CSS uses OLD state when .open is removed): ease-in-out-cubic 200ms — close is snappier */
+      transition: grid-template-rows 200ms cubic-bezier(.645, .045, .355, 1);
+    }
+    /* Panel is the direct grid child — overflow:hidden + min-height:0 required so 0fr fully collapses */
+    .cmg-detail-panel { overflow: hidden; min-height: 0; background: var(--surface); }
+    /* Inner wrapper carries visual padding/border and fades in after the row starts opening */
+    .cmg-detail-inner {
+      padding: 18px 20px; border-top: 1px solid var(--aqua-haze);
+      box-sizing: border-box; width: 100%;
+      background: rgba(77,182,172,0.025); /* micro teal tint — visually separates detail from card body */
+      opacity: 0;
+      /* Opening transition: ease-out-quart, delayed 60ms so content appears after row begins revealing */
+      transition: opacity 200ms cubic-bezier(.165, .84, .44, 1) 60ms;
+    }
+    .cmg-detail-wrap.open .cmg-detail-inner {
+      opacity: 1;
+      /* Closing transition: fast fade — users want content gone quickly */
+      transition: opacity 100ms ease;
+    }
+    /* Honour the user's motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .cmg-detail-wrap  { transition: none; }
+      .cmg-detail-inner { transition: none; }
+    }
+    .cmg-detail-title { font-size: var(--font-base); font-weight: var(--weight-semibold); color: var(--dark-teal); margin-bottom: 12px; }
+    .cmg-detail-desc { font-size: var(--font-sm); color: var(--cutty-sark); opacity: .75; line-height: 1.65; margin-bottom: 14px; }
+
+    /* Multi-segment distribution bar */
+    .cmg-dist-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; width: 100%; }
+    .cmg-dist-bar.tall { height: 16px; border-radius: 6px; }
+    .cmg-dist-segment { height: 100%; transition: opacity .15s; }
+    .cmg-dist-labels { display: flex; gap: 0; margin-top: 8px; }
+    .cmg-dist-label { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--cutty-sark); opacity: .7; margin-right: 12px; white-space: nowrap; }
+    .cmg-dist-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Big stat */
+    .cmg-big-stat { font-family: var(--font-display); font-size: 34px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1; }
+    .cmg-stat-compare { font-size: var(--font-sm); color: var(--cutty-sark); opacity: .7; margin-top: 6px; line-height: 1.55; }
+    .cmg-stat-arrow { font-size: var(--font-sm); font-weight: var(--weight-semibold); margin-right: 2px; }
+    .cmg-stat-arrow.up   { color: var(--accent-success); }
+    .cmg-stat-arrow.down { color: var(--status-negative); }
+    .cmg-stat-arrow.warn { color: var(--accent-warning); }
+
+    /* Churn risk blocks */
+    .cmg-risk-blocks { display: flex; gap: 12px; }
+    .cmg-risk-block { flex: 1; border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 14px 16px; border-left-width: 3px; }
+    .cmg-risk-block.high   { border-left-color: var(--status-negative); background: rgba(220,38,38,.03); }
+    .cmg-risk-block.medium { border-left-color: var(--accent-warning); background: rgba(245,158,11,.03); }
+    .cmg-risk-block.low    { border-left-color: var(--accent-success); background: rgba(16,185,129,.03); }
+    .cmg-risk-lbl { font-size: 10px; font-weight: var(--weight-bold); letter-spacing: .06em; text-transform: uppercase; opacity: .6; margin-bottom: 4px; }
+    .cmg-risk-val { font-family: var(--font-display); font-size: 24px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1; margin-top: 4px; }
+    .cmg-risk-pct { font-size: var(--font-sm); color: var(--cutty-sark); opacity: .7; margin-top: 4px; }
+
+    /* Cross-tab (3-col grid, header row + 3 data rows) */
+    .cmg-crosstab { display: grid; grid-template-columns: 90px repeat(3,1fr); gap: 4px; font-size: 11px; }
+    .cmg-crosstab-hd { padding: 7px 8px; text-align: center; font-weight: var(--weight-semibold); color: var(--cutty-sark); opacity: .7; background: var(--aqua-haze); border-radius: 4px; }
+    .cmg-crosstab-row-hd { padding: 7px 8px; font-weight: var(--weight-semibold); color: var(--cutty-sark); display: flex; align-items: center; }
+    .cmg-crosstab-cell { padding: 8px; text-align: center; border-radius: 4px; font-weight: var(--weight-semibold); color: var(--dark-teal); display: flex; align-items: center; justify-content: center; }
+
+    /* Trigger list */
+    .cmg-trigger-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--aqua-haze); }
+    .cmg-trigger-row:last-child { border-bottom: none; }
+    .cmg-trigger-rank { width: 22px; height: 22px; border-radius: 50%; background: var(--aqua-haze); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: var(--weight-bold); color: var(--cutty-sark); flex-shrink: 0; }
+    .cmg-trigger-name { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); font-style: italic; line-height: 1.4; }
+    .cmg-trigger-freq { font-size: 12px; font-weight: var(--weight-semibold); color: var(--dark-teal); min-width: 40px; text-align: right; }
+    .cmg-trigger-drop { font-size: 12px; font-weight: var(--weight-semibold); color: var(--status-negative); min-width: 44px; text-align: right; }
+
+    /* Stacked phase bar */
+    .cmg-phase-bar { display: flex; height: 30px; border-radius: 6px; overflow: hidden; width: 100%; }
+    .cmg-phase-seg { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: var(--weight-semibold); color: rgba(255,255,255,.9); overflow: hidden; white-space: nowrap; transition: opacity .15s; }
+    .cmg-phase-seg:hover { opacity: .85; cursor: default; }
+    .cmg-phase-labels { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+    .cmg-phase-label { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--cutty-sark); opacity: .7; }
+    .cmg-phase-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+    /* Secondary metric compact tile (for hidden grid) */
+    .cmg-sec-card {
+      background: #fff; border: 1px solid var(--nebula); border-radius: var(--radius-sm);
+      padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;
+      transition: box-shadow 0.18s, border-color 0.18s;
+    }
+    .cmg-sec-card:hover { box-shadow: var(--shadow-card-sm); border-color: var(--teal-20); }
+    .cmg-sec-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+    .cmg-sec-val  { font-family: var(--font-display); font-size: 22px; font-weight: var(--weight-bold); color: var(--dark-teal); }
+    .cmg-sec-desc { font-size: 11px; color: var(--cutty-sark); opacity: .65; line-height: 1.4; }
+    .cmg-sec-badge { font-size: 10px; font-weight: var(--weight-semibold); padding: 2px 7px; border-radius: 8px; align-self: flex-start; }
+
+    /* (tab nav removed — top cards are the sole section selector) */
+
+    /* Pane header */
+    .cmg-pane-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding-bottom: 12px; border-bottom: 1.5px solid var(--aqua-haze); }
+    .cmg-pane-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
+
+    /* Health card section label */
+    .cmg-health-section-label { font-size: 10px; font-weight: var(--weight-bold); letter-spacing: .05em; text-transform: uppercase; opacity: .6; color: var(--cutty-sark); }
+    .cmg-health-link {
+      font-size: 11px; color: var(--teal); font-weight: var(--weight-semibold);
+      display: inline-flex; align-items: center; gap: 2px;
+      transition: gap 0.15s, opacity 0.15s;
+    }
+    .cmg-health-card:hover .cmg-health-link { gap: 5px; opacity: 1; }
+    .cmg-health-card.active .cmg-health-link { font-weight: var(--weight-bold); }
+
+    /* Detail panel body */
+    .cmg-detail-body { font-size: var(--font-sm); }
+    .cmg-detail-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .cmg-detail-table th { text-align: left; padding: 8px 10px; background: var(--aqua-haze); font-weight: var(--weight-semibold); color: var(--cutty-sark); border-radius: 4px; }
+    .cmg-detail-table td { padding: 8px 10px; border-bottom: 1px solid var(--aqua-haze); color: var(--dark-teal); line-height: 1.4; transition: background .12s; }
+    .cmg-detail-table tr:last-child td { border-bottom: none; }
+    .cmg-detail-table tbody tr:hover td { background: rgba(77,182,172,0.06); }
+
+    /* Date range badge (reuse pattern) */
+    .analytics-date-range { display: flex; align-items: center; gap: 6px; font-size: var(--font-sm); color: var(--cutty-sark); background: #fff; border: 1px solid var(--nebula); border-radius: 8px; padding: 6px 12px; }
   </style>
 </head>
 <body>
@@ -3330,6 +3840,39 @@
       </button>
     </div>
     </div><!-- /nav-ds-group -->
+
+    <!-- Analytics — expandable -->
+    <div class="nav-analytics-group">
+    <button class="nav-item" id="nav-analytics" data-tooltip="Analytics" onclick="toggleAnalyticsExpand()">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+        <rect x="2" y="10" width="3" height="8" rx="1" fill="currentColor"/>
+        <rect x="8" y="6" width="3" height="12" rx="1" fill="currentColor"/>
+        <rect x="14" y="2" width="3" height="16" rx="1" fill="currentColor"/>
+      </svg>
+      <span class="nav-label">Analytics</span>
+      <svg class="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="nav-subnav" id="analytics-subnav">
+      <button class="nav-subitem" id="subnav-analytics-ci" onclick="navigateToAnalytics('ci')">
+        <span class="nav-subitem-dot"></span>
+        Conversational Intelligence
+      </button>
+      <button class="nav-subitem" id="subnav-analytics-rpa" onclick="navigateToAnalytics('rpa')">
+        <span class="nav-subitem-dot"></span>
+        Resolution Path Analytics
+      </button>
+      <button class="nav-subitem" id="subnav-analytics-vb" onclick="navigateToAnalytics('vb')">
+        <span class="nav-subitem-dot"></span>
+        Voicebot Dashboard
+      </button>
+      <button class="nav-subitem" id="subnav-analytics-cmg" onclick="navigateToAnalytics('cmg')">
+        <span class="nav-subitem-dot"></span>
+        Customer Memory Graph
+      </button>
+    </div>
+    </div><!-- /nav-analytics-group -->
 
     <!-- Intelligence -->
     <div class="nav-item" style="font-size:15.2px;" data-tooltip="Intelligence">
@@ -4225,6 +4768,1717 @@
 
   </div><!-- /view-data-studio -->
 
+  <!-- ══ View: Analytics ════════════════════════════════════════ -->
+  <div id="view-analytics" class="view">
+
+    <!-- ── Conversational Intelligence ── -->
+    <div id="analytics-ci" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+      <div class="analytics-topbar">
+        <div>
+          <div class="analytics-page-title">Conversational Intelligence Dashboard</div>
+          <div class="analytics-page-sub">Monitor and analyze ticket patterns, resolution times, customer sentiments, and service quality metrics for resolved tickets.</div>
+        </div>
+        <div class="analytics-date-controls">
+          <div class="analytics-date-group">
+            <span class="analytics-date-label">Start Date:</span>
+            <div class="analytics-date-field">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M9 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Mar 18th, 2026
+            </div>
+          </div>
+          <div class="analytics-date-group">
+            <span class="analytics-date-label">End Date:</span>
+            <div class="analytics-date-field">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M9 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Mar 25th, 2026
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="analytics-tabs-wrap">
+        <div class="a-tabs-pill">
+          <button class="a-tab active" id="ci-tab-overview"     onclick="setCiTab('overview')">Overview</button>
+          <button class="a-tab"        id="ci-tab-sentiment"    onclick="setCiTab('sentiment')">Sentiment Analytics</button>
+          <button class="a-tab"        id="ci-tab-performance"  onclick="setCiTab('performance')">Performance Hub</button>
+          <button class="a-tab"        id="ci-tab-risk"         onclick="setCiTab('risk')">Risk Management</button>
+          <button class="a-tab"        id="ci-tab-product"      onclick="setCiTab('product')">Product &amp; Compensation</button>
+        </div>
+      </div>
+      <div class="analytics-content">
+        <!-- Overview -->
+        <div class="a-tab-content active" id="ci-pane-overview">
+          <!-- KPI Row -->
+          <div class="a-kpi-row">
+            <div class="a-kpi-card">
+              <div class="a-kpi-label">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l5 6-5 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg>
+                Total Tickets
+              </div>
+              <div class="a-kpi-value">18,462</div>
+              <div class="a-kpi-trend positive">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9l4-6 4 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Trending up
+              </div>
+            </div>
+            <div class="a-kpi-card">
+              <div class="a-kpi-label">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3" opacity=".5"/><path d="M7 4v3l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Avg Resolution Time
+              </div>
+              <div class="a-kpi-value">1h 5m</div>
+            </div>
+            <div class="a-kpi-card">
+              <div class="a-kpi-label">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v5M7 9.5v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".5"/><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3" opacity=".5"/></svg>
+                Risk Conversations
+              </div>
+              <div class="a-kpi-value">1,620</div>
+            </div>
+            <div class="a-kpi-card">
+              <div class="a-kpi-label">Avg Sentiment</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                <span style="font-size:22px;">🙂</span>
+                <span style="font-family:var(--font-display);font-size:20px;font-weight:var(--weight-bold);color:var(--dark-teal);">Neutral</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Intent Analysis + Emerging Issues -->
+          <div class="a-2col-wide">
+            <div class="a-card">
+              <div class="a-card-head">
+                <div class="a-card-head-left">
+                  <div class="a-card-title">Intent Analysis</div>
+                  <div class="a-card-sub">Top intents by ticket volume</div>
+                </div>
+              </div>
+              <div class="a-card-body">
+                <button class="intent-cat-btn">Customer Support &amp; General Assistance</button>
+                <div style="display:flex;align-items:center;gap:20px;">
+                  <!-- Donut -->
+                  <div style="flex-shrink:0;">
+                    <svg width="130" height="130" viewBox="0 0 130 130">
+                      <circle cx="65" cy="65" r="52" fill="none" stroke="var(--aqua-haze)" stroke-width="18"/>
+                      <circle cx="65" cy="65" r="52" fill="none" stroke="#4DB6AC" stroke-width="18" stroke-dasharray="131 196" stroke-dashoffset="0" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
+                      <circle cx="65" cy="65" r="52" fill="none" stroke="#8B5CF6" stroke-width="18" stroke-dasharray="100 227" stroke-dashoffset="-131" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
+                      <circle cx="65" cy="65" r="52" fill="none" stroke="#3B82F6" stroke-width="18" stroke-dasharray="46 281" stroke-dashoffset="-231" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
+                      <circle cx="65" cy="65" r="52" fill="none" stroke="#F59E0B" stroke-width="18" stroke-dasharray="43 284" stroke-dashoffset="-277" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
+                      <circle cx="65" cy="65" r="52" fill="none" stroke="#10B981" stroke-width="18" stroke-dasharray="18 309" stroke-dashoffset="-320" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
+                      <text x="65" y="61" text-anchor="middle" font-family="var(--font-display)" font-size="16" font-weight="700" fill="var(--dark-teal)">18,462</text>
+                      <text x="65" y="75" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--cutty-sark)" opacity=".7">Total Tickets</text>
+                    </svg>
+                  </div>
+                  <!-- Legend -->
+                  <div class="intent-list" style="flex:1;">
+                    <div class="intent-row"><span class="intent-dot" style="background:#4DB6AC"></span><span class="intent-name">Customer Support &amp; General</span><span class="intent-count">6,946</span><span class="intent-avg">43m avg</span></div>
+                    <div class="intent-row"><span class="intent-dot" style="background:#8B5CF6"></span><span class="intent-name">Orders &amp; Order Management</span><span class="intent-count">5,063</span><span class="intent-avg">1.2h avg</span></div>
+                    <div class="intent-row"><span class="intent-dot" style="background:#3B82F6"></span><span class="intent-name">Delivery, Tracking &amp; Fulfilment</span><span class="intent-count">2,392</span><span class="intent-avg">1.2h avg</span></div>
+                    <div class="intent-row"><span class="intent-dot" style="background:#F59E0B"></span><span class="intent-name">Prescription &amp; Product Queries</span><span class="intent-count">2,259</span><span class="intent-avg">47m avg</span></div>
+                    <div class="intent-row"><span class="intent-dot" style="background:#10B981"></span><span class="intent-name">Others</span><span class="intent-count">942</span><span class="intent-avg">49m avg</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Emerging Issues -->
+            <div class="a-card">
+              <div class="a-card-head">
+                <div class="a-card-head-left"><div class="a-card-title">Emerging Issues</div><div class="a-card-sub">Intents with sudden spikes</div></div>
+                <span class="a-card-badge alert">Alert</span>
+              </div>
+              <div class="a-card-body">
+                <div class="emerging-item">
+                  <div class="emerging-icon">⚠️</div>
+                  <div>
+                    <div class="emerging-name">Rider Not Assigned</div>
+                    <div class="emerging-meta">1,770 tickets</div>
+                    <div class="emerging-sentiment pos">+0.04 sentiment</div>
+                  </div>
+                </div>
+                <div class="emerging-item">
+                  <div class="emerging-icon">⚠️</div>
+                  <div>
+                    <div class="emerging-name">Delivery Delay</div>
+                    <div class="emerging-meta">1,756 tickets</div>
+                    <div class="emerging-sentiment neg">-0.31 sentiment</div>
+                  </div>
+                </div>
+                <div class="emerging-item">
+                  <div class="emerging-icon">⚠️</div>
+                  <div>
+                    <div class="emerging-name">Product Out of Stock</div>
+                    <div class="emerging-meta">1,285 tickets</div>
+                    <div class="emerging-sentiment neg">-0.33 sentiment</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Sentiment Trend -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Weekly Sentiment Trend</div></div></div>
+            <div class="a-card-body">
+              <svg width="100%" height="90" viewBox="0 0 700 90" preserveAspectRatio="none">
+                <defs><linearGradient id="ci-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4DB6AC" stop-opacity=".25"/><stop offset="100%" stop-color="#4DB6AC" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18 L700,90 L0,90 Z" fill="url(#ci-grad)"/>
+                <path d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18" fill="none" stroke="#4DB6AC" stroke-width="2"/>
+                <path d="M0,70 C50,68 100,65 150,62 C200,59 250,63 300,60 C350,57 400,52 450,55 C500,58 550,54 600,50 C650,46 700,48 700,48" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="4 3" opacity=".6"/>
+              </svg>
+              <div style="display:flex;gap:16px;margin-top:6px;">
+                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:12px;height:3px;background:#4DB6AC;border-radius:2px;display:inline-block;"></span>Positive</div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:12px;height:3px;background:#8B5CF6;border-radius:2px;display:inline-block;"></span>Neutral</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Categories -->
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div class="a-section-hd" style="border:none;padding:0;flex:1;"><div class="a-section-hd-left"><span class="a-section-title">Top Categories</span></div><span style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Most common requests, queries &amp; complaints</span></div><button class="a-card-btn">Top 5 Each</button></div>
+          <div class="a-3col">
+            <div class="a-cat-card">
+              <div class="a-cat-head">
+                <div class="a-cat-icon" style="background:var(--teal-10);">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h10v10H2z" stroke="var(--teal)" stroke-width="1.3" rx="2"/><path d="M5 7h4M7 5v4" stroke="var(--teal)" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </div>
+                <div><div class="a-cat-title">Requests</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Customer service requests</div></div>
+              </div>
+              <div class="a-cat-vol">8,280 <span style="font-size:13px;font-weight:400;opacity:.6;">Total Volume</span></div>
+              <div class="a-cat-row"><span class="a-cat-name">Place Order</span><span class="a-cat-pct">18.3%</span><span class="a-cat-num">1,515</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:18.3%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Assign Rider</span><span class="a-cat-pct">9.7%</span><span class="a-cat-num">805</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:9.7%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Order Placement</span><span class="a-cat-pct">9.7%</span><span class="a-cat-num">800</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:9.7%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Order Status</span><span class="a-cat-pct">6.7%</span><span class="a-cat-num">558</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:6.7%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Product Inquiry</span><span class="a-cat-pct">6.6%</span><span class="a-cat-num">547</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:6.6%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+            </div>
+            <div class="a-cat-card">
+              <div class="a-cat-head">
+                <div class="a-cat-icon" style="background:rgba(59,130,246,0.10);">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="#3B82F6" stroke-width="1.3"/><path d="M7 5v2l1.5 1.5" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </div>
+                <div><div class="a-cat-title">Queries</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Information requests</div></div>
+              </div>
+              <div class="a-cat-vol">8,831 <span style="font-size:13px;font-weight:400;opacity:.6;">Total Volume</span></div>
+              <div class="a-cat-row"><span class="a-cat-name">Order Status</span><span class="a-cat-pct">6.0%</span><span class="a-cat-num">530</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:18%;background:#3B82F6;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Product Inquiry</span><span class="a-cat-pct">2.4%</span><span class="a-cat-num">208</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:7%;background:#3B82F6;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Product Availability</span><span class="a-cat-pct">1.8%</span><span class="a-cat-num">156</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:5%;background:#3B82F6;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Delivery Inquiry</span><span class="a-cat-pct">1.5%</span><span class="a-cat-num">134</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:4%;background:#3B82F6;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Product Availability Query</span><span class="a-cat-pct">1.5%</span><span class="a-cat-num">132</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:4%;background:#3B82F6;height:100%;border-radius:2px;"></div></div>
+            </div>
+            <div class="a-cat-card">
+              <div class="a-cat-head">
+                <div class="a-cat-icon" style="background:rgba(220,38,38,0.08);">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2l5 9H2z" stroke="#DC2626" stroke-width="1.3" stroke-linejoin="round"/><path d="M7 6v2M7 9.5v.5" stroke="#DC2626" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </div>
+                <div><div class="a-cat-title">Complaints</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Customer complaints</div></div>
+              </div>
+              <div class="a-cat-vol">1,345 <span style="font-size:13px;font-weight:400;opacity:.6;">Total Volume</span></div>
+              <div class="a-cat-row"><span class="a-cat-name">Order Status</span><span class="a-cat-pct">30.9%</span><span class="a-cat-num">416</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:30.9%;background:#DC2626;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Delivery Issue</span><span class="a-cat-pct">23.5%</span><span class="a-cat-num">316</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:23.5%;background:#DC2626;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Order Cancellation</span><span class="a-cat-pct">7.9%</span><span class="a-cat-num">106</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:7.9%;background:#DC2626;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Order Issue</span><span class="a-cat-pct">6.9%</span><span class="a-cat-num">93</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:6.9%;background:#DC2626;height:100%;border-radius:2px;"></div></div>
+              <div class="a-cat-row"><span class="a-cat-name">Technical Issue</span><span class="a-cat-pct">4.8%</span><span class="a-cat-num">64</span></div>
+              <div class="a-cat-bar"><div class="a-cat-bar-fill" style="width:4.8%;background:#DC2626;height:100%;border-radius:2px;"></div></div>
+            </div>
+          </div>
+
+          <!-- Folder Breakdown -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Folder Breakdown</div><div class="a-card-sub">Tickets by folder structure</div></div></div>
+            <div class="a-card-body">
+              <div class="a-folder-group">
+                <div class="a-folder-group-hd">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h5l1.5 2H13v7H1z" stroke="var(--teal)" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                  Command Centre <span class="a-folder-badge">18,245 tickets</span>
+                  <button class="a-card-btn" style="margin-left:auto;">Show All (243)</button>
+                </div>
+                <div class="a-folder-grid">
+                  <div class="a-folder-card">
+                    <div class="a-folder-card-path">Command Centre › Retention › Service</div>
+                    <div class="a-folder-card-name">Not Connected</div>
+                    <div class="a-folder-stats"><div><div class="a-folder-stat-val">3,626</div><div class="a-folder-stat-lbl">Tickets</div></div><div><div class="a-folder-stat-val">17m</div><div class="a-folder-stat-lbl">Avg Resolution</div></div></div>
+                    <div class="a-folder-sentiment-bar"><div class="a-folder-sentiment-fill" style="width:50%"></div></div>
+                    <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:2px;">Sentiment 50%</div>
+                  </div>
+                  <div class="a-folder-card">
+                    <div class="a-folder-card-path">Command Centre › C3 Whatsapp suppo...</div>
+                    <div class="a-folder-card-name">Delivery Related_Rider As...</div>
+                    <div class="a-folder-stats"><div><div class="a-folder-stat-val">2,060</div><div class="a-folder-stat-lbl">Tickets</div></div><div><div class="a-folder-stat-val">10m</div><div class="a-folder-stat-lbl">Avg Resolution</div></div></div>
+                    <div class="a-folder-sentiment-bar"><div class="a-folder-sentiment-fill" style="width:59%"></div></div>
+                    <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:2px;">Sentiment 59%</div>
+                  </div>
+                  <div class="a-folder-card">
+                    <div class="a-folder-card-path">Command Centre › C3 Whatsapp suppo...</div>
+                    <div class="a-folder-card-name">Order Placed</div>
+                    <div class="a-folder-stats"><div><div class="a-folder-stat-val">1,139</div><div class="a-folder-stat-lbl">Tickets</div></div><div><div class="a-folder-stat-val">47m</div><div class="a-folder-stat-lbl">Avg Resolution</div></div></div>
+                    <div class="a-folder-sentiment-bar"><div class="a-folder-sentiment-fill" style="width:80%"></div></div>
+                    <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:2px;">Sentiment 80%</div>
+                  </div>
+                  <div class="a-folder-card">
+                    <div class="a-folder-card-path">Command Centre › C3 Whatsapp suppo...</div>
+                    <div class="a-folder-card-name">No Response from Customer</div>
+                    <div class="a-folder-stats"><div><div class="a-folder-stat-val">676</div><div class="a-folder-stat-lbl">Tickets</div></div><div><div class="a-folder-stat-val">50m</div><div class="a-folder-stat-lbl">Avg Resolution</div></div></div>
+                    <div class="a-folder-sentiment-bar"><div class="a-folder-sentiment-fill" style="width:48%"></div></div>
+                    <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:2px;">Sentiment 48%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Channel Performance -->
+          <div class="a-card">
+            <div class="a-card-head">
+              <div class="a-card-head-left"><div class="a-card-title">Channel Performance</div><div class="a-card-sub">Voice vs Non-Voice breakdown</div></div>
+              <button class="a-card-btn">Channels</button>
+            </div>
+            <div class="a-card-body">
+              <div style="display:flex;align-items:center;gap:24px;margin-bottom:16px;">
+                <div>
+                  <div style="font-size:12px;color:var(--cutty-sark);opacity:.7;margin-bottom:6px;font-weight:500;">Overall Escalation Rates</div>
+                  <div style="display:flex;align-items:center;gap:24px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <svg width="80" height="80" viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="var(--teal)" stroke-width="12" stroke-dasharray="196 5" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="#DC2626" stroke-width="12" stroke-dasharray="5 196" stroke-dashoffset="-196" transform="rotate(-90 40 40)"/>
+                        <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="11" font-weight="700" fill="var(--dark-teal)">97.59%</text>
+                        <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".7">Not Escalated</text>
+                      </svg>
+                      <svg width="80" height="80" viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="#8B5CF6" stroke-width="12" stroke-dasharray="5 196" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                        <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="11" font-weight="700" fill="var(--dark-teal)">2.41%</text>
+                        <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".7">Escalated</text>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="a-channel-grid">
+                <div class="a-channel-card"><div class="a-channel-name">Whatsapp</div><div class="a-channel-vol">9,571</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">conversations</div><div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">96.7%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val" style="color:#DC2626;">3.3%</div></div></div></div>
+                <div class="a-channel-card"><div class="a-channel-name">Call</div><div class="a-channel-vol">8,291</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">conversations</div><div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">99%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val" style="color:#DC2626;">1%</div></div></div></div>
+                <div class="a-channel-card"><div class="a-channel-name">Email</div><div class="a-channel-vol">454</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">conversations</div><div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">90.7%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val" style="color:#DC2626;">9.3%</div></div></div></div>
+                <div class="a-channel-card"><div class="a-channel-name">General</div><div class="a-channel-vol">138</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">conversations</div><div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val">0%</div></div></div></div>
+                <div class="a-channel-card"><div class="a-channel-name">Custom</div><div class="a-channel-vol">7</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">conversations</div><div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val">0%</div></div></div></div>
+                <div class="a-channel-card"><div class="a-channel-name">Facebook</div><div class="a-channel-vol">1</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">conversations</div><div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val">0%</div></div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Drop-off Stage + Ticket Type Distribution -->
+          <div class="a-2col">
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Customer Drop-off Stage</div><div class="a-card-sub">Where customers abandon conversations</div></div><button class="a-card-btn">Drop-off</button></div>
+              <div class="a-card-body">
+                <div class="a-bar-row"><span class="a-bar-name">Post-Resolution</span><div class="a-bar-track"><div class="a-bar-fill" style="width:39%;background:#8B5CF6;"></div></div><span class="a-bar-val">7,137</span><span class="a-bar-pct">39%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Probing</span><div class="a-bar-track"><div class="a-bar-fill" style="width:11%;"></div></div><span class="a-bar-val">1,974</span><span class="a-bar-pct">11%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Execution</span><div class="a-bar-track"><div class="a-bar-fill" style="width:3%;background:var(--accent-warning);"></div></div><span class="a-bar-val">61</span><span class="a-bar-pct">3%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Hold</span><div class="a-bar-track"><div class="a-bar-fill" style="width:1%;background:#F97316;"></div></div><span class="a-bar-val">—</span><span class="a-bar-pct">1%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Escalation</span><div class="a-bar-track"><div class="a-bar-fill" style="width:1%;background:#3B82F6;"></div></div><span class="a-bar-val">—</span><span class="a-bar-pct">1%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Customer Dropoff</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0.5%;background:#DC2626;"></div></div><span class="a-bar-val">—</span><span class="a-bar-pct">0%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Request Unaddressed</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0.5%;background:var(--cutty-sark);"></div></div><span class="a-bar-val">—</span><span class="a-bar-pct">0%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">Escalation to another team</span><div class="a-bar-track"></div><span class="a-bar-val">—</span><span class="a-bar-pct">0%</span></div>
+                <div class="a-bar-row"><span class="a-bar-name">probing</span><div class="a-bar-track"></div><span class="a-bar-val">—</span><span class="a-bar-pct">0%</span></div>
+              </div>
+            </div>
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Ticket Type Distribution</div></div></div>
+              <div class="a-card-body">
+                <svg width="100%" height="140" viewBox="0 0 240 140" preserveAspectRatio="xMidYMid meet">
+                  <rect x="30" y="20" width="50" height="90" rx="4" fill="#8B5CF6" opacity=".85"/>
+                  <rect x="100" y="10" width="50" height="100" rx="4" fill="var(--teal)" opacity=".85"/>
+                  <rect x="170" y="70" width="50" height="40" rx="4" fill="#F59E0B" opacity=".85"/>
+                  <text x="55" y="125" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--cutty-sark)">Query</text>
+                  <text x="125" y="125" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--cutty-sark)">Request</text>
+                  <text x="195" y="125" text-anchor="middle" font-family="var(--font-body)" font-size="10" fill="var(--cutty-sark)">Complaint</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div><!-- /ci-pane-overview -->
+        <!-- Other CI tabs — stub -->
+        <div class="a-tab-content" id="ci-pane-sentiment"><div class="a-placeholder"><div class="a-placeholder-icon">📊</div><div class="a-placeholder-title">Sentiment Analytics</div><div class="a-placeholder-sub">Detailed sentiment scoring and trend analysis coming soon.</div></div></div>
+        <div class="a-tab-content" id="ci-pane-performance"><div class="a-placeholder"><div class="a-placeholder-icon">⚡</div><div class="a-placeholder-title">Performance Hub</div><div class="a-placeholder-sub">Agent and queue performance metrics coming soon.</div></div></div>
+        <div class="a-tab-content" id="ci-pane-risk"><div class="a-placeholder"><div class="a-placeholder-icon">🛡️</div><div class="a-placeholder-title">Risk Management</div><div class="a-placeholder-sub">Risk scoring and conversation flagging coming soon.</div></div></div>
+        <div class="a-tab-content" id="ci-pane-product"><div class="a-placeholder"><div class="a-placeholder-icon">🎁</div><div class="a-placeholder-title">Product &amp; Compensation</div><div class="a-placeholder-sub">Product issue analytics and compensation tracking coming soon.</div></div></div>
+      </div>
+    </div><!-- /analytics-ci -->
+
+    <!-- ── Resolution Path Analytics ── -->
+    <div id="analytics-rpa" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+      <div class="analytics-topbar">
+        <div>
+          <div class="analytics-page-title">RPA Analytics Dashboard</div>
+          <div class="analytics-page-sub">Comprehensive resolution journey, agent behavior &amp; quality metrics</div>
+        </div>
+        <div class="analytics-date-controls">
+          <div class="analytics-date-group"><span class="analytics-date-label">Start Date:</span><div class="analytics-date-field"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M9 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Mar 18th, 2026</div></div>
+          <div class="analytics-date-group"><span class="analytics-date-label">End Date:</span><div class="analytics-date-field"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M9 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Mar 25th, 2026</div></div>
+        </div>
+      </div>
+      <div class="analytics-tabs-wrap">
+        <div class="a-tabs-pill">
+          <button class="a-tab active" id="rpa-tab-overview"  onclick="setRpaTab('overview')">Overview</button>
+          <button class="a-tab"        id="rpa-tab-orders"    onclick="setRpaTab('orders')">Orders &amp; Order Management</button>
+          <button class="a-tab"        id="rpa-tab-delivery"  onclick="setRpaTab('delivery')">Delivery, Tracking &amp; Fulfillment</button>
+          <button class="a-tab"        id="rpa-tab-returns"   onclick="setRpaTab('returns')">Returns, Replacements &amp; Refunds</button>
+          <button class="a-tab"        id="rpa-tab-payments"  onclick="setRpaTab('payments')">Payments, Billing &amp; Wallet Issues</button>
+        </div>
+      </div>
+      <div class="analytics-content">
+        <div class="a-tab-content active" id="rpa-pane-overview">
+          <!-- KPI -->
+          <div class="a-kpi-row">
+            <div class="a-kpi-card"><div class="a-kpi-label">Total Tickets</div><div class="a-kpi-value">18,462</div><div class="a-kpi-trend positive"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9l4-6 4 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Trending up</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">Avg Resolution Time</div><div class="a-kpi-value">1h 6m</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">FCR Rate</div><div class="a-kpi-value">97.6%</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">CSAT Score</div><div class="a-kpi-value">0.87</div></div>
+          </div>
+          <!-- Bottlenecks + CES -->
+          <div class="a-2col-wide">
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Top Bottlenecks</div><div class="a-card-sub">Leading causes of delays or escalations</div></div><span class="a-card-badge teal">5 identified</span></div>
+              <div class="a-card-body">
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#F97316;"></div><div><div class="a-bottleneck-name">Excessive Customer Frustration</div><div class="a-bottleneck-meta">134 tickets · Impact 3.4/10</div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#F59E0B;"></div><div><div class="a-bottleneck-name">Level 2 Technical Support Needed</div><div class="a-bottleneck-meta">79 tickets · Impact 1.2/10</div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#6B7280;"></div><div><div class="a-bottleneck-name">Others</div><div class="a-bottleneck-meta">59 tickets · Impact 1.2/10</div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#DC2626;"></div><div><div class="a-bottleneck-name">Unresolved Complaint Deadlock</div><div class="a-bottleneck-meta">52 tickets · Impact 1.5/10</div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#3B82F6;"></div><div><div class="a-bottleneck-name">Complex Logistics Coordination</div><div class="a-bottleneck-meta">51 tickets · Impact 0.8/10</div></div></div>
+              </div>
+            </div>
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Customer Effort Score</div><div class="a-card-sub">Avg effort level for customers</div></div><span class="a-card-badge teal">0.8/5</span></div>
+              <div class="a-card-body" style="display:flex;align-items:center;justify-content:center;padding-top:8px;">
+                <svg width="110" height="110" viewBox="0 0 110 110">
+                  <circle cx="55" cy="55" r="44" fill="none" stroke="var(--aqua-haze)" stroke-width="14"/>
+                  <circle cx="55" cy="55" r="44" fill="none" stroke="var(--teal)" stroke-width="14" stroke-dasharray="44 232" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+                  <text x="55" y="51" text-anchor="middle" font-family="var(--font-display)" font-size="20" font-weight="700" fill="var(--dark-teal)">0.8</text>
+                  <text x="55" y="64" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--cutty-sark)" opacity=".7">/ 5</text>
+                </svg>
+              </div>
+              <div style="text-align:center;font-size:11px;color:var(--cutty-sark);opacity:.6;padding-bottom:8px;">Lower is better.</div>
+            </div>
+          </div>
+          <!-- Internal Effort + Interaction Efficiency -->
+          <div class="a-2col">
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Internal Effort Score</div><div class="a-card-sub">Average agent effort (messages, holds, escalations per ticket)</div></div><span class="a-card-badge teal">1.6/5</span></div>
+              <div class="a-card-body" style="display:flex;align-items:center;gap:20px;">
+                <svg width="90" height="90" viewBox="0 0 90 90" style="flex-shrink:0;">
+                  <circle cx="45" cy="45" r="36" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
+                  <circle cx="45" cy="45" r="36" fill="none" stroke="#F97316" stroke-width="12" stroke-dasharray="72 154" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
+                  <text x="45" y="42" text-anchor="middle" font-family="var(--font-display)" font-size="16" font-weight="700" fill="var(--dark-teal)">1.6</text>
+                  <text x="45" y="54" text-anchor="middle" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".7">/ 5</text>
+                </svg>
+                <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.5;">Lower is better. Captures agent messages, hold frequency, and escalation count per ticket.</div>
+              </div>
+            </div>
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Interaction Efficiency</div><div class="a-card-sub">Combined metric of speed, effort, and resolution quality</div></div><span class="a-card-badge green">1560.5%</span></div>
+              <div class="a-card-body">
+                <div style="font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--dark-teal);margin-bottom:8px;">1560.5 <span style="font-size:14px;opacity:.5;">efficient</span></div>
+                <div style="display:flex;gap:20px;">
+                  <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">1h 6m</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Speed</div></div>
+                  <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">0.8/5</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Cust. Effort</div></div>
+                  <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">97.6%</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">FCR</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Sentiment & Journey Analysis -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Sentiment &amp; Journey Analysis</div></div><button class="a-card-btn">Journey</button></div>
+            <div class="a-card-body">
+              <div class="a-2col">
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Sentiment Distribution</div>
+                  <div style="display:flex;gap:10px;margin-bottom:12px;">
+                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;background:rgba(16,185,129,0.05);">
+                      <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--accent-success);">15.32%</div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Improved<br/>2,928 cases</div>
+                    </div>
+                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;">
+                      <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--cutty-sark);">76.83%</div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">No Change<br/>14,184 cases</div>
+                    </div>
+                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;background:rgba(220,38,38,0.04);">
+                      <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--status-negative);">7.85%</div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Worsened<br/>1,450 cases</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">CX Impact Score</div>
+                  <div style="display:flex;align-items:center;gap:16px;">
+                    <svg width="80" height="80" viewBox="0 0 80 80">
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--teal)" stroke-width="12" stroke-dasharray="123 78" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <text x="40" y="38" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--dark-teal)">43</text>
+                      <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".7">/ 100</text>
+                    </svg>
+                    <div style="display:flex;flex-direction:column;gap:4px;">
+                      <div><span style="font-size:13px;font-weight:600;color:var(--dark-teal);">0.87/5</span> <span style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT</span></div>
+                      <div><span style="font-size:13px;font-weight:600;color:var(--dark-teal);">0.8/5</span> <span style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Effort</span></div>
+                      <div><span style="font-size:13px;font-weight:600;color:var(--dark-teal);">2,721</span> <span style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Happy</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Phase-Specific Quality Metrics -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Phase-Specific Quality Metrics</div></div></div>
+            <div class="a-card-body">
+              <div style="font-size:11px;font-weight:700;color:var(--cutty-sark);letter-spacing:.06em;opacity:.7;margin-bottom:8px;text-transform:uppercase;">Probing Phase</div>
+              <div class="a-card" style="margin-bottom:14px;">
+                <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Probing Quality</div><div class="a-card-sub">Over/under-probing, repeated info requests, re-explanations, intent match</div></div><span class="a-card-badge amber">46.7% match</span></div>
+                <div class="a-card-body">
+                  <div class="a-probe-grid">
+                    <div class="a-probe-stat"><div class="a-probe-val">1.4%</div><div class="a-probe-lbl">Over-Probing</div></div>
+                    <div class="a-probe-stat highlight"><div class="a-probe-val">24.2%</div><div class="a-probe-lbl">Under-Probing</div></div>
+                    <div class="a-probe-stat"><div class="a-probe-val">3.0%</div><div class="a-probe-lbl">Repeated Info</div></div>
+                    <div class="a-probe-stat highlight"><div class="a-probe-val">17.4%</div><div class="a-probe-lbl">Re-Explanations</div></div>
+                  </div>
+                  <div style="background:var(--surface);border:1px solid var(--nebula);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:var(--font-sm);color:var(--dark-teal);">Intent-Response Match Rate</span>
+                    <span style="font-size:var(--font-md);font-weight:700;color:var(--teal);">46.7%</span>
+                  </div>
+                </div>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:var(--cutty-sark);letter-spacing:.06em;opacity:.7;margin-bottom:8px;text-transform:uppercase;">Hold Phase</div>
+              <div class="a-card">
+                <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Hold Analysis</div><div class="a-card-sub">Tickets with holds, dead air incidents, hold time breaches, delay explanations</div></div><span class="a-card-badge amber">20.7% with holds</span></div>
+                <div class="a-card-body">
+                  <div style="display:flex;align-items:center;gap:20px;">
+                    <svg width="90" height="90" viewBox="0 0 90 90" style="flex-shrink:0;">
+                      <circle cx="45" cy="45" r="36" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
+                      <circle cx="45" cy="45" r="36" fill="none" stroke="#F97316" stroke-width="12" stroke-dasharray="47 179" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
+                      <text x="45" y="42" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--dark-teal)">20.1%</text>
+                      <text x="45" y="54" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".7">Hold Rate</text>
+                    </svg>
+                    <div class="a-2col" style="flex:1;">
+                      <div><div style="font-size:18px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);">34.3%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Dead Air</div></div>
+                      <div><div style="font-size:18px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);">34.3%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Time Breaches</div></div>
+                      <div><div style="font-size:18px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);">9.8%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Delay Explained</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Escalation & Transfer -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Escalation &amp; Transfer</div></div></div>
+            <div class="a-card-body">
+              <div class="a-2col">
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Escalations <span style="font-size:16px;font-weight:700;font-family:var(--font-display);color:var(--status-negative);"> 444 </span><span style="font-size:11px;font-weight:400;opacity:.6;">total</span></div>
+                  <svg width="100%" height="70" viewBox="0 0 260 70" preserveAspectRatio="none">
+                    <path d="M10,10 C40,10 60,20 80,30 C120,50 180,60 250,65" fill="none" stroke="var(--status-negative)" stroke-width="2"/>
+                    <text x="10" y="8" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">140</text>
+                    <text x="10" y="28" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">100</text>
+                    <text x="10" y="48" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">50</text>
+                  </svg>
+                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:4px;text-align:center;">Escalation trend by date</div>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Escalation Avoidability <span class="a-card-badge green" style="display:inline-flex;">37 avoidable</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <svg width="70" height="70" viewBox="0 0 70 70" style="flex-shrink:0;">
+                      <circle cx="35" cy="35" r="28" fill="none" stroke="var(--aqua-haze)" stroke-width="10"/>
+                      <circle cx="35" cy="35" r="28" fill="none" stroke="var(--accent-success)" stroke-width="10" stroke-dasharray="141 35" stroke-dashoffset="0" transform="rotate(-90 35 35)"/>
+                      <text x="35" y="33" text-anchor="middle" font-family="var(--font-display)" font-size="12" font-weight="700" fill="var(--dark-teal)">80%</text>
+                      <text x="35" y="44" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">avoidable</text>
+                    </svg>
+                    <div>
+                      <div style="display:flex;gap:10px;margin-bottom:6px;">
+                        <div style="border:1px solid var(--nebula);border-radius:6px;padding:6px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);">401</div><div style="font-size:9px;color:var(--cutty-sark);opacity:.6;">Early (80%)</div></div>
+                        <div style="border:1px solid var(--nebula);border-radius:6px;padding:6px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);">130</div><div style="font-size:9px;color:var(--cutty-sark);opacity:.6;">Late (29%)</div></div>
+                      </div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">Escalation Rate: <strong style="color:var(--dark-teal);">0.5%</strong></div>
+                    </div>
+                  </div>
+                  <div style="margin-top:10px;">
+                    <div style="font-size:11px;font-weight:600;color:var(--dark-teal);margin-bottom:4px;">Top Reasons</div>
+                    <div class="a-top-reason"><span class="a-top-reason-lbl">Excessive Customer Frustration</span><span class="a-top-reason-val">134</span></div>
+                    <div class="a-top-reason"><span class="a-top-reason-lbl">Level 2 Technical Support Needed</span><span class="a-top-reason-val">79</span></div>
+                    <div class="a-top-reason"><span class="a-top-reason-lbl">Others</span><span class="a-top-reason-val">59</span></div>
+                    <div class="a-top-reason"><span class="a-top-reason-lbl">Unresolved Complaint Deadlock</span><span class="a-top-reason-val">52</span></div>
+                    <div class="a-top-reason"><span class="a-top-reason-lbl">Complex Logistics Coordination</span><span class="a-top-reason-val">51</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Execution & Communication -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Execution &amp; Communication</div></div></div>
+            <div class="a-card-body">
+              <div class="a-kpi-row">
+                <div class="a-kpi-card"><div class="a-kpi-label">Replies per Resolution</div><div class="a-kpi-value">11.8</div><div class="a-kpi-sub">messages avg (target: 8)</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Turn Ratio</div><div class="a-kpi-value">1.3:1</div><div class="a-kpi-sub">Customer:Agent msgs ratio</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Repeated Info Requests</div><div class="a-kpi-value">3.0%</div><div class="a-kpi-sub">tickets requiring repetition</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Re-Explanation Rate</div><div class="a-kpi-value">17.4%</div><div class="a-kpi-sub">of tickets (target: 15%)</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Resolution Journey Breakdown -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Resolution Journey Breakdown</div></div><button class="a-card-btn">Journey</button></div>
+            <div class="a-card-body">
+              <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:10px;">Phase Durations <span style="font-size:11px;font-weight:400;opacity:.6;">Time spent in probing, hold, escalation, and execution phases</span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Probing</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:var(--teal);"></div></div><span class="a-phase-pct">0%</span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Execution</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:#8B5CF6;"></div></div><span class="a-phase-pct">0%</span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Hold</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:#F59E0B;"></div></div><span class="a-phase-pct">0%</span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Transition</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:#F97316;"></div></div><span class="a-phase-pct">0%</span></div>
+            </div>
+          </div>
+          <!-- Recontact & Repeat Issues -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Recontact &amp; Repeat Issues</div></div><span class="a-card-badge amber">43.0%</span></div>
+            <div class="a-card-body">
+              <div class="a-recontact-split">
+                <svg width="100" height="100" viewBox="0 0 100 100" style="flex-shrink:0;">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--aqua-haze)" stroke-width="14"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#F97316" stroke-width="14" stroke-dasharray="109 142" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <text x="50" y="47" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--dark-teal)">43.0%</text>
+                  <text x="50" y="59" text-anchor="middle" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">Recontact</text>
+                </svg>
+                <div class="a-recontact-right">
+                  <div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);">8,618 <span style="font-size:12px;font-weight:400;opacity:.6;">Unique Customers</span></div>
+                  <div style="font-size:11px;font-weight:600;color:var(--dark-teal);margin:8px 0 4px;">Top Reasons</div>
+                  <div class="a-top-reason"><span class="a-top-reason-lbl">Incomplete Resolution</span><span class="a-top-reason-val">3,321</span></div>
+                  <div class="a-top-reason"><span class="a-top-reason-lbl">Status Follow-up</span><span class="a-top-reason-val">387</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Compensation Analysis -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Compensation Analysis</div></div><span class="a-card-badge teal">3.8%</span></div>
+            <div class="a-card-body">
+              <div class="a-2col">
+                <div>
+                  <div style="display:flex;gap:16px;margin-bottom:14px;">
+                    <div style="padding:10px 14px;border:1px solid var(--nebula);border-radius:8px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--dark-teal);">3.8%</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">of tickets compensated</div></div>
+                    <div style="padding:10px 14px;border:1px solid var(--nebula);border-radius:8px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--dark-teal);">$55K</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">total compensation value</div></div>
+                  </div>
+                  <table class="a-comp-table">
+                    <tr><td>discount</td><td><div class="a-comp-bar" style="width:60%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>refund</td><td><div class="a-comp-bar" style="width:40%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>delivery fee waiver</td><td><div class="a-comp-bar" style="width:30%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>miscellaneous</td><td><div class="a-comp-bar" style="width:20%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>promo coupon</td><td><div class="a-comp-bar" style="width:15%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>replacement</td><td><div class="a-comp-bar" style="width:10%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>price adjustment</td><td><div class="a-comp-bar" style="width:8%;"></div></td><td>$NaN</td></tr>
+                  </table>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Sentiment by Compensation Type <button class="a-card-btn">Sentiment</button></div>
+                  <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Post-compensation sentiment (happy/sad/neutral) by type</div>
+                  <div class="a-chart-empty">Chart data loading…</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Agent Performance & Behavioral Metrics -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Agent Performance &amp; Behavioral Metrics</div></div></div>
+            <div class="a-card-body">
+              <div class="a-2col" style="margin-bottom:12px;">
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Shift-End Rush Metrics</div><div class="a-card-sub">Resolution time and CSAT for last 30 min vs mid-shift</div></div><button class="a-card-btn">Compare</button></div>
+                  <div class="a-card-body">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--cutty-sark);opacity:.6;margin-bottom:6px;text-transform:uppercase;">AVG RESOLUTION TIME</div>
+                    <div class="a-agent-row"><span class="a-agent-row-lbl">Last 30 min</span><span class="a-agent-row-val">2h 48m</span></div>
+                    <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:80%;background:var(--status-negative);height:100%;border-radius:2px;"></div></div>
+                    <div class="a-agent-row"><span class="a-agent-row-lbl">Mid-Shift</span><span class="a-agent-row-val">1h 5m</span></div>
+                    <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:35%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+                    <div style="display:flex;gap:16px;margin-top:10px;">
+                      <div><div style="font-size:16px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);">0.0</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT (Last 30m)</div></div>
+                      <div><div style="font-size:16px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);">0.9</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT (Mid-Shift)</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Peak Load Efficiency</div><div class="a-card-sub">Avg resolution time and CSAT during rush hours vs normal</div></div><button class="a-card-btn">Load</button></div>
+                  <div class="a-card-body">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--cutty-sark);opacity:.6;margin-bottom:6px;text-transform:uppercase;">RESOLUTION TIME</div>
+                    <div class="a-agent-row"><span class="a-agent-row-lbl">Rush Hour</span><span class="a-agent-row-val">1h 7m</span></div>
+                    <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:38%;background:#F97316;height:100%;border-radius:2px;"></div></div>
+                    <div class="a-agent-row"><span class="a-agent-row-lbl">Normal</span><span class="a-agent-row-val">1h 6m</span></div>
+                    <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:36%;background:var(--teal);height:100%;border-radius:2px;"></div></div>
+                    <div style="display:flex;gap:16px;margin-top:10px;">
+                      <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">Δ 0m</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Resolution Gap</div></div>
+                      <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">Δ 0.0</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT Gap</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="a-2col">
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Agent Empathy Index</div><div class="a-card-sub">Average empathy score across all agent interactions</div></div><span class="a-card-badge teal">31.0%</span></div>
+                  <div class="a-card-body" style="display:flex;align-items:center;gap:16px;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="11"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F97316" stroke-width="11" stroke-dasharray="43 158" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--dark-teal)">21</text>
+                      <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">%</text>
+                    </svg>
+                    <div><div style="font-size:16px;font-weight:700;color:var(--dark-teal);">21.0%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Empathy Score<br/>Across all interactions</div></div>
+                  </div>
+                </div>
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Tone Consistency Score</div><div class="a-card-sub">Agent tone consistency across interactions</div></div><span class="a-card-badge teal">52.0/100</span></div>
+                  <div class="a-card-body" style="display:flex;align-items:center;gap:16px;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="11"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--teal)" stroke-width="11" stroke-dasharray="104 100" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--dark-teal)">52</text>
+                      <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">/ 100</text>
+                    </svg>
+                    <div>
+                      <div style="font-size:16px;font-weight:700;color:var(--dark-teal);">21.0%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Empathy Score</div>
+                      <div style="font-size:16px;font-weight:700;color:var(--dark-teal);margin-top:4px;">38.5%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">SOP Adherence</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Path & Process Adherence -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Path &amp; Process Adherence</div></div></div>
+            <div class="a-card-body">
+              <div class="a-2col">
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Path Completion Rate</div><div class="a-card-sub">Percentage following optimal resolution paths</div></div><span class="a-card-badge teal">40.0%</span></div>
+                  <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="11"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F59E0B" stroke-width="11" stroke-dasharray="80 120" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="12" font-weight="700" fill="var(--dark-teal)">40.0%</text>
+                      <text x="40" y="49" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">SOP 38.5%</text>
+                    </svg>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">40.0% <span style="font-size:11px;opacity:.6;">Path Completion</span></div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);margin-top:4px;">52.0% <span style="font-size:11px;opacity:.6;">Tone Consistency</span></div></div>
+                  </div>
+                </div>
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">SOP Adherence Rate</div><div class="a-card-sub">Adherence to standard operating procedures</div></div><span class="a-card-badge teal">38.5%</span></div>
+                  <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
+                    <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="11"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--teal)" stroke-width="11" stroke-dasharray="77 123" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="13" font-weight="700" fill="var(--dark-teal)">38.5</text>
+                      <text x="40" y="49" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">%</text>
+                    </svg>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);">40.0% <span style="font-size:11px;opacity:.6;">Path Completion</span></div><div style="font-size:13px;font-weight:600;color:var(--dark-teal);margin-top:4px;">52.0% <span style="font-size:11px;opacity:.6;">Tone Consistency</span></div></div>
+                  </div>
+                </div>
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Multi-Channel Switch Rate</div><div class="a-card-sub">Customers switching channels for same issue</div></div><span class="a-card-badge teal">0.0%</span></div>
+                  <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
+                    <svg width="60" height="60" viewBox="0 0 60 60" style="flex-shrink:0;">
+                      <circle cx="30" cy="30" r="24" fill="none" stroke="var(--aqua-haze)" stroke-width="9"/>
+                      <text x="30" y="27" text-anchor="middle" font-family="var(--font-display)" font-size="10" font-weight="700" fill="var(--dark-teal)">0</text>
+                      <text x="30" y="38" text-anchor="middle" font-family="var(--font-body)" font-size="6" fill="var(--cutty-sark)" opacity=".6">%</text>
+                    </svg>
+                    <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.4;">Percentage of customers who switched channels for the same issue within 2 hours.</div>
+                  </div>
+                </div>
+                <div class="a-card" style="box-shadow:none;">
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Follow-Up Action Rate</div><div class="a-card-sub">Tickets ending with scheduled follow-ups</div></div><span class="a-card-badge teal">0.0%</span></div>
+                  <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
+                    <svg width="60" height="60" viewBox="0 0 60 60" style="flex-shrink:0;">
+                      <circle cx="30" cy="30" r="24" fill="none" stroke="var(--aqua-haze)" stroke-width="9"/>
+                      <text x="30" y="27" text-anchor="middle" font-family="var(--font-display)" font-size="10" font-weight="700" fill="var(--dark-teal)">0</text>
+                      <text x="30" y="38" text-anchor="middle" font-family="var(--font-body)" font-size="6" fill="var(--cutty-sark)" opacity=".6">%</text>
+                    </svg>
+                    <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.4;">Tickets that concluded with a scheduled follow-up action.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /rpa-pane-overview -->
+        <div class="a-tab-content" id="rpa-pane-orders"><div class="a-placeholder"><div class="a-placeholder-icon">📦</div><div class="a-placeholder-title">Orders &amp; Order Management</div><div class="a-placeholder-sub">Order resolution analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-delivery"><div class="a-placeholder"><div class="a-placeholder-icon">🚚</div><div class="a-placeholder-title">Delivery, Tracking &amp; Fulfillment</div><div class="a-placeholder-sub">Delivery path analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-returns"><div class="a-placeholder"><div class="a-placeholder-icon">↩️</div><div class="a-placeholder-title">Returns, Replacements &amp; Refunds</div><div class="a-placeholder-sub">Returns analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-payments"><div class="a-placeholder"><div class="a-placeholder-icon">💳</div><div class="a-placeholder-title">Payments, Billing &amp; Wallet Issues</div><div class="a-placeholder-sub">Payments analytics coming soon.</div></div></div>
+      </div>
+    </div><!-- /analytics-rpa -->
+
+    <!-- ── Voicebot Dashboard ── -->
+    <div id="analytics-vb" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+      <div class="analytics-topbar">
+        <div>
+          <div class="analytics-page-title">Voicebot Dashboard</div>
+          <div class="analytics-page-sub">Voicebot call analytics, resolution rates, and operational metrics.</div>
+        </div>
+        <div class="analytics-date-controls">
+          <div class="analytics-date-group"><span class="analytics-date-label">Start Date:</span><div class="analytics-date-field"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M9 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Mar 18th, 2026</div></div>
+          <div class="analytics-date-group"><span class="analytics-date-label">End Date:</span><div class="analytics-date-field"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M9 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Mar 25th, 2026</div></div>
+        </div>
+      </div>
+      <div class="analytics-tabs-wrap">
+        <div class="a-tabs-pill">
+          <button class="a-tab active" id="vb-tab-overview"    onclick="setVbTab('overview')">Overview</button>
+          <button class="a-tab"        id="vb-tab-insights"    onclick="setVbTab('insights')">Insights &amp; Performance</button>
+          <button class="a-tab"        id="vb-tab-resolution"  onclick="setVbTab('resolution')">Resolution Health</button>
+          <button class="a-tab"        id="vb-tab-others"      onclick="setVbTab('others')">Others</button>
+        </div>
+      </div>
+      <div class="analytics-content">
+        <div class="a-tab-content active" id="vb-pane-overview">
+          <!-- KPI row 1 -->
+          <div class="vb-kpi-row">
+            <div class="a-kpi-card">
+              <div class="a-kpi-label">Total Calls</div>
+              <div class="a-kpi-value">18,911</div>
+              <div class="a-kpi-trend negative">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3l4 6 4-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                -7.7% vs previous period
+              </div>
+            </div>
+            <div class="a-kpi-card"><div class="a-kpi-label">Total Voicebot Calls</div><div class="a-kpi-value">0</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">Resolved by Bot</div><div class="a-kpi-value">0</div><div class="a-kpi-sub">(0.00%)</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">Agent Handover</div><div class="a-kpi-value">0</div><div class="a-kpi-sub">(0.00%)</div></div>
+          </div>
+          <!-- KPI row 2 -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="a-kpi-card"><div class="a-kpi-label">Avg Handling Time</div><div class="a-kpi-value">—</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">Drop Off Rate</div><div class="a-kpi-value">0%</div></div>
+          </div>
+          <!-- Peak Call Hours + Weekly Breakdown -->
+          <div class="a-2col-wide">
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Peak Call Hours</div></div></div>
+              <div class="a-card-body">
+                <div class="a-chart-empty">No peak hours data available</div>
+              </div>
+            </div>
+            <div class="a-card">
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Weekly Breakdown</div></div></div>
+              <div class="a-card-body">
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Mon</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Tue</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Wed</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Thu</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Fri</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Sat</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                  <div class="a-bar-row" style="gap:6px;"><span style="min-width:30px;font-size:11px;color:var(--cutty-sark);opacity:.7;">Sun</span><div class="a-bar-track"><div class="a-bar-fill" style="width:0%;"></div></div></div>
+                </div>
+                <div style="display:flex;gap:14px;margin-top:10px;">
+                  <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:10px;height:10px;border-radius:50%;background:var(--teal);display:inline-block;"></span>Escalated</div>
+                  <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:10px;height:10px;border-radius:50%;background:#8B5CF6;display:inline-block;"></span>Resolved</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Hourly Trend -->
+          <div class="a-card">
+            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Hourly Trend</div></div></div>
+            <div class="a-card-body">
+              <svg width="100%" height="80" viewBox="0 0 700 80" preserveAspectRatio="none">
+                <line x1="0" y1="75" x2="700" y2="75" stroke="var(--aqua-haze)" stroke-width="1"/>
+                <line x1="0" y1="55" x2="700" y2="55" stroke="var(--aqua-haze)" stroke-width="1"/>
+                <line x1="0" y1="35" x2="700" y2="35" stroke="var(--aqua-haze)" stroke-width="1"/>
+                <line x1="0" y1="15" x2="700" y2="15" stroke="var(--aqua-haze)" stroke-width="1"/>
+                <path d="M0,75 L700,75" fill="none" stroke="var(--teal)" stroke-width="2"/>
+              </svg>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:4px;">
+                <span>11 AM – 12 PM</span><span>12 PM – 1 PM</span><span>1 PM – 2 PM</span><span>2 PM – 3 PM</span><span>3 PM – 4 PM</span><span>4 PM – 5 PM</span><span>5 PM – 6 PM</span><span>6 PM – 7 PM</span><span>7 PM – 8 PM</span>
+              </div>
+              <div style="display:flex;gap:14px;margin-top:6px;">
+                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:10px;height:10px;border-radius:50%;background:var(--teal);display:inline-block;"></span>Total Calls</div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /vb-pane-overview -->
+        <div class="a-tab-content" id="vb-pane-insights"><div class="a-placeholder"><div class="a-placeholder-icon">📈</div><div class="a-placeholder-title">Insights &amp; Performance</div><div class="a-placeholder-sub">Voicebot performance analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="vb-pane-resolution"><div class="a-placeholder"><div class="a-placeholder-icon">✅</div><div class="a-placeholder-title">Resolution Health</div><div class="a-placeholder-sub">Resolution quality metrics coming soon.</div></div></div>
+        <div class="a-tab-content" id="vb-pane-others"><div class="a-placeholder"><div class="a-placeholder-icon">📋</div><div class="a-placeholder-title">Others</div><div class="a-placeholder-sub">Additional voicebot metrics coming soon.</div></div></div>
+      </div>
+    </div><!-- /analytics-vb -->
+
+    <!-- ── Customer Memory Graph ── -->
+    <div id="analytics-cmg" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+      <div class="analytics-topbar">
+        <div>
+          <div class="analytics-page-title">Customer Memory Graph</div>
+          <div class="analytics-page-sub">Deep customer history, relationship patterns, and memory-based insights.</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="analytics-date-range">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Last 30 days
+          </div>
+        </div>
+      </div>
+
+      <div class="analytics-tabs-wrap">
+        <div class="a-tabs-pill">
+          <button class="a-tab active" id="cmg-hcard-a" role="tab" aria-selected="true"  onclick="setCmgTab('a')">Behavior Patterns</button>
+          <button class="a-tab"        id="cmg-hcard-b" role="tab" aria-selected="false" onclick="setCmgTab('b')">Sentiment</button>
+          <button class="a-tab"        id="cmg-hcard-c" role="tab" aria-selected="false" onclick="setCmgTab('c')">Loyalty &amp; Churn</button>
+          <button class="a-tab"        id="cmg-hcard-d" role="tab" aria-selected="false" onclick="setCmgTab('d')">Intent &amp; Journey</button>
+        </div>
+      </div>
+
+      <!-- CMG body: scrollable -->
+      <div style="flex:1;overflow-y:auto;padding:24px 28px 48px;">
+
+        <!-- ══ PANE A: Behavior Patterns ══ -->
+        <div class="cmg-pane active" id="cmg-pane-a">
+          <div class="cmg-pane-hd">
+            <span class="cmg-pane-title">Customer Behavior Patterns</span>
+            <button class="cmg-show-more-btn" id="cmg-more-btn-a" onclick="toggleCmgMore('a')">Show 9 more &rsaquo;</button>
+          </div>
+
+          <!-- Spotlight grid -->
+          <div class="cmg-grid">
+
+            <!-- Card A1: Repeat Issue Rate -->
+            <div class="cmg-card" id="cmg-card-a1">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Repeat Issue Rate</span>
+                <span class="cmg-card-badge amber">Amber</span>
+              </div>
+              <div class="cmg-card-desc">% of customers who raised the same intent more than once</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat">23.4%<span style="font-size:13px;font-weight:400;color:var(--text-muted);margin-left:6px;">this period</span></div>
+                <div class="cmg-stat-compare">
+                  <span class="cmg-stat-arrow warn">&#9650;</span> vs 19.8% last period &nbsp;<span style="color:#e07a2a;font-size:11px;font-weight:600;">+3.6pp</span>
+                </div>
+                <div style="margin-top:12px;">
+                  <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Top repeating intents</div>
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;"><span>Refund request</span><span style="font-weight:600;color:var(--text-primary);">38%</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:12px;"><span>Order status</span><span style="font-weight:600;color:var(--text-primary);">27%</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:12px;"><span>Delivery delay</span><span style="font-weight:600;color:var(--text-primary);">19%</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('a1')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-a1">
+                <div class="cmg-detail-title">Repeat Issue Rate — Drill-down</div>
+                <div class="cmg-detail-body">
+                  <div style="margin-bottom:10px;font-size:12px;color:var(--text-muted);">Ranked by repeat frequency · Period-over-period trend</div>
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Intent</th><th>Repeat %</th><th>vs Last</th><th>Signal</th></tr></thead>
+                    <tbody>
+                      <tr><td>Refund request</td><td>38%</td><td style="color:#e07a2a;">&#9650; +5pp</td><td><span class="cmg-card-badge red" style="font-size:10px;">High</span></td></tr>
+                      <tr><td>Order status</td><td>27%</td><td style="color:#e07a2a;">&#9650; +2pp</td><td><span class="cmg-card-badge amber" style="font-size:10px;">Med</span></td></tr>
+                      <tr><td>Delivery delay</td><td>19%</td><td style="color:var(--text-muted);">— flat</td><td><span class="cmg-card-badge amber" style="font-size:10px;">Med</span></td></tr>
+                      <tr><td>Product defect</td><td>11%</td><td style="color:#27ae7a;">&#9660; -1pp</td><td><span class="cmg-card-badge green" style="font-size:10px;">Low</span></td></tr>
+                      <tr><td>Account issue</td><td>5%</td><td style="color:var(--text-muted);">— flat</td><td><span class="cmg-card-badge green" style="font-size:10px;">Low</span></td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:10px;font-size:11px;color:var(--text-muted);">A high repeat issue rate at base level signals systemic product or service failure, not a support failure.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card A2: Issue Gravity Score -->
+            <div class="cmg-card" id="cmg-card-a2">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Issue Gravity Score</span>
+                <span class="cmg-card-badge amber">Amber</span>
+              </div>
+              <div class="cmg-card-desc">Severity of issues — combines type, order value, prior attempts, and sentiment</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Distribution by gravity band</div>
+                <div class="cmg-dist-bar">
+                  <div class="cmg-dist-segment" style="width:41%;background:#27ae7a;" title="Low 41%"></div>
+                  <div class="cmg-dist-segment" style="width:33%;background:#e0b22a;" title="Medium 33%"></div>
+                  <div class="cmg-dist-segment" style="width:19%;background:#e07a2a;" title="High 19%"></div>
+                  <div class="cmg-dist-segment" style="width:7%;background:#e03a2a;" title="Critical 7%"></div>
+                </div>
+                <div class="cmg-dist-labels">
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Low 41%</div>
+                  <div class="cmg-dist-label"><span style="color:#e0b22a;">&#9632;</span> Med 33%</div>
+                  <div class="cmg-dist-label"><span style="color:#e07a2a;">&#9632;</span> High 19%</div>
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> Crit 7%</div>
+                </div>
+                <div style="margin-top:8px;font-size:12px;color:#e07a2a;font-weight:600;">19% High or Critical — monitor closely</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('a2')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-a2">
+                <div class="cmg-detail-title">Issue Gravity Score — Drill-down</div>
+                <div class="cmg-detail-body">
+                  <div style="margin-bottom:10px;font-size:12px;color:var(--text-muted);">Breakdown by intent and channel</div>
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Intent</th><th>Low</th><th>Med</th><th>High</th><th>Critical</th></tr></thead>
+                    <tbody>
+                      <tr><td>Refund request</td><td>22%</td><td>31%</td><td>34%</td><td style="color:#e03a2a;font-weight:600;">13%</td></tr>
+                      <tr><td>Order status</td><td>61%</td><td>29%</td><td>8%</td><td>2%</td></tr>
+                      <tr><td>Delivery delay</td><td>38%</td><td>40%</td><td>18%</td><td>4%</td></tr>
+                      <tr><td>Product defect</td><td>29%</td><td>35%</td><td>27%</td><td style="color:#e03a2a;font-weight:600;">9%</td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:10px;font-size:11px;color:var(--text-muted);">A refund request for ₹200 and ₹20,000 are both "refund" intents — gravity captures the real impact difference.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card A3: Customer Loyalty Erosion Score -->
+            <div class="cmg-card" id="cmg-card-a3">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Customer Loyalty Erosion Score</span>
+                <span class="cmg-card-badge amber">Amber</span>
+              </div>
+              <div class="cmg-card-desc">Composite deterioration score: worsening sentiment, contact frequency, lower CSAT, higher-gravity intents</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Distribution by erosion band</div>
+                <div class="cmg-dist-bar">
+                  <div class="cmg-dist-segment" style="width:12%;background:#e03a2a;" title="High 12%"></div>
+                  <div class="cmg-dist-segment" style="width:28%;background:#e0b22a;" title="Medium 28%"></div>
+                  <div class="cmg-dist-segment" style="width:60%;background:#27ae7a;" title="Low 60%"></div>
+                </div>
+                <div class="cmg-dist-labels">
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> High 12%</div>
+                  <div class="cmg-dist-label"><span style="color:#e0b22a;">&#9632;</span> Med 28%</div>
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Low 60%</div>
+                </div>
+                <div class="cmg-stat-compare" style="margin-top:8px;">
+                  <span class="cmg-stat-arrow warn">&#9650;</span> 3.2% moved into High band this period
+                </div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('a3')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-a3">
+                <div class="cmg-detail-title">Customer Loyalty Erosion — Drill-down</div>
+                <div class="cmg-detail-body">
+                  <div style="margin-bottom:10px;font-size:12px;color:var(--text-muted);">Band movement this period · by customer segment</div>
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Segment</th><th>High Erosion</th><th>Movement</th></tr></thead>
+                    <tbody>
+                      <tr><td>Premium</td><td style="color:#e03a2a;font-weight:600;">18%</td><td style="color:#e07a2a;">&#9650; +4.1pp</td></tr>
+                      <tr><td>Standard</td><td>11%</td><td style="color:#e07a2a;">&#9650; +2.8pp</td></tr>
+                      <tr><td>New (&lt;90 days)</td><td>8%</td><td style="color:var(--text-muted);">— flat</td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:10px;font-size:11px;color:var(--text-muted);">Premium segment seeing highest erosion — warrants priority review of high-value customer experience.</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-grid spotlight A -->
+
+          <!-- Secondary metrics grid A -->
+          <div class="cmg-hidden-grid" id="cmg-hidden-a">
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Issue Gravity Escalation Pattern</span><span class="cmg-card-badge red">Watch</span></div>
+              <div class="cmg-card-desc">% of customers whose issues are getting more severe over time</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">8.3%</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">of base showing escalation trajectory</div>
+                <div style="font-size:12px;margin-top:6px;">Avg <strong>3.4 tickets</strong> before gravity shift detected</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Customer Contact Velocity</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">Rate at which customers are accelerating their contact frequency</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-dist-bar" style="height:10px;">
+                  <div class="cmg-dist-segment" style="width:9%;background:#e03a2a;" title="High 9%"></div>
+                  <div class="cmg-dist-segment" style="width:22%;background:#e0b22a;" title="Med 22%"></div>
+                  <div class="cmg-dist-segment" style="width:69%;background:#27ae7a;" title="Low 69%"></div>
+                </div>
+                <div class="cmg-dist-labels">
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> High 9%</div>
+                  <div class="cmg-dist-label"><span style="color:#e0b22a;">&#9632;</span> Med 22%</div>
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Low 69%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Self-Resolution Dropout Rate</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">% who tried self-service before reaching a live agent and failed</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">34.7%</div>
+                <div style="font-size:12px;color:var(--text-muted);">preceded by failed self-service attempt</div>
+                <div style="margin-top:8px;font-size:11px;display:flex;gap:8px;">
+                  <span>IVR <strong>41%</strong></span><span>Chatbot <strong>36%</strong></span><span>KB <strong>23%</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Channel Switching Behavior</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">% of customers switching support channels within the same issue journey</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">27.1%</div>
+                <div style="font-size:12px;color:var(--text-muted);">switched channels for same issue</div>
+                <div style="font-size:12px;margin-top:6px;">Top path: <strong>Chat → Voice</strong> (52% of switches)</div>
+                <div style="font-size:12px;">Avg <strong>2.1 channels</strong> per issue journey</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Silent Dissatisfaction Rate</span><span class="cmg-card-badge red">Action Needed</span></div>
+              <div class="cmg-card-desc">Negative sentiment, no CSAT submitted, no escalation raised — highest churn risk</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">6.2%</div>
+                <div class="cmg-stat-compare"><span class="cmg-stat-arrow warn">&#9650;</span> vs 4.8% last period</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">These customers leave without signaling</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Issue Resolution Satisfaction Gap</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">Gap between resolution asked for vs resolution actually received</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">31.4%</div>
+                <div style="font-size:12px;color:var(--text-muted);">of tickets have a resolution gap</div>
+                <div style="font-size:12px;margin-top:6px;">Most common: asked for <strong>full refund</strong>, received <strong>coupon</strong></div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Post-Resolution Sentiment Drop</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">% of customers whose sentiment worsens after resolution is provided</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">17.8%</div>
+                <div style="font-size:12px;color:var(--text-muted);">sentiment drop at resolution point</div>
+                <div style="font-size:12px;margin-top:6px;">Highest in: <strong>Coupon offers</strong> (29%), <strong>Partial refunds</strong> (24%)</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Issue Persistence Score</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">How consistently a customer contacts for the same unresolved intent category</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-dist-bar" style="height:10px;">
+                  <div class="cmg-dist-segment" style="width:14%;background:#e03a2a;"></div>
+                  <div class="cmg-dist-segment" style="width:31%;background:#e0b22a;"></div>
+                  <div class="cmg-dist-segment" style="width:55%;background:#27ae7a;"></div>
+                </div>
+                <div class="cmg-dist-labels">
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> High 14%</div>
+                  <div class="cmg-dist-label"><span style="color:#e0b22a;">&#9632;</span> Med 31%</div>
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Low 55%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Resolution Acceptance Rate</span><span class="cmg-card-badge green">Healthy</span></div>
+              <div class="cmg-card-desc">% of tickets where customer explicitly or implicitly accepted the resolution</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">68.4%</div>
+                <div style="font-size:12px;color:var(--text-muted);">accepted vs closed-but-rejected</div>
+                <div class="cmg-stat-compare"><span class="cmg-stat-arrow up">&#9650;</span> vs 65.1% last period</div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-hidden-a -->
+        </div><!-- /cmg-pane-a -->
+
+        <!-- ══ PANE B: Sentiment Intelligence ══ -->
+        <div class="cmg-pane" id="cmg-pane-b">
+          <div class="cmg-pane-hd">
+            <span class="cmg-pane-title">Customer Sentiment Intelligence</span>
+            <button class="cmg-show-more-btn" id="cmg-more-btn-b" onclick="toggleCmgMore('b')">Show 3 more &rsaquo;</button>
+          </div>
+
+          <div class="cmg-grid">
+
+            <!-- Card B1: Sentiment Distribution -->
+            <div class="cmg-card" id="cmg-card-b1">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Customer Sentiment Distribution</span>
+                <span class="cmg-card-badge amber">Amber</span>
+              </div>
+              <div class="cmg-card-desc">Population-level snapshot: how the entire customer base feels across all tickets</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Base-wide sentiment · last 30 days</div>
+                <div class="cmg-dist-bar" style="height:18px;border-radius:6px;overflow:hidden;">
+                  <div class="cmg-dist-segment" style="width:42%;background:#27ae7a;" title="Positive 42%"></div>
+                  <div class="cmg-dist-segment" style="width:38%;background:#b0bec5;" title="Neutral 38%"></div>
+                  <div class="cmg-dist-segment" style="width:20%;background:#e03a2a;" title="Negative 20%"></div>
+                </div>
+                <div class="cmg-dist-labels">
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Positive 42%</div>
+                  <div class="cmg-dist-label"><span style="color:#b0bec5;">&#9632;</span> Neutral 38%</div>
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> Negative 20%</div>
+                </div>
+                <div class="cmg-stat-compare" style="margin-top:8px;"><span class="cmg-stat-arrow warn">&#9650;</span> Negative up from 16.4% last period</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('b1')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-b1">
+                <div class="cmg-detail-title">Sentiment Distribution — Drill-down</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Channel</th><th>Positive</th><th>Neutral</th><th>Negative</th></tr></thead>
+                    <tbody>
+                      <tr><td>Voice</td><td>39%</td><td>35%</td><td style="color:#e03a2a;font-weight:600;">26%</td></tr>
+                      <tr><td>Chat</td><td>45%</td><td>39%</td><td>16%</td></tr>
+                      <tr><td>Email</td><td>44%</td><td>40%</td><td>16%</td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:10px;font-size:11px;color:var(--text-muted);">Voice channel shows highest negative sentiment — consider call handling experience review.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card B2: Emotional Intensity Distribution -->
+            <div class="cmg-card" id="cmg-card-b2">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Emotional Intensity Distribution</span>
+                <span class="cmg-card-badge red">Action Needed</span>
+              </div>
+              <div class="cmg-card-desc">5-tier emotional intensity: Calm to Irate — beyond simple positive/negative classification</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Intensity tiers across all tickets</div>
+                <div class="cmg-dist-bar" style="height:16px;border-radius:6px;overflow:hidden;">
+                  <div class="cmg-dist-segment" style="width:31%;background:#27ae7a;" title="Calm 31%"></div>
+                  <div class="cmg-dist-segment" style="width:24%;background:#8bc34a;" title="Mildly Frustrated 24%"></div>
+                  <div class="cmg-dist-segment" style="width:22%;background:#e0b22a;" title="Frustrated 22%"></div>
+                  <div class="cmg-dist-segment" style="width:15%;background:#e07a2a;" title="Distressed 15%"></div>
+                  <div class="cmg-dist-segment" style="width:8%;background:#e03a2a;" title="Irate 8%"></div>
+                </div>
+                <div class="cmg-dist-labels" style="flex-wrap:wrap;gap:4px;">
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Calm 31%</div>
+                  <div class="cmg-dist-label"><span style="color:#8bc34a;">&#9632;</span> Mild 24%</div>
+                  <div class="cmg-dist-label"><span style="color:#e0b22a;">&#9632;</span> Frust 22%</div>
+                  <div class="cmg-dist-label"><span style="color:#e07a2a;">&#9632;</span> Dist 15%</div>
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> Irate 8%</div>
+                </div>
+                <div style="margin-top:8px;font-size:12px;color:#e03a2a;font-weight:600;">Distressed + Irate = 23% of base</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('b2')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-b2">
+                <div class="cmg-detail-title">Emotional Intensity — Drill-down by Intent</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Intent</th><th>Distressed</th><th>Irate</th><th>Combined</th></tr></thead>
+                    <tbody>
+                      <tr><td>Refund request</td><td>21%</td><td style="color:#e03a2a;font-weight:600;">14%</td><td style="color:#e03a2a;font-weight:600;">35%</td></tr>
+                      <tr><td>Delivery delay</td><td>18%</td><td>9%</td><td>27%</td></tr>
+                      <tr><td>Product defect</td><td>16%</td><td>8%</td><td>24%</td></tr>
+                      <tr><td>Order status</td><td>8%</td><td>3%</td><td>11%</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card B3: Frustration Trigger Mapping -->
+            <div class="cmg-card" id="cmg-card-b3">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Frustration Trigger Mapping</span>
+                <span class="cmg-card-badge amber">Watch</span>
+              </div>
+              <div class="cmg-card-desc">Specific moments/statements that caused measurable negative sentiment shift</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Top triggers · ranked by frequency</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div class="cmg-trigger-row">
+                    <span class="cmg-trigger-rank">1</span>
+                    <span class="cmg-trigger-name">"your policy states"</span>
+                    <span class="cmg-trigger-freq">1,243</span>
+                    <span class="cmg-trigger-drop">-0.38</span>
+                  </div>
+                  <div class="cmg-trigger-row">
+                    <span class="cmg-trigger-rank">2</span>
+                    <span class="cmg-trigger-name">"we can't process that"</span>
+                    <span class="cmg-trigger-freq">987</span>
+                    <span class="cmg-trigger-drop">-0.31</span>
+                  </div>
+                  <div class="cmg-trigger-row">
+                    <span class="cmg-trigger-rank">3</span>
+                    <span class="cmg-trigger-name">"please hold for a moment"</span>
+                    <span class="cmg-trigger-freq">756</span>
+                    <span class="cmg-trigger-drop">-0.22</span>
+                  </div>
+                </div>
+                <div style="margin-top:6px;font-size:10px;color:var(--text-muted);">Freq = occurrences · Drop = avg sentiment score change</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('b3')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-b3">
+                <div class="cmg-detail-title">Frustration Triggers — Full Ranked List</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>#</th><th>Trigger phrase</th><th>Occurrences</th><th>Avg sentiment drop</th></tr></thead>
+                    <tbody>
+                      <tr><td>1</td><td>"your policy states"</td><td>1,243</td><td style="color:#e03a2a;">-0.38</td></tr>
+                      <tr><td>2</td><td>"we can't process that"</td><td>987</td><td style="color:#e03a2a;">-0.31</td></tr>
+                      <tr><td>3</td><td>"please hold for a moment"</td><td>756</td><td style="color:#e07a2a;">-0.22</td></tr>
+                      <tr><td>4</td><td>"I understand your frustration"</td><td>612</td><td style="color:#e07a2a;">-0.19</td></tr>
+                      <tr><td>5</td><td>"that's outside our scope"</td><td>498</td><td style="color:#e03a2a;">-0.34</td></tr>
+                      <tr><td>6</td><td>"let me transfer you"</td><td>441</td><td style="color:#e07a2a;">-0.28</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-grid spotlight B -->
+
+          <!-- Secondary metrics grid B -->
+          <div class="cmg-hidden-grid" id="cmg-hidden-b">
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Sentiment Transition Matrix</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">How customer sentiment shifts between consecutive tickets (not within a ticket)</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Ticket N → Ticket N+1 transitions (customer count)</div>
+                <div class="cmg-crosstab">
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd" style="background:transparent;"></div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">→ Pos</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">→ Neu</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">→ Neg</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Pos ↓</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(39,174,122,0.2);">2,841</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(176,190,197,0.2);">612</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,58,42,0.1);">247</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Neu ↓</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(39,174,122,0.1);">489</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(176,190,197,0.2);">1,934</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,58,42,0.15);">418</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Neg ↓</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(39,174,122,0.15);">312</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(176,190,197,0.15);">287</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,58,42,0.25);">764</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Sentiment Drift Throughout Journey</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">Net sentiment change measured at 4 conversation stages: open → mid → post-resolution → close</div>
+              <div class="cmg-card-vis">
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;height:48px;margin-bottom:4px;gap:4px;">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                    <div style="font-size:10px;font-weight:600;color:#27ae7a;">+0.42</div>
+                    <div style="width:100%;background:#27ae7a;height:32px;border-radius:3px 3px 0 0;"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                    <div style="font-size:10px;font-weight:600;color:#e0b22a;">+0.18</div>
+                    <div style="width:100%;background:#e0b22a;height:14px;border-radius:3px 3px 0 0;"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                    <div style="font-size:10px;font-weight:600;color:#e07a2a;">-0.08</div>
+                    <div style="width:100%;background:#e07a2a;height:6px;border-radius:3px 3px 0 0;"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                    <div style="font-size:10px;font-weight:600;color:#27ae7a;">+0.24</div>
+                    <div style="width:100%;background:#27ae7a;height:18px;border-radius:3px 3px 0 0;"></div>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-muted);">
+                  <span>Open</span><span>Mid</span><span>Post-res</span><span>Close</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Dip at post-resolution stage — resolution delivery experience needs attention</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Customer Tone Shift Rate</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">% of tickets where customer tone changed significantly mid-conversation</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">14.3%</div>
+                <div style="font-size:12px;color:var(--text-muted);">of tickets with detected tone shift</div>
+                <div style="margin-top:8px;display:flex;gap:12px;font-size:12px;">
+                  <span><span style="color:#e03a2a;">&#9660;</span> Neg shift <strong>71%</strong></span>
+                  <span><span style="color:#27ae7a;">&#9650;</span> Pos shift <strong>29%</strong></span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-hidden-b -->
+        </div><!-- /cmg-pane-b -->
+
+        <!-- ══ PANE C: Loyalty & Churn Intelligence ══ -->
+        <div class="cmg-pane" id="cmg-pane-c">
+          <div class="cmg-pane-hd">
+            <span class="cmg-pane-title">Customer Loyalty &amp; Churn Intelligence</span>
+            <button class="cmg-show-more-btn" id="cmg-more-btn-c" onclick="toggleCmgMore('c')">Show 1 more &rsaquo;</button>
+          </div>
+
+          <div class="cmg-grid">
+
+            <!-- Card C1: Churn Risk Distribution -->
+            <div class="cmg-card" id="cmg-card-c1">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Churn Risk Distribution</span>
+                <span class="cmg-card-badge red">Action Needed</span>
+              </div>
+              <div class="cmg-card-desc">Count and % of customers in High / Medium / Low churn risk bands</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-risk-blocks">
+                  <div class="cmg-risk-block high">
+                    <div class="cmg-risk-val">847</div>
+                    <div class="cmg-risk-pct">12%</div>
+                    <div class="cmg-risk-lbl">HIGH</div>
+                  </div>
+                  <div class="cmg-risk-block medium">
+                    <div class="cmg-risk-val">2,341</div>
+                    <div class="cmg-risk-pct">34%</div>
+                    <div class="cmg-risk-lbl">MEDIUM</div>
+                  </div>
+                  <div class="cmg-risk-block low">
+                    <div class="cmg-risk-val">3,754</div>
+                    <div class="cmg-risk-pct">54%</div>
+                    <div class="cmg-risk-lbl">LOW</div>
+                  </div>
+                </div>
+                <div class="cmg-stat-compare" style="margin-top:10px;"><span class="cmg-stat-arrow warn">&#9650;</span> High band grew by 89 customers this period</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('c1')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-c1">
+                <div class="cmg-detail-title">Churn Risk — Drill-down by Segment &amp; Tenure</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Segment</th><th>High Risk</th><th>Period change</th></tr></thead>
+                    <tbody>
+                      <tr><td>Premium</td><td style="color:#e03a2a;font-weight:600;">19% (156)</td><td style="color:#e07a2a;">&#9650; +31</td></tr>
+                      <tr><td>Standard</td><td>11% (524)</td><td style="color:#e07a2a;">&#9650; +47</td></tr>
+                      <tr><td>New (&lt;90d)</td><td>8% (167)</td><td style="color:#e07a2a;">&#9650; +11</td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Band movement: 127 customers escalated to High; 38 de-escalated from High.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card C2: High-Value Customer Risk Concentration -->
+            <div class="cmg-card" id="cmg-card-c2">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">High-Value Customer Risk Concentration</span>
+                <span class="cmg-card-badge red">Action Needed</span>
+              </div>
+              <div class="cmg-card-desc">Churn risk segmented by customer value tier — revenue at risk</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">Value tier × Churn risk (customer count)</div>
+                <div class="cmg-crosstab">
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd" style="background:transparent;"></div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">High Risk</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Med Risk</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Low Risk</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">High Value</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,58,42,0.35);font-weight:700;color:#e03a2a;">187</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,178,42,0.2);">341</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(39,174,122,0.1);">612</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Mid Value</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,58,42,0.15);">412</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,178,42,0.15);">987</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(39,174,122,0.1);">1,843</div>
+                  <div class="cmg-crosstab-cell cmg-crosstab-hd">Low Value</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,58,42,0.08);">248</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(224,178,42,0.08);">1,013</div>
+                  <div class="cmg-crosstab-cell" style="background:rgba(39,174,122,0.12);">1,299</div>
+                </div>
+                <div style="margin-top:8px;font-size:12px;color:#e03a2a;font-weight:600;">187 High-Value customers at High churn risk</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('c2')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-c2">
+                <div class="cmg-detail-title">High-Value Risk — Revenue at Risk Estimate</div>
+                <div class="cmg-detail-body">
+                  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+                    <div style="background:rgba(224,58,42,0.08);border:1px solid rgba(224,58,42,0.2);border-radius:6px;padding:10px 14px;flex:1;min-width:120px;">
+                      <div style="font-size:11px;color:var(--text-muted);">Revenue at risk</div>
+                      <div style="font-size:20px;font-weight:700;color:#e03a2a;">₹2.4Cr</div>
+                      <div style="font-size:10px;color:var(--text-muted);">High-Value × High-Risk</div>
+                    </div>
+                    <div style="background:rgba(224,178,42,0.08);border:1px solid rgba(224,178,42,0.2);border-radius:6px;padding:10px 14px;flex:1;min-width:120px;">
+                      <div style="font-size:11px;color:var(--text-muted);">At-risk customers</div>
+                      <div style="font-size:20px;font-weight:700;color:#e0b22a;">187</div>
+                      <div style="font-size:10px;color:var(--text-muted);">Avg LTV ₹1.28L</div>
+                    </div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);">Prioritize outreach to the 187 High-Value × High-Risk customers — highest revenue protection per intervention.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card C3: Recovery Rate -->
+            <div class="cmg-card" id="cmg-card-c3">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Recovery Rate</span>
+                <span class="cmg-card-badge green">Healthy</span>
+              </div>
+              <div class="cmg-card-desc">% of previously high churn risk customers who moved to Medium or Low this period</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat">18.3%<span style="font-size:13px;font-weight:400;color:var(--text-muted);margin-left:6px;">recovery rate</span></div>
+                <div class="cmg-stat-compare">
+                  <span class="cmg-stat-arrow up">&#9650;</span> vs 14.7% last period &nbsp;<span style="color:#27ae7a;font-size:11px;font-weight:600;">+3.6pp improving</span>
+                </div>
+                <div style="margin-top:10px;font-size:12px;"><strong>38 customers</strong> de-escalated from High risk band this period</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('c3')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-c3">
+                <div class="cmg-detail-title">Recovery Rate — What's Working</div>
+                <div class="cmg-detail-body">
+                  <div style="margin-bottom:8px;font-size:12px;color:var(--text-muted);">Factors correlated with successful recovery</div>
+                  <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+                    <div style="display:flex;justify-content:space-between;"><span>Proactive outreach call</span><span style="font-weight:600;color:#27ae7a;">+8.2pp recovery lift</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span>Full resolution on re-contact</span><span style="font-weight:600;color:#27ae7a;">+6.1pp recovery lift</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span>Manager callback offered</span><span style="font-weight:600;color:#27ae7a;">+4.7pp recovery lift</span></div>
+                    <div style="display:flex;justify-content:space-between;"><span>Goodwill gesture applied</span><span style="font-weight:600;color:#27ae7a;">+3.3pp recovery lift</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-grid spotlight C -->
+
+          <!-- Secondary metrics grid C -->
+          <div class="cmg-hidden-grid" id="cmg-hidden-c">
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Pre-Churn Behavioral Signature</span><span class="cmg-card-badge red">Action Needed</span></div>
+              <div class="cmg-card-desc">Pattern observed in customers who churned in the 60–90 days before leaving</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Signature checklist (% of pre-churn cohort showing signal)</div>
+                <div style="display:flex;flex-direction:column;gap:4px;font-size:12px;">
+                  <div style="display:flex;justify-content:space-between;"><span>3+ ticket reopens</span><span style="font-weight:600;color:#e03a2a;">78%</span></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Negative post-resolution sentiment</span><span style="font-weight:600;color:#e03a2a;">72%</span></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Contact velocity increase (&gt;50%)</span><span style="font-weight:600;color:#e07a2a;">61%</span></div>
+                  <div style="display:flex;justify-content:space-between;"><span>CSAT below 3 in last ticket</span><span style="font-weight:600;color:#e07a2a;">58%</span></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Channel switch in last journey</span><span style="font-weight:600;color:#e0b22a;">44%</span></div>
+                </div>
+                <div style="margin-top:8px;font-size:12px;color:#e07a2a;font-weight:600;">14.2% of current active base matches this signature</div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-hidden-c -->
+        </div><!-- /cmg-pane-c -->
+
+        <!-- ══ PANE D: Intent & Journey Intelligence ══ -->
+        <div class="cmg-pane" id="cmg-pane-d">
+          <div class="cmg-pane-hd">
+            <span class="cmg-pane-title">Intent &amp; Journey Intelligence</span>
+            <button class="cmg-show-more-btn" id="cmg-more-btn-d" onclick="toggleCmgMore('d')">Show 3 more &rsaquo;</button>
+          </div>
+
+          <div class="cmg-grid">
+
+            <!-- Card D1: Journey Abandonment Rate -->
+            <div class="cmg-card" id="cmg-card-d1">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Customer Journey Abandonment Rate</span>
+                <span class="cmg-card-badge amber">Amber</span>
+              </div>
+              <div class="cmg-card-desc">% of customers who disengaged mid-conversation before a resolution was reached</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat">7.4%<span style="font-size:13px;font-weight:400;color:var(--text-muted);margin-left:6px;">abandonment rate</span></div>
+                <div style="margin-top:10px;font-size:11px;color:var(--text-muted);margin-bottom:4px;">By channel</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                    <span style="width:40px;">Voice</span>
+                    <div style="flex:1;height:8px;background:var(--surface);border-radius:4px;overflow:hidden;">
+                      <div style="width:11.2%;height:100%;background:#e03a2a;border-radius:4px;"></div>
+                    </div>
+                    <span style="font-weight:600;color:#e03a2a;">11.2%</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                    <span style="width:40px;">Chat</span>
+                    <div style="flex:1;height:8px;background:var(--surface);border-radius:4px;overflow:hidden;">
+                      <div style="width:6.8%;height:100%;background:#e07a2a;border-radius:4px;"></div>
+                    </div>
+                    <span style="font-weight:600;color:#e07a2a;">6.8%</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+                    <span style="width:40px;">Email</span>
+                    <div style="flex:1;height:8px;background:var(--surface);border-radius:4px;overflow:hidden;">
+                      <div style="width:3.1%;height:100%;background:#27ae7a;border-radius:4px;"></div>
+                    </div>
+                    <span style="font-weight:600;color:#27ae7a;">3.1%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('d1')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-d1">
+                <div class="cmg-detail-title">Journey Abandonment — Drill-down by Intent &amp; Stage</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Intent</th><th>Abandon %</th><th>Avg time before abandon</th></tr></thead>
+                    <tbody>
+                      <tr><td>Refund request</td><td style="color:#e03a2a;font-weight:600;">11.8%</td><td>8.4 min</td></tr>
+                      <tr><td>Delivery delay</td><td style="color:#e07a2a;">9.2%</td><td>6.1 min</td></tr>
+                      <tr><td>Account issue</td><td>7.4%</td><td>11.2 min</td></tr>
+                      <tr><td>Order status</td><td>4.1%</td><td>4.3 min</td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Abandonment is the strongest indicator of immediate churn risk — these customers leave without any signal.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card D2: Unresolved Intent Accumulation -->
+            <div class="cmg-card" id="cmg-card-d2">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Unresolved Intent Accumulation</span>
+                <span class="cmg-card-badge red">Action Needed</span>
+              </div>
+              <div class="cmg-card-desc">Customers who raised the same intent across multiple tickets without confirmed resolution</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:24px;">1,847</div>
+                <div style="font-size:12px;color:var(--text-muted);">customers with 2+ unresolved instances of same intent</div>
+                <div style="margin-top:10px;font-size:11px;color:var(--text-muted);margin-bottom:4px;">Top unresolved intents</div>
+                <div style="display:flex;flex-direction:column;gap:4px;font-size:12px;">
+                  <div style="display:flex;justify-content:space-between;"><span>Refund request</span><span style="font-weight:600;color:#e03a2a;">621 customers</span></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Delivery delay</span><span style="font-weight:600;color:#e07a2a;">448 customers</span></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Account issue</span><span style="font-weight:600;color:#e07a2a;">387 customers</span></div>
+                </div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('d2')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-d2">
+                <div class="cmg-detail-title">Unresolved Intent Accumulation — Full Breakdown</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Intent</th><th>Customers</th><th>Avg attempts</th><th>Max attempts</th></tr></thead>
+                    <tbody>
+                      <tr><td>Refund request</td><td style="color:#e03a2a;font-weight:600;">621</td><td>3.4</td><td>9</td></tr>
+                      <tr><td>Delivery delay</td><td style="color:#e07a2a;">448</td><td>2.8</td><td>7</td></tr>
+                      <tr><td>Account issue</td><td style="color:#e07a2a;">387</td><td>3.1</td><td>11</td></tr>
+                      <tr><td>Product defect</td><td>248</td><td>2.6</td><td>6</td></tr>
+                      <tr><td>Order status</td><td>143</td><td>2.2</td><td>5</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card D3: Resolution Journey Stage Breakdown -->
+            <div class="cmg-card" id="cmg-card-d3">
+              <div class="cmg-card-hd">
+                <span class="cmg-card-name">Resolution Journey Stage Breakdown</span>
+                <span class="cmg-card-badge amber">Amber</span>
+              </div>
+              <div class="cmg-card-desc">Total handle time split across: Greeting → Probing → Hold → Execution → Closing</div>
+              <div class="cmg-card-vis">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Avg time per phase (% of total handle time)</div>
+                <div class="cmg-phase-bar">
+                  <div class="cmg-phase-seg" style="width:8%;background:#5c6bc0;" title="Greeting 8%">8%</div>
+                  <div class="cmg-phase-seg" style="width:31%;background:var(--teal);" title="Probing 31%">31%</div>
+                  <div class="cmg-phase-seg" style="width:22%;background:#e07a2a;" title="Hold 22%">22%</div>
+                  <div class="cmg-phase-seg" style="width:28%;background:#8bc34a;" title="Execution 28%">28%</div>
+                  <div class="cmg-phase-seg" style="width:11%;background:#b0bec5;" title="Closing 11%">11%</div>
+                </div>
+                <div class="cmg-phase-labels">
+                  <span><span style="color:#5c6bc0;">&#9632;</span> Greeting</span>
+                  <span><span style="color:var(--teal);">&#9632;</span> Probing</span>
+                  <span><span style="color:#e07a2a;">&#9632;</span> Hold</span>
+                  <span><span style="color:#8bc34a;">&#9632;</span> Execution</span>
+                  <span><span style="color:#b0bec5;">&#9632;</span> Closing</span>
+                </div>
+                <div style="margin-top:8px;font-size:12px;color:#e07a2a;font-weight:600;">Hold phase (22%) above 15% benchmark — investigate hold causes</div>
+              </div>
+              <div class="cmg-card-footer">
+                <button class="cmg-detail-btn" onclick="toggleCmgMetric('d3')">Details &rsaquo;</button>
+              </div>
+              <div class="cmg-detail-panel" id="cmg-detail-d3">
+                <div class="cmg-detail-title">Journey Stage Breakdown — By Intent</div>
+                <div class="cmg-detail-body">
+                  <table class="cmg-detail-table">
+                    <thead><tr><th>Intent</th><th>Greeting</th><th>Probing</th><th>Hold</th><th>Execution</th><th>Closing</th></tr></thead>
+                    <tbody>
+                      <tr><td>Refund request</td><td>6%</td><td>28%</td><td style="color:#e03a2a;font-weight:600;">31%</td><td>27%</td><td>8%</td></tr>
+                      <tr><td>Order status</td><td>10%</td><td>22%</td><td>14%</td><td>42%</td><td>12%</td></tr>
+                      <tr><td>Delivery delay</td><td>8%</td><td>34%</td><td style="color:#e07a2a;font-weight:600;">24%</td><td>26%</td><td>8%</td></tr>
+                      <tr><td>Account issue</td><td>7%</td><td>38%</td><td>19%</td><td>27%</td><td>9%</td></tr>
+                    </tbody>
+                  </table>
+                  <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Refund requests spend 31% of time on hold — highest among all intent types. Check system lookup bottlenecks.</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-grid spotlight D -->
+
+          <!-- Secondary metrics grid D -->
+          <div class="cmg-hidden-grid" id="cmg-hidden-d">
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Intent Shift Analysis</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">How customer intent changes turn-by-turn within a conversation — from opening to closing intent</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">41.2%</div>
+                <div style="font-size:12px;color:var(--text-muted);">of tickets show intent shift mid-conversation</div>
+                <div style="margin-top:8px;font-size:12px;">Avg <strong>2.3 intents</strong> per ticket · Most common shift:<br><strong>Order Status → Delivery Delay</strong> (18% of shifts)</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Intent Complexity Score</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">How complex a customer's support needs are — distinct intents, escalations, multi-agent handling</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-dist-bar" style="height:10px;">
+                  <div class="cmg-dist-segment" style="width:11%;background:#e03a2a;"></div>
+                  <div class="cmg-dist-segment" style="width:34%;background:#e0b22a;"></div>
+                  <div class="cmg-dist-segment" style="width:55%;background:#27ae7a;"></div>
+                </div>
+                <div class="cmg-dist-labels">
+                  <div class="cmg-dist-label"><span style="color:#e03a2a;">&#9632;</span> High 11%</div>
+                  <div class="cmg-dist-label"><span style="color:#e0b22a;">&#9632;</span> Med 34%</div>
+                  <div class="cmg-dist-label"><span style="color:#27ae7a;">&#9632;</span> Low 55%</div>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">High complexity customers avg 3.8 intents and 2.1 agent handoffs per journey</div>
+              </div>
+            </div>
+
+            <div class="cmg-sec-card">
+              <div class="cmg-card-hd"><span class="cmg-card-name">Repeat Contact Interval Trend</span><span class="cmg-card-badge amber">Watch</span></div>
+              <div class="cmg-card-desc">Whether time gap between consecutive tickets is shrinking, stable, or growing</div>
+              <div class="cmg-card-vis">
+                <div class="cmg-big-stat" style="font-size:22px;">28.7%</div>
+                <div style="font-size:12px;color:var(--text-muted);">of base with shrinking contact intervals</div>
+                <div style="margin-top:8px;font-size:12px;">
+                  High risk avg: <strong>4.2 days</strong> between tickets<br>
+                  Base avg: <strong>18.6 days</strong> between tickets
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cmg-hidden-d -->
+        </div><!-- /cmg-pane-d -->
+
+      </div><!-- /CMG scrollable body -->
+    </div><!-- /analytics-cmg -->
+
+  </div><!-- /view-analytics -->
+
 </main>
 
 <!-- Create New Dashboard modal -->
@@ -4580,9 +6834,10 @@ const CATEGORIES = ['All', 'Volume', 'Performance', 'Experience', 'Compliance', 
 
 /* ── App state ─────────────────────────────────────────────── */
 const state = {
-  currentView:    'kap-ai',
-  dsSection:      'home',
-  currentDashId:  null,     // tracks the open dashboard for Send modal
+  currentView:      'kap-ai',
+  dsSection:        'home',
+  currentDashId:    null,     // tracks the open dashboard for Send modal
+  analyticsSection: 'ci',
 };
 
 /* ── Saved queries mock data ─────────────────────────────── */
@@ -6977,6 +9232,14 @@ function navigate(view) {
     document.getElementById('ds-subnav')?.classList.remove('open');
     clearSubnavActive();
   }
+  // Analytics nav item (no data-nav — handled separately)
+  const analyticsBtn = document.getElementById('nav-analytics');
+  if (analyticsBtn) analyticsBtn.classList.toggle('active', view === 'analytics');
+  if (view !== 'analytics') {
+    analyticsBtn && analyticsBtn.classList.remove('expanded');
+    document.getElementById('analytics-subnav')?.classList.remove('open');
+    clearAnalyticsSubnavActive();
+  }
   closeSidebar();
 }
 
@@ -6991,6 +9254,10 @@ function toggleSidebarCollapse() {
     const btn = document.getElementById('nav-data-studio');
     if (subnav) subnav.classList.remove('open');
     if (btn) btn.classList.remove('expanded');
+    const aSubnav = document.getElementById('analytics-subnav');
+    const aBtn = document.getElementById('nav-analytics');
+    if (aSubnav) aSubnav.classList.remove('open');
+    if (aBtn) aBtn.classList.remove('expanded');
   }
 }
 
@@ -6999,6 +9266,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.querySelector('.sidebar');
     if (sidebar) sidebar.classList.add('collapsed');
   }
+  // Eagerly wrap every detail panel so grid-template-rows:0fr collapses them on load.
+  // Without this, panels have no collapse mechanism until first click.
+  document.querySelectorAll('.cmg-detail-panel').forEach(p => ensureCmgWrap(p));
 });
 
 /* ── Data Studio sidebar expand / sub-item navigation ───────────── */
@@ -7051,6 +9321,189 @@ function setSubnavActive(section) {
   const map = { home: 'home', 'new-question': 'new-question' };
   const el = document.getElementById('subnav-' + (map[section] || section));
   if (el) el.classList.add('active');
+}
+
+/* ── Analytics sidebar expand / sub-item navigation ─────────────── */
+function toggleAnalyticsExpand() {
+  const btn    = document.getElementById('nav-analytics');
+  const subnav = document.getElementById('analytics-subnav');
+  btn.classList.add('expanded', 'active');
+  subnav.classList.add('open');
+  if (state.currentView !== 'analytics') {
+    state.currentView = 'analytics';
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-analytics').classList.add('active');
+    document.querySelectorAll('.nav-item[data-nav]').forEach(b => b.classList.remove('active'));
+    // close DS
+    document.getElementById('nav-data-studio')?.classList.remove('expanded', 'active');
+    document.getElementById('ds-subnav')?.classList.remove('open');
+    clearSubnavActive();
+  }
+  setAnalyticsSection('ci');
+  setAnalyticsSubnavActive('ci');
+  closeSidebar();
+}
+
+function navigateToAnalytics(section) {
+  const btn    = document.getElementById('nav-analytics');
+  const subnav = document.getElementById('analytics-subnav');
+  btn.classList.add('expanded', 'active');
+  subnav.classList.add('open');
+  if (state.currentView !== 'analytics') {
+    state.currentView = 'analytics';
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-analytics').classList.add('active');
+    document.querySelectorAll('.nav-item[data-nav]').forEach(b => b.classList.remove('active'));
+    document.getElementById('nav-data-studio')?.classList.remove('expanded', 'active');
+    document.getElementById('ds-subnav')?.classList.remove('open');
+    clearSubnavActive();
+  }
+  setAnalyticsSection(section);
+  setAnalyticsSubnavActive(section);
+  closeSidebar();
+}
+
+function setAnalyticsSection(section) {
+  ['analytics-ci', 'analytics-rpa', 'analytics-vb', 'analytics-cmg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const el = document.getElementById('analytics-' + section);
+  if (el) { el.style.display = 'flex'; el.style.flexDirection = 'column'; }
+  state.analyticsSection = section;
+}
+
+function clearAnalyticsSubnavActive() {
+  ['ci', 'rpa', 'vb', 'cmg'].forEach(s => {
+    document.getElementById('subnav-analytics-' + s)?.classList.remove('active');
+  });
+}
+
+function setAnalyticsSubnavActive(section) {
+  clearAnalyticsSubnavActive();
+  const el = document.getElementById('subnav-analytics-' + section);
+  if (el) el.classList.add('active');
+}
+
+/* ── Analytics internal tab switching ───────────────────────────── */
+function setCiTab(tab) {
+  document.querySelectorAll('[id^="ci-tab-"]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[id^="ci-pane-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById('ci-tab-' + tab)?.classList.add('active');
+  document.getElementById('ci-pane-' + tab)?.classList.add('active');
+}
+
+function setRpaTab(tab) {
+  document.querySelectorAll('[id^="rpa-tab-"]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[id^="rpa-pane-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById('rpa-tab-' + tab)?.classList.add('active');
+  document.getElementById('rpa-pane-' + tab)?.classList.add('active');
+}
+
+function setVbTab(tab) {
+  document.querySelectorAll('[id^="vb-tab-"]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[id^="vb-pane-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById('vb-tab-' + tab)?.classList.add('active');
+  document.getElementById('vb-pane-' + tab)?.classList.add('active');
+}
+
+function setCmgTab(tab) {
+  document.querySelectorAll('[id^="cmg-pane-"]').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('[id^="cmg-hcard-"]').forEach(c => {
+    c.classList.remove('active');
+    c.setAttribute('aria-selected', 'false');
+  });
+  document.getElementById('cmg-pane-' + tab)?.classList.add('active');
+  const card = document.getElementById('cmg-hcard-' + tab);
+  if (card) { card.classList.add('active'); card.setAttribute('aria-selected', 'true'); }
+}
+
+function toggleCmgMore(section) {
+  const grid = document.getElementById('cmg-hidden-' + section);
+  const btn  = document.getElementById('cmg-more-btn-' + section);
+  if (!grid || !btn) return;
+  const isOpen = grid.classList.toggle('open');
+  const counts = { a: 9, b: 3, c: 1, d: 3 };
+  btn.textContent = isOpen
+    ? 'Show less \u2039'
+    : 'Show ' + (counts[section] || '?') + ' more \u203a';
+}
+
+/* Lazily wrap each detail panel in a grid-row accordion container (runs once per panel).
+   The panel becomes the direct grid child (overflow:hidden, no padding).
+   A .cmg-detail-inner div is injected inside to carry visual padding/border/content. */
+function ensureCmgWrap(panel) {
+  if (panel.parentElement?.classList.contains('cmg-detail-wrap')) return panel.parentElement;
+  const wrap = document.createElement('div');
+  wrap.className = 'cmg-detail-wrap';
+  panel.parentNode.insertBefore(wrap, panel);
+  wrap.appendChild(panel);
+  const inner = document.createElement('div');
+  inner.className = 'cmg-detail-inner';
+  while (panel.firstChild) inner.appendChild(panel.firstChild);
+  panel.appendChild(inner);
+  return wrap;
+}
+
+function toggleCmgMetric(metricId) {
+  const panel = document.getElementById('cmg-detail-' + metricId);
+  if (!panel) return;
+
+  const wrap = ensureCmgWrap(panel);
+  const card = wrap.closest('.cmg-card');
+  const grid = card?.closest('.cmg-grid');
+  const vis  = card?.querySelector('.cmg-card-vis');
+  const btn  = card?.querySelector('.cmg-card-footer .cmg-detail-btn');
+  const isOpen = wrap.classList.contains('open');
+
+  function unlockAll() {
+    grid?.querySelectorAll('.cmg-card').forEach(c => { c.style.minHeight = ''; c.style.alignSelf = ''; });
+    // vis.style.height is intentionally kept — removing it while grid-stretch
+    // re-engages causes a one-frame jump. It is overwritten on each new open().
+  }
+
+  if (!isOpen) {
+    // ── Batch-read all measurements before any DOM writes ──────────────
+    const cardH = card?.offsetHeight ?? 0;
+    const visH  = vis?.offsetHeight  ?? 0;
+    const siblings = [];
+    grid?.querySelectorAll('.cmg-card').forEach(c => {
+      if (c !== card) {
+        // If this sibling has an open accordion, subtract it so we lock to the collapsed height
+        const openWrap = c.querySelector('.cmg-detail-wrap.open');
+        const h = c.offsetHeight - (openWrap ? openWrap.offsetHeight : 0);
+        siblings.push({ el: c, h });
+      }
+    });
+
+    // Close any other open panel in this grid instantly
+    grid?.querySelectorAll('.cmg-detail-wrap.open').forEach(w => {
+      w.classList.remove('open');
+      const b = w.closest('.cmg-card')?.querySelector('.cmg-card-footer .cmg-detail-btn');
+      if (b) { b.textContent = 'Details \u203a'; b.classList.remove('is-open'); }
+    });
+    unlockAll();
+
+    // Lock expanding card: minHeight holds its current stretched height so the footer
+    // stays put; vis height locked so flex:1 doesn't consume the new space as the panel grows.
+    if (card) { card.style.minHeight = cardH + 'px'; card.style.alignSelf = 'start'; }
+    if (vis)  vis.style.height = visH + 'px';
+    // Freeze siblings so they don't shrink or stretch to match the expanding card
+    siblings.forEach(({ el, h }) => { el.style.minHeight = h + 'px'; el.style.alignSelf = 'start'; });
+
+    wrap.classList.add('open');
+    if (btn) { btn.textContent = 'Close \u2039'; btn.classList.add('is-open'); }
+
+  } else {
+    wrap.classList.remove('open');
+    if (btn) { btn.textContent = 'Details \u203a'; btn.classList.remove('is-open'); }
+    // Restore grid stretch only after the collapse transition fully settles
+    wrap.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName !== 'grid-template-rows') return;
+      wrap.removeEventListener('transitionend', handler);
+      unlockAll();
+    });
+  }
 }
 
 /* ── NQB: 4-Step Conversational Query Builder ─────────────────────── */
