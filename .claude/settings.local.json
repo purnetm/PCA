@@ -52,7 +52,10 @@
       "Bash(chmod +x \"/c/Users/purnet.moirangthem/Documents/Claude/Data Studio v2/.git/hooks/post-commit\")",
       "Bash(curl -s \"http://localhost:3845/assets/8b0c8b0ae2b80f324d8faff8a52da4babbb4545e.svg\")",
       "mcp__Figma__get_metadata",
-      "mcp__figma__get_code_connect_suggestions"
+      "mcp__figma__get_code_connect_suggestions",
+      "Bash(start \"\" \"http://localhost:3000/#figmacapture=1c3db10f-e112-4a03-a7d3-99c5200eb03f&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F1c3db10f-e112-4a03-a7d3-99c5200eb03f%2Fsubmit&figmadelay=1000\")",
+      "Bash(start \"\" \"http://localhost:3000/#figmacapture=b5b95e59-e9e8-4a01-b7b7-592fc24787c7&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2Fb5b95e59-e9e8-4a01-b7b7-592fc24787c7%2Fsubmit&figmadelay=1000\")",
+      "mcp__Figma__get_screenshot"
     ]
   }
 }

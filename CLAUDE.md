@@ -83,3 +83,4 @@
 - Values iterative A/B branch exploration
 - Interested in colour palette experiments while keeping brand teal as anchor
 - Works from both Git Bash and the Claude desktop app
+- **Always use installed skills and plugins for design and animation work** — invoke `frontend-design`, `ui-ux-pro-max`, `animation-expert`, `motion-design`, `scroll-experience`, and `figma:implement-design` skills as appropriate rather than generating generic code directly
