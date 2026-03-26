@@ -666,7 +666,42 @@
     .insight-row.level-2 { background: rgba(77,182,172,0.42); border: 1px solid rgba(77,182,172,0.20); color: var(--dark-teal); }
     .insight-row.level-3 { background: rgba(77,182,172,0.16); border: 1px solid rgba(77,182,172,0.10); color: var(--dark-teal); }
     .insight-dot { width: 6px; height: 6px; border-radius: 3px; background: currentColor; flex-shrink: 0; opacity: 0.75; }
-    .insight-text { font-size: var(--font-sm); font-weight: var(--weight-medium); color: inherit; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .insight-text { font-size: var(--font-sm); font-weight: var(--weight-medium); color: inherit; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+
+    /* Live board flip animation */
+    @keyframes row-flip-out {
+      0%   { transform: translateY(0);    opacity: 1; }
+      100% { transform: translateY(-100%); opacity: 0; }
+    }
+    @keyframes row-flip-in {
+      0%   { transform: translateY(100%); opacity: 0; }
+      100% { transform: translateY(0);    opacity: 1; }
+    }
+    @keyframes live-blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    .insight-clip { height: 32px; overflow: hidden; border-radius: 10px; }
+    .insight-text { flex: 1; min-width: 0; }
+    .insight-row.is-flipping-out { animation: row-flip-out 160ms cubic-bezier(.895,.03,.685,.22) forwards; }
+    .insight-row.is-flipping-in  { animation: row-flip-in  210ms cubic-bezier(.165,.84,.44,1)    forwards; }
+    .insight-new-tag {
+      font-size: 9px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase;
+      margin-left: auto; padding: 0 12px 0 8px; flex-shrink: 0;
+      opacity: 0; transition: opacity 1.6s ease; color: inherit;
+    }
+    .insight-row.is-new .insight-new-tag { opacity: 0.6; }
+    .insights { position: relative; }
+    .insights-live-badge {
+      position: absolute; top: -20px; left: 40px;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 700; color: var(--teal);
+      letter-spacing: 0.6px; text-transform: uppercase;
+    }
+    .insights-live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+      animation: live-blink 1.8s ease infinite;
+    }
 
     /* ══════════════════════════════════════════════════════════════
        DATA STUDIO VIEW
@@ -4079,17 +4114,24 @@
         </div>
 
         <div class="insights">
-          <div class="insight-row level-1">
-            <div class="insight-dot"></div>
-            <span class="insight-text">15 customers waiting for first response over 30 min</span>
+          <div class="insights-live-badge"><div class="insights-live-dot"></div>Live</div>
+          <div class="insight-clip">
+            <div class="insight-row level-1" id="insight-level-1">
+              <span class="insight-text">15 customers waiting for first response over 30 min</span>
+              <span class="insight-new-tag">NEW</span>
+            </div>
           </div>
-          <div class="insight-row level-2">
-            <div class="insight-dot"></div>
-            <span class="insight-text">Agent response time exceeded SLA on 8 open tickets</span>
+          <div class="insight-clip">
+            <div class="insight-row level-2" id="insight-level-2">
+              <span class="insight-text">Agent response time exceeded SLA on 8 open tickets</span>
+              <span class="insight-new-tag">NEW</span>
+            </div>
           </div>
-          <div class="insight-row level-3">
-            <div class="insight-dot"></div>
-            <span class="insight-text">Customer sentiment score dropped 12 points this morning</span>
+          <div class="insight-clip">
+            <div class="insight-row level-3" id="insight-level-3">
+              <span class="insight-text">Customer sentiment score dropped 12 points this morning</span>
+              <span class="insight-new-tag">NEW</span>
+            </div>
           </div>
         </div>
       </div>
@@ -5145,27 +5187,27 @@
                   <!-- bar columns -->
                   <div style="flex:1;min-height:0;display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid var(--aqua-haze);">
                     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
-                      <span style="font-size:10px;font-weight:700;color:var(--blue-500);">35%</span>
+                      <span style="font-size:10px;font-weight:700;color:var(--blue-500);">98%</span>
                       <div style="width:100%;height:160px;background:var(--blue-500);border-radius:6px 6px 0 0;"></div>
                     </div>
                     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
-                      <span style="font-size:10px;font-weight:700;color:#22C55E;">5%</span>
+                      <span style="font-size:10px;font-weight:700;color:#22C55E;">14%</span>
                       <div style="width:100%;height:23px;background:#22C55E;border-radius:6px 6px 0 0;"></div>
                     </div>
                     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
-                      <span style="font-size:10px;font-weight:700;color:#9C74F7;">18%</span>
+                      <span style="font-size:10px;font-weight:700;color:#9C74F7;">51%</span>
                       <div style="width:100%;height:82px;background:#9C74F7;border-radius:6px 6px 0 0;"></div>
                     </div>
                     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
-                      <span style="font-size:10px;font-weight:700;color:#FCA5A5;">12%</span>
+                      <span style="font-size:10px;font-weight:700;color:#FCA5A5;">34%</span>
                       <div style="width:100%;height:55px;background:#FCA5A5;border-radius:6px 6px 0 0;"></div>
                     </div>
                     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
-                      <span style="font-size:10px;font-weight:700;color:var(--accent-warning);">22%</span>
+                      <span style="font-size:10px;font-weight:700;color:var(--accent-warning);">63%</span>
                       <div style="width:100%;height:101px;background:var(--accent-warning);border-radius:6px 6px 0 0;"></div>
                     </div>
                     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
-                      <span style="font-size:10px;font-weight:700;color:var(--blue-300);">8%</span>
+                      <span style="font-size:10px;font-weight:700;color:var(--blue-300);">23%</span>
                       <div style="width:100%;height:37px;background:var(--blue-300);border-radius:6px 6px 0 0;"></div>
                     </div>
                   </div>
@@ -10397,6 +10439,72 @@ function nqbPostSaveSkip() {
 }
 
 /* ── Keyboard: Esc closes sidebar and NQB modals ────────────────── */
+/* ── Live insight board ─────────────────────────────────────────── */
+(function () {
+  // Items marked true surface as "NEW" (distinct visual treatment)
+  const POOL = {
+    1: [
+      { text: '15 customers waiting for first response over 30 min',  isNew: false },
+      { text: 'Queue backlog at 347 tickets — 23% above threshold',   isNew: true  },
+      { text: '3 agents offline during peak hour · coverage gap',     isNew: false },
+      { text: 'CSAT dropped to 0.71 — 14% below SLA target',         isNew: true  },
+      { text: 'Bot deflection at 61% · 9 pts below weekly target',    isNew: false },
+      { text: 'Unresolved escalations up 31% vs yesterday',           isNew: false },
+    ],
+    2: [
+      { text: 'Agent response time exceeded SLA on 8 open tickets',   isNew: false },
+      { text: 'Voice tickets up 18% in last 60 min',                  isNew: true  },
+      { text: 'Repeat contact rate at 34% · billing cluster detected', isNew: false },
+      { text: 'Avg handle time trending 4.2 min above benchmark',     isNew: false },
+      { text: '5 tickets escalated to L2 in the last 15 min',         isNew: true  },
+      { text: 'Longest wait: 1h 47m · Order Management queue',        isNew: false },
+    ],
+    3: [
+      { text: 'Customer sentiment dropped 12 points this morning',    isNew: false },
+      { text: 'Kap AI auto-resolved 89 tickets in last 30 min',       isNew: false },
+      { text: 'Top intent: Order Delivery Status · 312 tickets',      isNew: true  },
+      { text: 'FCR at 97.6% — up 2.1 pts from last week',            isNew: false },
+      { text: 'Peak volume window in 45 min · historically 2× traffic', isNew: false },
+      { text: '214 tickets imported from Zendesk · 3 min ago',        isNew: true  },
+    ],
+  };
+  const idx = { 1: 0, 2: 0, 3: 0 };
+
+  function flip(level) {
+    const row    = document.getElementById('insight-level-' + level);
+    if (!row) return;
+    const textEl = row.querySelector('.insight-text');
+    const pool   = POOL[level];
+    let next = idx[level];
+    do { next = Math.floor(Math.random() * pool.length); } while (next === idx[level] && pool.length > 1);
+    idx[level] = next;
+    const item = pool[next];
+
+    // Whole row exits upward
+    row.classList.add('is-flipping-out');
+
+    setTimeout(() => {
+      // Swap content while invisible
+      textEl.textContent = item.text;
+      row.classList.remove('is-flipping-out', 'is-new');
+
+      // Whole row enters from below
+      row.classList.add('is-flipping-in');
+      if (item.isNew) row.classList.add('is-new');
+
+      setTimeout(() => {
+        row.classList.remove('is-flipping-in');
+        // Keep is-new until NEW tag fades (transition handles it)
+        if (item.isNew) setTimeout(() => row.classList.remove('is-new'), 2400);
+      }, 220);
+    }, 170);
+  }
+
+  setTimeout(() => { flip(1); setInterval(() => flip(1), 4200); }, 2000);
+  setTimeout(() => { flip(2); setInterval(() => flip(2), 5400); }, 3500);
+  setTimeout(() => { flip(3); setInterval(() => flip(3), 6800); }, 5200);
+})();
+
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   closeSidebar();
