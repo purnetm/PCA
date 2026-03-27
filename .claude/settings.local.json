@@ -36,7 +36,26 @@
       "Bash(powershell.exe -ExecutionPolicy Bypass -File tokenize2.ps1)",
       "Bash(powershell.exe -ExecutionPolicy Bypass -File verify.ps1)",
       "Bash(powershell.exe -ExecutionPolicy Bypass -File verify2.ps1)",
-      "Bash(powershell.exe -ExecutionPolicy Bypass -File tokenize3.ps1)"
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File tokenize3.ps1)",
+      "Bash(start \"http://localhost:3000/#figmacapture=950a4b8c-cde9-435c-a845-2b4253d6c1a8&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F950a4b8c-cde9-435c-a845-2b4253d6c1a8%2Fsubmit&figmadelay=1000\")",
+      "Bash(xxd)",
+      "Bash(start \"http://localhost:3000/#figmacapture=f8ac96ac-ab00-4db6-8065-df7a9e3908e1&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2Ff8ac96ac-ab00-4db6-8065-df7a9e3908e1%2Fsubmit&figmadelay=1000\")",
+      "Bash(start \"\" \"http://localhost:3000/#figmacapture=4c9c4b28-ef15-4cf0-b2de-de1fda123806&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F4c9c4b28-ef15-4cf0-b2de-de1fda123806%2Fsubmit&figmadelay=1000\")",
+      "Bash(python3 -c \":*)",
+      "Bash(node -e \":*)",
+      "Bash(node replace_html.js)",
+      "Bash(node replace_js.js)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 36804 /F)",
+      "Bash(cmd /c \"taskkill /PID 36804 /F\")",
+      "Bash(cmd /c \"wmic process where processid=36804 get name,processid,executablepath 2>nul\")",
+      "Bash(chmod +x \"/c/Users/purnet.moirangthem/Documents/Claude/Data Studio v2/.git/hooks/post-commit\")",
+      "Bash(curl -s \"http://localhost:3845/assets/8b0c8b0ae2b80f324d8faff8a52da4babbb4545e.svg\")",
+      "mcp__Figma__get_metadata",
+      "mcp__figma__get_code_connect_suggestions",
+      "Bash(start \"\" \"http://localhost:3000/#figmacapture=1c3db10f-e112-4a03-a7d3-99c5200eb03f&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F1c3db10f-e112-4a03-a7d3-99c5200eb03f%2Fsubmit&figmadelay=1000\")",
+      "Bash(start \"\" \"http://localhost:3000/#figmacapture=b5b95e59-e9e8-4a01-b7b7-592fc24787c7&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2Fb5b95e59-e9e8-4a01-b7b7-592fc24787c7%2Fsubmit&figmadelay=1000\")",
+      "mcp__Figma__get_screenshot"
     ]
   }
 }
