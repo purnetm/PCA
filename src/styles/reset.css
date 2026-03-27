@@ -78,6 +78,12 @@ html, body { height: 100%; }
 }
 
 /* ── Root shell ─────────────────────────────────────────────── */
+#root {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   display: flex;

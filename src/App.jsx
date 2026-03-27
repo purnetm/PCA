@@ -9,6 +9,7 @@ import CMGView from './components/views/analytics/CMGView'
 import CreateDashboardModal from './components/modals/CreateDashboardModal'
 import SendDashboardModal from './components/modals/SendDashboardModal'
 import AccessModal from './components/modals/AccessModal'
+import SaveQueryModal from './components/modals/SaveQueryModal'
 
 function ViewRouter() {
   const { state } = useApp()
@@ -57,6 +58,7 @@ function Modals() {
       <CreateDashboardModal open={modal === 'create-dashboard'} onClose={closeModal} />
       <SendDashboardModal open={modal === 'send-dashboard'} onClose={closeModal} />
       <AccessModal open={modal === 'access'} onClose={closeModal} />
+      <SaveQueryModal open={modal === 'save-query'} onClose={closeModal} />
     </>
   )
 }

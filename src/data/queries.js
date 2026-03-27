@@ -5,6 +5,15 @@ export const QUERIES = [
   { id: 'q4', name: 'Top 10 Customers by Open Tickets', desc: 'Ranked by open ticket count', category: 'Customers', viz: 'table', updated: '3h ago' },
   { id: 'q5', name: 'Agent Performance Scorecard', desc: 'CSAT, resolution time, escalation rate', category: 'Performance', viz: 'table', updated: '6h ago' },
   { id: 'q6', name: 'Ticket Type Distribution', desc: 'Breakdown by ticket category', category: 'Volume', viz: 'donut', updated: '2d ago' },
+  { id: 'q7', name: 'First Response Time Trend', desc: 'FRT over last 30 days by channel', category: 'Performance', viz: 'line', updated: '5h ago' },
+  { id: 'q8', name: 'Escalation Rate by Queue', desc: 'Percentage of tickets escalated per queue', category: 'Escalation', viz: 'bar', updated: '3h ago' },
+  { id: 'q9', name: 'Customer Satisfaction Score', desc: 'CSAT scores over time with trend line', category: 'CSAT', viz: 'line', updated: '1h ago' },
+  { id: 'q10', name: 'Open Tickets by Priority', desc: 'Current open ticket distribution by priority', category: 'Volume', viz: 'donut', updated: '30m ago' },
+  { id: 'q11', name: 'Agent Utilization Rate', desc: 'Active vs idle time per agent', category: 'Performance', viz: 'bar', updated: '2h ago' },
+  { id: 'q12', name: 'Repeat Contact Rate', desc: 'Customers contacting support more than once', category: 'Quality', viz: 'metric', updated: '12h ago' },
+  { id: 'q13', name: 'Knowledge Base Deflection', desc: 'Tickets resolved via KB without agent assist', category: 'Deflection', viz: 'gauge', updated: '1d ago' },
+  { id: 'q14', name: 'Backlog Trend', desc: 'Daily unresolved ticket count over 30 days', category: 'Volume', viz: 'area', updated: '4h ago' },
+  { id: 'q15', name: 'Queue Wait Time Distribution', desc: 'Time in queue before first agent response', category: 'SLA', viz: 'bar', updated: '6h ago' },
 ]
 
 export const QB_DATA = {

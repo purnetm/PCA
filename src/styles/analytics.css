@@ -282,15 +282,19 @@
 .a-cat-bar-fill { height: 100%; border-radius: 2px; }
 /* ── Channel Cards ──────────────────────────────────────────── */
 .a-channel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-.a-channel-card { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: row; justify-content: space-between; background: #fff; }
-.a-channel-l { display: flex; flex-direction: column; gap: var(--space-3); }
-.a-channel-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
-.a-channel-vol { font-family: var(--font-display); font-size: 26px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1; }
-.a-channel-conversations { font-size: var(--font-xs); color: var(--cutty-sark); opacity: 0.6; }
-.a-channel-stats { display: flex; flex-direction: column; gap: var(--space-7); justify-content: center; }
-.a-channel-stat .lbl { font-size: 10px; color: var(--cutty-sark); opacity: 0.7; }
-.a-channel-stat .val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
-.a-channel-stat .val.neg { color: var(--status-negative); }
+.a-channel-card { border: 0.571px solid #c7d9d6; border-radius: 8px; padding: 16px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; background: #fff; }
+.a-channel-l { display: flex; flex-direction: column; gap: 4px; }
+.a-channel-name { font-size: 12px; font-weight: var(--weight-semibold); color: var(--dark-teal); }
+.a-channel-vol { font-family: var(--font-display); font-size: 26px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1.1; }
+.a-channel-conversations { font-size: 11px; color: var(--cutty-sark); opacity: 0.6; }
+.a-channel-stats { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+.a-channel-stat { border-radius: 6px; padding: 5px 10px; min-width: 108px; }
+.a-channel-stat.pos { background: #eff6ff; }
+.a-channel-stat.pos .lbl { font-size: 10px; color: #1e3a8a; }
+.a-channel-stat.pos .val { font-size: 12px; font-weight: var(--weight-semibold); color: #1e3a8a; }
+.a-channel-stat.neg { background: #fef2f2; }
+.a-channel-stat.neg .lbl { font-size: 10px; color: #dc2626; }
+.a-channel-stat.neg .val { font-size: 12px; font-weight: var(--weight-semibold); color: #dc2626; }
 /* ── Bottleneck Rows ────────────────────────────────────────── */
 .a-bottleneck-row {
   display: flex; align-items: center; gap: 12px; padding: 11px 0;

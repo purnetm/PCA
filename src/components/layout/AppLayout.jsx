@@ -1,7 +1,6 @@
 import { useApp } from '../../context/AppContext'
 import Background from './Background'
 import Sidebar from '../sidebar/Sidebar'
-import Topbar from './Topbar'
 import Toast from '../ui/Toast'
 
 export default function AppLayout({ children }) {
@@ -11,7 +10,6 @@ export default function AppLayout({ children }) {
       <Background />
       <Sidebar />
       <main className="main">
-        <Topbar />
         {children}
       </main>
       <Toast message={state.toast?.message} show={!!state.toast} />

@@ -250,11 +250,68 @@
 .access-people-section { margin-top: var(--space-2); }
 .access-people-section[hidden] { display: none; }
 
+/* ── Create Dashboard Modal (two-column) ────────────────────── */
+.cdm-body { display: flex; flex-direction: row; height: 380px; overflow: hidden; }
+.cdm-left {
+  flex: 0 0 55%; border-right: 1px solid var(--nebula);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.cdm-left-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-5) var(--space-7); border-bottom: 1px solid var(--nebula); flex-shrink: 0;
+  font-size: var(--font-base); font-weight: var(--weight-medium); color: var(--dark-teal);
+}
+.cdm-select-all-btn {
+  font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--teal);
+  background: none; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; padding: 0;
+}
+.cdm-query-list { flex: 1; overflow-y: auto; }
+.cdm-query-row {
+  display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-7);
+  cursor: pointer; border-bottom: 1px solid var(--aqua-haze); transition: background 0.12s;
+}
+.cdm-query-row:last-child { border-bottom: none; }
+.cdm-query-row:hover { background: var(--aqua-haze); }
+.cdm-query-row.selected { background: var(--teal-10); }
+.cdm-check {
+  width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+  border: 1.5px solid var(--nebula); display: flex; align-items: center; justify-content: center;
+  color: #fff; background: transparent; transition: background 0.12s, border-color 0.12s;
+}
+.cdm-query-row.selected .cdm-check { background: var(--teal); border-color: var(--teal); }
+.cdm-query-name { flex: 1; font-size: var(--font-base); color: var(--dark-teal); }
+.cdm-query-meta { font-size: var(--font-xs); color: var(--cutty-sark); opacity: 0.7; white-space: nowrap; }
+.cdm-right {
+  flex: 1; display: flex; flex-direction: column; gap: var(--space-6);
+  padding: 18px var(--space-8); overflow-y: auto;
+}
+.cdm-counter-card {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--dark-teal) 100%);
+  border-radius: 14px; padding: 18px var(--space-8); color: #fff;
+  display: flex; align-items: center; gap: var(--space-7);
+}
+.cdm-counter-num { font-size: 42px; font-weight: var(--weight-bold); line-height: 1; color: #fff; }
+.cdm-counter-text { display: flex; flex-direction: column; gap: 2px; }
+.cdm-counter-label { font-size: var(--font-base); font-weight: var(--weight-semibold); color: rgba(255,255,255,0.95); }
+.cdm-counter-hint { font-size: var(--font-xs); color: rgba(255,255,255,0.6); }
+.cdm-selected-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-1); }
+.cdm-selected-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: var(--space-1) var(--space-4); border-radius: 20px; background: var(--teal-10);
+  color: var(--teal); font-size: var(--font-xs); font-weight: var(--weight-medium);
+}
+.cdm-selected-chip button {
+  border: none; background: none; cursor: pointer;
+  color: var(--cutty-sark); font-size: var(--font-md); line-height: 1; padding: 0;
+}
+
 /* ── Visibility badges on dash cards ─────────────────── */
 .dv-visibility-badge {
   font-size: 10px; padding: 2px var(--space-3); border-radius: 10px;
   cursor: pointer; white-space: nowrap; user-select: none;
   font-weight: var(--weight-medium); transition: opacity 0.15s;
+  border: none; display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .dv-visibility-badge:hover { opacity: 0.8; }
 .dv-visibility-badge--private { background: rgba(220,38,38,0.10); color: #DC2626; }

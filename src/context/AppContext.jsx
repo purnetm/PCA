@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useEffect } from 'react'
 const initialState = {
   currentView: 'kap-ai',
   dsSection: 'home',
-  expandedNav: new Set(['ds', 'analytics']),
+  expandedNav: new Set(),
   darkMode: false,
   sidebarCollapsed: false,
   userMenuOpen: false,

@@ -3,12 +3,11 @@ import NavItem from './NavItem'
 import UserMenu from './UserMenu'
 
 const KapAIIcon = (
-  <svg width="16" height="16" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.6">
-    <rect x="3" y="5" width="16" height="13" rx="3"/>
-    <path d="M11 5V1H7"/>
-    <circle cx="8" cy="12" r="1.5" fill="currentColor" stroke="none"/>
-    <circle cx="14" cy="12" r="1.5" fill="currentColor" stroke="none"/>
-    <path d="M1 11H3M19 11H21" strokeLinecap="round"/>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2"/>
+    <polyline points="8 21 12 18 16 21"/>
+    <path d="M7 9l3 3-3 3"/>
+    <line x1="13" y1="15" x2="17" y2="15"/>
   </svg>
 )
 const DataStudioIcon = (
@@ -27,8 +26,10 @@ const AnalyticsIcon = (
   </svg>
 )
 const IntelligenceIcon = (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M8 1L9.5 6L14 8L9.5 10L8 15L6.5 10L2 8L6.5 6L8 1Z"/>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/>
+    <path d="M4.5 2l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z"/>
+    <path d="M20 14l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z"/>
   </svg>
 )
 const ConfigIcon = (
@@ -45,17 +46,17 @@ const HelpIcon = (
   </svg>
 )
 const CollapseIcon = (
-  <svg className="icon-sb-collapse" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <rect x="1" y="1" width="16" height="16" rx="3"/>
-    <line x1="6" y1="1" x2="6" y2="17"/>
-    <path d="M10 7L8 9L10 11"/>
+  <svg className="icon-sb-collapse" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="3"/>
+    <path d="M9 3v18"/>
+    <path d="M15 10l-3 2.5 3 2.5"/>
   </svg>
 )
 const ExpandIcon = (
-  <svg className="icon-sb-expand" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <rect x="1" y="1" width="16" height="16" rx="3"/>
-    <line x1="6" y1="1" x2="6" y2="17"/>
-    <path d="M8 7L10 9L8 11"/>
+  <svg className="icon-sb-expand" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="3"/>
+    <path d="M9 3v18"/>
+    <path d="M13 10l3 2.5-3 2.5"/>
   </svg>
 )
 

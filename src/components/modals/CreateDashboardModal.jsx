@@ -12,6 +12,14 @@ export default function CreateDashboardModal() {
     setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
   }
 
+  function selectAll() {
+    if (selected.size === QUERIES.length) {
+      setSelected(new Set())
+    } else {
+      setSelected(new Set(QUERIES.map(q => q.id)))
+    }
+  }
+
   function proceed() {
     if (selected.size === 0 || !dashName.trim()) return
     closeModal()
@@ -19,54 +27,94 @@ export default function CreateDashboardModal() {
     dispatch({ type: 'NAVIGATE', view: 'data-studio' })
   }
 
+  const canProceed = selected.size > 0 && dashName.trim()
+
   return (
     <div className="sq-overlay" style={{ display: 'flex' }} onClick={e => e.target === e.currentTarget && closeModal()}>
-      <div className="sq-modal" style={{ width: 640, maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+      <div className="sq-modal" style={{ width: 720, maxWidth: '94vw', maxHeight: 'calc(100vh - 80px)' }}>
         <div className="sq-modal-hd">
-          <div className="sq-modal-hd-icon">⊞</div>
-          <div>
-            <div className="sq-modal-title">Create New Dashboard</div>
-            <div style={{ fontSize: 12, color: 'var(--cutty-sark)' }}>Select queries to include</div>
-          </div>
-          <button className="sq-close-btn" onClick={closeModal}>✕</button>
-        </div>
-        <div className="sq-modal-body" style={{ display: 'flex', gap: 20, flex: 1, overflow: 'hidden' }}>
-          {/* Query list */}
-          <div style={{ flex: 1, overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)' }}>Select Queries</span>
-              <button onClick={() => setSelected(new Set(QUERIES.map(q => q.id)))}
-                style={{ fontSize: 11, color: 'var(--teal)', background: 'none', border: 'none', cursor: 'pointer' }}>Select all</button>
+          <div className="sq-modal-hd-left">
+            <div className="sq-modal-hd-icon">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <rect x="1" y="1" width="6" height="6" rx="1" fill="white"/>
+                <rect x="9" y="1" width="6" height="6" rx="1" fill="white"/>
+                <rect x="1" y="9" width="6" height="6" rx="1" fill="white"/>
+                <rect x="9" y="9" width="6" height="6" rx="1" fill="white"/>
+              </svg>
             </div>
-            {QUERIES.map(q => (
-              <div key={q.id} onClick={() => toggle(q.id)}
-                style={{ padding: '10px 12px', border: `1px solid ${selected.has(q.id) ? 'var(--teal)' : 'var(--nebula)'}`, borderRadius: 8, marginBottom: 8, cursor: 'pointer', background: selected.has(q.id) ? 'var(--teal-10)' : '#fff', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 16, height: 16, border: `2px solid ${selected.has(q.id) ? 'var(--teal)' : 'var(--nebula)'}`, borderRadius: 4, background: selected.has(q.id) ? 'var(--teal)' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {selected.has(q.id) && <span style={{ color: '#fff', fontSize: 10 }}>✓</span>}
-                </div>
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)' }}>{q.name}</div>
-                  <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: 0.7 }}>{q.desc}</div>
-                </div>
-              </div>
-            ))}
+            <div>
+              <div className="sq-modal-title">Create New Dashboard</div>
+              <div className="sq-modal-sub">Select queries and configure your dashboard</div>
+            </div>
           </div>
-          {/* Right panel */}
-          <div style={{ width: 180, flexShrink: 0 }}>
-            <div style={{ padding: '14px', border: '1px solid var(--nebula)', borderRadius: 10, background: 'var(--surface)', marginBottom: 12 }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)' }}>{selected.size}</div>
-              <div style={{ fontSize: 11, color: 'var(--cutty-sark)' }}>Queries selected</div>
+          <button className="sq-close-btn" onClick={closeModal}>
+            <svg width="16" height="16" viewBox="0 0 15 15" fill="none">
+              <path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className="cdm-body">
+          {/* LEFT: Query list */}
+          <div className="cdm-left">
+            <div className="cdm-left-hd">
+              Select Queries
+              <button className="cdm-select-all-btn" onClick={selectAll}>
+                {selected.size === QUERIES.length ? 'Deselect all' : 'Select all'}
+              </button>
+            </div>
+            <div className="cdm-query-list">
+              {QUERIES.map(q => (
+                <div
+                  key={q.id}
+                  className={`cdm-query-row${selected.has(q.id) ? ' selected' : ''}`}
+                  onClick={() => toggle(q.id)}
+                >
+                  <div className="cdm-check">
+                    {selected.has(q.id) && (
+                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                  </div>
+                  <span className="cdm-query-name">{q.name}</span>
+                  <span className="cdm-query-meta">{q.chartType || q.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: Counter + Name */}
+          <div className="cdm-right">
+            <div className="cdm-counter-card">
+              <div className="cdm-counter-num">{selected.size}</div>
+              <div className="cdm-counter-text">
+                <div className="cdm-counter-label">Queries selected</div>
+                <div className="cdm-counter-hint">Pick from the list on the left</div>
+              </div>
             </div>
             <div className="sq-field">
               <label className="sq-label">Dashboard Name</label>
-              <input className="sq-input" value={dashName} onChange={e => setDashName(e.target.value)} placeholder="My Dashboard" />
+              <input
+                className="sq-input"
+                value={dashName}
+                onChange={e => setDashName(e.target.value)}
+                placeholder="e.g. Agent Performance Dashboard"
+              />
             </div>
           </div>
         </div>
+
         <div className="sq-modal-ft">
           <button className="sq-cancel-btn" onClick={closeModal}>Cancel</button>
-          <button className="sq-save-btn" onClick={proceed} disabled={selected.size === 0 || !dashName.trim()}
-            style={{ opacity: (selected.size === 0 || !dashName.trim()) ? 0.5 : 1 }}>Next →</button>
+          <button
+            className="sq-save-btn"
+            onClick={proceed}
+            disabled={!canProceed}
+            style={{ opacity: canProceed ? 1 : 0.35, cursor: canProceed ? 'pointer' : 'not-allowed' }}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

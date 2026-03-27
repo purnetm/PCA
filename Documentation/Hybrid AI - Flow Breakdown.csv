@@ -1,0 +1,45 @@
+#,Flow Step,What User Does Manually,KapAI Trigger,Inline Nudge Bar (suggestion),If Engaged — KapAI Does,Outcome
+① Query Building,,,,,,
+1,Table Selection,"Picks data source, schema & table from dropdowns
+e.g. StarRocks → adjetter → act_quick_ticket_report",On table select,"✦  ""Ticket data detected. Want me to suggest useful columns & filters?""  [Dismiss · Yes, suggest]","• Recommends relevant columns from schema
+• Suggests common filters (date, status, agent)
+• Pre-fills group-by contextually",User skips manual column hunting. Can still adjust any selection.
+2,Column Selection,"Checks columns one by one from list
+0/12 → ticket_id, assigned_to, status…",After 2+ manual picks,"✦  ""I can predict the remaining columns you'll need. Complete for you?""  [Dismiss · Complete selection]","• Infers intent from already-selected columns
+• Auto-checks complementary columns
+• Shows reasoning via tooltip on hover",Saves repetitive checkbox work. User sees why each was added and can undo.
+3,Group By & Filters,"Sets group-by field, adds filter conditions manually
+Dropdown → field → operator → value",On group-by open,"✦  ""Describe what you want to see — I'll set the grouping & filters.""  [Dismiss · Describe it]","• Accepts plain English — ""by agent, last 7 days""
+• Sets group-by field + filter values in builder
+• Confirms before applying","Removes most error-prone manual step. User describes intent, AI configures."
+② After Query Run — Results Shown,,,,,,
+4,Data Preview Shown,"Clicks Run Query, sees 100-row data table
+Scans results to check if they look right",After Run Query completes,"✦  ""Want a plain-English summary of this data, or need to refine it?""  [Dismiss · Summarise · Refine]","• 2–3 sentence plain English summary of data
+• Flags nulls, anomalies, or outliers in results
+• Opens 'what to change?' prompt if Refine clicked",User understands data instantly without scanning 100 rows manually.
+5,Refining the Query,"Goes back to sidebar, changes columns/filters, re-runs
+Repeating the manual selection cycle again",On second Run attempt,"✦  ""Refining? Just tell me what's missing or wrong — I'll update the query.""  [Dismiss · Tell KapAI]","• Accepts delta instruction — ""add ticket_type, open only""
+• Modifies existing query, not a full rebuild
+• Re-runs automatically after user confirms diff",No more re-clicking through the builder. Iterate via natural language.
+③ SQL Console,,,,,,
+6,Opens SQL Console,"Switches to SQL Console tab to manually edit query
+Writes or modifies raw SQL",On SQL Console tab open,"✦  ""Prefer to describe the change? I'll write the SQL for you.""  [Dismiss · Describe change]","• Takes plain English change description
+• Modifies existing SQL, shows diff view
+• Explains what changed and why",Non-technical users can use the SQL Console via natural language. SQL users unaffected.
+7,SQL Written / Edited,"User has written or edited SQL manually
+About to click Run Query","After SQL typed, before run","✦  ""I spotted a potential issue in this query. Want me to review it?""  [Dismiss · Review]","• Reviews SQL for logic errors and inefficiencies
+• Suggests optimisations (LIMIT, index hints)
+• Offers corrected version as a highlighted diff",Catches mistakes before a failed run. Acts as an inline SQL peer reviewer.
+"④ Save, Visualise & Dashboard",,,,,,
+8,Choosing Visualisation,"Picks chart type in Save Question dialog
+Default Visualization → Table dropdown",On Save Question dialog open,"✦  ""Based on your data, a Bar Chart grouped by agent would work better.""  [Dismiss · Apply suggestion]","• Analyses result columns & cardinality
+• Recommends best-fit chart type with reason
+• Auto-sets axes and grouping for the chart",Better default visualisations without user needing chart best-practice knowledge.
+9,Naming the Question,"Types question name & description in Save dialog
+Often left as 'Untitled Query' with no description",On question name field focus,"✦  ""Want me to suggest a name and description based on your query?""  [Dismiss · Suggest]","• Generates a clear, descriptive question name
+• Writes one-line description of what it answers
+• User can edit both before saving",No more 'Untitled Query' clutter. Questions become searchable and reusable.
+10,Dashboard Assembly,"Creates/edits dashboard, adds saved questions, arranges layout
+Manual drag-and-drop of widgets",On dashboard edit mode open,"✦  ""I can suggest related saved questions and arrange a layout to start with.""  [Dismiss · Show suggestions]","• Finds related saved questions by topic
+• Proposes logical widget layout & order
+• Recommends dashboard-level filters",Dashboard assembly accelerated. User refines the AI scaffold manually.
