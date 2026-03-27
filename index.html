@@ -3529,15 +3529,19 @@
     .a-cat-bar-fill { height: 100%; border-radius: 2px; }
     /* ── Channel Cards ──────────────────────────────────────────── */
     .a-channel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-    .a-channel-card { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: row; justify-content: space-between; background: #fff; }
+    .a-channel-card { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; background: #fff; }
     .a-channel-l { display: flex; flex-direction: column; gap: var(--space-3); }
     .a-channel-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
     .a-channel-vol { font-family: var(--font-display); font-size: 26px; font-weight: var(--weight-bold); color: var(--dark-teal); line-height: 1; }
     .a-channel-conversations { font-size: var(--font-xs); color: var(--cutty-sark); opacity: 0.6; }
-    .a-channel-stats { display: flex; flex-direction: column; gap: var(--space-7); justify-content: center; }
-    .a-channel-stat .lbl { font-size: 10px; color: var(--cutty-sark); opacity: 0.7; }
-    .a-channel-stat .val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); }
-    .a-channel-stat .val.neg { color: var(--status-negative); }
+    .a-channel-stats { display: flex; flex-direction: column; gap: 8px; justify-content: center; align-self: stretch; }
+    .a-channel-stat { border-radius: 4px; padding: 4px; display: flex; flex-direction: column; gap: 4px; }
+    .a-channel-stat.pos { background: #eff6ff; }
+    .a-channel-stat.pos .lbl { font-size: 10px; color: #1e3a8a; opacity: 0.7; }
+    .a-channel-stat.pos .val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: #1e3a8a; }
+    .a-channel-stat.neg { background: #fef2f2; }
+    .a-channel-stat.neg .lbl { font-size: 10px; color: #dc2626; opacity: 0.7; }
+    .a-channel-stat.neg .val { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: #dc2626; }
     /* ── Bottleneck Rows ────────────────────────────────────────── */
     .a-bottleneck-row {
       display: flex; align-items: center; gap: 12px; padding: 11px 0;
@@ -5159,27 +5163,27 @@
               <div class="a-channel-grid">
                 <div class="a-channel-card">
                   <div class="a-channel-l"><div class="a-channel-name">Whatsapp</div><div class="a-channel-vol">9,571</div><div class="a-channel-conversations">conversations</div></div>
-                  <div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">96.7%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val neg">3.3%</div></div></div>
+                  <div class="a-channel-stats"><div class="a-channel-stat pos"><div class="lbl">Not Escalated</div><div class="val">96.7%</div></div><div class="a-channel-stat neg"><div class="lbl">Escalated</div><div class="val">3.3%</div></div></div>
                 </div>
                 <div class="a-channel-card">
                   <div class="a-channel-l"><div class="a-channel-name">Call</div><div class="a-channel-vol">8,291</div><div class="a-channel-conversations">conversations</div></div>
-                  <div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">99%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val neg">1%</div></div></div>
+                  <div class="a-channel-stats"><div class="a-channel-stat pos"><div class="lbl">Not Escalated</div><div class="val">99%</div></div><div class="a-channel-stat neg"><div class="lbl">Escalated</div><div class="val">1%</div></div></div>
                 </div>
                 <div class="a-channel-card">
                   <div class="a-channel-l"><div class="a-channel-name">Email</div><div class="a-channel-vol">454</div><div class="a-channel-conversations">conversations</div></div>
-                  <div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">90.7%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val neg">9.3%</div></div></div>
+                  <div class="a-channel-stats"><div class="a-channel-stat pos"><div class="lbl">Not Escalated</div><div class="val">90.7%</div></div><div class="a-channel-stat neg"><div class="lbl">Escalated</div><div class="val">9.3%</div></div></div>
                 </div>
                 <div class="a-channel-card">
                   <div class="a-channel-l"><div class="a-channel-name">General</div><div class="a-channel-vol">138</div><div class="a-channel-conversations">conversations</div></div>
-                  <div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val">0%</div></div></div>
+                  <div class="a-channel-stats"><div class="a-channel-stat pos"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat neg"><div class="lbl">Escalated</div><div class="val">0%</div></div></div>
                 </div>
                 <div class="a-channel-card">
                   <div class="a-channel-l"><div class="a-channel-name">Custom</div><div class="a-channel-vol">7</div><div class="a-channel-conversations">conversations</div></div>
-                  <div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val">0%</div></div></div>
+                  <div class="a-channel-stats"><div class="a-channel-stat pos"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat neg"><div class="lbl">Escalated</div><div class="val">0%</div></div></div>
                 </div>
                 <div class="a-channel-card">
                   <div class="a-channel-l"><div class="a-channel-name">Facebook</div><div class="a-channel-vol">1</div><div class="a-channel-conversations">conversations</div></div>
-                  <div class="a-channel-stats"><div class="a-channel-stat"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat"><div class="lbl">Escalated</div><div class="val">0%</div></div></div>
+                  <div class="a-channel-stats"><div class="a-channel-stat pos"><div class="lbl">Not Escalated</div><div class="val">100%</div></div><div class="a-channel-stat neg"><div class="lbl">Escalated</div><div class="val">0%</div></div></div>
                 </div>
               </div>
             </div>
