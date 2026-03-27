@@ -1,0 +1,116 @@
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+/* Remove default focus outline — we provide our own via :focus-visible */
+:focus { outline: none; }
+
+/* ── Accessibility: keyboard focus states (WCAG AA) ─────────── */
+.nav-item:focus-visible,
+.nav-subitem:focus-visible,
+.user-menu-btn:focus-visible,
+.hamburger:focus-visible,
+.user-popup-item:focus-visible,
+.home-tab:focus-visible,
+.mode-btn:focus-visible,
+.cat-btn:focus-visible,
+.prompt-chip:focus-visible,
+.topbar-back-btn:focus-visible,
+.qs-subnav-item:focus-visible,
+.qs-nav-item:focus-visible,
+.qs-back-btn:focus-visible,
+.dv-ctl-btn:focus-visible,
+.dv-dd-item:focus-visible,
+.dv-chart-btn:focus-visible,
+.dash-card-del-btn:focus-visible,
+.dash-card-edit-btn:focus-visible,
+.bdm-query-row:focus-visible,
+.qb-view-tab:focus-visible,
+.qb-col-item:focus-visible,
+.qb-select-all-btn:focus-visible,
+.qb-back-btn:focus-visible,
+.ge-adv-toggle:focus-visible,
+.ge-select-all:focus-visible,
+.nq-ai-chip:focus-visible,
+.nq-ai-toggle-btn:focus-visible,
+.nq-nudge-dismiss:focus-visible,
+.nq-nudge-accept:focus-visible,
+.add-manual-btn:focus-visible,
+.chip-remove:focus-visible,
+.bc-home:focus-visible,
+.cmg-health-card:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+.pill-btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.ai-send-btn:focus-visible,
+.send-btn:focus-visible,
+.new-query-btn:focus-visible,
+.back-to-builder-btn:focus-visible,
+.create-question-btn:focus-visible,
+.qs-primary-btn:focus-visible,
+.qb-save-btn:focus-visible,
+.qb-reset-btn:focus-visible,
+.qb-run-btn:focus-visible,
+.qb-export-btn:focus-visible,
+.sq-save-btn:focus-visible,
+.sq-cancel-btn:focus-visible,
+.sq-close-btn:focus-visible,
+.dash-save-final-btn:focus-visible,
+.dash-new-btn:focus-visible,
+.dv-btn-primary:focus-visible,
+.nq-generate-btn:focus-visible,
+.nq-run-btn:focus-visible,
+.ge-ai-send-btn:focus-visible,
+.ge-ai-attach-btn:focus-visible,
+.ge-ai-mic-btn:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+/* Inputs: inset focus ring so border isn't doubled */
+.sq-input:focus-visible,
+.sq-textarea:focus-visible,
+.nq-ai-textarea:focus-visible,
+.ge-ai-input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 0;
+}
+
+/* ── Root shell ─────────────────────────────────────────────── */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Main + view switching ──────────────────────────────────── */
+.main {
+  position: relative; z-index: 1;
+  flex: 1; height: 100vh; overflow: hidden;
+}
+.view {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.view.active { opacity: 1; pointer-events: all; }
+
+/* ══════════════════════════════════════════════════════════════
+   FULLSCREEN — ensure the layout always fills the viewport
+══════════════════════════════════════════════════════════════ */
+html { height: 100dvh; }
+body { height: 100dvh; min-height: 100dvh; }
+.main { min-height: 0; flex: 1; }
+.view { min-height: 0; }
+.ds-body { min-height: 0; }
+.ds-body > div { min-height: 0; }
+#manual-mode {
+  display: flex; flex-direction: column;
+  flex: 1; overflow: hidden; min-height: 0;
+}
+#ai-mode { min-height: 0; }
+#queries-section { min-height: 0; }
