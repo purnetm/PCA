@@ -3456,6 +3456,16 @@
     .a-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
     .a-2col-wide { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
     .a-2col-left { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+    /* ── Bottleneck bars ────────────────────────────────────────── */
+    .a-bottleneck-bar-wrap { flex:1; display:flex; flex-direction:column; gap:4px; }
+    .a-bottleneck-bar      { width:100%; height:5px; background:var(--aqua-haze); border-radius:3px; overflow:hidden; }
+    .a-bottleneck-bar-fill { height:100%; border-radius:3px; }
+    .a-bottleneck-footer   { display:flex; align-items:center; justify-content:space-between; }
+    .a-bottleneck-count    { font-size:10px; color:var(--cutty-sark); opacity:.7; }
+    /* ── Effort pills ───────────────────────────────────────────── */
+    .a-effort-pill       { background:var(--surface); border:1px solid var(--nebula); border-radius:6px; padding:5px 10px; display:flex; flex-direction:column; gap:2px; }
+    .a-effort-pill-label { font-size:10px; color:var(--cutty-sark); opacity:.6; }
+    .a-effort-pill-value { font-size:13px; font-weight:700; color:var(--dark-teal); font-family:var(--font-display); }
     /* ── Donut Chart (SVG ring) ──────────────────────────────────── */
     .a-donut-wrap { display: flex; align-items: center; justify-content: center; padding: 16px 0; }
     .a-donut-svg { overflow: visible; }
@@ -3463,8 +3473,8 @@
     /* ── Horizontal Bar ─────────────────────────────────────────── */
     .a-bar-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
     .a-bar-name {
-      min-width: 120px; max-width: 160px; font-size: var(--font-sm); color: var(--dark-teal);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0;
+      width: 160px; flex-shrink: 0; font-size: var(--font-sm); color: var(--dark-teal);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .a-bar-track { flex: 1; height: 6px; background: var(--aqua-haze); border-radius: 3px; overflow: hidden; }
     .a-bar-fill { height: 100%; border-radius: 3px; background: var(--teal); transition: width 0.4s; }
@@ -3478,7 +3488,10 @@
     .a-bar-pct { min-width: 36px; text-align: right; font-size: var(--font-sm); color: var(--teal); font-weight: var(--weight-semibold); }
     /* ── Intent Analysis ────────────────────────────────────────── */
     .intent-list { display: flex; flex-direction: column; gap: 16px; }
-    .intent-row { display: flex; align-items: center; gap: 8px; }
+    .intent-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 2px 4px; border-radius: 6px; transition: background .15s; }
+    .intent-row:hover { background: var(--surface-alt, #f4f6f8); }
+    .intent-row.active { background: var(--surface-alt, #f4f6f8); border-radius: 6px; }
+    .intent-seg { transition: stroke-width .2s, opacity .2s; }
     .intent-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .intent-name { flex: 1; font-size: var(--font-sm); color: var(--dark-teal); }
     .intent-count { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); min-width: 50px; text-align: right; }
@@ -3577,7 +3590,7 @@
     .a-folder-card { border: 1px solid var(--nebula); border-radius: var(--radius-sm); padding: 14px; background: var(--surface); }
     .a-folder-card-path { font-size: 10px; color: var(--cutty-sark); opacity: 0.6; margin-bottom: 2px; }
     .a-folder-card-name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--dark-teal); margin-bottom: 14px; }
-    .a-folder-stats { display: flex; gap: 16px; }
+    .a-folder-stats { display: flex; justify-content: space-between; width: 100%; }
     .a-folder-stat-val { font-size: 20px; font-weight: var(--weight-bold); color: var(--dark-teal); font-family: var(--font-display); line-height: 1; }
     .a-folder-stat-lbl { font-size: 10px; color: var(--cutty-sark); opacity: 0.6; }
     .a-folder-sentiment-bar { height: 4px; background: var(--aqua-haze); border-radius: 2px; overflow: hidden; margin-top: 14px; }
@@ -3591,7 +3604,8 @@
       align-items: center; justify-content: center; gap: 14px;
       text-align: center; padding: 48px;
     }
-    .a-placeholder-icon { font-size: 52px; opacity: 0.25; }
+    .a-placeholder-icon { font-size: 52px; opacity: 0.25; display:flex;align-items:center;justify-content:center; }
+    .a-placeholder-icon svg { width:52px;height:52px;opacity:.25; }
     .a-placeholder-title { font-family: var(--font-display); font-size: var(--font-xl); font-weight: var(--weight-bold); color: var(--dark-teal); }
     .a-placeholder-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); max-width: 300px; line-height: 1.5; }
     /* ── Chart empty state ──────────────────────────────────────── */
@@ -4906,49 +4920,73 @@
             </div>
           </div>
 
-          <!-- Intent Analysis + Emerging Issues -->
+          <!-- Intent Analysis + Weekly Sentiment Trend (grouped) | Emerging Issues -->
           <div class="a-2col-wide">
-            <div class="a-card">
+            <!-- Left: Intent Analysis + Weekly Sentiment Trend stacked in one card -->
+            <div class="a-card" style="display:flex;flex-direction:column;">
               <div class="a-card-head">
                 <div class="a-card-head-left">
                   <div class="a-card-title">Intent Analysis</div>
                   <div class="a-card-sub">Top intents by ticket volume</div>
                 </div>
-                <button class="intent-cat-btn">Customer Support &amp; General Assistance</button>
+                <button class="intent-cat-btn" id="intent-cat-btn">Customer Support &amp; General Assistance</button>
               </div>
               <div class="a-card-body">
-                <div style="display:flex;align-items:center;gap:16px;flex:1;margin-top:auto;margin-bottom:auto;">
+                <div style="display:flex;align-items:center;gap:16px;">
                   <!-- Donut -->
                   <div style="flex-shrink:0;">
                     <svg width="110" height="110" viewBox="0 0 130 130">
                       <circle cx="65" cy="65" r="52" fill="none" stroke="var(--aqua-haze)" stroke-width="18"/>
-                      <circle cx="65" cy="65" r="52" fill="none" stroke="var(--accent-info)" stroke-width="18" stroke-dasharray="131 196" stroke-dashoffset="0" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
-                      <circle cx="65" cy="65" r="52" fill="none" stroke="#8B5CF6" stroke-width="18" stroke-dasharray="100 227" stroke-dashoffset="-131" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
-                      <circle cx="65" cy="65" r="52" fill="none" stroke="#3B82F6" stroke-width="18" stroke-dasharray="46 281" stroke-dashoffset="-231" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
-                      <circle cx="65" cy="65" r="52" fill="none" stroke="#F59E0B" stroke-width="18" stroke-dasharray="43 284" stroke-dashoffset="-277" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
-                      <circle cx="65" cy="65" r="52" fill="none" stroke="#10B981" stroke-width="18" stroke-dasharray="18 309" stroke-dashoffset="-320" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
-                      <text x="65" y="61" text-anchor="middle" font-family="var(--font-display)" font-size="16" font-weight="700" fill="var(--accent-info-dark)">18,462</text>
-                      <text x="65" y="75" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--accent-info-mid)" opacity=".7">Total Tickets</text>
+                      <circle id="intent-seg-cs"           class="intent-seg" cx="65" cy="65" r="52" fill="none" stroke="var(--accent-info)" stroke-width="22" stroke-dasharray="131 196" stroke-dashoffset="0" stroke-linecap="butt" transform="rotate(-90 65 65)"/>
+                      <circle id="intent-seg-orders"       class="intent-seg" cx="65" cy="65" r="52" fill="none" stroke="#8B5CF6" stroke-width="18" stroke-dasharray="100 227" stroke-dashoffset="-131" stroke-linecap="butt" transform="rotate(-90 65 65)" style="opacity:.35"/>
+                      <circle id="intent-seg-delivery"     class="intent-seg" cx="65" cy="65" r="52" fill="none" stroke="#3B82F6" stroke-width="18" stroke-dasharray="46 281" stroke-dashoffset="-231" stroke-linecap="butt" transform="rotate(-90 65 65)" style="opacity:.35"/>
+                      <circle id="intent-seg-prescription" class="intent-seg" cx="65" cy="65" r="52" fill="none" stroke="#F59E0B" stroke-width="18" stroke-dasharray="43 284" stroke-dashoffset="-277" stroke-linecap="butt" transform="rotate(-90 65 65)" style="opacity:.35"/>
+                      <circle id="intent-seg-others"       class="intent-seg" cx="65" cy="65" r="52" fill="none" stroke="#10B981" stroke-width="18" stroke-dasharray="18 309" stroke-dashoffset="-320" stroke-linecap="butt" transform="rotate(-90 65 65)" style="opacity:.35"/>
+                      <text id="intent-total-count" x="65" y="61" text-anchor="middle" font-family="var(--font-display)" font-size="16" font-weight="700" fill="var(--accent-info-dark)">6,946</text>
+                      <text id="intent-total-label" x="65" y="75" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--accent-info-mid)" opacity=".7">Tickets</text>
                     </svg>
                   </div>
                   <!-- Legend -->
                   <div class="intent-list" style="flex:1;">
-                    <div class="intent-row"><span class="intent-dot" style="background:var(--accent-info)"></span><span class="intent-name">Customer Support &amp; General</span><span class="intent-count">6,946</span><span class="intent-avg">43m avg</span></div>
-                    <div class="intent-row"><span class="intent-dot" style="background:#8B5CF6"></span><span class="intent-name">Orders &amp; Order Management</span><span class="intent-count">5,063</span><span class="intent-avg">1.2h avg</span></div>
-                    <div class="intent-row"><span class="intent-dot" style="background:#3B82F6"></span><span class="intent-name">Delivery, Tracking &amp; Fulfilment</span><span class="intent-count">2,392</span><span class="intent-avg">1.2h avg</span></div>
-                    <div class="intent-row"><span class="intent-dot" style="background:#F59E0B"></span><span class="intent-name">Prescription &amp; Product Queries</span><span class="intent-count">2,259</span><span class="intent-avg">47m avg</span></div>
-                    <div class="intent-row"><span class="intent-dot" style="background:#10B981"></span><span class="intent-name">Others</span><span class="intent-count">942</span><span class="intent-avg">49m avg</span></div>
+                    <div class="intent-row active" data-intent="cs" onclick="setIntentTab('cs')"><span class="intent-dot" style="background:var(--accent-info)"></span><span class="intent-name">Customer Support &amp; General</span><span class="intent-count">6,946</span><span class="intent-avg">43m avg</span></div>
+                    <div class="intent-row" data-intent="orders" onclick="setIntentTab('orders')"><span class="intent-dot" style="background:#8B5CF6"></span><span class="intent-name">Orders &amp; Order Management</span><span class="intent-count">5,063</span><span class="intent-avg">1.2h avg</span></div>
+                    <div class="intent-row" data-intent="delivery" onclick="setIntentTab('delivery')"><span class="intent-dot" style="background:#3B82F6"></span><span class="intent-name">Delivery, Tracking &amp; Fulfilment</span><span class="intent-count">2,392</span><span class="intent-avg">1.2h avg</span></div>
+                    <div class="intent-row" data-intent="prescription" onclick="setIntentTab('prescription')"><span class="intent-dot" style="background:#F59E0B"></span><span class="intent-name">Prescription &amp; Product Queries</span><span class="intent-count">2,259</span><span class="intent-avg">47m avg</span></div>
+                    <div class="intent-row" data-intent="others" onclick="setIntentTab('others')"><span class="intent-dot" style="background:#10B981"></span><span class="intent-name">Others</span><span class="intent-count">942</span><span class="intent-avg">49m avg</span></div>
+                  </div>
+                </div>
+
+                <!-- Divider -->
+                <div style="border-top:1px solid var(--nebula);margin-top:20px;padding-top:16px;">
+                  <div class="a-card-title" style="font-size:var(--font-sm);margin-bottom:10px;">Weekly Sentiment Trend</div>
+                  <svg width="100%" height="104" viewBox="0 0 700 104" preserveAspectRatio="none">
+                    <defs><linearGradient id="ci-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3B82F6" stop-opacity=".25"/><stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/></linearGradient></defs>
+                    <path id="intent-sent-fill" d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18 L700,90 L0,90 Z" fill="url(#ci-grad)"/>
+                    <path id="intent-sent-pos" d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18" fill="none" stroke="var(--accent-info)" stroke-width="2"/>
+                    <path id="intent-sent-neutral" d="M0,70 C50,68 100,65 150,62 C200,59 250,63 300,60 C350,57 400,52 450,55 C500,58 550,54 600,50 C650,46 700,48 700,48" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="4 3" opacity=".6"/>
+                    <text x="50"  y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Mon</text>
+                    <text x="150" y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Tue</text>
+                    <text x="250" y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Wed</text>
+                    <text x="350" y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Thu</text>
+                    <text x="450" y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Fri</text>
+                    <text x="550" y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Sat</text>
+                    <text x="650" y="100" font-size="9" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Sun</text>
+                  </svg>
+                  <div style="display:flex;gap:16px;margin-top:6px;">
+                    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:12px;height:3px;background:var(--accent-info);border-radius:2px;display:inline-block;"></span>Positive</div>
+                    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:12px;height:3px;background:#8B5CF6;border-radius:2px;display:inline-block;"></span>Neutral</div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- Emerging Issues -->
-            <div class="a-card">
+
+            <!-- Right: Emerging Issues — stretches to match left card height via grid -->
+            <div class="a-card" style="display:flex;flex-direction:column;">
               <div class="a-card-head">
                 <div class="a-card-head-left"><div class="a-card-title">Emerging Issues</div><div class="a-card-sub">Intents with sudden spikes</div></div>
                 <span class="a-card-badge alert">Alert</span>
               </div>
-              <div class="a-card-body" style="gap:8px;">
+              <div class="a-card-body" style="gap:10px;flex:1;">
                 <div class="emerging-item">
                   <div class="emerging-item-l">
                     <div class="emerging-icon">⚠️</div>
@@ -4979,23 +5017,6 @@
                   </div>
                   <div class="emerging-sentiment neg">-0.33 sentiment</div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Weekly Sentiment Trend -->
-          <div class="a-card">
-            <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Weekly Sentiment Trend</div></div></div>
-            <div class="a-card-body">
-              <svg width="100%" height="90" viewBox="0 0 700 90" preserveAspectRatio="none">
-                <defs><linearGradient id="ci-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3B82F6" stop-opacity=".25"/><stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/></linearGradient></defs>
-                <path d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18 L700,90 L0,90 Z" fill="url(#ci-grad)"/>
-                <path d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18" fill="none" stroke="var(--accent-info)" stroke-width="2"/>
-                <path d="M0,70 C50,68 100,65 150,62 C200,59 250,63 300,60 C350,57 400,52 450,55 C500,58 550,54 600,50 C650,46 700,48 700,48" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="4 3" opacity=".6"/>
-              </svg>
-              <div style="display:flex;gap:16px;margin-top:6px;">
-                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:12px;height:3px;background:var(--accent-info);border-radius:2px;display:inline-block;"></span>Positive</div>
-                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--cutty-sark);opacity:.7;"><span style="width:12px;height:3px;background:#8B5CF6;border-radius:2px;display:inline-block;"></span>Neutral</div>
               </div>
             </div>
           </div>
@@ -5183,42 +5204,42 @@
             <div class="a-card">
               <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Ticket Type Distribution</div><div class="a-card-sub">Breakdown by ticket category</div></div></div>
               <div class="a-card-body">
-                <div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:0;">
+                <div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:0;padding:0 40px;">
                   <!-- bar columns -->
-                  <div style="flex:1;min-height:0;display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid var(--aqua-haze);">
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
+                  <div style="flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--aqua-haze);">
+                    <div style="width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
                       <span style="font-size:10px;font-weight:700;color:var(--blue-500);">98%</span>
-                      <div style="width:100%;height:160px;background:var(--blue-500);border-radius:6px 6px 0 0;"></div>
+                      <div style="width:40px;height:160px;background:var(--blue-500);border-radius:6px 6px 0 0;"></div>
                     </div>
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
+                    <div style="width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
                       <span style="font-size:10px;font-weight:700;color:#22C55E;">14%</span>
-                      <div style="width:100%;height:23px;background:#22C55E;border-radius:6px 6px 0 0;"></div>
+                      <div style="width:40px;height:23px;background:#22C55E;border-radius:6px 6px 0 0;"></div>
                     </div>
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
+                    <div style="width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
                       <span style="font-size:10px;font-weight:700;color:#9C74F7;">51%</span>
-                      <div style="width:100%;height:82px;background:#9C74F7;border-radius:6px 6px 0 0;"></div>
+                      <div style="width:40px;height:82px;background:#9C74F7;border-radius:6px 6px 0 0;"></div>
                     </div>
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
+                    <div style="width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
                       <span style="font-size:10px;font-weight:700;color:#FCA5A5;">34%</span>
-                      <div style="width:100%;height:55px;background:#FCA5A5;border-radius:6px 6px 0 0;"></div>
+                      <div style="width:40px;height:55px;background:#FCA5A5;border-radius:6px 6px 0 0;"></div>
                     </div>
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
+                    <div style="width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
                       <span style="font-size:10px;font-weight:700;color:var(--accent-warning);">63%</span>
-                      <div style="width:100%;height:101px;background:var(--accent-warning);border-radius:6px 6px 0 0;"></div>
+                      <div style="width:40px;height:101px;background:var(--accent-warning);border-radius:6px 6px 0 0;"></div>
                     </div>
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
+                    <div style="width:40px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;">
                       <span style="font-size:10px;font-weight:700;color:var(--blue-300);">23%</span>
-                      <div style="width:100%;height:37px;background:var(--blue-300);border-radius:6px 6px 0 0;"></div>
+                      <div style="width:40px;height:37px;background:var(--blue-300);border-radius:6px 6px 0 0;"></div>
                     </div>
                   </div>
                   <!-- category labels -->
-                  <div style="display:flex;gap:12px;padding-top:7px;">
-                    <div style="flex:1;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Technical<br>Support</div>
-                    <div style="flex:1;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">General<br>Query</div>
-                    <div style="flex:1;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Order<br>Inquiry</div>
-                    <div style="flex:1;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Complaint</div>
-                    <div style="flex:1;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Billing &amp;<br>Payment</div>
-                    <div style="flex:1;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Account<br>Mngt</div>
+                  <div style="display:flex;justify-content:space-between;padding-top:7px;">
+                    <div style="width:40px;flex-shrink:0;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Technical<br>Support</div>
+                    <div style="width:40px;flex-shrink:0;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">General<br>Query</div>
+                    <div style="width:40px;flex-shrink:0;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Order<br>Inquiry</div>
+                    <div style="width:40px;flex-shrink:0;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Complaint</div>
+                    <div style="width:40px;flex-shrink:0;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Billing &amp;<br>Payment</div>
+                    <div style="width:40px;flex-shrink:0;font-size:10px;color:var(--cutty-sark);text-align:center;line-height:1.5;">Account<br>Mngt</div>
                   </div>
                 </div>
               </div>
@@ -5259,57 +5280,70 @@
           <!-- KPI -->
           <div class="a-kpi-row">
             <div class="a-kpi-card"><div class="a-kpi-label">Total Tickets</div><div class="a-kpi-value">18,462</div><div class="a-kpi-trend positive"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9l4-6 4 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Trending up</div></div>
-            <div class="a-kpi-card"><div class="a-kpi-label">Avg Resolution Time</div><div class="a-kpi-value">1h 6m</div></div>
-            <div class="a-kpi-card"><div class="a-kpi-label">FCR Rate</div><div class="a-kpi-value">97.6%</div></div>
-            <div class="a-kpi-card"><div class="a-kpi-label">CSAT Score</div><div class="a-kpi-value">0.87</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">Avg Resolution Time</div><div class="a-kpi-value">1h 6m</div><div class="a-kpi-trend positive"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3l4 6 4-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> ↓ 4m vs last week</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">FCR Rate</div><div class="a-kpi-value">97.6%</div><div class="a-kpi-trend positive"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9l4-6 4 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> ↑ 2.4 pp vs last week</div></div>
+            <div class="a-kpi-card"><div class="a-kpi-label">CSAT Score</div><div class="a-kpi-value">0.87</div><div class="a-kpi-trend positive"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9l4-6 4 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> ↑ 0.05 vs last period</div></div>
           </div>
           <!-- Bottlenecks + CES -->
           <div class="a-2col-wide">
             <div class="a-card">
               <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Top Bottlenecks</div><div class="a-card-sub">Leading causes of delays or escalations</div></div><span class="a-card-badge info">5 identified</span></div>
               <div class="a-card-body">
-                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#F97316;"></div><div><div class="a-bottleneck-name">Excessive Customer Frustration</div><div class="a-bottleneck-meta">134 tickets · Impact 3.4/10</div></div></div>
-                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#F59E0B;"></div><div><div class="a-bottleneck-name">Level 2 Technical Support Needed</div><div class="a-bottleneck-meta">79 tickets · Impact 1.2/10</div></div></div>
-                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#6B7280;"></div><div><div class="a-bottleneck-name">Others</div><div class="a-bottleneck-meta">59 tickets · Impact 1.2/10</div></div></div>
-                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#DC2626;"></div><div><div class="a-bottleneck-name">Unresolved Complaint Deadlock</div><div class="a-bottleneck-meta">52 tickets · Impact 1.5/10</div></div></div>
-                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#3B82F6;"></div><div><div class="a-bottleneck-name">Complex Logistics Coordination</div><div class="a-bottleneck-meta">51 tickets · Impact 0.8/10</div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#F97316;"></div><div style="flex:1;min-width:0;"><div class="a-bottleneck-name">Excessive Customer Frustration</div><div class="a-bottleneck-bar-wrap"><div class="a-bottleneck-bar"><div class="a-bottleneck-bar-fill" style="width:100%;background:#F97316;"></div></div><div class="a-bottleneck-footer"><span class="a-bottleneck-count">134 tickets</span><span class="a-card-badge alert" style="font-size:9px;padding:1px 6px;">High Impact 3.4</span></div></div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#F59E0B;"></div><div style="flex:1;min-width:0;"><div class="a-bottleneck-name">Level 2 Technical Support Needed</div><div class="a-bottleneck-bar-wrap"><div class="a-bottleneck-bar"><div class="a-bottleneck-bar-fill" style="width:59%;background:#F59E0B;"></div></div><div class="a-bottleneck-footer"><span class="a-bottleneck-count">79 tickets</span><span class="a-card-badge info" style="font-size:9px;padding:1px 6px;">Low Impact 1.2</span></div></div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#6B7280;"></div><div style="flex:1;min-width:0;"><div class="a-bottleneck-name">Others</div><div class="a-bottleneck-bar-wrap"><div class="a-bottleneck-bar"><div class="a-bottleneck-bar-fill" style="width:44%;background:#6B7280;"></div></div><div class="a-bottleneck-footer"><span class="a-bottleneck-count">59 tickets</span><span class="a-card-badge info" style="font-size:9px;padding:1px 6px;">Low Impact 1.2</span></div></div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#DC2626;"></div><div style="flex:1;min-width:0;"><div class="a-bottleneck-name">Unresolved Complaint Deadlock</div><div class="a-bottleneck-bar-wrap"><div class="a-bottleneck-bar"><div class="a-bottleneck-bar-fill" style="width:39%;background:#DC2626;"></div></div><div class="a-bottleneck-footer"><span class="a-bottleneck-count">52 tickets</span><span class="a-card-badge amber" style="font-size:9px;padding:1px 6px;">Med Impact 1.5</span></div></div></div></div>
+                <div class="a-bottleneck-row"><div class="a-bottleneck-color" style="background:#3B82F6;"></div><div style="flex:1;min-width:0;"><div class="a-bottleneck-name">Complex Logistics Coordination</div><div class="a-bottleneck-bar-wrap"><div class="a-bottleneck-bar"><div class="a-bottleneck-bar-fill" style="width:38%;background:#3B82F6;"></div></div><div class="a-bottleneck-footer"><span class="a-bottleneck-count">51 tickets</span><span class="a-card-badge info" style="font-size:9px;padding:1px 6px;">Low Impact 0.8</span></div></div></div></div>
               </div>
             </div>
             <div class="a-card">
               <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Customer Effort Score</div><div class="a-card-sub">Avg effort level for customers</div></div><span class="a-card-badge info">0.8/5</span></div>
-              <div class="a-card-body" style="display:flex;align-items:center;justify-content:center;padding-top:8px;">
-                <svg width="110" height="110" viewBox="0 0 110 110">
-                  <circle cx="55" cy="55" r="44" fill="none" stroke="var(--accent-info-10)" stroke-width="14"/>
-                  <circle cx="55" cy="55" r="44" fill="none" stroke="var(--accent-info)" stroke-width="14" stroke-dasharray="44 232" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
-                  <text x="55" y="51" text-anchor="middle" font-family="var(--font-display)" font-size="20" font-weight="700" fill="var(--accent-info-dark)">0.8</text>
-                  <text x="55" y="64" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--accent-info-mid)" opacity=".7">/ 5</text>
+              <div class="a-card-body" style="display:flex;align-items:center;gap:16px;padding-top:8px;">
+                <svg width="100" height="100" viewBox="0 0 110 110" style="flex-shrink:0;">
+                  <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(16,185,129,0.12)" stroke-width="14"/>
+                  <circle cx="55" cy="55" r="44" fill="none" stroke="var(--accent-success)" stroke-width="14" stroke-dasharray="44 232" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+                  <text x="55" y="51" text-anchor="middle" font-family="var(--font-display)" font-size="20" font-weight="700" fill="var(--accent-success)">0.8</text>
+                  <text x="55" y="64" text-anchor="middle" font-family="var(--font-body)" font-size="9" fill="var(--accent-success)" opacity=".7">/ 5</text>
                 </svg>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <div style="font-size:22px;font-weight:700;color:var(--accent-success);font-family:var(--font-display);line-height:1;">Excellent</div>
+                  <div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-bottom:4px;">Low customer effort</div>
+                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.7;">Industry avg <strong style="color:var(--dark-teal);">2.1/5</strong></div>
+                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.7;">Your target <strong style="color:var(--dark-teal);">1.0/5</strong></div>
+                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.7;">Last period <strong style="color:var(--dark-teal);">1.1/5</strong></div>
+                </div>
               </div>
-              <div style="text-align:center;font-size:11px;color:var(--cutty-sark);opacity:.6;padding-bottom:8px;">Lower is better.</div>
             </div>
           </div>
           <!-- Internal Effort + Interaction Efficiency -->
           <div class="a-2col">
             <div class="a-card">
               <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Internal Effort Score</div><div class="a-card-sub">Average agent effort (messages, holds, escalations per ticket)</div></div><span class="a-card-badge info">1.6/5</span></div>
-              <div class="a-card-body" style="display:flex;align-items:center;gap:20px;">
-                <svg width="90" height="90" viewBox="0 0 90 90" style="flex-shrink:0;">
-                  <circle cx="45" cy="45" r="36" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
-                  <circle cx="45" cy="45" r="36" fill="none" stroke="#F97316" stroke-width="12" stroke-dasharray="72 154" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
-                  <text x="45" y="42" text-anchor="middle" font-family="var(--font-display)" font-size="16" font-weight="700" fill="var(--accent-info-dark)">1.6</text>
-                  <text x="45" y="54" text-anchor="middle" font-family="var(--font-body)" font-size="8" fill="var(--accent-info-mid)" opacity=".7">/ 5</text>
-                </svg>
-                <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.5;">Lower is better. Captures agent messages, hold frequency, and escalation count per ticket.</div>
+              <div class="a-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;gap:20px;">
+                  <svg width="90" height="90" viewBox="0 0 90 90" style="flex-shrink:0;">
+                    <circle cx="45" cy="45" r="36" fill="none" stroke="var(--aqua-haze)" stroke-width="12"/>
+                    <circle cx="45" cy="45" r="36" fill="none" stroke="#F97316" stroke-width="12" stroke-dasharray="72 154" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
+                    <text x="45" y="42" text-anchor="middle" font-family="var(--font-display)" font-size="16" font-weight="700" fill="var(--accent-info-dark)">1.6</text>
+                    <text x="45" y="54" text-anchor="middle" font-family="var(--font-body)" font-size="8" fill="var(--accent-info-mid)" opacity=".7">/ 5</text>
+                  </svg>
+                  <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.5;">Lower is better. Captures agent messages, hold frequency, and escalation count per ticket.</div>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <div class="a-effort-pill"><span class="a-effort-pill-label">Avg Messages</span><span class="a-effort-pill-value">11.8</span></div>
+                  <div class="a-effort-pill"><span class="a-effort-pill-label">Hold Rate</span><span class="a-effort-pill-value">20.7%</span></div>
+                  <div class="a-effort-pill"><span class="a-effort-pill-label">Escalation</span><span class="a-effort-pill-value">0.5%</span></div>
+                </div>
               </div>
             </div>
             <div class="a-card">
-              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Interaction Efficiency</div><div class="a-card-sub">Combined metric of speed, effort, and resolution quality</div></div><span class="a-card-badge green">1560.5%</span></div>
+              <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Interaction Efficiency</div><div class="a-card-sub">Combined metric of speed, effort, and resolution quality</div></div><span class="a-card-badge green">High Efficiency</span></div>
               <div class="a-card-body">
-                <div style="font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--dark-teal);margin-bottom:8px;">1560.5 <span style="font-size:14px;opacity:.5;">efficient</span></div>
-                <div style="display:flex;gap:20px;">
-                  <div><div style="font-size:18px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">1h 6m</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">Speed</div></div>
-                  <div><div style="font-size:18px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">0.8/5</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">Cust. Effort</div></div>
-                  <div><div style="font-size:18px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">97.6%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">FCR</div></div>
+                <div style="font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--dark-teal);margin-bottom:8px;">1,561</div>
+                <div style="display:flex;gap:10px;">
+                  <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;"><div style="font-size:16px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">1h 6m</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-top:4px;">Speed</div></div>
+                  <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;"><div style="font-size:16px;font-weight:700;color:var(--accent-success);font-family:var(--font-display);line-height:1;">0.8/5</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-top:4px;">Cust. Effort</div></div>
+                  <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;"><div style="font-size:16px;font-weight:700;color:var(--accent-success);font-family:var(--font-display);line-height:1;">97.6%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.6;margin-top:4px;">FCR</div></div>
                 </div>
               </div>
             </div>
@@ -5322,15 +5356,15 @@
                 <div>
                   <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Sentiment Distribution</div>
                   <div style="display:flex;gap:10px;margin-bottom:12px;">
-                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;background:rgba(16,185,129,0.05);">
+                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;background:rgba(16,185,129,0.05);border-top:3px solid var(--accent-success);">
                       <div style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--accent-success);line-height:1;">15.32%</div>
                       <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Improved<br/>2,928 cases</div>
                     </div>
-                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;">
+                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;border-top:3px solid var(--cutty-sark);">
                       <div style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--cutty-sark);line-height:1;">76.83%</div>
                       <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">No Change<br/>14,184 cases</div>
                     </div>
-                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;background:rgba(220,38,38,0.04);">
+                    <div style="flex:1;padding:10px;border:1px solid var(--nebula);border-radius:8px;background:rgba(220,38,38,0.04);border-top:3px solid var(--status-negative);">
                       <div style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--status-negative);line-height:1;">7.85%</div>
                       <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Worsened<br/>1,450 cases</div>
                     </div>
@@ -5346,9 +5380,10 @@
                       <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--accent-info-mid)" opacity=".7">/ 100</text>
                     </svg>
                     <div style="display:flex;flex-direction:column;gap:6px;">
-                      <div><span style="font-size:20px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">0.87/5</span> <span style="font-size:11px;color:var(--cutty-sark);opacity:.6;">CSAT</span></div>
-                      <div><span style="font-size:20px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">0.8/5</span> <span style="font-size:11px;color:var(--cutty-sark);opacity:.6;">Effort</span></div>
-                      <div><span style="font-size:20px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">2,721</span> <span style="font-size:11px;color:var(--cutty-sark);opacity:.6;">Happy</span></div>
+                      <div style="margin-bottom:2px;"><span style="font-size:11px;font-weight:600;color:var(--accent-warning);padding:1px 6px;background:rgba(245,158,11,0.1);border-radius:4px;">Moderate</span></div>
+                      <div><span style="font-size:20px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">4.4/5</span> <span style="font-size:11px;color:var(--cutty-sark);opacity:.6;">CSAT</span> <span style="font-size:10px;color:var(--accent-success);">↑ +0.2</span></div>
+                      <div><span style="font-size:20px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">0.8/5</span> <span style="font-size:11px;color:var(--cutty-sark);opacity:.6;">Effort</span> <span style="font-size:10px;color:var(--accent-success);">↓ -0.1</span></div>
+                      <div><span style="font-size:20px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">2,721</span> <span style="font-size:11px;color:var(--cutty-sark);opacity:.6;">Happy</span> <span style="font-size:10px;color:var(--accent-success);">↑ +124</span></div>
                     </div>
                   </div>
                 </div>
@@ -5365,13 +5400,20 @@
                 <div class="a-card-body">
                   <div class="a-probe-grid">
                     <div class="a-probe-stat"><div class="a-probe-val">1.4%</div><div class="a-probe-lbl">Over-Probing</div></div>
-                    <div class="a-probe-stat highlight"><div class="a-probe-val">24.2%</div><div class="a-probe-lbl">Under-Probing</div></div>
+                    <div class="a-probe-stat highlight" style="background:rgba(245,158,11,0.07);"><div class="a-probe-val">24.2%</div><div class="a-probe-lbl">Under-Probing</div></div>
                     <div class="a-probe-stat"><div class="a-probe-val">3.0%</div><div class="a-probe-lbl">Repeated Info</div></div>
-                    <div class="a-probe-stat highlight"><div class="a-probe-val">17.4%</div><div class="a-probe-lbl">Re-Explanations</div></div>
+                    <div class="a-probe-stat highlight" style="background:rgba(245,158,11,0.07);"><div class="a-probe-val">17.4%</div><div class="a-probe-lbl">Re-Explanations</div></div>
                   </div>
-                  <div style="background:var(--surface);border:1px solid var(--nebula);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">
-                    <span style="font-size:var(--font-sm);color:var(--dark-teal);">Intent-Response Match Rate</span>
-                    <span style="font-size:var(--font-md);font-weight:700;color:var(--accent-info);">46.7%</span>
+                  <div style="background:var(--surface);border:1px solid var(--nebula);border-radius:8px;padding:8px 12px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                      <span style="font-size:var(--font-sm);color:var(--dark-teal);">Intent-Response Match Rate</span>
+                      <span style="font-size:var(--font-md);font-weight:700;color:var(--accent-warning);">46.7%</span>
+                    </div>
+                    <div style="position:relative;height:5px;background:var(--aqua-haze);border-radius:3px;overflow:visible;">
+                      <div style="position:absolute;left:0;top:0;height:100%;width:46.7%;background:var(--accent-warning);border-radius:3px;"></div>
+                      <div style="position:absolute;left:70%;top:-4px;width:2px;height:13px;background:var(--dark-teal);border-radius:1px;" title="Target: 70%"></div>
+                    </div>
+                    <div style="font-size:10px;color:var(--accent-warning);margin-top:5px;">Below target (70%)</div>
                   </div>
                 </div>
               </div>
@@ -5388,10 +5430,11 @@
                     </svg>
                     <div class="a-2col" style="flex:1;">
                       <div><div style="font-size:24px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">34.3%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Dead Air</div></div>
-                      <div><div style="font-size:24px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">34.3%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Time Breaches</div></div>
-                      <div><div style="font-size:24px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">9.8%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Delay Explained</div></div>
+                      <div><div style="font-size:24px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">22.4%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Time Breaches</div></div>
+                      <div><div style="font-size:24px;font-weight:700;color:var(--dark-teal);font-family:var(--font-display);line-height:1;">9.8%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Delay Explained <span style="font-size:9px;color:var(--accent-warning);display:block;font-weight:400;">should be &gt;80%</span></div></div>
                     </div>
                   </div>
+                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:8px;padding-top:8px;border-top:1px solid var(--nebula);">Of tickets with holds (20.1%)</div>
                 </div>
               </div>
             </div>
@@ -5403,13 +5446,28 @@
               <div class="a-2col">
                 <div>
                   <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Escalations <span style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--status-negative);line-height:1;"> 444 </span><span style="font-size:11px;font-weight:400;opacity:.6;">total</span></div>
-                  <svg width="100%" height="70" viewBox="0 0 260 70" preserveAspectRatio="none">
-                    <path d="M10,10 C40,10 60,20 80,30 C120,50 180,60 250,65" fill="none" stroke="var(--status-negative)" stroke-width="2"/>
-                    <text x="10" y="8" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">140</text>
-                    <text x="10" y="28" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">100</text>
-                    <text x="10" y="48" font-family="var(--font-body)" font-size="8" fill="var(--cutty-sark)" opacity=".6">50</text>
+                  <svg width="100%" height="84" viewBox="0 0 260 84" preserveAspectRatio="none">
+                    <defs><linearGradient id="esc-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#DC2626" stop-opacity=".2"/><stop offset="100%" stop-color="#DC2626" stop-opacity="0"/></linearGradient></defs>
+                    <!-- grid lines -->
+                    <line x1="30" y1="10" x2="255" y2="10" stroke="var(--nebula)" stroke-width=".5" opacity=".5"/>
+                    <line x1="30" y1="30" x2="255" y2="30" stroke="var(--nebula)" stroke-width=".5" opacity=".5"/>
+                    <line x1="30" y1="50" x2="255" y2="50" stroke="var(--nebula)" stroke-width=".5" opacity=".5"/>
+                    <!-- y-axis labels -->
+                    <text x="26" y="13" font-family="var(--font-body)" font-size="7" text-anchor="end" fill="var(--cutty-sark)" opacity=".6">140</text>
+                    <text x="26" y="33" font-family="var(--font-body)" font-size="7" text-anchor="end" fill="var(--cutty-sark)" opacity=".6">100</text>
+                    <text x="26" y="53" font-family="var(--font-body)" font-size="7" text-anchor="end" fill="var(--cutty-sark)" opacity=".6">50</text>
+                    <!-- fill -->
+                    <path d="M30,10 C70,10 90,22 110,32 C150,52 200,62 255,66 L255,66 L255,68 L30,68 Z" fill="url(#esc-grad)"/>
+                    <!-- line -->
+                    <path d="M30,10 C70,10 90,22 110,32 C150,52 200,62 255,66" fill="none" stroke="var(--status-negative)" stroke-width="1.8" stroke-linecap="round"/>
+                    <!-- x-axis day labels -->
+                    <text x="30"  y="78" font-size="7" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Mon</text>
+                    <text x="72"  y="78" font-size="7" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Tue</text>
+                    <text x="114" y="78" font-size="7" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Wed</text>
+                    <text x="156" y="78" font-size="7" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Thu</text>
+                    <text x="198" y="78" font-size="7" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Fri</text>
+                    <text x="255" y="78" font-size="7" text-anchor="middle" fill="var(--cutty-sark)" opacity=".6">Sat</text>
                   </svg>
-                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:4px;text-align:center;">Escalation trend by date</div>
                 </div>
                 <div>
                   <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Escalation Avoidability <span class="a-card-badge green" style="display:inline-flex;">37 avoidable</span></div>
@@ -5422,8 +5480,8 @@
                     </svg>
                     <div>
                       <div style="display:flex;gap:10px;margin-bottom:6px;">
-                        <div style="border:1px solid var(--nebula);border-radius:6px;padding:8px 12px;text-align:center;"><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">401</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">Early (80%)</div></div>
-                        <div style="border:1px solid var(--nebula);border-radius:6px;padding:8px 12px;text-align:center;"><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">130</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">Late (29%)</div></div>
+                        <div style="border:1px solid var(--nebula);border-radius:6px;padding:8px 12px;text-align:center;"><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">401</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">Early-stage</div></div>
+                        <div style="border:1px solid var(--nebula);border-radius:6px;padding:8px 12px;text-align:center;"><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">43</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:3px;">Late-stage</div></div>
                       </div>
                       <div style="font-size:11px;color:var(--cutty-sark);opacity:.6;">Escalation Rate: <strong style="color:var(--dark-teal);">0.5%</strong></div>
                     </div>
@@ -5435,6 +5493,7 @@
                     <div class="a-top-reason"><span class="a-top-reason-lbl">Others</span><span class="a-top-reason-val">59</span></div>
                     <div class="a-top-reason"><span class="a-top-reason-lbl">Unresolved Complaint Deadlock</span><span class="a-top-reason-val">52</span></div>
                     <div class="a-top-reason"><span class="a-top-reason-lbl">Complex Logistics Coordination</span><span class="a-top-reason-val">51</span></div>
+                    <div class="a-top-reason" style="opacity:.5;"><span class="a-top-reason-lbl">Unaccounted</span><span class="a-top-reason-val">69</span></div>
                   </div>
                 </div>
               </div>
@@ -5445,10 +5504,10 @@
             <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Execution &amp; Communication</div></div></div>
             <div class="a-card-body">
               <div class="a-kpi-row">
-                <div class="a-kpi-card"><div class="a-kpi-label">Replies per Resolution</div><div class="a-kpi-value">11.8</div><div class="a-kpi-sub">messages avg (target: 8)</div></div>
-                <div class="a-kpi-card"><div class="a-kpi-label">Turn Ratio</div><div class="a-kpi-value">1.3:1</div><div class="a-kpi-sub">Customer:Agent msgs ratio</div></div>
-                <div class="a-kpi-card"><div class="a-kpi-label">Repeated Info Requests</div><div class="a-kpi-value">3.0%</div><div class="a-kpi-sub">tickets requiring repetition</div></div>
-                <div class="a-kpi-card"><div class="a-kpi-label">Re-Explanation Rate</div><div class="a-kpi-value">17.4%</div><div class="a-kpi-sub">of tickets (target: 15%)</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Replies per Resolution</div><div class="a-kpi-value">11.8</div><div class="a-kpi-sub" style="color:var(--accent-warning);">Target: 8 · Over by 3.8</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Turn Ratio</div><div class="a-kpi-value">1.3:1</div><div class="a-kpi-sub" style="color:var(--accent-success);">Healthy range: 1–1.5:1</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Repeated Info Requests</div><div class="a-kpi-value">3.0%</div><div class="a-kpi-sub" style="color:var(--accent-success);">Target: &lt;5% ✓</div></div>
+                <div class="a-kpi-card"><div class="a-kpi-label">Re-Explanation Rate</div><div class="a-kpi-value">17.4%</div><div class="a-kpi-sub" style="color:var(--accent-warning);">Target: 15% · Slightly over</div></div>
               </div>
             </div>
           </div>
@@ -5457,10 +5516,10 @@
             <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title">Resolution Journey Breakdown</div></div><button class="a-card-btn">Journey</button></div>
             <div class="a-card-body">
               <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:10px;">Phase Durations <span style="font-size:11px;font-weight:400;opacity:.6;">Time spent in probing, hold, escalation, and execution phases</span></div>
-              <div class="a-phase-row"><span class="a-phase-name">Probing</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:var(--accent-info);"></div></div><span class="a-phase-pct">0%</span></div>
-              <div class="a-phase-row"><span class="a-phase-name">Execution</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:#8B5CF6;"></div></div><span class="a-phase-pct">0%</span></div>
-              <div class="a-phase-row"><span class="a-phase-name">Hold</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:#F59E0B;"></div></div><span class="a-phase-pct">0%</span></div>
-              <div class="a-phase-row"><span class="a-phase-name">Transition</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:2%;background:#F97316;"></div></div><span class="a-phase-pct">0%</span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Execution</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:53%;background:#8B5CF6;transition:width .4s ease;"></div></div><span class="a-phase-pct"><span>53%</span><span style="opacity:.5;font-size:10px;margin-left:4px;">~35m</span></span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Hold</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:27%;background:#F59E0B;transition:width .4s ease;"></div></div><span class="a-phase-pct"><span>27%</span><span style="opacity:.5;font-size:10px;margin-left:4px;">~18m</span></span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Probing</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:12%;background:var(--accent-info);transition:width .4s ease;"></div></div><span class="a-phase-pct"><span>12%</span><span style="opacity:.5;font-size:10px;margin-left:4px;">~8m</span></span></div>
+              <div class="a-phase-row"><span class="a-phase-name">Transition</span><div class="a-phase-bar"><div class="a-phase-fill" style="width:8%;background:#F97316;transition:width .4s ease;"></div></div><span class="a-phase-pct"><span>8%</span><span style="opacity:.5;font-size:10px;margin-left:4px;">~5m</span></span></div>
             </div>
           </div>
           <!-- Recontact & Repeat Issues -->
@@ -5479,6 +5538,9 @@
                   <div style="font-size:11px;font-weight:600;color:var(--dark-teal);margin:8px 0 4px;">Top Reasons</div>
                   <div class="a-top-reason"><span class="a-top-reason-lbl">Incomplete Resolution</span><span class="a-top-reason-val">3,321</span></div>
                   <div class="a-top-reason"><span class="a-top-reason-lbl">Status Follow-up</span><span class="a-top-reason-val">387</span></div>
+                  <div class="a-top-reason" style="opacity:.6;"><span class="a-top-reason-lbl">Other Reasons</span><span class="a-top-reason-val">7,910</span></div>
+                  <div style="font-size:10px;color:var(--accent-warning);margin-top:8px;padding-top:8px;border-top:1px solid var(--nebula);">43% recontact is above industry benchmark (~25%)</div>
+                  <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:4px;">8,618 unique × avg 1.5 contacts = ~12,927 recontact tickets</div>
                 </div>
               </div>
             </div>
@@ -5494,19 +5556,27 @@
                     <div style="padding:10px 14px;border:1px solid var(--nebula);border-radius:8px;"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--dark-teal);">$55K</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">total compensation value</div></div>
                   </div>
                   <table class="a-comp-table">
-                    <tr><td>discount</td><td><div class="a-comp-bar" style="width:60%;"></div></td><td>$NaN</td></tr>
-                    <tr><td>refund</td><td><div class="a-comp-bar" style="width:40%;"></div></td><td>$NaN</td></tr>
-                    <tr><td>delivery fee waiver</td><td><div class="a-comp-bar" style="width:30%;"></div></td><td>$NaN</td></tr>
-                    <tr><td>miscellaneous</td><td><div class="a-comp-bar" style="width:20%;"></div></td><td>$NaN</td></tr>
-                    <tr><td>promo coupon</td><td><div class="a-comp-bar" style="width:15%;"></div></td><td>$NaN</td></tr>
-                    <tr><td>replacement</td><td><div class="a-comp-bar" style="width:10%;"></div></td><td>$NaN</td></tr>
-                    <tr><td>price adjustment</td><td><div class="a-comp-bar" style="width:8%;"></div></td><td>$NaN</td></tr>
+                    <tr><td>Discount</td><td><div class="a-comp-bar" style="width:100%;"></div></td><td>$20K (36%)</td></tr>
+                    <tr><td>Refund</td><td><div class="a-comp-bar" style="width:65%;"></div></td><td>$13K (24%)</td></tr>
+                    <tr><td>Delivery Fee Waiver</td><td><div class="a-comp-bar" style="width:50%;"></div></td><td>$10K (18%)</td></tr>
+                    <tr><td>Miscellaneous</td><td><div class="a-comp-bar" style="width:35%;"></div></td><td>$7K (13%)</td></tr>
+                    <tr><td>Promo Coupon</td><td><div class="a-comp-bar" style="width:25%;"></div></td><td>$5K (9%)</td></tr>
+                    <tr><td>Replacement</td><td><div class="a-comp-bar" style="width:15%;"></div></td><td>$3K (5%)</td></tr>
+                    <tr><td>Price Adjustment</td><td><div class="a-comp-bar" style="width:15%;"></div></td><td>$3K (5%)</td></tr>
                   </table>
                 </div>
                 <div>
                   <div style="font-size:12px;font-weight:600;color:var(--dark-teal);margin-bottom:8px;">Sentiment by Compensation Type <button class="a-card-btn">Sentiment</button></div>
-                  <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Post-compensation sentiment (happy/sad/neutral) by type</div>
-                  <div class="a-chart-empty">Chart data loading…</div>
+                  <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-bottom:10px;">Post-compensation sentiment by type</div>
+                  <!-- Stacked mini bars: Positive / Neutral / Negative -->
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-bottom:2px;display:flex;justify-content:space-between;"><span>Type</span><span style="display:flex;gap:10px;"><span style="color:var(--accent-success);">Pos</span><span>Neu</span><span style="color:var(--status-negative);">Neg</span></span></div>
+                    <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--cutty-sark);width:80px;flex-shrink:0;">Discount</span><div style="flex:1;display:flex;height:8px;border-radius:4px;overflow:hidden;"><div style="width:62%;background:var(--accent-success);opacity:.7;"></div><div style="width:28%;background:var(--accent-info-10);"></div><div style="width:10%;background:var(--status-negative);opacity:.7;"></div></div></div>
+                    <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--cutty-sark);width:80px;flex-shrink:0;">Refund</span><div style="flex:1;display:flex;height:8px;border-radius:4px;overflow:hidden;"><div style="width:48%;background:var(--accent-success);opacity:.7;"></div><div style="width:33%;background:var(--accent-info-10);"></div><div style="width:19%;background:var(--status-negative);opacity:.7;"></div></div></div>
+                    <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--cutty-sark);width:80px;flex-shrink:0;">Fee Waiver</span><div style="flex:1;display:flex;height:8px;border-radius:4px;overflow:hidden;"><div style="width:71%;background:var(--accent-success);opacity:.7;"></div><div style="width:22%;background:var(--accent-info-10);"></div><div style="width:7%;background:var(--status-negative);opacity:.7;"></div></div></div>
+                    <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--cutty-sark);width:80px;flex-shrink:0;">Promo</span><div style="flex:1;display:flex;height:8px;border-radius:4px;overflow:hidden;"><div style="width:55%;background:var(--accent-success);opacity:.7;"></div><div style="width:35%;background:var(--accent-info-10);"></div><div style="width:10%;background:var(--status-negative);opacity:.7;"></div></div></div>
+                    <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:10px;color:var(--cutty-sark);width:80px;flex-shrink:0;">Replacement</span><div style="flex:1;display:flex;height:8px;border-radius:4px;overflow:hidden;"><div style="width:40%;background:var(--accent-success);opacity:.7;"></div><div style="width:38%;background:var(--accent-info-10);"></div><div style="width:22%;background:var(--status-negative);opacity:.7;"></div></div></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -5525,7 +5595,7 @@
                     <div class="a-agent-row"><span class="a-agent-row-lbl">Mid-Shift</span><span class="a-agent-row-val">1h 5m</span></div>
                     <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:35%;background:var(--accent-info);height:100%;border-radius:2px;"></div></div>
                     <div style="display:flex;gap:16px;margin-top:10px;">
-                      <div><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">0.0</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT (Last 30m)</div></div>
+                      <div><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--cutty-sark);line-height:1;opacity:.4;">—</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT (Last 30m)</div><div style="font-size:9px;color:var(--cutty-sark);opacity:.5;">(insufficient data)</div></div>
                       <div><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">0.9</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT (Mid-Shift)</div></div>
                     </div>
                   </div>
@@ -5538,24 +5608,36 @@
                     <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:38%;background:#F97316;height:100%;border-radius:2px;"></div></div>
                     <div class="a-agent-row"><span class="a-agent-row-lbl">Normal</span><span class="a-agent-row-val">1h 6m</span></div>
                     <div class="a-agent-bar"><div class="a-agent-bar-fill" style="width:36%;background:var(--accent-info);height:100%;border-radius:2px;"></div></div>
-                    <div style="display:flex;gap:16px;margin-top:10px;">
-                      <div><div style="font-size:20px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">Δ 0m</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Resolution Gap</div></div>
-                      <div><div style="font-size:20px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">Δ 0.0</div><div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">CSAT Gap</div></div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+                      <span class="a-card-badge green">Stable</span>
+                      <span style="font-size:10px;color:var(--cutty-sark);opacity:.7;">No significant degradation under peak load</span>
                     </div>
+                    <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:6px;">1% slower during rush hours</div>
                   </div>
                 </div>
               </div>
               <div class="a-2col">
                 <div class="a-card" style="box-shadow:none;">
-                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Agent Empathy Index</div><div class="a-card-sub">Average empathy score across all agent interactions</div></div><span class="a-card-badge info">31.0%</span></div>
+                  <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Agent Empathy Index</div><div class="a-card-sub">Average empathy score across all agent interactions</div></div><span class="a-card-badge amber">31.0%</span></div>
                   <div class="a-card-body" style="display:flex;align-items:center;gap:16px;">
                     <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
                       <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="11"/>
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F97316" stroke-width="11" stroke-dasharray="43 158" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
-                      <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--dark-teal)">21</text>
-                      <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">%</text>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F97316" stroke-width="11" stroke-dasharray="62 139" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="13" font-weight="700" fill="var(--dark-teal)">31%</text>
+                      <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">empathy</text>
                     </svg>
-                    <div><div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">21.0%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Empathy Score<br/>Across all interactions</div></div>
+                    <div>
+                      <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">31.0%</div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;">Empathy Score</div>
+                      <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;">
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">5,723 empathetic interactions</div>
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">12,739 below threshold</div>
+                      </div>
+                      <div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;">
+                        <span class="a-card-badge alert" style="align-self:flex-start;">Needs Improvement</span>
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Industry benchmark: &gt;60%</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="a-card" style="box-shadow:none;">
@@ -5563,13 +5645,22 @@
                   <div class="a-card-body" style="display:flex;align-items:center;gap:16px;">
                     <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
                       <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info-10)" stroke-width="11"/>
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info)" stroke-width="11" stroke-dasharray="104 100" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info)" stroke-width="11" stroke-dasharray="104 97" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
                       <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="14" font-weight="700" fill="var(--accent-info-dark)">52</text>
                       <text x="40" y="48" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--accent-info-mid)" opacity=".6">/ 100</text>
                     </svg>
                     <div>
-                      <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">21.0%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">Empathy Score</div>
-                      <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;margin-top:6px;">38.5%</div><div style="font-size:11px;color:var(--cutty-sark);opacity:.7;">SOP Adherence</div>
+                      <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">52.0<span style="font-size:13px;font-weight:400;opacity:.5;"> / 100</span></div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:2px;">Tone Consistency</div>
+                      <div style="margin-top:8px;display:flex;flex-direction:column;gap:3px;">
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">9,600 consistent interactions</div>
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">8,862 tone variation detected</div>
+                      </div>
+                      <div style="margin-top:8px;display:flex;flex-direction:column;gap:4px;">
+                        <span style="font-size:11px;font-weight:600;color:var(--accent-warning);">Moderate</span>
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">Target: &gt;75%</div>
+                        <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;">18,462 interactions reviewed</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -5586,11 +5677,16 @@
                   <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
                     <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
                       <circle cx="40" cy="40" r="32" fill="none" stroke="var(--aqua-haze)" stroke-width="11"/>
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F59E0B" stroke-width="11" stroke-dasharray="80 120" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F59E0B" stroke-width="11" stroke-dasharray="80 121" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
                       <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="12" font-weight="700" fill="var(--dark-teal)">40.0%</text>
-                      <text x="40" y="49" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">SOP 38.5%</text>
+                      <text x="40" y="49" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">on-path</text>
                     </svg>
-                    <div><div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">40.0% <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">Path Completion</span></div><div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;margin-top:6px;">52.0% <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">Tone Consistency</span></div></div>
+                    <div>
+                      <div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">7,385 <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">on optimal path</span></div>
+                      <div style="font-size:18px;font-weight:700;font-family:var(--dark-teal);font-family:var(--font-display);color:var(--status-negative);line-height:1;margin-top:6px;">11,077 <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">deviated</span></div>
+                      <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:6px;">Target: 65%</div>
+                      <div style="font-size:10px;color:var(--accent-warning);margin-top:3px;">Currently 25pp below target</div>
+                    </div>
                   </div>
                 </div>
                 <div class="a-card" style="box-shadow:none;">
@@ -5598,43 +5694,51 @@
                   <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
                     <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0;">
                       <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info-10)" stroke-width="11"/>
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info)" stroke-width="11" stroke-dasharray="77 123" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+                      <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info)" stroke-width="11" stroke-dasharray="77 124" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
                       <text x="40" y="37" text-anchor="middle" font-family="var(--font-display)" font-size="13" font-weight="700" fill="var(--accent-info-dark)">38.5</text>
                       <text x="40" y="49" text-anchor="middle" font-family="var(--font-body)" font-size="7" fill="var(--cutty-sark)" opacity=".6">%</text>
                     </svg>
-                    <div><div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">40.0% <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">Path Completion</span></div><div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;margin-top:6px;">52.0% <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">Tone Consistency</span></div></div>
+                    <div>
+                      <div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--dark-teal);line-height:1;">7,108 <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">compliant tickets</span></div>
+                      <div style="font-size:18px;font-weight:700;font-family:var(--font-display);color:var(--status-negative);line-height:1;margin-top:6px;">11,354 <span style="font-size:11px;opacity:.6;font-family:var(--font-body);font-weight:400;">non-compliant</span></div>
+                      <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:6px;">Target: 75%</div>
+                      <div style="font-size:10px;color:var(--accent-warning);margin-top:3px;">Currently 36.5pp below target</div>
+                      <div style="font-size:10px;color:var(--cutty-sark);opacity:.6;margin-top:4px;">Common violations: Hold SOP, Escalation SOP</div>
+                    </div>
                   </div>
                 </div>
                 <div class="a-card" style="box-shadow:none;">
                   <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Multi-Channel Switch Rate</div><div class="a-card-sub">Customers switching channels for same issue</div></div><span class="a-card-badge info">0.0%</span></div>
                   <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
-                    <svg width="60" height="60" viewBox="0 0 60 60" style="flex-shrink:0;">
-                      <circle cx="30" cy="30" r="24" fill="none" stroke="var(--aqua-haze)" stroke-width="9"/>
-                      <text x="30" y="27" text-anchor="middle" font-family="var(--font-display)" font-size="10" font-weight="700" fill="var(--dark-teal)">0</text>
-                      <text x="30" y="38" text-anchor="middle" font-family="var(--font-body)" font-size="6" fill="var(--cutty-sark)" opacity=".6">%</text>
-                    </svg>
-                    <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.4;">Percentage of customers who switched channels for the same issue within 2 hours.</div>
+                    <div style="flex-shrink:0;width:60px;height:60px;border-radius:50%;border:9px solid var(--aqua-haze);display:flex;align-items:center;justify-content:center;position:relative;">
+                      <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--dark-teal);">—</span>
+                    </div>
+                    <div>
+                      <div style="font-size:20px;font-weight:700;font-family:var(--font-display);color:var(--accent-success);line-height:1;">0.0%</div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;line-height:1.4;">No channel switching detected in this period.</div>
+                    </div>
                   </div>
                 </div>
                 <div class="a-card" style="box-shadow:none;">
                   <div class="a-card-head"><div class="a-card-head-left"><div class="a-card-title" style="font-size:13px;">Follow-Up Action Rate</div><div class="a-card-sub">Tickets ending with scheduled follow-ups</div></div><span class="a-card-badge info">0.0%</span></div>
                   <div class="a-card-body" style="display:flex;align-items:center;gap:12px;">
-                    <svg width="60" height="60" viewBox="0 0 60 60" style="flex-shrink:0;">
-                      <circle cx="30" cy="30" r="24" fill="none" stroke="var(--aqua-haze)" stroke-width="9"/>
-                      <text x="30" y="27" text-anchor="middle" font-family="var(--font-display)" font-size="10" font-weight="700" fill="var(--dark-teal)">0</text>
-                      <text x="30" y="38" text-anchor="middle" font-family="var(--font-body)" font-size="6" fill="var(--cutty-sark)" opacity=".6">%</text>
-                    </svg>
-                    <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;line-height:1.4;">Tickets that concluded with a scheduled follow-up action.</div>
+                    <div style="flex-shrink:0;width:60px;height:60px;border-radius:50%;border:9px solid var(--aqua-haze);display:flex;align-items:center;justify-content:center;">
+                      <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--dark-teal);">—</span>
+                    </div>
+                    <div>
+                      <div style="font-size:20px;font-weight:700;font-family:var(--font-display);color:var(--accent-success);line-height:1;">0.0%</div>
+                      <div style="font-size:11px;color:var(--cutty-sark);opacity:.7;margin-top:4px;line-height:1.4;">No follow-up actions scheduled in this period.</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div><!-- /rpa-pane-overview -->
-        <div class="a-tab-content" id="rpa-pane-orders"><div class="a-placeholder"><div class="a-placeholder-icon">📦</div><div class="a-placeholder-title">Orders &amp; Order Management</div><div class="a-placeholder-sub">Order resolution analytics coming soon.</div></div></div>
-        <div class="a-tab-content" id="rpa-pane-delivery"><div class="a-placeholder"><div class="a-placeholder-icon">🚚</div><div class="a-placeholder-title">Delivery, Tracking &amp; Fulfillment</div><div class="a-placeholder-sub">Delivery path analytics coming soon.</div></div></div>
-        <div class="a-tab-content" id="rpa-pane-returns"><div class="a-placeholder"><div class="a-placeholder-icon">↩️</div><div class="a-placeholder-title">Returns, Replacements &amp; Refunds</div><div class="a-placeholder-sub">Returns analytics coming soon.</div></div></div>
-        <div class="a-tab-content" id="rpa-pane-payments"><div class="a-placeholder"><div class="a-placeholder-icon">💳</div><div class="a-placeholder-title">Payments, Billing &amp; Wallet Issues</div><div class="a-placeholder-sub">Payments analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-orders"><div class="a-placeholder"><div class="a-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/><path d="M12 12v4m-2-2h4"/></svg></div><div class="a-placeholder-title">Orders &amp; Order Management</div><div class="a-placeholder-sub">Order resolution analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-delivery"><div class="a-placeholder"><div class="a-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="a-placeholder-title">Delivery, Tracking &amp; Fulfilment</div><div class="a-placeholder-sub">Delivery path analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-returns"><div class="a-placeholder"><div class="a-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l-4-4 4-4"/><path d="M5 10h11a4 4 0 010 8h-1"/></svg></div><div class="a-placeholder-title">Returns, Replacements &amp; Refunds</div><div class="a-placeholder-sub">Returns analytics coming soon.</div></div></div>
+        <div class="a-tab-content" id="rpa-pane-payments"><div class="a-placeholder"><div class="a-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></div><div class="a-placeholder-title">Payments, Billing &amp; Wallet Issues</div><div class="a-placeholder-sub">Payments analytics coming soon.</div></div></div>
       </div>
     </div><!-- /analytics-rpa -->
 
@@ -9523,6 +9627,102 @@ function setCiTab(tab) {
   document.querySelectorAll('[id^="ci-pane-"]').forEach(p => p.classList.remove('active'));
   document.getElementById('ci-tab-' + tab)?.classList.add('active');
   document.getElementById('ci-pane-' + tab)?.classList.add('active');
+}
+
+/* ── Intent Analysis interactive tabs ───────────────────────────── */
+const INTENT_DATA = {
+  cs: {
+    label: 'Customer Support & General Assistance',
+    color: 'var(--accent-info)', bgColor: 'var(--accent-info-10)', textColor: 'var(--blue-700)',
+    count: '6,946', total: '18,462',
+    positivePath: 'M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18',
+    neutralPath:  'M0,70 C50,68 100,65 150,62 C200,59 250,63 300,60 C350,57 400,52 450,55 C500,58 550,54 600,50 C650,46 700,48 700,48',
+    fillPath:     'M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18 L700,90 L0,90 Z',
+  },
+  orders: {
+    label: 'Orders & Order Management',
+    color: '#8B5CF6', bgColor: '#EDE9FE', textColor: '#6D28D9',
+    count: '5,063', total: '18,462',
+    positivePath: 'M0,65 C50,60 100,55 150,50 C200,45 250,50 300,47 C350,44 400,35 450,30 C500,25 550,32 600,28 C650,24 700,26 700,26',
+    neutralPath:  'M0,72 C50,70 100,68 150,65 C200,62 250,65 300,63 C350,61 400,56 450,58 C500,60 550,57 600,54 C650,51 700,52 700,52',
+    fillPath:     'M0,65 C50,60 100,55 150,50 C200,45 250,50 300,47 C350,44 400,35 450,30 C500,25 550,32 600,28 C650,24 700,26 700,26 L700,90 L0,90 Z',
+  },
+  delivery: {
+    label: 'Delivery, Tracking & Fulfilment',
+    color: '#3B82F6', bgColor: '#DBEAFE', textColor: '#1D4ED8',
+    count: '2,392', total: '18,462',
+    positivePath: 'M0,55 C50,52 100,48 150,44 C200,40 250,43 300,40 C350,37 400,30 450,27 C500,24 550,30 600,26 C650,22 700,24 700,24',
+    neutralPath:  'M0,68 C50,66 100,64 150,61 C200,58 250,62 300,59 C350,56 400,51 450,54 C500,57 550,53 600,49 C650,45 700,47 700,47',
+    fillPath:     'M0,55 C50,52 100,48 150,44 C200,40 250,43 300,40 C350,37 400,30 450,27 C500,24 550,30 600,26 C650,22 700,24 700,24 L700,90 L0,90 Z',
+  },
+  prescription: {
+    label: 'Prescription & Product Queries',
+    color: '#F59E0B', bgColor: '#FEF3C7', textColor: '#B45309',
+    count: '2,259', total: '18,462',
+    positivePath: 'M0,62 C50,59 100,56 150,52 C200,48 250,53 300,50 C350,47 400,40 450,36 C500,32 550,38 600,34 C650,30 700,32 700,32',
+    neutralPath:  'M0,71 C50,69 100,67 150,64 C200,61 250,65 300,62 C350,59 400,54 450,57 C500,60 550,56 600,52 C650,48 700,50 700,50',
+    fillPath:     'M0,62 C50,59 100,56 150,52 C200,48 250,53 300,50 C350,47 400,40 450,36 C500,32 550,38 600,34 C650,30 700,32 700,32 L700,90 L0,90 Z',
+  },
+  others: {
+    label: 'Others',
+    color: '#10B981', bgColor: '#D1FAE5', textColor: '#065F46',
+    count: '942', total: '18,462',
+    positivePath: 'M0,68 C50,65 100,62 150,58 C200,54 250,58 300,56 C350,54 400,47 450,44 C500,41 550,46 600,42 C650,38 700,40 700,40',
+    neutralPath:  'M0,74 C50,72 100,70 150,67 C200,64 250,67 300,65 C350,63 400,58 450,61 C500,64 550,60 600,56 C650,52 700,54 700,54',
+    fillPath:     'M0,68 C50,65 100,62 150,58 C200,54 250,58 300,56 C350,54 400,47 450,44 C500,41 550,46 600,42 C650,38 700,40 700,40 L700,90 L0,90 Z',
+  },
+};
+
+const INTENT_SEGS = {
+  cs:           { dasharray: '131 196', dashoffset: '0'    },
+  orders:       { dasharray: '100 227', dashoffset: '-131' },
+  delivery:     { dasharray: '46 281',  dashoffset: '-231' },
+  prescription: { dasharray: '43 284',  dashoffset: '-277' },
+  others:       { dasharray: '18 309',  dashoffset: '-320' },
+};
+
+let _activeIntent = 'cs';
+
+function setIntentTab(key) {
+  if (!INTENT_DATA[key]) return;
+  _activeIntent = key;
+  const d = INTENT_DATA[key];
+
+  // 1. Update badge
+  const btn = document.getElementById('intent-cat-btn');
+  btn.textContent = d.label;
+  btn.style.background = d.bgColor;
+  btn.style.color = d.textColor;
+
+  // 2. Highlight active legend row
+  document.querySelectorAll('.intent-row').forEach(r => r.classList.remove('active'));
+  const activeRow = document.querySelector('.intent-row[data-intent="' + key + '"]');
+  if (activeRow) activeRow.classList.add('active');
+
+  // 3. Update donut segments — boost active, dim others
+  Object.keys(INTENT_SEGS).forEach(k => {
+    const el = document.getElementById('intent-seg-' + k);
+    if (!el) return;
+    if (k === key) {
+      el.setAttribute('stroke-width', '22');
+      el.style.opacity = '1';
+    } else {
+      el.setAttribute('stroke-width', '18');
+      el.style.opacity = '0.35';
+    }
+  });
+
+  // 4. Update centre count
+  const countEl = document.getElementById('intent-total-count');
+  if (countEl) countEl.textContent = d.count;
+  const labelEl = document.getElementById('intent-total-label');
+  if (labelEl) labelEl.textContent = 'Tickets';
+
+  // 5. Update sentiment trend paths
+  document.getElementById('intent-sent-fill')?.setAttribute('d', d.fillPath);
+  const posEl = document.getElementById('intent-sent-pos');
+  if (posEl) { posEl.setAttribute('d', d.positivePath); posEl.setAttribute('stroke', d.color); }
+  document.getElementById('intent-sent-neutral')?.setAttribute('d', d.neutralPath);
 }
 
 function setRpaTab(tab) {
