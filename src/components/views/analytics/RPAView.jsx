@@ -122,11 +122,11 @@ export default function RPAView() {
               <div className="a-card">
                 <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Interaction Efficiency</div><div className="a-card-sub">Combined metric of speed, effort, and resolution quality</div></div><span className="a-card-badge green">High Efficiency</span></div>
                 <div className="a-card-body">
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 700, color: 'var(--dark-teal)', marginBottom: 8 }}>1,561</div>
-                  <div style={{ display: 'flex', gap: 10 }}>
-                    <div style={{ flex: 1, padding: 10, border: '1px solid var(--nebula)', borderRadius: 8 }}><div style={{ fontSize: 16, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>1h 6m</div><div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginTop: 4 }}>Speed</div></div>
-                    <div style={{ flex: 1, padding: 10, border: '1px solid var(--nebula)', borderRadius: 8 }}><div style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent-success)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>0.8/5</div><div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginTop: 4 }}>Cust. Effort</div></div>
-                    <div style={{ flex: 1, padding: 10, border: '1px solid var(--nebula)', borderRadius: 8 }}><div style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent-success)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>97.6%</div><div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginTop: 4 }}>FCR</div></div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 700, color: 'var(--dark-teal)', marginBottom: 12 }}>1,561</div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)' }}><div style={{ fontSize: 16, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>1h 6m</div><div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginTop: 6 }}>Speed</div></div>
+                    <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)' }}><div style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent-success)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>0.8/5</div><div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginTop: 6 }}>Cust. Effort</div></div>
+                    <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)' }}><div style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent-success)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>97.6%</div><div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginTop: 6 }}>FCR</div></div>
                   </div>
                 </div>
               </div>
@@ -138,24 +138,24 @@ export default function RPAView() {
               <div className="a-card-body">
                 <div className="a-2col">
                   <div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 8 }}>Sentiment Distribution</div>
-                    <div style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
-                      <div style={{ flex: 1, padding: 10, border: '1px solid var(--nebula)', borderRadius: 8, background: 'rgba(16,185,129,0.05)', borderTop: '3px solid var(--accent-success)' }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 12 }}>Sentiment Distribution</div>
+                    <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+                      <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)', background: 'rgba(16,185,129,0.05)', borderTop: '3px solid var(--accent-success)' }}>
                         <div style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, color: 'var(--accent-success)', lineHeight: 1 }}>15.32%</div>
-                        <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .7, marginTop: 4 }}>Improved<br/>2,928 cases</div>
+                        <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .7, marginTop: 6 }}>Improved<br/>2,928 cases</div>
                       </div>
-                      <div style={{ flex: 1, padding: 10, border: '1px solid var(--nebula)', borderRadius: 8, borderTop: '3px solid var(--cutty-sark)' }}>
+                      <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)', borderTop: '3px solid var(--cutty-sark)' }}>
                         <div style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, color: 'var(--cutty-sark)', lineHeight: 1 }}>76.83%</div>
-                        <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .7, marginTop: 4 }}>No Change<br/>14,184 cases</div>
+                        <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .7, marginTop: 6 }}>No Change<br/>14,184 cases</div>
                       </div>
-                      <div style={{ flex: 1, padding: 10, border: '1px solid var(--nebula)', borderRadius: 8, background: 'rgba(220,38,38,0.04)', borderTop: '3px solid var(--status-negative)' }}>
+                      <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)', background: 'rgba(220,38,38,0.04)', borderTop: '3px solid var(--status-negative)' }}>
                         <div style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, color: 'var(--status-negative)', lineHeight: 1 }}>7.85%</div>
-                        <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .7, marginTop: 4 }}>Worsened<br/>1,450 cases</div>
+                        <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .7, marginTop: 6 }}>Worsened<br/>1,450 cases</div>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 8 }}>CX Impact Score</div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 12 }}>CX Impact Score</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                       <svg width="80" height="80" viewBox="0 0 80 80">
                         <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info-10)" strokeWidth="12"/>
@@ -179,8 +179,8 @@ export default function RPAView() {
             <div className="a-card">
               <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Phase-Specific Quality Metrics</div></div></div>
               <div className="a-card-body">
-                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--cutty-sark)', letterSpacing: '.06em', opacity: .7, marginBottom: 8, textTransform: 'uppercase' }}>Probing Phase</div>
-                <div className="a-card" style={{ marginBottom: 14 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--cutty-sark)', letterSpacing: '.06em', opacity: .7, marginBottom: 12, textTransform: 'uppercase' }}>Probing Phase</div>
+                <div className="a-card" style={{ marginBottom: 20 }}>
                   <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Probing Quality</div><div className="a-card-sub">Over/under-probing, repeated info requests, re-explanations, intent match</div></div><span className="a-card-badge amber">46.7% match</span></div>
                   <div className="a-card-body">
                     <div className="a-probe-grid">
@@ -202,7 +202,7 @@ export default function RPAView() {
                     </div>
                   </div>
                 </div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--cutty-sark)', letterSpacing: '.06em', opacity: .7, marginBottom: 8, textTransform: 'uppercase' }}>Hold Phase</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--cutty-sark)', letterSpacing: '.06em', opacity: .7, marginBottom: 12, textTransform: 'uppercase' }}>Hold Phase</div>
                 <div className="a-card">
                   <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Hold Analysis</div><div className="a-card-sub">Tickets with holds, dead air incidents, hold time breaches, delay explanations</div></div><span className="a-card-badge amber">20.7% with holds</span></div>
                   <div className="a-card-body">
@@ -231,7 +231,7 @@ export default function RPAView() {
               <div className="a-card-body">
                 <div className="a-2col">
                   <div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 8 }}>Escalations <span style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--status-negative)', lineHeight: 1 }}> 444 </span><span style={{ fontSize: 11, fontWeight: 400, opacity: .6 }}>total</span></div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 12 }}>Escalations <span style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--status-negative)', lineHeight: 1 }}> 444 </span><span style={{ fontSize: 11, fontWeight: 400, opacity: .6 }}>total</span></div>
                     <svg width="100%" height="84" viewBox="0 0 260 84" preserveAspectRatio="none">
                       <defs><linearGradient id="esc-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#DC2626" stopOpacity=".2"/><stop offset="100%" stopColor="#DC2626" stopOpacity="0"/></linearGradient></defs>
                       <line x1="30" y1="10" x2="255" y2="10" stroke="var(--nebula)" strokeWidth=".5" opacity=".5"/>

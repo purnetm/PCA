@@ -183,12 +183,12 @@
 }
 .a-card-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 20px 10px;
+  padding: 20px 20px 12px;
 }
 .a-card-head-left { display: flex; flex-direction: column; gap: 4px; }
 .a-card-title { font-size: var(--font-md); font-weight: var(--weight-semibold); color: var(--dark-teal); }
 .a-card-sub { font-size: var(--font-sm); color: var(--cutty-sark); opacity: var(--opacity-muted); line-height: 1.55; }
-.a-card-body { padding: 6px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+.a-card-body { padding: 12px 20px 20px; flex: 1; display: flex; flex-direction: column; }
 .a-card-badge {
   font-size: 11px; font-weight: var(--weight-semibold); padding: 3px 9px;
   border-radius: 10px; white-space: nowrap; flex-shrink: 0;
@@ -499,8 +499,42 @@
   /* Closing transition (CSS uses OLD state when .open is removed): ease-in-out-cubic 200ms — close is snappier */
   transition: grid-template-rows 200ms cubic-bezier(.645, .045, .355, 1);
 }
-/* Panel is the direct grid child — overflow:hidden + min-height:0 required so 0fr fully collapses */
-.cmg-detail-panel { overflow: hidden; min-height: 0; background: var(--surface); }
+/* Full-width detail row — spans all 3 grid columns, animates open/close */
+.cmg-detail-row {
+  grid-column: 1 / -1;
+  align-self: start;
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  background: rgba(77,182,172,0.025);
+  border-top: 1px solid var(--aqua-haze);
+  transition: grid-template-rows 240ms cubic-bezier(.77, 0, .175, 1);
+}
+.cmg-detail-row.open {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 200ms cubic-bezier(.645, .045, .355, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmg-detail-row { transition: none; }
+}
+/* Inner wrapper — min-height:0 allows the grid row to collapse to 0fr */
+.cmg-detail-row-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(.165, .84, .44, 1) 40ms, padding 240ms cubic-bezier(.77, 0, .175, 1);
+}
+.cmg-detail-row.open .cmg-detail-row-inner {
+  padding: 20px;
+  opacity: 1;
+  transition: opacity 120ms ease, padding 200ms cubic-bezier(.645, .045, .355, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmg-detail-row-inner { transition: none; }
+}
+/* Panel content wrapper — no animation, just content styling */
+.cmg-detail-panel { background: transparent; }
 /* Inner wrapper carries visual padding/border and fades in after the row starts opening */
 .cmg-detail-inner {
   padding: 18px 20px; border-top: 1px solid var(--aqua-haze);
@@ -600,10 +634,10 @@
 .cmg-health-card.active .cmg-health-link { font-weight: var(--weight-bold); }
 
 /* Detail panel body */
-.cmg-detail-body { font-size: var(--font-sm); }
-.cmg-detail-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.cmg-detail-table th { text-align: left; padding: 8px 10px; background: var(--aqua-haze); font-weight: var(--weight-semibold); color: var(--cutty-sark); border-radius: 4px; }
-.cmg-detail-table td { padding: 8px 10px; border-bottom: 1px solid var(--aqua-haze); color: var(--dark-teal); line-height: 1.4; transition: background .12s; }
+.cmg-detail-body { font-size: var(--font-sm); overflow-x: auto; }
+.cmg-detail-table { width: 100%; min-width: 280px; border-collapse: collapse; font-size: 12px; }
+.cmg-detail-table th { text-align: left; padding: 8px 10px; background: var(--aqua-haze); font-weight: var(--weight-semibold); color: var(--cutty-sark); border-radius: 4px; white-space: nowrap; }
+.cmg-detail-table td { padding: 8px 10px; border-bottom: 1px solid var(--aqua-haze); color: var(--dark-teal); line-height: 1.4; transition: background .12s; white-space: nowrap; }
 .cmg-detail-table tr:last-child td { border-bottom: none; }
 .cmg-detail-table tbody tr:hover td { background: rgba(77,182,172,0.06); }
 

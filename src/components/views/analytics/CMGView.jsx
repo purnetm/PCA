@@ -10,13 +10,13 @@ const TABS = [
 export default function CMGView() {
   const [activeTab, setActiveTab] = useState('a')
   const [expandedPanes, setExpandedPanes] = useState(new Set())
-  const [expandedCards, setExpandedCards] = useState(new Set())
+  const [expandedCard, setExpandedCard] = useState(null)
 
   function toggleMore(id) {
     setExpandedPanes(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
   }
   function toggleCard(id) {
-    setExpandedCards(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
+    setExpandedCard(prev => prev === id ? null : id)
   }
 
   return (
@@ -46,7 +46,7 @@ export default function CMGView() {
                 id={`cmg-hcard-${t.id}`}
                 role="tab"
                 aria-selected={activeTab === t.id}
-                onClick={() => setActiveTab(t.id)}>
+                onClick={() => { setActiveTab(t.id); setExpandedCard(null); }}>
                 {t.label}
               </button>
             ))}
@@ -89,24 +89,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-a1" style={{ display: expandedCards.has('a1') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Repeat Issue Rate — Drill-down</div>
-                  <div className="cmg-detail-body">
-                    <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Ranked by repeat frequency · Period-over-period trend</div>
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Intent</th><th>Repeat %</th><th>vs Last</th><th>Signal</th></tr></thead>
-                      <tbody>
-                        <tr><td>Refund request</td><td>38%</td><td style={{ color: '#e07a2a' }}>&#9650; +5pp</td><td><span className="cmg-card-badge red" style={{ fontSize: 10 }}>High</span></td></tr>
-                        <tr><td>Order status</td><td>27%</td><td style={{ color: '#e07a2a' }}>&#9650; +2pp</td><td><span className="cmg-card-badge amber" style={{ fontSize: 10 }}>Med</span></td></tr>
-                        <tr><td>Delivery delay</td><td>19%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge amber" style={{ fontSize: 10 }}>Med</span></td></tr>
-                        <tr><td>Product defect</td><td>11%</td><td style={{ color: '#27ae7a' }}>&#9660; -1pp</td><td><span className="cmg-card-badge green" style={{ fontSize: 10 }}>Low</span></td></tr>
-                        <tr><td>Account issue</td><td>5%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge green" style={{ fontSize: 10 }}>Low</span></td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>A high repeat issue rate at base level signals systemic product or service failure, not a support failure.</div>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>{expandedCard === 'a1' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -134,23 +117,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e07a2a', fontWeight: 600 }}>19% High or Critical — monitor closely</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-a2" style={{ display: expandedCards.has('a2') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Issue Gravity Score — Drill-down</div>
-                  <div className="cmg-detail-body">
-                    <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Breakdown by intent and channel</div>
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Intent</th><th>Low</th><th>Med</th><th>High</th><th>Critical</th></tr></thead>
-                      <tbody>
-                        <tr><td>Refund request</td><td>22%</td><td>31%</td><td>34%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>13%</td></tr>
-                        <tr><td>Order status</td><td>61%</td><td>29%</td><td>8%</td><td>2%</td></tr>
-                        <tr><td>Delivery delay</td><td>38%</td><td>40%</td><td>18%</td><td>4%</td></tr>
-                        <tr><td>Product defect</td><td>29%</td><td>35%</td><td>27%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>9%</td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>A refund request for ₹200 and ₹20,000 are both "refund" intents — gravity captures the real impact difference.</div>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>{expandedCard === 'a2' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -178,22 +145,67 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>Details ›</button>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>{expandedCard === 'a3' ? 'Hide' : 'Details ›'}</button>
                 </div>
-                <div className="cmg-detail-panel" id="cmg-detail-a3" style={{ display: expandedCards.has('a3') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Customer Loyalty Erosion — Drill-down</div>
-                  <div className="cmg-detail-body">
-                    <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Band movement this period · by customer segment</div>
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Segment</th><th>High Erosion</th><th>Movement</th></tr></thead>
-                      <tbody>
-                        <tr><td>Premium</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>18%</td><td style={{ color: '#e07a2a' }}>&#9650; +4.1pp</td></tr>
-                        <tr><td>Standard</td><td>11%</td><td style={{ color: '#e07a2a' }}>&#9650; +2.8pp</td></tr>
-                        <tr><td>New (&lt;90 days)</td><td>8%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>Premium segment seeing highest erosion — warrants priority review of high-value customer experience.</div>
+              </div>
+
+              {/* Full-width detail row for pane A */}
+              <div className={`cmg-detail-row${['a1','a2','a3'].includes(expandedCard) ? ' open' : ''}`}>
+                <div className="cmg-detail-row-inner">
+                {expandedCard === 'a1' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-a1">
+                    <div className="cmg-detail-title">Repeat Issue Rate — Drill-down</div>
+                    <div className="cmg-detail-body">
+                      <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Ranked by repeat frequency · Period-over-period trend</div>
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Intent</th><th>Repeat %</th><th>vs Last</th><th>Signal</th></tr></thead>
+                        <tbody>
+                          <tr><td>Refund request</td><td>38%</td><td style={{ color: '#e07a2a' }}>&#9650; +5pp</td><td><span className="cmg-card-badge red" style={{ fontSize: 10 }}>High</span></td></tr>
+                          <tr><td>Order status</td><td>27%</td><td style={{ color: '#e07a2a' }}>&#9650; +2pp</td><td><span className="cmg-card-badge amber" style={{ fontSize: 10 }}>Med</span></td></tr>
+                          <tr><td>Delivery delay</td><td>19%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge amber" style={{ fontSize: 10 }}>Med</span></td></tr>
+                          <tr><td>Product defect</td><td>11%</td><td style={{ color: '#27ae7a' }}>&#9660; -1pp</td><td><span className="cmg-card-badge green" style={{ fontSize: 10 }}>Low</span></td></tr>
+                          <tr><td>Account issue</td><td>5%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge green" style={{ fontSize: 10 }}>Low</span></td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>A high repeat issue rate at base level signals systemic product or service failure, not a support failure.</div>
+                    </div>
                   </div>
+                )}
+                {expandedCard === 'a2' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-a2">
+                    <div className="cmg-detail-title">Issue Gravity Score — Drill-down</div>
+                    <div className="cmg-detail-body">
+                      <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Breakdown by intent and channel</div>
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Intent</th><th>Low</th><th>Med</th><th>High</th><th>Critical</th></tr></thead>
+                        <tbody>
+                          <tr><td>Refund request</td><td>22%</td><td>31%</td><td>34%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>13%</td></tr>
+                          <tr><td>Order status</td><td>61%</td><td>29%</td><td>8%</td><td>2%</td></tr>
+                          <tr><td>Delivery delay</td><td>38%</td><td>40%</td><td>18%</td><td>4%</td></tr>
+                          <tr><td>Product defect</td><td>29%</td><td>35%</td><td>27%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>9%</td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>A refund request for ₹200 and ₹20,000 are both "refund" intents — gravity captures the real impact difference.</div>
+                    </div>
+                  </div>
+                )}
+                {expandedCard === 'a3' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-a3">
+                    <div className="cmg-detail-title">Customer Loyalty Erosion — Drill-down</div>
+                    <div className="cmg-detail-body">
+                      <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Band movement this period · by customer segment</div>
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Segment</th><th>High Erosion</th><th>Movement</th></tr></thead>
+                        <tbody>
+                          <tr><td>Premium</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>18%</td><td style={{ color: '#e07a2a' }}>&#9650; +4.1pp</td></tr>
+                          <tr><td>Standard</td><td>11%</td><td style={{ color: '#e07a2a' }}>&#9650; +2.8pp</td></tr>
+                          <tr><td>New (&lt;90 days)</td><td>8%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>Premium segment seeing highest erosion — warrants priority review of high-value customer experience.</div>
+                    </div>
+                  </div>
+                )}
                 </div>
               </div>
 
@@ -346,21 +358,7 @@ export default function CMGView() {
                   <div className="cmg-stat-compare" style={{ marginTop: 8 }}><span className="cmg-stat-arrow warn">&#9650;</span> Negative up from 16.4% last period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-b1" style={{ display: expandedCards.has('b1') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Sentiment Distribution — Drill-down</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Channel</th><th>Positive</th><th>Neutral</th><th>Negative</th></tr></thead>
-                      <tbody>
-                        <tr><td>Voice</td><td>39%</td><td>35%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>26%</td></tr>
-                        <tr><td>Chat</td><td>45%</td><td>39%</td><td>16%</td></tr>
-                        <tr><td>Email</td><td>44%</td><td>40%</td><td>16%</td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>Voice channel shows highest negative sentiment — consider call handling experience review.</div>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>{expandedCard === 'b1' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -390,21 +388,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e03a2a', fontWeight: 600 }}>Distressed + Irate = 23% of base</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-b2" style={{ display: expandedCards.has('b2') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Emotional Intensity — Drill-down by Intent</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Intent</th><th>Distressed</th><th>Irate</th><th>Combined</th></tr></thead>
-                      <tbody>
-                        <tr><td>Refund request</td><td>21%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>14%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>35%</td></tr>
-                        <tr><td>Delivery delay</td><td>18%</td><td>9%</td><td>27%</td></tr>
-                        <tr><td>Product defect</td><td>16%</td><td>8%</td><td>24%</td></tr>
-                        <tr><td>Order status</td><td>8%</td><td>3%</td><td>11%</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>{expandedCard === 'b2' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -440,23 +424,63 @@ export default function CMGView() {
                   <div style={{ marginTop: 6, fontSize: 10, color: 'var(--text-muted)' }}>Freq = occurrences · Drop = avg sentiment score change</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>Details ›</button>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>{expandedCard === 'b3' ? 'Hide' : 'Details ›'}</button>
                 </div>
-                <div className="cmg-detail-panel" id="cmg-detail-b3" style={{ display: expandedCards.has('b3') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Frustration Triggers — Full Ranked List</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>#</th><th>Trigger phrase</th><th>Occurrences</th><th>Avg sentiment drop</th></tr></thead>
-                      <tbody>
-                        <tr><td>1</td><td>"your policy states"</td><td>1,243</td><td style={{ color: '#e03a2a' }}>-0.38</td></tr>
-                        <tr><td>2</td><td>"we can't process that"</td><td>987</td><td style={{ color: '#e03a2a' }}>-0.31</td></tr>
-                        <tr><td>3</td><td>"please hold for a moment"</td><td>756</td><td style={{ color: '#e07a2a' }}>-0.22</td></tr>
-                        <tr><td>4</td><td>"I understand your frustration"</td><td>612</td><td style={{ color: '#e07a2a' }}>-0.19</td></tr>
-                        <tr><td>5</td><td>"that's outside our scope"</td><td>498</td><td style={{ color: '#e03a2a' }}>-0.34</td></tr>
-                        <tr><td>6</td><td>"let me transfer you"</td><td>441</td><td style={{ color: '#e07a2a' }}>-0.28</td></tr>
-                      </tbody>
-                    </table>
+              </div>
+
+              {/* Full-width detail row for pane B */}
+              <div className={`cmg-detail-row${['b1','b2','b3'].includes(expandedCard) ? ' open' : ''}`}>
+                <div className="cmg-detail-row-inner">
+                {expandedCard === 'b1' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-b1">
+                    <div className="cmg-detail-title">Sentiment Distribution — Drill-down</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Channel</th><th>Positive</th><th>Neutral</th><th>Negative</th></tr></thead>
+                        <tbody>
+                          <tr><td>Voice</td><td>39%</td><td>35%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>26%</td></tr>
+                          <tr><td>Chat</td><td>45%</td><td>39%</td><td>16%</td></tr>
+                          <tr><td>Email</td><td>44%</td><td>40%</td><td>16%</td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 10, fontSize: 11, color: 'var(--text-muted)' }}>Voice channel shows highest negative sentiment — consider call handling experience review.</div>
+                    </div>
                   </div>
+                )}
+                {expandedCard === 'b2' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-b2">
+                    <div className="cmg-detail-title">Emotional Intensity — Drill-down by Intent</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Intent</th><th>Distressed</th><th>Irate</th><th>Combined</th></tr></thead>
+                        <tbody>
+                          <tr><td>Refund request</td><td>21%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>14%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>35%</td></tr>
+                          <tr><td>Delivery delay</td><td>18%</td><td>9%</td><td>27%</td></tr>
+                          <tr><td>Product defect</td><td>16%</td><td>8%</td><td>24%</td></tr>
+                          <tr><td>Order status</td><td>8%</td><td>3%</td><td>11%</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+                {expandedCard === 'b3' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-b3">
+                    <div className="cmg-detail-title">Frustration Triggers — Full Ranked List</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>#</th><th>Trigger phrase</th><th>Occurrences</th><th>Avg sentiment drop</th></tr></thead>
+                        <tbody>
+                          <tr><td>1</td><td>"your policy states"</td><td>1,243</td><td style={{ color: '#e03a2a' }}>-0.38</td></tr>
+                          <tr><td>2</td><td>"we can't process that"</td><td>987</td><td style={{ color: '#e03a2a' }}>-0.31</td></tr>
+                          <tr><td>3</td><td>"please hold for a moment"</td><td>756</td><td style={{ color: '#e07a2a' }}>-0.22</td></tr>
+                          <tr><td>4</td><td>"I understand your frustration"</td><td>612</td><td style={{ color: '#e07a2a' }}>-0.19</td></tr>
+                          <tr><td>5</td><td>"that's outside our scope"</td><td>498</td><td style={{ color: '#e03a2a' }}>-0.34</td></tr>
+                          <tr><td>6</td><td>"let me transfer you"</td><td>441</td><td style={{ color: '#e07a2a' }}>-0.28</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
                 </div>
               </div>
 
@@ -576,21 +600,7 @@ export default function CMGView() {
                   <div className="cmg-stat-compare" style={{ marginTop: 10 }}><span className="cmg-stat-arrow warn">&#9650;</span> High band grew by 89 customers this period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-c1" style={{ display: expandedCards.has('c1') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Churn Risk — Drill-down by Segment &amp; Tenure</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Segment</th><th>High Risk</th><th>Period change</th></tr></thead>
-                      <tbody>
-                        <tr><td>Premium</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>19% (156)</td><td style={{ color: '#e07a2a' }}>&#9650; +31</td></tr>
-                        <tr><td>Standard</td><td>11% (524)</td><td style={{ color: '#e07a2a' }}>&#9650; +47</td></tr>
-                        <tr><td>New (&lt;90d)</td><td>8% (167)</td><td style={{ color: '#e07a2a' }}>&#9650; +11</td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Band movement: 127 customers escalated to High; 38 de-escalated from High.</div>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>{expandedCard === 'c1' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -624,25 +634,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e03a2a', fontWeight: 600 }}>187 High-Value customers at High churn risk</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-c2" style={{ display: expandedCards.has('c2') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">High-Value Risk — Revenue at Risk Estimate</div>
-                  <div className="cmg-detail-body">
-                    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
-                      <div style={{ background: 'rgba(224,58,42,0.08)', border: '1px solid rgba(224,58,42,0.2)', borderRadius: 6, padding: '10px 14px', flex: 1, minWidth: 120 }}>
-                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Revenue at risk</div>
-                        <div style={{ fontSize: 20, fontWeight: 700, color: '#e03a2a' }}>₹2.4Cr</div>
-                        <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>High-Value × High-Risk</div>
-                      </div>
-                      <div style={{ background: 'rgba(224,178,42,0.08)', border: '1px solid rgba(224,178,42,0.2)', borderRadius: 6, padding: '10px 14px', flex: 1, minWidth: 120 }}>
-                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>At-risk customers</div>
-                        <div style={{ fontSize: 20, fontWeight: 700, color: '#e0b22a' }}>187</div>
-                        <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Avg LTV ₹1.28L</div>
-                      </div>
-                    </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Prioritize outreach to the 187 High-Value × High-Risk customers — highest revenue protection per intervention.</div>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>{expandedCard === 'c2' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -661,19 +653,63 @@ export default function CMGView() {
                   <div style={{ marginTop: 10, fontSize: 12 }}><strong>38 customers</strong> de-escalated from High risk band this period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>Details ›</button>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>{expandedCard === 'c3' ? 'Hide' : 'Details ›'}</button>
                 </div>
-                <div className="cmg-detail-panel" id="cmg-detail-c3" style={{ display: expandedCards.has('c3') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Recovery Rate — What's Working</div>
-                  <div className="cmg-detail-body">
-                    <div style={{ marginBottom: 8, fontSize: 12, color: 'var(--text-muted)' }}>Factors correlated with successful recovery</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Proactive outreach call</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+8.2pp recovery lift</span></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Full resolution on re-contact</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+6.1pp recovery lift</span></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Manager callback offered</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+4.7pp recovery lift</span></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Goodwill gesture applied</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+3.3pp recovery lift</span></div>
+              </div>
+
+              {/* Full-width detail row for pane C */}
+              <div className={`cmg-detail-row${['c1','c2','c3'].includes(expandedCard) ? ' open' : ''}`}>
+                <div className="cmg-detail-row-inner">
+                {expandedCard === 'c1' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-c1">
+                    <div className="cmg-detail-title">Churn Risk — Drill-down by Segment &amp; Tenure</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Segment</th><th>High Risk</th><th>Period change</th></tr></thead>
+                        <tbody>
+                          <tr><td>Premium</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>19% (156)</td><td style={{ color: '#e07a2a' }}>&#9650; +31</td></tr>
+                          <tr><td>Standard</td><td>11% (524)</td><td style={{ color: '#e07a2a' }}>&#9650; +47</td></tr>
+                          <tr><td>New (&lt;90d)</td><td>8% (167)</td><td style={{ color: '#e07a2a' }}>&#9650; +11</td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Band movement: 127 customers escalated to High; 38 de-escalated from High.</div>
                     </div>
                   </div>
+                )}
+                {expandedCard === 'c2' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-c2">
+                    <div className="cmg-detail-title">High-Value Risk — Revenue at Risk Estimate</div>
+                    <div className="cmg-detail-body">
+                      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
+                        <div style={{ background: 'rgba(224,58,42,0.08)', border: '1px solid rgba(224,58,42,0.2)', borderRadius: 6, padding: '10px 14px', flex: 1, minWidth: 120 }}>
+                          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Revenue at risk</div>
+                          <div style={{ fontSize: 20, fontWeight: 700, color: '#e03a2a' }}>₹2.4Cr</div>
+                          <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>High-Value × High-Risk</div>
+                        </div>
+                        <div style={{ background: 'rgba(224,178,42,0.08)', border: '1px solid rgba(224,178,42,0.2)', borderRadius: 6, padding: '10px 14px', flex: 1, minWidth: 120 }}>
+                          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>At-risk customers</div>
+                          <div style={{ fontSize: 20, fontWeight: 700, color: '#e0b22a' }}>187</div>
+                          <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Avg LTV ₹1.28L</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Prioritize outreach to the 187 High-Value × High-Risk customers — highest revenue protection per intervention.</div>
+                    </div>
+                  </div>
+                )}
+                {expandedCard === 'c3' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-c3">
+                    <div className="cmg-detail-title">Recovery Rate — What's Working</div>
+                    <div className="cmg-detail-body">
+                      <div style={{ marginBottom: 8, fontSize: 12, color: 'var(--text-muted)' }}>Factors correlated with successful recovery</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Proactive outreach call</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+8.2pp recovery lift</span></div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Full resolution on re-contact</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+6.1pp recovery lift</span></div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Manager callback offered</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+4.7pp recovery lift</span></div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Goodwill gesture applied</span><span style={{ fontWeight: 600, color: '#27ae7a' }}>+3.3pp recovery lift</span></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 </div>
               </div>
 
@@ -748,22 +784,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-d1" style={{ display: expandedCards.has('d1') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Journey Abandonment — Drill-down by Intent &amp; Stage</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Intent</th><th>Abandon %</th><th>Avg time before abandon</th></tr></thead>
-                      <tbody>
-                        <tr><td>Refund request</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>11.8%</td><td>8.4 min</td></tr>
-                        <tr><td>Delivery delay</td><td style={{ color: '#e07a2a' }}>9.2%</td><td>6.1 min</td></tr>
-                        <tr><td>Account issue</td><td>7.4%</td><td>11.2 min</td></tr>
-                        <tr><td>Order status</td><td>4.1%</td><td>4.3 min</td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Abandonment is the strongest indicator of immediate churn risk — these customers leave without any signal.</div>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>{expandedCard === 'd1' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -785,22 +806,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>Details ›</button>
-                </div>
-                <div className="cmg-detail-panel" id="cmg-detail-d2" style={{ display: expandedCards.has('d2') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Unresolved Intent Accumulation — Full Breakdown</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Intent</th><th>Customers</th><th>Avg attempts</th><th>Max attempts</th></tr></thead>
-                      <tbody>
-                        <tr><td>Refund request</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>621</td><td>3.4</td><td>9</td></tr>
-                        <tr><td>Delivery delay</td><td style={{ color: '#e07a2a' }}>448</td><td>2.8</td><td>7</td></tr>
-                        <tr><td>Account issue</td><td style={{ color: '#e07a2a' }}>387</td><td>3.1</td><td>11</td></tr>
-                        <tr><td>Product defect</td><td>248</td><td>2.6</td><td>6</td></tr>
-                        <tr><td>Order status</td><td>143</td><td>2.2</td><td>5</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>{expandedCard === 'd2' ? 'Hide' : 'Details ›'}</button>
                 </div>
               </div>
 
@@ -830,22 +836,64 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e07a2a', fontWeight: 600 }}>Hold phase (22%) above 15% benchmark — investigate hold causes</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>Details ›</button>
+                  <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>{expandedCard === 'd3' ? 'Hide' : 'Details ›'}</button>
                 </div>
-                <div className="cmg-detail-panel" id="cmg-detail-d3" style={{ display: expandedCards.has('d3') ? '' : 'none' }}>
-                  <div className="cmg-detail-title">Journey Stage Breakdown — By Intent</div>
-                  <div className="cmg-detail-body">
-                    <table className="cmg-detail-table">
-                      <thead><tr><th>Intent</th><th>Greeting</th><th>Probing</th><th>Hold</th><th>Execution</th><th>Closing</th></tr></thead>
-                      <tbody>
-                        <tr><td>Refund request</td><td>6%</td><td>28%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>31%</td><td>27%</td><td>8%</td></tr>
-                        <tr><td>Order status</td><td>10%</td><td>22%</td><td>14%</td><td>42%</td><td>12%</td></tr>
-                        <tr><td>Delivery delay</td><td>8%</td><td>34%</td><td style={{ color: '#e07a2a', fontWeight: 600 }}>24%</td><td>26%</td><td>8%</td></tr>
-                        <tr><td>Account issue</td><td>7%</td><td>38%</td><td>19%</td><td>27%</td><td>9%</td></tr>
-                      </tbody>
-                    </table>
-                    <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Refund requests spend 31% of time on hold — highest among all intent types. Check system lookup bottlenecks.</div>
+              </div>
+
+              {/* Full-width detail row for pane D */}
+              <div className={`cmg-detail-row${['d1','d2','d3'].includes(expandedCard) ? ' open' : ''}`}>
+                <div className="cmg-detail-row-inner">
+                {expandedCard === 'd1' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-d1">
+                    <div className="cmg-detail-title">Journey Abandonment — Drill-down by Intent &amp; Stage</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Intent</th><th>Abandon %</th><th>Avg time before abandon</th></tr></thead>
+                        <tbody>
+                          <tr><td>Refund request</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>11.8%</td><td>8.4 min</td></tr>
+                          <tr><td>Delivery delay</td><td style={{ color: '#e07a2a' }}>9.2%</td><td>6.1 min</td></tr>
+                          <tr><td>Account issue</td><td>7.4%</td><td>11.2 min</td></tr>
+                          <tr><td>Order status</td><td>4.1%</td><td>4.3 min</td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Abandonment is the strongest indicator of immediate churn risk — these customers leave without any signal.</div>
+                    </div>
                   </div>
+                )}
+                {expandedCard === 'd2' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-d2">
+                    <div className="cmg-detail-title">Unresolved Intent Accumulation — Full Breakdown</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Intent</th><th>Customers</th><th>Avg attempts</th><th>Max attempts</th></tr></thead>
+                        <tbody>
+                          <tr><td>Refund request</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>621</td><td>3.4</td><td>9</td></tr>
+                          <tr><td>Delivery delay</td><td style={{ color: '#e07a2a' }}>448</td><td>2.8</td><td>7</td></tr>
+                          <tr><td>Account issue</td><td style={{ color: '#e07a2a' }}>387</td><td>3.1</td><td>11</td></tr>
+                          <tr><td>Product defect</td><td>248</td><td>2.6</td><td>6</td></tr>
+                          <tr><td>Order status</td><td>143</td><td>2.2</td><td>5</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+                {expandedCard === 'd3' && (
+                  <div className="cmg-detail-panel" id="cmg-detail-d3">
+                    <div className="cmg-detail-title">Journey Stage Breakdown — By Intent</div>
+                    <div className="cmg-detail-body">
+                      <table className="cmg-detail-table">
+                        <thead><tr><th>Intent</th><th>Greeting</th><th>Probing</th><th>Hold</th><th>Execution</th><th>Closing</th></tr></thead>
+                        <tbody>
+                          <tr><td>Refund request</td><td>6%</td><td>28%</td><td style={{ color: '#e03a2a', fontWeight: 600 }}>31%</td><td>27%</td><td>8%</td></tr>
+                          <tr><td>Order status</td><td>10%</td><td>22%</td><td>14%</td><td>42%</td><td>12%</td></tr>
+                          <tr><td>Delivery delay</td><td>8%</td><td>34%</td><td style={{ color: '#e07a2a', fontWeight: 600 }}>24%</td><td>26%</td><td>8%</td></tr>
+                          <tr><td>Account issue</td><td>7%</td><td>38%</td><td>19%</td><td>27%</td><td>9%</td></tr>
+                        </tbody>
+                      </table>
+                      <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Refund requests spend 31% of time on hold — highest among all intent types. Check system lookup bottlenecks.</div>
+                    </div>
+                  </div>
+                )}
                 </div>
               </div>
 

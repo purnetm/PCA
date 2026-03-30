@@ -22,12 +22,8 @@ function reducer(state, action) {
       return { ...state, dsSection: action.section }
 
     case 'TOGGLE_NAV': {
-      const next = new Set(state.expandedNav)
-      if (next.has(action.id)) {
-        next.delete(action.id)
-      } else {
-        next.add(action.id)
-      }
+      const next = new Set()
+      if (!state.expandedNav.has(action.id)) next.add(action.id)
       return { ...state, expandedNav: next }
     }
 

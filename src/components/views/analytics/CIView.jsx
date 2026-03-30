@@ -8,6 +8,44 @@ const CalendarSvg = () => (
   </svg>
 )
 
+const INTENT_META = {
+  cs: {
+    label: 'Customer Support & General Assistance',
+    count: '6,946',
+    color: '#4DB6AC',
+    trendPos: 'M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18',
+    trendNeu: 'M0,70 C50,68 100,65 150,62 C200,59 250,63 300,60 C350,57 400,52 450,55 C500,58 550,54 600,50 C650,46 700,48 700,48',
+  },
+  orders: {
+    label: 'Orders & Order Management',
+    count: '5,063',
+    color: '#8B5CF6',
+    trendPos: 'M0,50 C50,52 100,58 150,55 C200,50 250,48 300,52 C350,55 400,45 450,42 C500,38 550,35 600,30 C650,28 700,25 700,25',
+    trendNeu: 'M0,65 C50,67 100,64 150,60 C200,58 250,62 300,65 C350,62 400,58 450,60 C500,62 550,58 600,55 C650,52 700,50 700,50',
+  },
+  delivery: {
+    label: 'Delivery, Tracking & Fulfilment',
+    count: '2,392',
+    color: '#3B82F6',
+    trendPos: 'M0,35 C50,38 100,42 150,50 C200,55 250,52 300,58 C350,62 400,65 450,60 C500,55 550,58 600,62 C650,65 700,68 700,68',
+    trendNeu: 'M0,55 C50,58 100,62 150,65 C200,68 250,65 300,68 C350,70 400,72 450,68 C500,65 550,68 600,70 C650,72 700,74 700,74',
+  },
+  prescription: {
+    label: 'Prescription & Product Queries',
+    count: '2,259',
+    color: '#F59E0B',
+    trendPos: 'M0,45 C50,42 100,38 150,35 C200,32 250,30 300,28 C350,26 400,24 450,22 C500,20 550,18 600,16 C650,14 700,15 700,15',
+    trendNeu: 'M0,65 C50,63 100,60 150,58 C200,55 250,53 300,52 C350,50 400,48 450,47 C500,46 550,45 600,44 C650,43 700,43 700,43',
+  },
+  others: {
+    label: 'Others',
+    count: '942',
+    color: '#10B981',
+    trendPos: 'M0,55 C50,50 100,55 150,48 C200,55 250,52 300,58 C350,50 400,45 450,50 C500,55 550,45 600,48 C650,52 700,45 700,45',
+    trendNeu: 'M0,68 C50,65 100,68 150,62 C200,68 250,65 300,70 C350,65 400,62 450,65 C500,68 550,62 600,65 C650,68 700,62 700,62',
+  },
+}
+
 const TABS = [
   { id: 'overview',    label: 'Overview' },
   { id: 'sentiment',  label: 'Sentiment Analytics' },
@@ -102,7 +140,7 @@ export default function CIView() {
                       <div className="a-card-title">Intent Analysis</div>
                       <div className="a-card-sub">Top intents by ticket volume</div>
                     </div>
-                    <button className="intent-cat-btn" id="intent-cat-btn">Customer Support &amp; General Assistance</button>
+                    <button className="intent-cat-btn" id="intent-cat-btn">{INTENT_META[activeIntent].label}</button>
                   </div>
                   <div className="a-card-body">
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -110,22 +148,47 @@ export default function CIView() {
                       <div style={{ flexShrink: 0 }}>
                         <svg width="110" height="110" viewBox="0 0 130 130">
                           <circle cx="65" cy="65" r="52" fill="none" stroke="var(--aqua-haze)" strokeWidth="18"/>
-                          <circle cx="65" cy="65" r="52" fill="none" stroke="var(--accent-info)" strokeWidth="22" strokeDasharray="131 196" strokeDashoffset="0" strokeLinecap="butt" transform="rotate(-90 65 65)" style={{ cursor: activeIntent === 'cs' ? 'default' : 'pointer' }} onClick={() => setActiveIntent('cs')}/>
-                          <circle cx="65" cy="65" r="52" fill="none" stroke="#8B5CF6" strokeWidth="18" strokeDasharray="100 227" strokeDashoffset="-131" strokeLinecap="butt" transform="rotate(-90 65 65)" style={{ opacity: activeIntent === 'orders' ? 1 : 0.35, cursor: 'pointer' }} onClick={() => setActiveIntent('orders')}/>
-                          <circle cx="65" cy="65" r="52" fill="none" stroke="#3B82F6" strokeWidth="18" strokeDasharray="46 281" strokeDashoffset="-231" strokeLinecap="butt" transform="rotate(-90 65 65)" style={{ opacity: activeIntent === 'delivery' ? 1 : 0.35, cursor: 'pointer' }} onClick={() => setActiveIntent('delivery')}/>
-                          <circle cx="65" cy="65" r="52" fill="none" stroke="#F59E0B" strokeWidth="18" strokeDasharray="43 284" strokeDashoffset="-277" strokeLinecap="butt" transform="rotate(-90 65 65)" style={{ opacity: activeIntent === 'prescription' ? 1 : 0.35, cursor: 'pointer' }} onClick={() => setActiveIntent('prescription')}/>
-                          <circle cx="65" cy="65" r="52" fill="none" stroke="#10B981" strokeWidth="18" strokeDasharray="18 309" strokeDashoffset="-320" strokeLinecap="butt" transform="rotate(-90 65 65)" style={{ opacity: activeIntent === 'others' ? 1 : 0.35, cursor: 'pointer' }} onClick={() => setActiveIntent('others')}/>
-                          <text x="65" y="61" textAnchor="middle" fontFamily="var(--font-display)" fontSize="16" fontWeight="700" fill="var(--accent-info-dark)">6,946</text>
-                          <text x="65" y="75" textAnchor="middle" fontFamily="var(--font-body)" fontSize="9" fill="var(--accent-info-mid)" opacity=".7">Tickets</text>
+                          {[
+                            { id: 'cs',           dasharray: '131 196', dashoffset: '0'    },
+                            { id: 'orders',       dasharray: '100 227', dashoffset: '-131' },
+                            { id: 'delivery',     dasharray: '46 281',  dashoffset: '-231' },
+                            { id: 'prescription', dasharray: '43 284',  dashoffset: '-277' },
+                            { id: 'others',       dasharray: '18 309',  dashoffset: '-320' },
+                          ].map(seg => {
+                            const isActive = activeIntent === seg.id
+                            return (
+                              <circle key={seg.id} cx="65" cy="65" r="52" fill="none"
+                                stroke={INTENT_META[seg.id].color}
+                                strokeWidth={isActive ? 22 : 18}
+                                strokeDasharray={seg.dasharray}
+                                strokeDashoffset={seg.dashoffset}
+                                strokeLinecap="butt"
+                                transform="rotate(-90 65 65)"
+                                style={{ opacity: isActive ? 1 : 0.35, cursor: isActive ? 'default' : 'pointer', transition: 'opacity 0.2s, stroke-width 0.2s' }}
+                                onClick={() => setActiveIntent(seg.id)}
+                              />
+                            )
+                          })}
+                          <text x="65" y="61" textAnchor="middle" fontFamily="var(--font-display)" fontSize="16" fontWeight="700" fill={INTENT_META[activeIntent].color}>{INTENT_META[activeIntent].count}</text>
+                          <text x="65" y="75" textAnchor="middle" fontFamily="var(--font-body)" fontSize="9" fill="var(--cutty-sark)" opacity=".7">Tickets</text>
                         </svg>
                       </div>
                       {/* Legend */}
                       <div className="intent-list" style={{ flex: 1 }}>
-                        <div className={`intent-row${activeIntent === 'cs' ? ' active' : ''}`} data-intent="cs" onClick={() => setActiveIntent('cs')}><span className="intent-dot" style={{ background: 'var(--accent-info)' }}></span><span className="intent-name">Customer Support &amp; General</span><span className="intent-count">6,946</span><span className="intent-avg">43m avg</span></div>
-                        <div className={`intent-row${activeIntent === 'orders' ? ' active' : ''}`} data-intent="orders" onClick={() => setActiveIntent('orders')}><span className="intent-dot" style={{ background: '#8B5CF6' }}></span><span className="intent-name">Orders &amp; Order Management</span><span className="intent-count">5,063</span><span className="intent-avg">1.2h avg</span></div>
-                        <div className={`intent-row${activeIntent === 'delivery' ? ' active' : ''}`} data-intent="delivery" onClick={() => setActiveIntent('delivery')}><span className="intent-dot" style={{ background: '#3B82F6' }}></span><span className="intent-name">Delivery, Tracking &amp; Fulfilment</span><span className="intent-count">2,392</span><span className="intent-avg">1.2h avg</span></div>
-                        <div className={`intent-row${activeIntent === 'prescription' ? ' active' : ''}`} data-intent="prescription" onClick={() => setActiveIntent('prescription')}><span className="intent-dot" style={{ background: '#F59E0B' }}></span><span className="intent-name">Prescription &amp; Product Queries</span><span className="intent-count">2,259</span><span className="intent-avg">47m avg</span></div>
-                        <div className={`intent-row${activeIntent === 'others' ? ' active' : ''}`} data-intent="others" onClick={() => setActiveIntent('others')}><span className="intent-dot" style={{ background: '#10B981' }}></span><span className="intent-name">Others</span><span className="intent-count">942</span><span className="intent-avg">49m avg</span></div>
+                        {[
+                          { id: 'cs',           name: 'Customer Support & General',       count: '6,946', avg: '43m avg'  },
+                          { id: 'orders',       name: 'Orders & Order Management',         count: '5,063', avg: '1.2h avg' },
+                          { id: 'delivery',     name: 'Delivery, Tracking & Fulfilment',   count: '2,392', avg: '1.2h avg' },
+                          { id: 'prescription', name: 'Prescription & Product Queries',    count: '2,259', avg: '47m avg'  },
+                          { id: 'others',       name: 'Others',                            count: '942',   avg: '49m avg'  },
+                        ].map(row => (
+                          <div key={row.id} className={`intent-row${activeIntent === row.id ? ' active' : ''}`} onClick={() => setActiveIntent(row.id)}>
+                            <span className="intent-dot" style={{ background: INTENT_META[row.id].color }}></span>
+                            <span className="intent-name">{row.name}</span>
+                            <span className="intent-count">{row.count}</span>
+                            <span className="intent-avg">{row.avg}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
@@ -133,10 +196,10 @@ export default function CIView() {
                     <div style={{ borderTop: '1px solid var(--nebula)', marginTop: 20, paddingTop: 16 }}>
                       <div className="a-card-title" style={{ fontSize: 'var(--font-sm)', marginBottom: 10 }}>Weekly Sentiment Trend</div>
                       <svg width="100%" height="104" viewBox="0 0 700 104" preserveAspectRatio="none">
-                        <defs><linearGradient id="ci-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3B82F6" stopOpacity=".25"/><stop offset="100%" stopColor="#3B82F6" stopOpacity="0"/></linearGradient></defs>
-                        <path d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18 L700,90 L0,90 Z" fill="url(#ci-grad)"/>
-                        <path d="M0,60 C50,55 100,40 150,35 C200,30 250,45 300,42 C350,38 400,25 450,20 C500,15 550,28 600,22 C650,16 700,18 700,18" fill="none" stroke="var(--accent-info)" strokeWidth="2"/>
-                        <path d="M0,70 C50,68 100,65 150,62 C200,59 250,63 300,60 C350,57 400,52 450,55 C500,58 550,54 600,50 C650,46 700,48 700,48" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeDasharray="4 3" opacity=".6"/>
+                        <defs><linearGradient id="ci-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={INTENT_META[activeIntent].color} stopOpacity=".25"/><stop offset="100%" stopColor={INTENT_META[activeIntent].color} stopOpacity="0"/></linearGradient></defs>
+                        <path d={`${INTENT_META[activeIntent].trendPos} L700,90 L0,90 Z`} fill="url(#ci-grad)"/>
+                        <path d={INTENT_META[activeIntent].trendPos} fill="none" stroke={INTENT_META[activeIntent].color} strokeWidth="2"/>
+                        <path d={INTENT_META[activeIntent].trendNeu} fill="none" stroke={INTENT_META[activeIntent].color} strokeWidth="1.5" strokeDasharray="4 3" opacity=".4"/>
                         <text x="50" y="100" fontSize="9" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Mon</text>
                         <text x="150" y="100" fontSize="9" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Tue</text>
                         <text x="250" y="100" fontSize="9" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Wed</text>
@@ -146,8 +209,8 @@ export default function CIView() {
                         <text x="650" y="100" fontSize="9" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Sun</text>
                       </svg>
                       <div style={{ display: 'flex', gap: 16, marginTop: 6 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--cutty-sark)', opacity: .7 }}><span style={{ width: 12, height: 3, background: 'var(--accent-info)', borderRadius: 2, display: 'inline-block' }}></span>Positive</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--cutty-sark)', opacity: .7 }}><span style={{ width: 12, height: 3, background: '#8B5CF6', borderRadius: 2, display: 'inline-block' }}></span>Neutral</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--cutty-sark)', opacity: .7 }}><span style={{ width: 12, height: 3, background: INTENT_META[activeIntent].color, borderRadius: 2, display: 'inline-block' }}></span>Positive</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--cutty-sark)', opacity: .5 }}><span style={{ width: 12, height: 3, background: INTENT_META[activeIntent].color, borderRadius: 2, display: 'inline-block', opacity: .4 }}></span>Neutral</div>
                       </div>
                     </div>
                   </div>

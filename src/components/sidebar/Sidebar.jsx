@@ -4,10 +4,7 @@ import UserMenu from './UserMenu'
 
 const KapAIIcon = (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="3" width="20" height="14" rx="2"/>
-    <polyline points="8 21 12 18 16 21"/>
-    <path d="M7 9l3 3-3 3"/>
-    <line x1="13" y1="15" x2="17" y2="15"/>
+    <path d="M11 5V1H7M1 11H3M19 11H21M14 10V12M8 10V12M5 5H17C18.1046 5 19 5.89543 19 7V15C19 16.1046 18.1046 17 17 17H5C3.89543 17 3 16.1046 3 15V7C3 5.89543 3.89543 5 5 5Z"/>
   </svg>
 )
 const DataStudioIcon = (
@@ -26,23 +23,21 @@ const AnalyticsIcon = (
   </svg>
 )
 const IntelligenceIcon = (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/>
-    <path d="M4.5 2l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z"/>
-    <path d="M20 14l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z"/>
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+    <path fillRule="evenodd" d="M7.27273 2.72727L9.54545 7.72727L14.5455 10L9.54545 12.2727L7.27273 17.2727L5 12.2727L0 10L5 7.72727L7.27273 2.72727ZM7.27273 7.11818L6.36364 9.09091L4.39091 10L6.36364 10.9091L7.27273 12.8818L8.18182 10.9091L10.1545 10L8.18182 9.09091L7.27273 7.11818ZM16.3636 7.27273L15.2182 4.78182L12.7273 3.63636L15.2182 2.5L16.3636 0L17.5 2.5L20 3.63636L17.5 4.78182L16.3636 7.27273ZM16.3636 20L15.2182 17.5091L12.7273 16.3636L15.2182 15.2273L16.3636 12.7273L17.5 15.2273L20 16.3636L17.5 17.5091L16.3636 20Z"/>
   </svg>
 )
 const ConfigIcon = (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <circle cx="8" cy="8" r="2.5"/>
-    <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
   </svg>
 )
 const HelpIcon = (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <circle cx="8" cy="8" r="6.5"/>
-    <path d="M6 6.5a2 2 0 0 1 4 0c0 1.5-2 1.5-2 3"/>
-    <circle cx="8" cy="12" r="0.75" fill="currentColor" stroke="none"/>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4.5"/>
+    <circle cx="12" cy="17.5" r="0.5" fill="currentColor" stroke="none"/>
   </svg>
 )
 const CollapseIcon = (
@@ -115,7 +110,7 @@ export default function Sidebar() {
               icon={DataStudioIcon}
               active={currentView === 'data-studio'}
               expanded={expandedNav.has('ds')}
-              onToggle={() => toggleNav('ds')}
+              onToggle={() => { toggleNav('ds'); goToDs('home') }}
             >
               <button
                 className={`nav-subitem${currentView === 'data-studio' && dsSection === 'home' ? ' active' : ''}`}
@@ -144,7 +139,7 @@ export default function Sidebar() {
               icon={AnalyticsIcon}
               active={currentView.startsWith('analytics-')}
               expanded={expandedNav.has('analytics')}
-              onToggle={() => toggleNav('analytics')}
+              onToggle={() => { toggleNav('analytics'); navigate('analytics-ci') }}
             >
               <button className={`nav-subitem${currentView === 'analytics-ci' ? ' active' : ''}`} id="subnav-analytics-ci" onClick={() => navigate('analytics-ci')}>
                 <span className="nav-subitem-dot" /> Conversational Intelligence
