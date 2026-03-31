@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useApp } from '../../context/AppContext'
-import { DASHBOARDS_DATA } from '../../data'
+import { DASHBOARDS_DATA, DV_CONFIGS_BY_ID, DV_ACTIVITY } from '../../data'
 
 const LockIcon = (
   <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
@@ -16,49 +16,714 @@ const GlobeIcon = (
 )
 
 const THUMB_SVGS = {
-  bar: (
-    <svg width="100%" height="60" viewBox="0 0 180 60" preserveAspectRatio="none">
-      <rect x="5"   y="36" width="20" height="24" rx="3" fill="#3B82F6" opacity="0.75"/>
-      <rect x="33"  y="24" width="20" height="36" rx="3" fill="#10B981" opacity="0.80"/>
-      <rect x="61"  y="8"  width="20" height="52" rx="3" fill="#4DB6AC"/>
-      <rect x="89"  y="16" width="20" height="44" rx="3" fill="#F59E0B" opacity="0.85"/>
-      <rect x="117" y="2"  width="20" height="58" rx="3" fill="#A78BFA"/>
-      <rect x="145" y="20" width="20" height="40" rx="3" fill="#F87171" opacity="0.80"/>
+  /* d1 — Agent Performance Overview: horizontal bar chart */
+  hbar: (
+    <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
+      <rect x="36" y="4"  width="110" height="7" rx="3.5" fill="#4DB6AC"/>
+      <rect x="36" y="15" width="88"  height="7" rx="3.5" fill="#3B82F6" opacity="0.85"/>
+      <rect x="36" y="26" width="130" height="7" rx="3.5" fill="#10B981" opacity="0.85"/>
+      <rect x="36" y="37" width="74"  height="7" rx="3.5" fill="#F59E0B" opacity="0.85"/>
+      <rect x="36" y="48" width="96"  height="7" rx="3.5" fill="#A78BFA" opacity="0.85"/>
+      <line x1="36" y1="2" x2="36" y2="58" stroke="#C7D9D6" strokeWidth="1"/>
     </svg>
   ),
+  /* d2 — CSAT & Quality Tracker: donut at 73% + small bar column */
+  donut73: (
+    <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="dg2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#4DB6AC"/>
+          <stop offset="100%" stopColor="#10B981"/>
+        </linearGradient>
+      </defs>
+      {/* donut — circumference ≈ 150.8, 73% ≈ 110 */}
+      <circle cx="38" cy="30" r="24" fill="none" stroke="#ECF4F2" strokeWidth="10"/>
+      <circle cx="38" cy="30" r="24" fill="none" stroke="url(#dg2)" strokeWidth="10"
+        strokeDasharray="110 40.8" strokeLinecap="round" transform="rotate(-90 38 30)"/>
+      <circle cx="38" cy="30" r="14" fill="white"/>
+      <text x="38" y="34" textAnchor="middle" fontSize="9" fontWeight="700" fill="#1F4141" fontFamily="Plus Jakarta Sans,sans-serif">73%</text>
+      {/* mini bar sparklines on right */}
+      <rect x="82"  y="38" width="9" height="18" rx="2" fill="#4DB6AC" opacity="0.6"/>
+      <rect x="94"  y="28" width="9" height="28" rx="2" fill="#4DB6AC" opacity="0.8"/>
+      <rect x="106" y="20" width="9" height="36" rx="2" fill="#4DB6AC"/>
+      <rect x="118" y="24" width="9" height="32" rx="2" fill="#10B981" opacity="0.85"/>
+      <rect x="130" y="14" width="9" height="42" rx="2" fill="#10B981"/>
+      <rect x="142" y="30" width="9" height="26" rx="2" fill="#3B82F6" opacity="0.75"/>
+      <rect x="154" y="10" width="9" height="46" rx="2" fill="#3B82F6"/>
+    </svg>
+  ),
+  /* d3 — Volume & Trend Analysis: dual area chart */
   area: (
     <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
       <defs>
-        <linearGradient id="ag1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#4DB6AC" stopOpacity="0.28"/>
+        <linearGradient id="ag3a" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#4DB6AC" stopOpacity="0.35"/>
           <stop offset="100%" stopColor="#4DB6AC" stopOpacity="0.02"/>
         </linearGradient>
+        <linearGradient id="ag3b" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25"/>
+          <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.02"/>
+        </linearGradient>
       </defs>
-      <path d="M0 50 C30 44 50 30 70 34 C90 38 120 14 155 8 L200 2 L200 60 L0 60 Z" fill="url(#ag1)"/>
-      <path d="M0 50 C30 44 50 30 70 34 C90 38 120 14 155 8 L200 2" stroke="#4DB6AC" strokeWidth="2" fill="none" strokeLinecap="round"/>
-      <circle cx="200" cy="2" r="3.5" fill="#4DB6AC"/>
+      <path d="M0 52 C25 50 45 42 65 38 C85 34 110 20 135 14 C155 9 175 5 200 3 L200 60 L0 60 Z" fill="url(#ag3a)"/>
+      <path d="M0 52 C25 50 45 42 65 38 C85 34 110 20 135 14 C155 9 175 5 200 3" stroke="#4DB6AC" strokeWidth="2" fill="none" strokeLinecap="round"/>
+      <path d="M0 56 C30 54 55 50 80 46 C105 42 130 34 160 28 C178 24 190 20 200 18 L200 60 L0 60 Z" fill="url(#ag3b)"/>
+      <path d="M0 56 C30 54 55 50 80 46 C105 42 130 34 160 28 C178 24 190 20 200 18" stroke="#3B82F6" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.7"/>
+      <circle cx="200" cy="3" r="3" fill="#4DB6AC"/>
     </svg>
   ),
-  donut: (
-    <svg width="100%" height="60" viewBox="0 0 180 60" preserveAspectRatio="none">
-      <circle cx="90" cy="30" r="24" fill="none" stroke="#4DB6AC" strokeWidth="10" strokeDasharray="75 75" strokeLinecap="round" transform="rotate(-90 90 30)"/>
-      <circle cx="90" cy="30" r="24" fill="none" stroke="#3B82F6" strokeWidth="10" strokeDasharray="38 113" strokeDashoffset="-75" strokeLinecap="round" transform="rotate(-90 90 30)"/>
-      <circle cx="90" cy="30" r="14" fill="white"/>
-    </svg>
-  ),
-  line: (
+  /* d4 — AI-Powered Insights: three diverging lines */
+  multiline: (
     <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
-      <path d="M0 48 C40 44 70 20 100 28 C130 36 160 10 200 6" stroke="#F59E0B" strokeWidth="2" fill="none" strokeLinecap="round"/>
-      <path d="M0 52 C40 48 70 36 100 40 C130 44 160 24 200 18" stroke="#4DB6AC" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6"/>
+      {/* AI resolved — rising */}
+      <path d="M0 54 C30 50 60 42 90 30 C120 18 155 10 200 5" stroke="#10B981" strokeWidth="2" fill="none" strokeLinecap="round"/>
+      {/* Human — declining */}
+      <path d="M0 10 C35 14 70 22 100 32 C130 42 160 48 200 52" stroke="#4DB6AC" strokeWidth="2" fill="none" strokeLinecap="round"/>
+      {/* Escalated — dotted flat */}
+      <path d="M0 36 C50 34 100 32 150 30 C170 29 185 28 200 28" stroke="#A78BFA" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeDasharray="5 3" opacity="0.8"/>
+      {/* crossover dot */}
+      <circle cx="100" cy="31" r="3.5" fill="white" stroke="#4DB6AC" strokeWidth="1.5"/>
     </svg>
   ),
+  /* d5 — Smart Escalation Monitor: scatter plot */
+  scatter: (
+    <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
+      {/* safe cluster — bottom left */}
+      <circle cx="22"  cy="48" r="4"   fill="#10B981" opacity="0.8"/>
+      <circle cx="38"  cy="44" r="5"   fill="#10B981" opacity="0.7"/>
+      <circle cx="52"  cy="50" r="3.5" fill="#4DB6AC" opacity="0.85"/>
+      <circle cx="65"  cy="42" r="4.5" fill="#10B981" opacity="0.75"/>
+      <circle cx="80"  cy="46" r="3"   fill="#4DB6AC" opacity="0.9"/>
+      <circle cx="95"  cy="40" r="5"   fill="#4DB6AC" opacity="0.7"/>
+      <circle cx="110" cy="44" r="4"   fill="#10B981" opacity="0.8"/>
+      {/* medium risk */}
+      <circle cx="125" cy="32" r="5"   fill="#F59E0B" opacity="0.8"/>
+      <circle cx="140" cy="28" r="4"   fill="#F59E0B" opacity="0.75"/>
+      <circle cx="152" cy="22" r="5.5" fill="#F59E0B" opacity="0.85"/>
+      {/* high risk — top right */}
+      <circle cx="165" cy="14" r="6"   fill="#F87171" opacity="0.85"/>
+      <circle cx="178" cy="10" r="5"   fill="#F87171" opacity="0.9"/>
+      <circle cx="188" cy="18" r="4.5" fill="#F87171" opacity="0.8"/>
+    </svg>
+  ),
+  /* d6 — Operations Command Center: grouped vertical bars */
+  bar: (
+    <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
+      <rect x="8"   y="28" width="12" height="28" rx="2" fill="#4DB6AC"/>
+      <rect x="22"  y="38" width="12" height="18" rx="2" fill="#4DB6AC" opacity="0.35"/>
+      <rect x="42"  y="14" width="12" height="42" rx="2" fill="#4DB6AC"/>
+      <rect x="56"  y="22" width="12" height="34" rx="2" fill="#4DB6AC" opacity="0.35"/>
+      <rect x="76"  y="20" width="12" height="36" rx="2" fill="#4DB6AC"/>
+      <rect x="90"  y="28" width="12" height="28" rx="2" fill="#4DB6AC" opacity="0.35"/>
+      <rect x="110" y="8"  width="12" height="48" rx="2" fill="#4DB6AC"/>
+      <rect x="124" y="16" width="12" height="40" rx="2" fill="#4DB6AC" opacity="0.35"/>
+      <rect x="144" y="24" width="12" height="32" rx="2" fill="#4DB6AC"/>
+      <rect x="158" y="32" width="12" height="24" rx="2" fill="#4DB6AC" opacity="0.35"/>
+      <rect x="178" y="34" width="12" height="22" rx="2" fill="#4DB6AC"/>
+      <line x1="0" y1="57" x2="200" y2="57" stroke="#C7D9D6" strokeWidth="1"/>
+    </svg>
+  ),
+  /* d7 — Compliance & Audit Board: step/staircase chart high near top */
+  step: (
+    <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sg7" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#10B981" stopOpacity="0.25"/>
+          <stop offset="100%" stopColor="#10B981" stopOpacity="0.03"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 14 H40 V10 H70 V14 H95 V8 H120 V12 H145 V6 H170 V10 H200 L200 60 L0 60 Z" fill="url(#sg7)"/>
+      <path d="M0 14 H40 V10 H70 V14 H95 V8 H120 V12 H145 V6 H170 V10 H200" stroke="#10B981" strokeWidth="2" fill="none" strokeLinecap="square"/>
+      {/* violation dots */}
+      <circle cx="60"  cy="26" r="3" fill="#F87171" opacity="0.9"/>
+      <circle cx="108" cy="22" r="3" fill="#F87171" opacity="0.85"/>
+      <circle cx="162" cy="18" r="2.5" fill="#F87171" opacity="0.8"/>
+    </svg>
+  ),
+  /* d8 — Team Productivity Mix: stacked area bands */
+  area2: (
+    <svg width="100%" height="60" viewBox="0 0 200 60" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="ag8a" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#4DB6AC" stopOpacity="0.9"/>
+          <stop offset="100%" stopColor="#4DB6AC" stopOpacity="0.7"/>
+        </linearGradient>
+        <linearGradient id="ag8b" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8"/>
+          <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.6"/>
+        </linearGradient>
+        <linearGradient id="ag8c" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#10B981" stopOpacity="0.7"/>
+          <stop offset="100%" stopColor="#10B981" stopOpacity="0.5"/>
+        </linearGradient>
+      </defs>
+      {/* bottom band — teal */}
+      <path d="M0 44 C50 42 100 40 150 38 C175 37 190 36 200 36 L200 60 L0 60 Z" fill="url(#ag8a)"/>
+      {/* middle band — blue */}
+      <path d="M0 30 C50 28 100 26 150 24 C175 23 190 22 200 22 L200 36 C190 36 175 37 150 38 C100 40 50 42 0 44 Z" fill="url(#ag8b)"/>
+      {/* top band — green */}
+      <path d="M0 18 C50 16 100 13 150 11 C175 10 190 9 200 9 L200 22 C190 22 175 23 150 24 C100 26 50 28 0 30 Z" fill="url(#ag8c)"/>
+    </svg>
+  ),
+}
+
+const COLUMNS_BY_AREA = {
+  tickets: [
+    { key:'ticket_id',    label:'Ticket ID',    type:'varchar',  pre:true  },
+    { key:'ticket_title', label:'Title',        type:'varchar',  pre:true  },
+    { key:'status',       label:'Status',       type:'varchar',  pre:true  },
+    { key:'assigned_to',  label:'Assigned To',  type:'string',   pre:true  },
+    { key:'create_date',  label:'Created At',   type:'datetime', pre:true  },
+    { key:'priority',     label:'Priority',     type:'varchar',  pre:false },
+    { key:'queue',        label:'Queue',        type:'varchar',  pre:false },
+    { key:'resolved_at',  label:'Resolved At',  type:'datetime', pre:false },
+    { key:'handle_time',  label:'Handle Time',  type:'number',   pre:false },
+    { key:'ticket_type',  label:'Type',         type:'varchar',  pre:false },
+    { key:'sub_status',   label:'Sub-status',   type:'varchar',  pre:false },
+    { key:'folder_name',  label:'Folder',       type:'varchar',  pre:false },
+  ],
+  agents: [
+    { key:'agent_id',     label:'Agent ID',     type:'bigint',   pre:true  },
+    { key:'agent_name',   label:'Name',         type:'string',   pre:true  },
+    { key:'team',         label:'Team',         type:'varchar',  pre:true  },
+    { key:'tickets_count',label:'Tickets',      type:'number',   pre:true  },
+    { key:'resolve_rate', label:'Resolve Rate', type:'percent',  pre:true  },
+    { key:'avg_handle',   label:'Avg Handle Time',type:'number', pre:false },
+    { key:'csat_score',   label:'CSAT Score',   type:'number',   pre:false },
+    { key:'status',       label:'Status',       type:'varchar',  pre:false },
+    { key:'last_active',  label:'Last Active',  type:'datetime', pre:false },
+  ],
+  queues: [
+    { key:'queue_id',     label:'Queue ID',     type:'bigint',   pre:true  },
+    { key:'queue_name',   label:'Queue Name',   type:'varchar',  pre:true  },
+    { key:'depth',        label:'Depth',        type:'number',   pre:true  },
+    { key:'avg_wait',     label:'Avg Wait',     type:'number',   pre:true  },
+    { key:'tickets_in',   label:'Tickets In',   type:'number',   pre:false },
+    { key:'tickets_out',  label:'Tickets Out',  type:'number',   pre:false },
+    { key:'sla_rate',     label:'SLA Rate',     type:'percent',  pre:false },
+  ],
+  sla: [
+    { key:'ticket_id',    label:'Ticket ID',    type:'varchar',  pre:true  },
+    { key:'sla_policy',   label:'SLA Policy',   type:'varchar',  pre:true  },
+    { key:'due_at',       label:'Due At',       type:'datetime', pre:true  },
+    { key:'status',       label:'SLA Status',   type:'varchar',  pre:true  },
+    { key:'breach_time',  label:'Breach Time',  type:'number',   pre:false },
+    { key:'agent_name',   label:'Agent',        type:'string',   pre:false },
+    { key:'queue',        label:'Queue',        type:'varchar',  pre:false },
+  ],
+  customers: [
+    { key:'customer_id',  label:'Customer ID',  type:'bigint',   pre:true  },
+    { key:'name',         label:'Name',         type:'string',   pre:true  },
+    { key:'email',        label:'Email',        type:'varchar',  pre:true  },
+    { key:'open_tickets', label:'Open Tickets', type:'number',   pre:true  },
+    { key:'total_tickets',label:'Total Tickets',type:'number',   pre:false },
+    { key:'last_contact', label:'Last Contact', type:'datetime', pre:false },
+    { key:'segment',      label:'Segment',      type:'varchar',  pre:false },
+  ],
+  csat: [
+    { key:'ticket_id',    label:'Ticket ID',    type:'varchar',  pre:true  },
+    { key:'score',        label:'CSAT Score',   type:'number',   pre:true  },
+    { key:'feedback',     label:'Feedback',     type:'text',     pre:true  },
+    { key:'agent_name',   label:'Agent',        type:'string',   pre:true  },
+    { key:'submitted_at', label:'Submitted At', type:'datetime', pre:true  },
+    { key:'sentiment',    label:'Sentiment',    type:'varchar',  pre:false },
+    { key:'queue',        label:'Queue',        type:'varchar',  pre:false },
+  ],
+}
+
+const AREA_LABELS = {
+  tickets:'Tickets', agents:'Agents', queues:'Queues', sla:'SLA', customers:'Customers', csat:'CSAT'
+}
+
+const SAMPLE_ROWS = {
+  tickets: {
+    cols:['ticket_id','title','status','assigned_to','created_at'],
+    rows:[
+      ['#677218','Chat Ticket: 6772...','Open','Gurram Triveni','2026-02-27 16:02'],
+      ['#677219','Billing enquiry re...','Resolved','Kattoju U. Rani','2026-02-27 16:04'],
+      ['#677220','Account reset req...','Pending','Swetha Neerudu','2026-02-27 16:08'],
+      ['#677221','Technical issue wi...','Escalated','Laxmi Singh','2026-02-27 16:09'],
+      ['#677222','Delivery complaint','Resolved','Patangey V. Kumar','2026-02-27 16:15'],
+      ['#677223','Refund request','Open','Ravi Shankar','2026-02-27 16:18'],
+    ]
+  },
+  agents: {
+    cols:['agent_name','team','tickets','resolve_rate','avg_handle'],
+    rows:[
+      ['Gurram Triveni','Support L1','94','96.2%','3m 42s'],
+      ['Kattoju U. Rani','Support L1','76','93.4%','4m 10s'],
+      ['Swetha Neerudu','Support L2','68','91.1%','4m 38s'],
+      ['Laxmi Singh','Billing','72','89.0%','5m 02s'],
+      ['Patangey V. Kumar','Technical','54','83.3%','6m 15s'],
+      ['Ravi Shankar','Support L2','48','79.1%','6m 44s'],
+    ]
+  },
+  queues: {
+    cols:['queue_name','depth','avg_wait','sla_rate'],
+    rows:[
+      ['Support L1','18','1m 42s','97.2%'],
+      ['Billing','11','2m 08s','95.8%'],
+      ['Technical','23','3m 55s','91.3%'],
+      ['Returns','7','1m 22s','98.4%'],
+    ]
+  },
+  sla: {
+    cols:['ticket_id','sla_policy','due_at','status'],
+    rows:[
+      ['#677218','4-hour response','16:02','Met'],
+      ['#677219','Same-day resolve','17:00','Met'],
+      ['#677220','2-hour response','15:30','Breached'],
+      ['#677221','4-hour response','18:09','Met'],
+    ]
+  },
+  customers: {
+    cols:['name','email','open_tickets','total_tickets'],
+    rows:[
+      ['Arjun Mehta','arjun@example.com','3','14'],
+      ['Priya Sharma','priya@example.com','1','8'],
+      ['Ritu Patel','ritu@example.com','0','22'],
+      ['Sanjay Kumar','sanjay@example.com','5','31'],
+    ]
+  },
+  csat: {
+    cols:['agent_name','score','sentiment','submitted_at'],
+    rows:[
+      ['Gurram Triveni','4.8','Positive','2026-02-27 14:22'],
+      ['Kattoju U. Rani','4.2','Neutral','2026-02-27 13:05'],
+      ['Swetha Neerudu','3.9','Neutral','2026-02-27 11:44'],
+      ['Laxmi Singh','4.6','Positive','2026-02-27 10:18'],
+    ]
+  },
+}
+
+/* ── Dashboard view helpers ───────────────────────────────── */
+const DV_KPI_ICONS = {
+  ticket: (<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"><rect x="2" y="1.5" width="8" height="9" rx="1.2"/><path d="M4 4.5h4M4 6.5h4M4 8.5h2.5"/></svg>),
+  clock:  (<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"><circle cx="6" cy="6.5" r="4.5"/><path d="M6 4v2.5l1.5 1" strokeLinejoin="round"/></svg>),
+  star:   (<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"><path d="M6 1.5l1.2 3.5H11l-2.9 2.1 1.1 3.4L6 8.5l-3.2 2 1.1-3.4L1 5h3.8L6 1.5Z"/></svg>),
+  alert:  (<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"><path d="M6 1L11 10.5H1L6 1Z" strokeLinejoin="round"/><path d="M6 5v2M6 9h.01"/></svg>),
+}
+
+function Sparkline({ data }) {
+  const max = Math.max(...data), min = Math.min(...data), range = max - min || 1
+  const W = 88, H = 28
+  const pts = data.map((v, i) => `${(i / (data.length - 1)) * W},${H - ((v - min) / range) * (H - 6) - 3}`)
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none">
+      <polyline points={pts.join(' ')} stroke="#4DB6AC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
+function KpiCard({ kpi, idx }) {
+  return (
+    <div className="dv-kpi-card" style={{ animationDelay: `${idx * 0.06}s` }}>
+      <div className="dv-kpi-top">
+        <div className="dv-kpi-label">{DV_KPI_ICONS[kpi.icon]} {kpi.label}</div>
+        <div className={`dv-kpi-delta ${kpi.up ? 'up' : 'down'}`}>{kpi.up ? '↑' : '↓'} {kpi.delta}</div>
+      </div>
+      <div className="dv-kpi-val">{kpi.val}</div>
+      <div className="dv-kpi-footer">
+        <div className="dv-kpi-compare">{kpi.compare}</div>
+        <div className="dv-kpi-spark-wrap"><Sparkline data={kpi.sparkData}/></div>
+      </div>
+    </div>
+  )
+}
+
+function AreaSVG({ sparkData, h = 90 }) {
+  const max = Math.max(...sparkData), min = Math.min(...sparkData), range = max - min || 1
+  const W = 300, color = '#4DB6AC'
+  const pts = sparkData.map((v, i) => ({ x: (i / (sparkData.length - 1)) * W, y: h - ((v - min) / range) * (h * 0.72) - 8 }))
+  const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+  const areaPath = `${linePath} L ${W} ${h} L 0 ${h} Z`
+  return (
+    <svg width="100%" height={h} viewBox={`0 0 ${W} ${h}`} preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="dv_ag" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.18"/>
+          <stop offset="100%" stopColor={color} stopOpacity="0.01"/>
+        </linearGradient>
+      </defs>
+      <path d={areaPath} fill="url(#dv_ag)"/>
+      <path d={linePath} stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx={pts[pts.length - 1].x} cy={pts[pts.length - 1].y} r="3" fill={color}/>
+    </svg>
+  )
+}
+
+function MultiLineSVG({ data, h = 110 }) {
+  const all = data.flatMap(s => s.data)
+  const max = Math.max(...all), min = Math.min(...all), range = max - min || 1
+  const W = 300
+  function toD(vals) {
+    return vals.map((v, i) => `${i === 0 ? 'M' : 'L'} ${(i / (vals.length - 1)) * W} ${h - ((v - min) / range) * (h * 0.75) - 8}`).join(' ')
+  }
+  return (
+    <svg width="100%" height={h} viewBox={`0 0 ${W} ${h}`} preserveAspectRatio="none">
+      {data.map((s, i) => (
+        <path key={i} d={toD(s.data)} stroke={s.color} strokeWidth="2" fill="none"
+          strokeDasharray={s.dashed ? '6 3' : undefined} strokeLinecap="round" strokeLinejoin="round" opacity={s.dashed ? 0.7 : 1}/>
+      ))}
+    </svg>
+  )
+}
+
+function DonutSVG({ data, center, centerSub, size = 100 }) {
+  const cx = size / 2, cy = size / 2, r = size * 0.37, sw = size * 0.16
+  let angle = -90
+  const arcs = data.map(d => {
+    const pct = parseFloat(d.val)
+    const s = angle, e = angle + pct * 3.6 - 1
+    angle += pct * 3.6
+    return { color: d.color, s, e }
+  })
+  function arc({ s, e }) {
+    const toRad = a => (a * Math.PI) / 180
+    const x1 = cx + r * Math.cos(toRad(s)), y1 = cy + r * Math.sin(toRad(s))
+    const x2 = cx + r * Math.cos(toRad(e)), y2 = cy + r * Math.sin(toRad(e))
+    const large = e - s > 180 ? 1 : 0
+    return `M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2}`
+  }
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--teal-10)" strokeWidth={sw}/>
+      {arcs.map((seg, i) => <path key={i} d={arc(seg)} fill="none" stroke={seg.color} strokeWidth={sw} strokeLinecap="round"/>)}
+      <text x={cx} y={cy - 3} textAnchor="middle" fontSize="13" fontWeight="700" fill="#1F4141" fontFamily="Plus Jakarta Sans,sans-serif">{center}</text>
+      <text x={cx} y={cy + 11} textAnchor="middle" fontSize="9" fill="#4C6A69" opacity="0.75" fontFamily="Plus Jakarta Sans,sans-serif">{centerSub}</text>
+    </svg>
+  )
+}
+
+function HBarList({ data }) {
+  const maxVal = Math.max(...data.map(d => d.val))
+  return (
+    <div className="dv-hbar-chart">
+      {data.map((row, i) => (
+        <div key={i} className="dv-hbar-row">
+          <div className="dv-hbar-name" title={row.name}>{row.name}</div>
+          <div className="dv-hbar-track">
+            <div className="dv-hbar-fill" style={{ width: `${(row.val / maxVal) * 100}%`, background: row.color }}/>
+          </div>
+          <div className="dv-hbar-val">{row.val}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function VBarChart({ data }) {
+  const maxVal = Math.max(...data.flatMap(g => g.bars.map(b => b.val)))
+  return (
+    <div className="dv-vbar-wrap">
+      {data.map((group, i) => (
+        <div key={i} className="dv-vbar-group">
+          <div className="dv-vbar-cols">
+            {group.bars.map((bar, j) => (
+              <div key={j} className="dv-vbar-col" style={{ height: `${Math.round((bar.val / maxVal) * 84)}px`, background: bar.color }}/>
+            ))}
+          </div>
+          <div className="dv-vbar-group-label">{group.label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function FunnelChart({ data }) {
+  return (
+    <div className="dv-funnel">
+      {data.map((stage, i) => (
+        <div key={i} className="dv-funnel-stage">
+          <div className="dv-funnel-label">{stage.label}</div>
+          <div className="dv-funnel-bar-wrap">
+            <div className="dv-funnel-bar" style={{ width: `${stage.pct}%`, background: stage.color }}>
+              {stage.pct > 18 ? stage.val : ''}
+            </div>
+          </div>
+          {stage.pct <= 18 && <div className="dv-funnel-val">{stage.val}</div>}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function GaugeRow({ gauges }) {
+  const circ = Math.PI * 30
+  return (
+    <div className="dv-gauge-row">
+      {gauges.map((g, i) => (
+        <div key={i} className="dv-gauge-item">
+          <svg width="72" height="42" viewBox="0 0 72 42" fill="none">
+            <path d="M 6 38 A 30 30 0 0 1 66 38" stroke="var(--teal-10)" strokeWidth="8" strokeLinecap="round"/>
+            <path d="M 6 38 A 30 30 0 0 1 66 38" stroke={g.color} strokeWidth="8" strokeLinecap="round"
+              strokeDasharray={`${(g.pct / 100) * circ} ${circ}`}/>
+            <text x="36" y="37" textAnchor="middle" fontSize="11" fontWeight="700" fill="#1F4141" fontFamily="Plus Jakarta Sans,sans-serif">{g.val}</text>
+          </svg>
+          <div className="dv-gauge-label">{g.label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function DvTable({ rows }) {
+  return (
+    <div style={{ overflowX: 'auto' }}>
+      <table className="dv-table">
+        <thead><tr>
+          <th>ID</th><th>Agent</th><th>Category</th><th>Status</th><th>Time</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>
+              <td style={{ color: 'var(--teal)', fontWeight: 500 }}>{r.id}</td>
+              <td>{r.agent}</td>
+              <td style={{ color: 'var(--cutty-sark)' }}>{r.queue}</td>
+              <td><span className={`dv-status-badge ${r.status}`}>{r.status}</span></td>
+              <td style={{ opacity: 0.6, fontSize: '11px' }}>{r.time}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+const WEEK_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+function ChartCard({ title, sub, children, delay = '0s', style }) {
+  return (
+    <div className="dv-chart-card" style={{ animationDelay: delay, ...style }}>
+      <div className="dv-chart-hd">
+        <div>
+          <div className="dv-chart-title">{title}</div>
+          {sub && <div className="dv-chart-sub">{sub}</div>}
+        </div>
+        <div className="dv-chart-actions">
+          <button className="dv-chart-btn" title="Download">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/><path d="M1.5 10.5h9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
+          </button>
+          <button className="dv-chart-btn" title="Options">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="2" r="1" fill="currentColor"/><circle cx="6" cy="6" r="1" fill="currentColor"/><circle cx="6" cy="10" r="1" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+      {children}
+    </div>
+  )
+}
+
+function DonutBlock({ title, sub, data, center, centerSub, delay }) {
+  return (
+    <ChartCard title={title} sub={sub} delay={delay}>
+      <div className="dv-donut-wrap">
+        <DonutSVG data={data} center={center} centerSub={centerSub}/>
+        <div className="dv-donut-legend">
+          {data.map((d, i) => (
+            <div key={i} className="dv-donut-leg-item">
+              <div className="dv-donut-leg-dot" style={{ background: d.color }}/>
+              <div className="dv-donut-leg-val">{d.val}</div>
+              <div className="dv-donut-leg-lbl">{d.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </ChartCard>
+  )
+}
+
+function LineBlock({ title, sub, data, delay }) {
+  return (
+    <ChartCard title={title} sub={sub} delay={delay}>
+      <MultiLineSVG data={data} h={110}/>
+      <div className="dv-chart-xaxis">{WEEK_LABELS.map(l => <span key={l}>{l}</span>)}</div>
+      <div className="dv-legend">
+        {data.map((s, i) => (
+          <div key={i} className="dv-legend-item">
+            {s.dashed
+              ? <div className="dv-legend-dashed" style={{ borderTopColor: s.color }}/>
+              : <div className="dv-legend-line" style={{ background: s.color }}/>}
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </ChartCard>
+  )
+}
+
+function DashboardBody({ cfg }) {
+  if (!cfg) return null
+  const { layout, kpis, areaTitle, areaSub, donutTitle, donutSub, donutData, donutCenter, donutCenterSub,
+    barTitle, barSub, barData, lineTitle, lineSub, lineData, vbarTitle, vbarSub, vbarData,
+    gaugeTitle, gaugeSub, gauges, funnelTitle, funnelSub, funnelData, tableTitle, tableSub, tableRows } = cfg
+  const rows = tableRows || DV_ACTIVITY
+
+  if (layout === 'standard') {
+    return (
+      <>
+        <div className="dv-kpi-row">
+          {kpis.map((k, i) => <KpiCard key={i} kpi={k} idx={i}/>)}
+        </div>
+        <div className="dv-charts-row two-one">
+          <ChartCard title={areaTitle} sub={areaSub} delay="0.1s">
+            <AreaSVG sparkData={kpis[0].sparkData} h={90}/>
+            <div className="dv-chart-xaxis">{WEEK_LABELS.map(l => <span key={l}>{l}</span>)}</div>
+          </ChartCard>
+          <DonutBlock title={donutTitle} sub={donutSub} data={donutData} center={donutCenter} centerSub={donutCenterSub} delay="0.15s"/>
+        </div>
+        <div className="dv-charts-row two-one">
+          <ChartCard title={barTitle} sub={barSub} delay="0.2s">
+            <HBarList data={barData}/>
+          </ChartCard>
+          <ChartCard title={tableTitle} sub={tableSub} delay="0.25s">
+            <DvTable rows={rows}/>
+          </ChartCard>
+        </div>
+      </>
+    )
+  }
+
+  if (layout === 'quality') {
+    return (
+      <>
+        <div className="dv-kpi-row">
+          {kpis.map((k, i) => <KpiCard key={i} kpi={k} idx={i}/>)}
+        </div>
+        <div className="dv-charts-row half">
+          <LineBlock title={lineTitle} sub={lineSub} data={lineData} delay="0.1s"/>
+          <ChartCard title={barTitle} sub={barSub} delay="0.15s">
+            <HBarList data={barData}/>
+          </ChartCard>
+        </div>
+        <div className="dv-charts-row half">
+          <DonutBlock title={donutTitle} sub={donutSub} data={donutData} center={donutCenter} centerSub={donutCenterSub} delay="0.2s"/>
+          <ChartCard title="Score Distribution" sub="QA scores by band · last 30 days" delay="0.25s">
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, height: 100, padding: '8px 4px 0' }}>
+              {[{ l: '80–84', v: 12 }, { l: '85–89', v: 22 }, { l: '90–94', v: 38 }, { l: '95–99', v: 28 }].map((b, i) => (
+                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <div style={{ width: '100%', background: '#4DB6AC', borderRadius: '4px 4px 0 0', height: `${b.v * 2}px`, opacity: 0.6 + i * 0.1 }}/>
+                  <span style={{ fontSize: 10, color: 'var(--cutty-sark)', opacity: 0.65 }}>{b.l}</span>
+                </div>
+              ))}
+            </div>
+          </ChartCard>
+        </div>
+      </>
+    )
+  }
+
+  if (layout === 'trend') {
+    return (
+      <>
+        <div className="dv-kpi-row">
+          {kpis.map((k, i) => <KpiCard key={i} kpi={k} idx={i}/>)}
+        </div>
+        <div className="dv-charts-row full">
+          <ChartCard title={areaTitle} sub={areaSub} delay="0.1s">
+            <AreaSVG sparkData={kpis[0].sparkData} h={110}/>
+            <div className="dv-chart-xaxis">{WEEK_LABELS.map(l => <span key={l}>{l}</span>)}</div>
+          </ChartCard>
+        </div>
+        <div className="dv-charts-row half">
+          <ChartCard title={barTitle} sub={barSub} delay="0.15s">
+            <HBarList data={barData}/>
+          </ChartCard>
+          <ChartCard title={funnelTitle} sub={funnelSub} delay="0.2s">
+            <FunnelChart data={funnelData}/>
+          </ChartCard>
+        </div>
+      </>
+    )
+  }
+
+  if (layout === 'ai-insights') {
+    return (
+      <>
+        <div className="dv-kpi-row">
+          {kpis.map((k, i) => <KpiCard key={i} kpi={k} idx={i}/>)}
+        </div>
+        <div className="dv-charts-row half">
+          <LineBlock title={lineTitle} sub={lineSub} data={lineData} delay="0.1s"/>
+          <ChartCard title={gaugeTitle} sub={gaugeSub} delay="0.15s">
+            <GaugeRow gauges={gauges}/>
+          </ChartCard>
+        </div>
+        <div className="dv-charts-row half">
+          <ChartCard title={barTitle} sub={barSub} delay="0.2s">
+            <HBarList data={barData}/>
+          </ChartCard>
+          <ChartCard title={tableTitle} sub={tableSub} delay="0.25s">
+            <DvTable rows={rows}/>
+          </ChartCard>
+        </div>
+      </>
+    )
+  }
+
+  if (layout === 'ops-command') {
+    return (
+      <>
+        <div className="dv-kpi-row six">
+          {kpis.map((k, i) => <KpiCard key={i} kpi={k} idx={i}/>)}
+        </div>
+        <div className="dv-charts-row three">
+          <ChartCard title={areaTitle} sub={areaSub} delay="0.1s">
+            <AreaSVG sparkData={kpis[0].sparkData} h={90}/>
+            <div className="dv-chart-xaxis">{WEEK_LABELS.map(l => <span key={l}>{l}</span>)}</div>
+          </ChartCard>
+          <DonutBlock title={donutTitle} sub={donutSub} data={donutData} center={donutCenter} centerSub={donutCenterSub} delay="0.15s"/>
+          <ChartCard title={vbarTitle} sub={vbarSub} delay="0.2s">
+            <VBarChart data={vbarData}/>
+          </ChartCard>
+        </div>
+        <div className="dv-charts-row full">
+          <ChartCard title={tableTitle} sub={tableSub} delay="0.25s">
+            <DvTable rows={DV_ACTIVITY}/>
+          </ChartCard>
+        </div>
+      </>
+    )
+  }
+
+  if (layout === 'productivity') {
+    return (
+      <>
+        <div className="dv-kpi-row">
+          {kpis.map((k, i) => <KpiCard key={i} kpi={k} idx={i}/>)}
+        </div>
+        <div className="dv-charts-row half">
+          <ChartCard title={vbarTitle} sub={vbarSub} delay="0.1s">
+            <VBarChart data={vbarData}/>
+            <div className="dv-legend" style={{ marginTop: 'var(--space-3)' }}>
+              <div className="dv-legend-item"><div className="dv-legend-line" style={{ background: '#4DB6AC' }}/><span>Actual</span></div>
+              <div className="dv-legend-item"><div className="dv-legend-line" style={{ background: 'rgba(77,182,172,0.35)' }}/><span>Target</span></div>
+            </div>
+          </ChartCard>
+          <ChartCard title={gaugeTitle} sub={gaugeSub} delay="0.15s">
+            <GaugeRow gauges={gauges}/>
+          </ChartCard>
+        </div>
+        <div className="dv-charts-row half">
+          <ChartCard title={funnelTitle} sub={funnelSub} delay="0.2s">
+            <FunnelChart data={funnelData}/>
+          </ChartCard>
+          <ChartCard title={tableTitle} sub={tableSub} delay="0.25s">
+            <DvTable rows={rows}/>
+          </ChartCard>
+        </div>
+      </>
+    )
+  }
+
+  return null
 }
 
 function DashboardCard({ dash, onOpen, onAccess }) {
   const thumb = THUMB_SVGS[dash.thumb] || THUMB_SVGS.bar
   const modeLabel = { manual: 'Manual', ai: 'AI', hybrid: 'Hybrid' }
   return (
-    <div className="dash-card" onClick={() => onOpen(dash.id)}>
+    <div className="dash-card" data-mode={dash.mode} onClick={() => onOpen(dash.id)}>
       <div className="dash-card-actions">
         <button className="dash-card-edit-btn" onClick={e => e.stopPropagation()} title="Edit">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -72,21 +737,37 @@ function DashboardCard({ dash, onOpen, onAccess }) {
         </button>
       </div>
       <div className="dash-card-thumb">{thumb}</div>
-      <div className="dash-card-title">{dash.name}</div>
-      <div className="dash-card-desc">{dash.desc}</div>
-      <div className="dash-card-meta">
-        <span className={`home-mode-badge ${dash.mode}`}>{modeLabel[dash.mode] || dash.mode}</span>
-        <button
-          className={`dv-visibility-badge dv-visibility-badge--${dash.visibility || 'private'}`}
-          onClick={e => { e.stopPropagation(); onAccess(dash) }}
-        >
-          {(dash.visibility || 'private') === 'private' ? <>{LockIcon} Private</> : <>{GlobeIcon} Public</>}
-        </button>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ marginLeft: 'auto', flexShrink: 0 }}>
-          <path d="M2 4.5h8M4 2v2.5M8 2v2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-          <rect x="1" y="3.5" width="10" height="7.5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-        </svg>
-        {dash.updated}
+      <div className="dash-card-body">
+        <div className="dash-card-title">{dash.name}</div>
+        <div className="dash-card-desc">{dash.desc}</div>
+        <div className="dash-card-meta">
+          <span className={`home-mode-badge ${dash.mode}`}>
+            <span className="mode-dot"/>
+            {modeLabel[dash.mode] || dash.mode}
+          </span>
+          <button
+            className={`dv-visibility-badge dv-visibility-badge--${dash.visibility || 'private'}`}
+            onClick={e => { e.stopPropagation(); onAccess(dash) }}
+          >
+            {(dash.visibility || 'private') === 'private' ? <>{LockIcon} Private</> : <>{GlobeIcon} Public</>}
+          </button>
+          <span className="dash-card-tiles-count">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <rect x="0.5" y="0.5" width="3.5" height="3.5" rx="0.75" stroke="currentColor" strokeWidth="1"/>
+              <rect x="5.5" y="0.5" width="3.5" height="3.5" rx="0.75" stroke="currentColor" strokeWidth="1"/>
+              <rect x="0.5" y="5.5" width="3.5" height="3.5" rx="0.75" stroke="currentColor" strokeWidth="1"/>
+              <rect x="5.5" y="5.5" width="3.5" height="3.5" rx="0.75" stroke="currentColor" strokeWidth="1"/>
+            </svg>
+            {dash.tiles}
+          </span>
+          <span className="dash-card-updated">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+              <path d="M2 4.5h8M4 2v2.5M8 2v2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+              <rect x="1" y="3.5" width="10" height="7.5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+            </svg>
+            {dash.updated}
+          </span>
+        </div>
       </div>
     </div>
   )
@@ -100,8 +781,20 @@ export default function DataStudioView() {
   const [queryTitle, setQueryTitle] = useState('Untitled Query')
   const [nqStep, setNqStep] = useState(1)
   const [sqlOpen, setSqlOpen] = useState(false)
+  const [selectedArea, setSelectedArea] = useState(null)
+  const [selectedCols, setSelectedCols] = useState([])
+  const [queryRan, setQueryRan] = useState(false)
+  const [aiDescribeOpen, setAiDescribeOpen] = useState(false)
+  const [aiDescribeText, setAiDescribeText] = useState('')
+  const [selectedTimePreset, setSelectedTimePreset] = useState('30d')
+  const [exampleText, setExampleText] = useState('')
+  const [activeDashId, setActiveDashId] = useState(null)
 
   function goToStep(n) { setNqStep(Math.max(1, Math.min(4, n))) }
+  function resetQuery() {
+    setNqStep(1); setSelectedArea(null); setSelectedCols([]); setQueryRan(false)
+    setAiDescribeOpen(false); setAiDescribeText(''); setSelectedTimePreset('30d'); setExampleText('')
+  }
 
   const filtered = activeTab === 'all'
     ? DASHBOARDS_DATA
@@ -180,6 +873,17 @@ export default function DataStudioView() {
               onChange={e => setQueryTitle(e.target.value)}
             />
           </nav>
+          <nav
+            className="topbar-breadcrumb"
+            id="topbar-dv-breadcrumb"
+            style={{ display: isDashboardView ? '' : 'none' }}
+          >
+            <button className="bc-home" onClick={() => dispatch({ type: 'SET_DS_SECTION', section: 'home' })}>My Dashboards</button>
+            <span className="bc-sep">›</span>
+            <span className="bc-title" style={{ pointerEvents: 'none', border: 'none', background: 'transparent', cursor: 'default' }}>
+              {activeDashId ? (DASHBOARDS_DATA.find(d => d.id === activeDashId)?.name || '') : ''}
+            </span>
+          </nav>
         </div>
         <div className="topbar-right">
           <button
@@ -187,6 +891,7 @@ export default function DataStudioView() {
             id="ib-reset-btn"
             title="Start over"
             style={{ display: isNewQuestion ? '' : 'none' }}
+            onClick={() => resetQuery()}
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M2 6.5A4.5 4.5 0 1 1 4.5 11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
@@ -248,11 +953,26 @@ export default function DataStudioView() {
         id="ds-home"
         style={{ display: dsSection === 'home' ? 'flex' : 'none', flex: 1, flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}
       >
-        {/* Topbar: title + action buttons */}
+        {/* Topbar: title + stats + action */}
         <div className="qs-page-topbar" id="home-topbar">
           <div>
             <div className="qs-page-title">My Dashboards</div>
-            <div className="qs-page-sub" id="home-dash-count">{filtered.length} dashboards</div>
+            <div className="qs-page-stats">
+              <div className="qs-page-stat">
+                <span className="qs-page-stat-num">{DASHBOARDS_DATA.length}</span>
+                <span className="qs-page-stat-label">Total</span>
+              </div>
+              <div className="qs-page-stat-sep"/>
+              <div className="qs-page-stat">
+                <span className="qs-page-stat-num">{DASHBOARDS_DATA.filter(d => d.mode === 'ai').length}</span>
+                <span className="qs-page-stat-label">AI</span>
+              </div>
+              <div className="qs-page-stat-sep"/>
+              <div className="qs-page-stat">
+                <span className="qs-page-stat-num">{DASHBOARDS_DATA.filter(d => d.mode === 'hybrid').length}</span>
+                <span className="qs-page-stat-label">Hybrid</span>
+              </div>
+            </div>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }} id="create-dash-btn-wrap">
             <button className="qs-primary-btn" onClick={() => openModal('create-dashboard')}>
@@ -283,7 +1003,7 @@ export default function DataStudioView() {
                 <DashboardCard
                   key={d.id}
                   dash={d}
-                  onOpen={() => dispatch({ type: 'SET_DS_SECTION', section: 'dashboard-view' })}
+                  onOpen={dashId => { setActiveDashId(dashId); dispatch({ type: 'SET_DS_SECTION', section: 'dashboard-view' }) }}
                   onAccess={dash => openModal('access', { dashName: dash.name })}
                 />
               ))}
@@ -417,15 +1137,17 @@ export default function DataStudioView() {
                   id="nqb-question"
                   aria-label="Describe your query in plain language"
                   placeholder="e.g. How many tickets were resolved last month by each agent?"
-                ></textarea>
+                  value={exampleText}
+                  onChange={e => setExampleText(e.target.value)}
+                />
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: 'var(--weight-semibold)', color: 'var(--cutty-sark)', opacity: 0.75, letterSpacing: '0.05em', marginBottom: 'var(--space-2)', textTransform: 'uppercase' }}>Try an example</div>
                   <div className="nqb-example-chips">
-                    <button className="nqb-example-chip">Ticket volume by agent last 30 days</button>
-                    <button className="nqb-example-chip">Average resolution time by queue</button>
-                    <button className="nqb-example-chip">SLA compliance rate this month</button>
-                    <button className="nqb-example-chip">Top 10 customers by open tickets</button>
-                    <button className="nqb-example-chip">Agent performance scorecard</button>
+                    <button className="nqb-example-chip" onClick={() => { setExampleText('Ticket volume by agent last 30 days'); goToStep(2) }}>Ticket volume by agent last 30 days</button>
+                    <button className="nqb-example-chip" onClick={() => { setExampleText('Average resolution time by queue'); goToStep(2) }}>Average resolution time by queue</button>
+                    <button className="nqb-example-chip" onClick={() => { setExampleText('SLA compliance rate this month'); goToStep(2) }}>SLA compliance rate this month</button>
+                    <button className="nqb-example-chip" onClick={() => { setExampleText('Top 10 customers by open tickets'); goToStep(2) }}>Top 10 customers by open tickets</button>
+                    <button className="nqb-example-chip" onClick={() => { setExampleText('Agent performance scorecard'); goToStep(2) }}>Agent performance scorecard</button>
                   </div>
                 </div>
               </div>
@@ -437,39 +1159,39 @@ export default function DataStudioView() {
                   <div className="nqb-step-sub">Pick the area that best matches your question.</div>
                 </div>
                 <div className="nqb-data-grid" id="nqb-data-grid">
-                  <button type="button" className="nqb-data-btn" data-area="tickets">
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'tickets' ? ' selected' : ''}`} data-area="tickets" onClick={() => { setSelectedArea('tickets'); setSelectedCols(COLUMNS_BY_AREA.tickets.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">Tickets</span>
                     <span className="nqb-data-btn-sub">Support &amp; service requests</span>
                   </button>
-                  <button type="button" className="nqb-data-btn" data-area="agents">
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'agents' ? ' selected' : ''}`} data-area="agents" onClick={() => { setSelectedArea('agents'); setSelectedCols(COLUMNS_BY_AREA.agents.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" stroke="currentColor" strokeWidth="1.5"/><path d="M4.5 20.5c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">Agents</span>
                     <span className="nqb-data-btn-sub">Team &amp; individual performance</span>
                   </button>
-                  <button type="button" className="nqb-data-btn" data-area="queues">
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'queues' ? ' selected' : ''}`} data-area="queues" onClick={() => { setSelectedArea('queues'); setSelectedCols(COLUMNS_BY_AREA.queues.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M8 9h8M8 12h8M8 15h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">Queues</span>
                     <span className="nqb-data-btn-sub">Queue load &amp; wait times</span>
                   </button>
-                  <button type="button" className="nqb-data-btn" data-area="sla">
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'sla' ? ' selected' : ''}`} data-area="sla" onClick={() => { setSelectedArea('sla'); setSelectedCols(COLUMNS_BY_AREA.sla.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="currentColor" strokeWidth="1.5"/><path d="M12 9.5V13l2.5 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 3h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">SLA</span>
                     <span className="nqb-data-btn-sub">SLA compliance &amp; breaches</span>
                   </button>
-                  <button type="button" className="nqb-data-btn" data-area="customers">
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'customers' ? ' selected' : ''}`} data-area="customers" onClick={() => { setSelectedArea('customers'); setSelectedCols(COLUMNS_BY_AREA.customers.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M8 9V6.5A4 4 0 0 1 16 6.5V9" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><rect x="10" y="15" width="4" height="6" rx="1" stroke="currentColor" strokeWidth="1.3"/></svg>
                     <span className="nqb-data-btn-label">Customers</span>
                     <span className="nqb-data-btn-sub">Accounts &amp; contacts</span>
                   </button>
-                  <button type="button" className="nqb-data-btn" data-area="csat">
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'csat' ? ' selected' : ''}`} data-area="csat" onClick={() => { setSelectedArea('csat'); setSelectedCols(COLUMNS_BY_AREA.csat.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l2.5 5.1 5.6.81-4.05 3.95.96 5.59L12 15.9l-4.97 2.55.96-5.59L4 8.91l5.6-.81L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>
                     <span className="nqb-data-btn-label">CSAT</span>
                     <span className="nqb-data-btn-sub">Satisfaction scores &amp; feedback</span>
                   </button>
                 </div>
                 {/* Inline Kap AI nudge: step 1 */}
-                <div className="nqb-inline-nudge" id="nqb-nudge-2" style={{ display: 'none' }}>
+                <div className="nqb-inline-nudge" id="nqb-nudge-2" style={{ display: selectedArea ? 'flex' : 'none' }}>
                   <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
                   <div className="nqb-inline-nudge-body">
                     <span className="nqb-inline-nudge-text" id="nqb-nudge-2-text">Data detected. Want me to suggest the most useful columns &amp; filters for your question?</span>
@@ -488,13 +1210,27 @@ export default function DataStudioView() {
                   <div className="nqb-step-sub">We've pre-selected the most useful ones — tweak as needed.</div>
                 </div>
                 <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
-                  <button style={{ fontSize: 'var(--font-sm)', color: 'var(--teal)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", padding: 0 }}>Select all</button>
+                  <button style={{ fontSize: 'var(--font-sm)', color: 'var(--teal)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", padding: 0 }} onClick={() => setSelectedCols((COLUMNS_BY_AREA[selectedArea]||[]).map(c=>c.key))}>Select all</button>
                   <span style={{ color: 'var(--nebula)', userSelect: 'none' }}>&middot;</span>
-                  <button style={{ fontSize: 'var(--font-sm)', color: 'var(--cutty-sark)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", padding: 0 }}>Clear all</button>
+                  <button style={{ fontSize: 'var(--font-sm)', color: 'var(--cutty-sark)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", padding: 0 }} onClick={() => setSelectedCols([])}>Clear all</button>
                 </div>
-                <div className="nqb-col-grid" id="nqb-col-grid"></div>
+                <div className="nqb-col-grid" id="nqb-col-grid">
+                  {(COLUMNS_BY_AREA[selectedArea] || []).map(col => (
+                    <label key={col.key} className={`nqb-col-item${selectedCols.includes(col.key) ? ' selected' : ''}`}>
+                      <input
+                        type="checkbox"
+                        checked={selectedCols.includes(col.key)}
+                        onChange={() => setSelectedCols(prev =>
+                          prev.includes(col.key) ? prev.filter(k => k !== col.key) : [...prev, col.key]
+                        )}
+                      />
+                      <span className="nqb-col-name">{col.label}</span>
+                      <span className="nqb-col-type">{col.type}</span>
+                    </label>
+                  ))}
+                </div>
                 {/* Inline Kap AI nudge: step 2 */}
-                <div className="nqb-inline-nudge" id="nqb-nudge-3" style={{ display: 'none' }}>
+                <div className="nqb-inline-nudge" id="nqb-nudge-3" style={{ display: selectedCols.length >= 3 ? 'flex' : 'none' }}>
                   <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
                   <div className="nqb-inline-nudge-body">
                     <span className="nqb-inline-nudge-text">I can predict the remaining columns you'll need based on your question. Complete the selection for you?</span>
@@ -518,13 +1254,13 @@ export default function DataStudioView() {
                   <div className="nqb-inline-nudge-body">
                     <span className="nqb-inline-nudge-text">Describe what you want to see — I'll set the grouping &amp; filters. <em>e.g. "by agent, last 7 days"</em></span>
                     <div className="nqb-inline-nudge-actions" style={{ marginTop: 'var(--space-2)' }}>
-                      <button className="nqb-nudge-action-btn">Describe it</button>
+                      <button className="nqb-nudge-action-btn" onClick={() => setAiDescribeOpen(true)}>Describe it</button>
                       <button className="nqb-nudge-dismiss">Set manually</button>
                     </div>
                   </div>
                 </div>
                 {/* Describe-it pill bar */}
-                <div className="nqb-describe-bar" id="nqb-describe-bar" style={{ display: 'none' }}>
+                <div className="nqb-describe-bar" id="nqb-describe-bar" style={{ display: aiDescribeOpen ? 'flex' : 'none' }}>
                   <div className="nqb-describe-bar-inner">
                     <span className="nqb-describe-bar-icon" aria-hidden="true">✦</span>
                     <input
@@ -532,20 +1268,22 @@ export default function DataStudioView() {
                       className="nqb-describe-input"
                       type="text"
                       placeholder='e.g. "by agent, last 7 days, status open"'
+                      value={aiDescribeText}
+                      onChange={e => setAiDescribeText(e.target.value)}
                     />
-                    <button className="nqb-nudge-action-btn" style={{ borderRadius: '20px', flexShrink: 0 }}>Apply</button>
-                    <button className="nqb-nudge-dismiss">Cancel</button>
+                    <button className="nqb-nudge-action-btn" style={{ borderRadius: '20px', flexShrink: 0 }} onClick={() => setAiDescribeOpen(false)}>Apply</button>
+                    <button className="nqb-nudge-dismiss" onClick={() => setAiDescribeOpen(false)}>Cancel</button>
                   </div>
                 </div>
                 <div>
                   <div style={{ fontSize: 'var(--font-sm)', fontWeight: 'var(--weight-semibold)', color: 'var(--dark-teal)', marginBottom: 'var(--space-3)' }}>Time range</div>
                   <div className="nqb-time-row" id="nqb-time-row">
-                    <button className="nqb-time-btn" data-preset="today">Today</button>
-                    <button className="nqb-time-btn" data-preset="7d">Last 7 days</button>
-                    <button className="nqb-time-btn selected" data-preset="30d">Last 30 days</button>
-                    <button className="nqb-time-btn" data-preset="90d">Last 90 days</button>
-                    <button className="nqb-time-btn" data-preset="mtd">This month</button>
-                    <button className="nqb-time-btn" data-preset="ytd">This year</button>
+                    <button className={`nqb-time-btn${selectedTimePreset === 'today' ? ' selected' : ''}`} data-preset="today" onClick={() => setSelectedTimePreset('today')}>Today</button>
+                    <button className={`nqb-time-btn${selectedTimePreset === '7d' ? ' selected' : ''}`} data-preset="7d" onClick={() => setSelectedTimePreset('7d')}>Last 7 days</button>
+                    <button className={`nqb-time-btn${selectedTimePreset === '30d' ? ' selected' : ''}`} data-preset="30d" onClick={() => setSelectedTimePreset('30d')}>Last 30 days</button>
+                    <button className={`nqb-time-btn${selectedTimePreset === '90d' ? ' selected' : ''}`} data-preset="90d" onClick={() => setSelectedTimePreset('90d')}>Last 90 days</button>
+                    <button className={`nqb-time-btn${selectedTimePreset === 'mtd' ? ' selected' : ''}`} data-preset="mtd" onClick={() => setSelectedTimePreset('mtd')}>This month</button>
+                    <button className={`nqb-time-btn${selectedTimePreset === 'ytd' ? ' selected' : ''}`} data-preset="ytd" onClick={() => setSelectedTimePreset('ytd')}>This year</button>
                   </div>
                 </div>
                 <div>
@@ -749,25 +1487,8 @@ export default function DataStudioView() {
             Edit
           </button>
         </div>
-        <div className="dv-body" id="dv-body" style={{ flex: 1, overflow: 'auto', padding: 'var(--space-8) var(--space-10)' }}>
-          <div className="dash-tiles">
-            {[
-              { title: 'Avg Handle Time', value: '4.2m', sub: '+0.3m vs last week' },
-              { title: 'First Response Rate', value: '87%', sub: '−3% vs target' },
-              { title: 'Tickets Resolved', value: '1,204', sub: 'Today' },
-              { title: 'CSAT Score', value: '4.6/5', sub: '+0.2 vs last month' },
-            ].map((tile, i) => (
-              <div key={i} className="dash-tile">
-                <div className="dash-tile-hd">
-                  <span className="dash-tile-title">{tile.title}</span>
-                  <button className="dash-tile-remove">×</button>
-                </div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, color: 'var(--dark-teal)' }}>{tile.value}</div>
-                <div style={{ fontSize: 'var(--font-xs)', color: 'var(--cutty-sark)' }}>{tile.sub}</div>
-                <div className="dash-tile-viz"></div>
-              </div>
-            ))}
-          </div>
+        <div className="dv-body" id="dv-body">
+          <DashboardBody cfg={activeDashId ? DV_CONFIGS_BY_ID[activeDashId] : null}/>
         </div>
       </div>
 

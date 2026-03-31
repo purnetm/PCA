@@ -27,7 +27,7 @@ export default function UserMenu({ open, onToggle, onDarkMode, onSignOut }) {
   )
   const ChevronIcon = (
     <svg id="user-menu-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
-      style={{ transform: open ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.2s' }}>
+      style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
       <path d="M2 8l4-4 4 4"/>
     </svg>
   )

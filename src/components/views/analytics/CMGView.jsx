@@ -60,9 +60,9 @@ export default function CMGView() {
           <div className={`cmg-pane${activeTab === 'a' ? ' active' : ''}`} id="cmg-pane-a">
             <div className="cmg-pane-hd">
               <span className="cmg-pane-title">Customer Behavior Patterns</span>
-              <button className="cmg-show-more-btn" id="cmg-more-btn-a" onClick={() => toggleMore('a')}>
-                {expandedPanes.has('a') ? 'Show less ›' : 'Show 9 more ›'}
-              </button>
+              {!expandedPanes.has('a') && (
+                <button className="cmg-show-more-btn" id="cmg-more-btn-a" onClick={() => toggleMore('a')}>Show 9 more ›</button>
+              )}
             </div>
 
             <div className="cmg-grid">
@@ -71,7 +71,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-a1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Repeat Issue Rate</span>
-                  <span className="cmg-card-badge amber">Amber</span>
+                  <span className="cmg-card-badge caution">Caution</span>
                 </div>
                 <div className="cmg-card-desc">% of customers who raised the same intent more than once</div>
                 <div className="cmg-card-vis">
@@ -89,7 +89,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>{expandedCard === 'a1' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'a1' ? <button className="cmg-close-btn" onClick={() => toggleCard('a1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>Details ›</button>}
                 </div>
               </div>
 
@@ -97,7 +97,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-a2">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Issue Gravity Score</span>
-                  <span className="cmg-card-badge amber">Amber</span>
+                  <span className="cmg-card-badge caution">Caution</span>
                 </div>
                 <div className="cmg-card-desc">Severity of issues — combines type, order value, prior attempts, and sentiment</div>
                 <div className="cmg-card-vis">
@@ -117,7 +117,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e07a2a', fontWeight: 600 }}>19% High or Critical — monitor closely</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>{expandedCard === 'a2' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'a2' ? <button className="cmg-close-btn" onClick={() => toggleCard('a2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>Details ›</button>}
                 </div>
               </div>
 
@@ -125,7 +125,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-a3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Customer Loyalty Erosion Score</span>
-                  <span className="cmg-card-badge amber">Amber</span>
+                  <span className="cmg-card-badge caution">Caution</span>
                 </div>
                 <div className="cmg-card-desc">Composite deterioration score: worsening sentiment, contact frequency, lower CSAT, higher-gravity intents</div>
                 <div className="cmg-card-vis">
@@ -145,7 +145,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>{expandedCard === 'a3' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'a3' ? <button className="cmg-close-btn" onClick={() => toggleCard('a3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -161,8 +161,8 @@ export default function CMGView() {
                         <thead><tr><th>Intent</th><th>Repeat %</th><th>vs Last</th><th>Signal</th></tr></thead>
                         <tbody>
                           <tr><td>Refund request</td><td>38%</td><td style={{ color: '#e07a2a' }}>&#9650; +5pp</td><td><span className="cmg-card-badge red" style={{ fontSize: 10 }}>High</span></td></tr>
-                          <tr><td>Order status</td><td>27%</td><td style={{ color: '#e07a2a' }}>&#9650; +2pp</td><td><span className="cmg-card-badge amber" style={{ fontSize: 10 }}>Med</span></td></tr>
-                          <tr><td>Delivery delay</td><td>19%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge amber" style={{ fontSize: 10 }}>Med</span></td></tr>
+                          <tr><td>Order status</td><td>27%</td><td style={{ color: '#e07a2a' }}>&#9650; +2pp</td><td><span className="cmg-card-badge caution" style={{ fontSize: 10 }}>Med</span></td></tr>
+                          <tr><td>Delivery delay</td><td>19%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge caution" style={{ fontSize: 10 }}>Med</span></td></tr>
                           <tr><td>Product defect</td><td>11%</td><td style={{ color: '#27ae7a' }}>&#9660; -1pp</td><td><span className="cmg-card-badge green" style={{ fontSize: 10 }}>Low</span></td></tr>
                           <tr><td>Account issue</td><td>5%</td><td style={{ color: 'var(--text-muted)' }}>— flat</td><td><span className="cmg-card-badge green" style={{ fontSize: 10 }}>Low</span></td></tr>
                         </tbody>
@@ -212,7 +212,11 @@ export default function CMGView() {
             </div>{/* /cmg-grid spotlight A */}
 
             {/* Secondary metrics grid A */}
-            <div className="cmg-hidden-grid" id="cmg-hidden-a" style={{ display: expandedPanes.has('a') ? '' : 'none' }}>
+            <div className="cmg-hidden-grid" id="cmg-hidden-a" style={{ display: expandedPanes.has('a') ? 'grid' : 'none' }}>
+
+              <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                <button className="cmg-close-btn" onClick={() => toggleMore('a')} aria-label="Collapse">✕</button>
+              </div>
 
               <div className="cmg-sec-card">
                 <div className="cmg-card-hd"><span className="cmg-card-name">Issue Gravity Escalation Pattern</span><span className="cmg-card-badge red">Watch</span></div>
@@ -225,7 +229,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Customer Contact Velocity</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Customer Contact Velocity</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">Rate at which customers are accelerating their contact frequency</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-dist-bar" style={{ height: 10 }}>
@@ -242,7 +246,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Self-Resolution Dropout Rate</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Self-Resolution Dropout Rate</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">% who tried self-service before reaching a live agent and failed</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">34.7%</div>
@@ -254,7 +258,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Channel Switching Behavior</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Channel Switching Behavior</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">% of customers switching support channels within the same issue journey</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">27.1%</div>
@@ -275,7 +279,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Issue Resolution Satisfaction Gap</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Issue Resolution Satisfaction Gap</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">Gap between resolution asked for vs resolution actually received</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">31.4%</div>
@@ -285,7 +289,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Post-Resolution Sentiment Drop</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Post-Resolution Sentiment Drop</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">% of customers whose sentiment worsens after resolution is provided</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">17.8%</div>
@@ -295,7 +299,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Issue Persistence Score</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Issue Persistence Score</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">How consistently a customer contacts for the same unresolved intent category</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-dist-bar" style={{ height: 10 }}>
@@ -329,9 +333,9 @@ export default function CMGView() {
           <div className={`cmg-pane${activeTab === 'b' ? ' active' : ''}`} id="cmg-pane-b">
             <div className="cmg-pane-hd">
               <span className="cmg-pane-title">Customer Sentiment Intelligence</span>
-              <button className="cmg-show-more-btn" id="cmg-more-btn-b" onClick={() => toggleMore('b')}>
-                {expandedPanes.has('b') ? 'Show less ›' : 'Show 3 more ›'}
-              </button>
+              {!expandedPanes.has('b') && (
+                <button className="cmg-show-more-btn" id="cmg-more-btn-b" onClick={() => toggleMore('b')}>Show 3 more ›</button>
+              )}
             </div>
 
             <div className="cmg-grid">
@@ -340,7 +344,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-b1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Customer Sentiment Distribution</span>
-                  <span className="cmg-card-badge amber">Amber</span>
+                  <span className="cmg-card-badge caution">Caution</span>
                 </div>
                 <div className="cmg-card-desc">Population-level snapshot: how the entire customer base feels across all tickets</div>
                 <div className="cmg-card-vis">
@@ -358,7 +362,7 @@ export default function CMGView() {
                   <div className="cmg-stat-compare" style={{ marginTop: 8 }}><span className="cmg-stat-arrow warn">&#9650;</span> Negative up from 16.4% last period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>{expandedCard === 'b1' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'b1' ? <button className="cmg-close-btn" onClick={() => toggleCard('b1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>Details ›</button>}
                 </div>
               </div>
 
@@ -388,7 +392,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e03a2a', fontWeight: 600 }}>Distressed + Irate = 23% of base</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>{expandedCard === 'b2' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'b2' ? <button className="cmg-close-btn" onClick={() => toggleCard('b2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>Details ›</button>}
                 </div>
               </div>
 
@@ -396,7 +400,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-b3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Frustration Trigger Mapping</span>
-                  <span className="cmg-card-badge amber">Watch</span>
+                  <span className="cmg-card-badge caution">Watch</span>
                 </div>
                 <div className="cmg-card-desc">Specific moments/statements that caused measurable negative sentiment shift</div>
                 <div className="cmg-card-vis">
@@ -424,7 +428,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 6, fontSize: 10, color: 'var(--text-muted)' }}>Freq = occurrences · Drop = avg sentiment score change</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>{expandedCard === 'b3' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'b3' ? <button className="cmg-close-btn" onClick={() => toggleCard('b3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -487,10 +491,14 @@ export default function CMGView() {
             </div>{/* /cmg-grid spotlight B */}
 
             {/* Secondary metrics grid B */}
-            <div className="cmg-hidden-grid" id="cmg-hidden-b" style={{ display: expandedPanes.has('b') ? '' : 'none' }}>
+            <div className="cmg-hidden-grid" id="cmg-hidden-b" style={{ display: expandedPanes.has('b') ? 'grid' : 'none' }}>
+
+              <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                <button className="cmg-close-btn" onClick={() => toggleMore('b')} aria-label="Collapse">✕</button>
+              </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Sentiment Transition Matrix</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Sentiment Transition Matrix</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">How customer sentiment shifts between consecutive tickets (not within a ticket)</div>
                 <div className="cmg-card-vis">
                   <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 6 }}>Ticket N → Ticket N+1 transitions (customer count)</div>
@@ -516,7 +524,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Sentiment Drift Throughout Journey</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Sentiment Drift Throughout Journey</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">Net sentiment change measured at 4 conversation stages: open → mid → post-resolution → close</div>
                 <div className="cmg-card-vis">
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: 48, marginBottom: 4, gap: 4 }}>
@@ -545,7 +553,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Customer Tone Shift Rate</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Customer Tone Shift Rate</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">% of tickets where customer tone changed significantly mid-conversation</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">14.3%</div>
@@ -565,9 +573,9 @@ export default function CMGView() {
           <div className={`cmg-pane${activeTab === 'c' ? ' active' : ''}`} id="cmg-pane-c">
             <div className="cmg-pane-hd">
               <span className="cmg-pane-title">Customer Loyalty &amp; Churn Intelligence</span>
-              <button className="cmg-show-more-btn" id="cmg-more-btn-c" onClick={() => toggleMore('c')}>
-                {expandedPanes.has('c') ? 'Show less ›' : 'Show 1 more ›'}
-              </button>
+              {!expandedPanes.has('c') && (
+                <button className="cmg-show-more-btn" id="cmg-more-btn-c" onClick={() => toggleMore('c')}>Show 1 more ›</button>
+              )}
             </div>
 
             <div className="cmg-grid">
@@ -600,7 +608,7 @@ export default function CMGView() {
                   <div className="cmg-stat-compare" style={{ marginTop: 10 }}><span className="cmg-stat-arrow warn">&#9650;</span> High band grew by 89 customers this period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>{expandedCard === 'c1' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'c1' ? <button className="cmg-close-btn" onClick={() => toggleCard('c1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>Details ›</button>}
                 </div>
               </div>
 
@@ -634,7 +642,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e03a2a', fontWeight: 600 }}>187 High-Value customers at High churn risk</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>{expandedCard === 'c2' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'c2' ? <button className="cmg-close-btn" onClick={() => toggleCard('c2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>Details ›</button>}
                 </div>
               </div>
 
@@ -653,7 +661,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 10, fontSize: 12 }}><strong>38 customers</strong> de-escalated from High risk band this period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>{expandedCard === 'c3' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'c3' ? <button className="cmg-close-btn" onClick={() => toggleCard('c3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -716,7 +724,11 @@ export default function CMGView() {
             </div>{/* /cmg-grid spotlight C */}
 
             {/* Secondary metrics grid C */}
-            <div className="cmg-hidden-grid" id="cmg-hidden-c" style={{ display: expandedPanes.has('c') ? '' : 'none' }}>
+            <div className="cmg-hidden-grid" id="cmg-hidden-c" style={{ display: expandedPanes.has('c') ? 'grid' : 'none' }}>
+
+              <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                <button className="cmg-close-btn" onClick={() => toggleMore('c')} aria-label="Collapse">✕</button>
+              </div>
 
               <div className="cmg-sec-card">
                 <div className="cmg-card-hd"><span className="cmg-card-name">Pre-Churn Behavioral Signature</span><span className="cmg-card-badge red">Action Needed</span></div>
@@ -742,9 +754,9 @@ export default function CMGView() {
           <div className={`cmg-pane${activeTab === 'd' ? ' active' : ''}`} id="cmg-pane-d">
             <div className="cmg-pane-hd">
               <span className="cmg-pane-title">Intent &amp; Journey Intelligence</span>
-              <button className="cmg-show-more-btn" id="cmg-more-btn-d" onClick={() => toggleMore('d')}>
-                {expandedPanes.has('d') ? 'Show less ›' : 'Show 3 more ›'}
-              </button>
+              {!expandedPanes.has('d') && (
+                <button className="cmg-show-more-btn" id="cmg-more-btn-d" onClick={() => toggleMore('d')}>Show 3 more ›</button>
+              )}
             </div>
 
             <div className="cmg-grid">
@@ -753,7 +765,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-d1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Customer Journey Abandonment Rate</span>
-                  <span className="cmg-card-badge amber">Amber</span>
+                  <span className="cmg-card-badge caution">Caution</span>
                 </div>
                 <div className="cmg-card-desc">% of customers who disengaged mid-conversation before a resolution was reached</div>
                 <div className="cmg-card-vis">
@@ -784,7 +796,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>{expandedCard === 'd1' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'd1' ? <button className="cmg-close-btn" onClick={() => toggleCard('d1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>Details ›</button>}
                 </div>
               </div>
 
@@ -806,7 +818,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>{expandedCard === 'd2' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'd2' ? <button className="cmg-close-btn" onClick={() => toggleCard('d2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>Details ›</button>}
                 </div>
               </div>
 
@@ -814,7 +826,7 @@ export default function CMGView() {
               <div className="cmg-card" id="cmg-card-d3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Resolution Journey Stage Breakdown</span>
-                  <span className="cmg-card-badge amber">Amber</span>
+                  <span className="cmg-card-badge caution">Caution</span>
                 </div>
                 <div className="cmg-card-desc">Total handle time split across: Greeting → Probing → Hold → Execution → Closing</div>
                 <div className="cmg-card-vis">
@@ -836,7 +848,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e07a2a', fontWeight: 600 }}>Hold phase (22%) above 15% benchmark — investigate hold causes</div>
                 </div>
                 <div className="cmg-card-footer">
-                  <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>{expandedCard === 'd3' ? 'Hide' : 'Details ›'}</button>
+                  {expandedCard === 'd3' ? <button className="cmg-close-btn" onClick={() => toggleCard('d3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -900,10 +912,14 @@ export default function CMGView() {
             </div>{/* /cmg-grid spotlight D */}
 
             {/* Secondary metrics grid D */}
-            <div className="cmg-hidden-grid" id="cmg-hidden-d" style={{ display: expandedPanes.has('d') ? '' : 'none' }}>
+            <div className="cmg-hidden-grid" id="cmg-hidden-d" style={{ display: expandedPanes.has('d') ? 'grid' : 'none' }}>
+
+              <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                <button className="cmg-close-btn" onClick={() => toggleMore('d')} aria-label="Collapse">✕</button>
+              </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Intent Shift Analysis</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Intent Shift Analysis</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">How customer intent changes turn-by-turn within a conversation — from opening to closing intent</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">41.2%</div>
@@ -913,7 +929,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Intent Complexity Score</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Intent Complexity Score</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">How complex a customer's support needs are — distinct intents, escalations, multi-agent handling</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-dist-bar" style={{ height: 10 }}>
@@ -931,7 +947,7 @@ export default function CMGView() {
               </div>
 
               <div className="cmg-sec-card">
-                <div className="cmg-card-hd"><span className="cmg-card-name">Repeat Contact Interval Trend</span><span className="cmg-card-badge amber">Watch</span></div>
+                <div className="cmg-card-hd"><span className="cmg-card-name">Repeat Contact Interval Trend</span><span className="cmg-card-badge caution">Watch</span></div>
                 <div className="cmg-card-desc">Whether time gap between consecutive tickets is shrinking, stable, or growing</div>
                 <div className="cmg-card-vis">
                   <div className="cmg-big-stat">28.7%</div>

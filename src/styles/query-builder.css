@@ -148,11 +148,28 @@
 
 /* QS page header */
 .qs-page-topbar {
-  flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
-  padding: var(--space-10) var(--space-10) var(--space-7);
+  flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-between;
+  padding: var(--space-9) var(--space-10) var(--space-6);
 }
-.qs-page-title { font-family: var(--font-display); font-size: var(--font-lg); font-weight: 700; color: var(--dark-teal); letter-spacing: -0.2px; }
-.qs-page-sub { font-size: var(--font-sm); color: var(--cutty-sark); margin-top: 2px; }
+.qs-page-title { font-family: var(--font-display); font-size: 22px; font-weight: 750; color: var(--dark-teal); letter-spacing: -0.4px; line-height: 1; }
+.qs-page-sub { font-size: var(--font-xs); color: var(--cutty-sark); margin-top: 5px; opacity: 0.6; letter-spacing: 0.02em; }
+.qs-page-stats {
+  display: flex; align-items: center; gap: 18px; margin-top: 10px;
+}
+.qs-page-stat {
+  display: flex; align-items: baseline; gap: 5px;
+}
+.qs-page-stat-num {
+  font-family: var(--font-display); font-size: 26px; font-weight: 700;
+  color: var(--dark-teal); letter-spacing: -0.8px; line-height: 1;
+}
+.qs-page-stat-label {
+  font-size: 10px; font-weight: var(--weight-medium); color: var(--cutty-sark);
+  opacity: 0.55; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.qs-page-stat-sep {
+  width: 1px; height: 20px; background: var(--nebula); flex-shrink: 0;
+}
 .qs-primary-btn {
   display: flex; align-items: center; gap: var(--space-2);
   padding: var(--space-3) var(--space-7); border-radius: var(--radius-sm);

@@ -2,7 +2,7 @@ export default function NavItem({ id, label, icon, active, expanded, onToggle, c
   return (
     <div>
       <button
-        className={`nav-item${active ? ' active' : ''}`}
+        className={`nav-item${active ? ' active' : ''}${expanded ? ' expanded' : ''}`}
         data-nav={id}
         data-tooltip={label}
         onClick={onToggle}
@@ -11,12 +11,12 @@ export default function NavItem({ id, label, icon, active, expanded, onToggle, c
         <span className="nav-label">{label}</span>
         {children && (
           <svg className="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M4 6l4 4 4-4"/>
+            <path d="M6 4l4 4-4 4"/>
           </svg>
         )}
       </button>
       {children && (
-        <div className="nav-subnav" style={{ display: expanded ? 'flex' : 'none' }}>
+        <div className={`nav-subnav${expanded ? ' open' : ''}`}>
           {children}
         </div>
       )}
