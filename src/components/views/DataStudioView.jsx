@@ -234,6 +234,18 @@ const COLUMNS_BY_AREA = {
 const AREA_LABELS = {
   tickets:'Tickets', agents:'Agents', queues:'Queues', sla:'SLA', customers:'Customers', csat:'CSAT'
 }
+const TIME_PRESET_LABELS = {
+  today:'Today', '7d':'Last 7 days', '30d':'Last 30 days',
+  '90d':'Last 90 days', mtd:'This month', ytd:'This year'
+}
+const AREA_SUMMARY = {
+  tickets: '6 tickets were created in the selected period. 2 are resolved, 2 open, 1 pending, and 1 escalated. Gurram Triveni and Ravi Shankar currently hold the open tickets.',
+  agents: 'Gurram Triveni leads with a 96.2% resolve rate across 94 tickets. Average handle time ranges from 3m 42s to 6m 44s. Patangey V. Kumar and Ravi Shankar have the lowest resolve rates and may benefit from additional support.',
+  queues: 'Returns queue is the healthiest with a 98.4% SLA rate and 1m 22s average wait. Technical queue has the highest depth (23) and longest average wait at 3m 55s, presenting the most risk.',
+  sla: '3 of 4 tickets met their SLA targets. Ticket #677220 breached its 2-hour response SLA — review assignment routing for this policy.',
+  customers: 'Sanjay Kumar has the highest open ticket volume (5 of 31 total). Ritu Patel has 0 open tickets across 22 total — the best-served account in the set.',
+  csat: 'Average CSAT score is 4.38. Gurram Triveni leads at 4.8 (Positive). Swetha Neerudu has the lowest score at 3.9 (Neutral) — consider targeted coaching.',
+}
 
 const SAMPLE_ROWS = {
   tickets: {
@@ -784,16 +796,43 @@ export default function DataStudioView() {
   const [selectedArea, setSelectedArea] = useState(null)
   const [selectedCols, setSelectedCols] = useState([])
   const [queryRan, setQueryRan] = useState(false)
+  const [summaryOpen, setSummaryOpen] = useState(false)
   const [aiDescribeOpen, setAiDescribeOpen] = useState(false)
   const [aiDescribeText, setAiDescribeText] = useState('')
   const [selectedTimePreset, setSelectedTimePreset] = useState('30d')
   const [exampleText, setExampleText] = useState('')
   const [activeDashId, setActiveDashId] = useState(null)
+  const [activeBtn, setActiveBtn] = useState(null)
+  const [stepKey, setStepKey] = useState(0)
+  const [transitionDir, setTransitionDir] = useState('forward')
 
-  function goToStep(n) { setNqStep(Math.max(1, Math.min(4, n))) }
+  function navigateStep(n, btnId, preFn, dir = 'forward') {
+    if (activeBtn) return
+    if (preFn) preFn()
+    setTransitionDir(dir)
+    setActiveBtn(btnId)
+    setTimeout(() => {
+      setNqStep(Math.max(1, Math.min(4, n)))
+      setStepKey(k => k + 1)
+      setActiveBtn(null)
+    }, 900)
+  }
+  function runQueryDelayed() {
+    if (activeBtn) return
+    setTransitionDir('forward')
+    setActiveBtn('run')
+    setTimeout(() => { setQueryRan(true); setStepKey(k => k + 1); setActiveBtn(null) }, 900)
+  }
+  function backFromResults(btnId) {
+    if (activeBtn) return
+    setTransitionDir('back')
+    setActiveBtn(btnId)
+    setTimeout(() => { setQueryRan(false); setStepKey(k => k + 1); setActiveBtn(null) }, 650)
+  }
   function resetQuery() {
-    setNqStep(1); setSelectedArea(null); setSelectedCols([]); setQueryRan(false)
+    setNqStep(1); setSelectedArea(null); setSelectedCols([]); setQueryRan(false); setSummaryOpen(false)
     setAiDescribeOpen(false); setAiDescribeText(''); setSelectedTimePreset('30d'); setExampleText('')
+    setActiveBtn(null)
   }
 
   const filtered = activeTab === 'all'
@@ -932,18 +971,6 @@ export default function DataStudioView() {
               <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
             </svg>
             AI
-          </button>
-          <button
-            className="nq-ai-toggle-btn"
-            id="nq-ai-toggle-btn"
-            title="Toggle AI Assistant"
-            style={{ display: isNewQuestion ? '' : 'none' }}
-          >
-            <svg width="11" height="11" viewBox="0 0 13 13" fill="currentColor">
-              <path d="M6.5 0.5L7.6 4.1L11.5 6.5L7.6 8.9L6.5 12.5L5.4 8.9L1.5 6.5L5.4 4.1L6.5 0.5Z"/>
-            </svg>
-            AI
-            <span className="ai-dot"></span>
           </button>
         </div>
       </div>
@@ -1109,7 +1136,7 @@ export default function DataStudioView() {
                     <div
                       className={`nqb-step-item${nqStep === s.n ? ' active' : nqStep > s.n ? ' done-step' : ''}`}
                       id={`nqb-step-item-${s.n}`}
-                      onClick={() => nqStep > s.n && goToStep(s.n)}
+                      onClick={() => nqStep > s.n && navigateStep(s.n, `dot-${s.n}`, null, 'back')}
                       style={{ cursor: nqStep > s.n ? 'pointer' : 'default' }}
                     >
                       <div className={`nqb-step-dot${nqStep === s.n ? ' active' : nqStep > s.n ? ' done' : ''}`} id={`nqb-dot-${s.n}`}>
@@ -1127,7 +1154,7 @@ export default function DataStudioView() {
               </div>
 
               {/* Step 1: Query */}
-              <div className="nqb-step-content" id="nqb-panel-1" style={{ display: nqStep === 1 ? 'flex' : 'none' }}>
+              <div key={nqStep === 1 ? `p1-${stepKey}` : 'p1-off'} className={`nqb-step-content${nqStep === 1 && stepKey > 0 ? ` nqb-step-${transitionDir}` : ''}`} id="nqb-panel-1" style={{ display: nqStep === 1 ? 'flex' : 'none' }}>
                 <div>
                   <div className="nqb-step-title">What do you want to know?</div>
                   <div className="nqb-step-sub">Describe your query in plain language — no SQL needed.</div>
@@ -1153,38 +1180,38 @@ export default function DataStudioView() {
               </div>
 
               {/* Step 2: Data area */}
-              <div className="nqb-step-content" id="nqb-panel-2" style={{ display: nqStep === 2 ? 'flex' : 'none' }}>
+              <div key={nqStep === 2 ? `p2-${stepKey}` : 'p2-off'} className={`nqb-step-content${nqStep === 2 && stepKey > 0 ? ` nqb-step-${transitionDir}` : ''}`} id="nqb-panel-2" style={{ display: nqStep === 2 ? 'flex' : 'none' }}>
                 <div>
                   <div className="nqb-step-title">What data are you looking at?</div>
                   <div className="nqb-step-sub">Pick the area that best matches your question.</div>
                 </div>
                 <div className="nqb-data-grid" id="nqb-data-grid">
-                  <button type="button" className={`nqb-data-btn${selectedArea === 'tickets' ? ' selected' : ''}`} data-area="tickets" onClick={() => { setSelectedArea('tickets'); setSelectedCols(COLUMNS_BY_AREA.tickets.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'tickets' ? ' selected' : ''}`} data-area="tickets" onClick={() => navigateStep(3, 'area-tickets', () => { setSelectedArea('tickets'); setSelectedCols(COLUMNS_BY_AREA.tickets.filter(c=>c.pre).map(c=>c.key)) })}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">Tickets</span>
                     <span className="nqb-data-btn-sub">Support &amp; service requests</span>
                   </button>
-                  <button type="button" className={`nqb-data-btn${selectedArea === 'agents' ? ' selected' : ''}`} data-area="agents" onClick={() => { setSelectedArea('agents'); setSelectedCols(COLUMNS_BY_AREA.agents.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'agents' ? ' selected' : ''}`} data-area="agents" onClick={() => navigateStep(3, 'area-agents', () => { setSelectedArea('agents'); setSelectedCols(COLUMNS_BY_AREA.agents.filter(c=>c.pre).map(c=>c.key)) })}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" stroke="currentColor" strokeWidth="1.5"/><path d="M4.5 20.5c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">Agents</span>
                     <span className="nqb-data-btn-sub">Team &amp; individual performance</span>
                   </button>
-                  <button type="button" className={`nqb-data-btn${selectedArea === 'queues' ? ' selected' : ''}`} data-area="queues" onClick={() => { setSelectedArea('queues'); setSelectedCols(COLUMNS_BY_AREA.queues.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'queues' ? ' selected' : ''}`} data-area="queues" onClick={() => navigateStep(3, 'area-queues', () => { setSelectedArea('queues'); setSelectedCols(COLUMNS_BY_AREA.queues.filter(c=>c.pre).map(c=>c.key)) })}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M8 9h8M8 12h8M8 15h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">Queues</span>
                     <span className="nqb-data-btn-sub">Queue load &amp; wait times</span>
                   </button>
-                  <button type="button" className={`nqb-data-btn${selectedArea === 'sla' ? ' selected' : ''}`} data-area="sla" onClick={() => { setSelectedArea('sla'); setSelectedCols(COLUMNS_BY_AREA.sla.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'sla' ? ' selected' : ''}`} data-area="sla" onClick={() => navigateStep(3, 'area-sla', () => { setSelectedArea('sla'); setSelectedCols(COLUMNS_BY_AREA.sla.filter(c=>c.pre).map(c=>c.key)) })}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="currentColor" strokeWidth="1.5"/><path d="M12 9.5V13l2.5 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 3h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     <span className="nqb-data-btn-label">SLA</span>
                     <span className="nqb-data-btn-sub">SLA compliance &amp; breaches</span>
                   </button>
-                  <button type="button" className={`nqb-data-btn${selectedArea === 'customers' ? ' selected' : ''}`} data-area="customers" onClick={() => { setSelectedArea('customers'); setSelectedCols(COLUMNS_BY_AREA.customers.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'customers' ? ' selected' : ''}`} data-area="customers" onClick={() => navigateStep(3, 'area-customers', () => { setSelectedArea('customers'); setSelectedCols(COLUMNS_BY_AREA.customers.filter(c=>c.pre).map(c=>c.key)) })}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.5"/><path d="M8 9V6.5A4 4 0 0 1 16 6.5V9" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><rect x="10" y="15" width="4" height="6" rx="1" stroke="currentColor" strokeWidth="1.3"/></svg>
                     <span className="nqb-data-btn-label">Customers</span>
                     <span className="nqb-data-btn-sub">Accounts &amp; contacts</span>
                   </button>
-                  <button type="button" className={`nqb-data-btn${selectedArea === 'csat' ? ' selected' : ''}`} data-area="csat" onClick={() => { setSelectedArea('csat'); setSelectedCols(COLUMNS_BY_AREA.csat.filter(c=>c.pre).map(c=>c.key)); goToStep(3) }}>
+                  <button type="button" className={`nqb-data-btn${selectedArea === 'csat' ? ' selected' : ''}`} data-area="csat" onClick={() => navigateStep(3, 'area-csat', () => { setSelectedArea('csat'); setSelectedCols(COLUMNS_BY_AREA.csat.filter(c=>c.pre).map(c=>c.key)) })}>
                     <svg className="nqb-data-btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l2.5 5.1 5.6.81-4.05 3.95.96 5.59L12 15.9l-4.97 2.55.96-5.59L4 8.91l5.6-.81L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>
                     <span className="nqb-data-btn-label">CSAT</span>
                     <span className="nqb-data-btn-sub">Satisfaction scores &amp; feedback</span>
@@ -1196,7 +1223,7 @@ export default function DataStudioView() {
                   <div className="nqb-inline-nudge-body">
                     <span className="nqb-inline-nudge-text" id="nqb-nudge-2-text">Data detected. Want me to suggest the most useful columns &amp; filters for your question?</span>
                     <div className="nqb-inline-nudge-actions">
-                      <button className="nqb-nudge-action-btn">Yes, suggest columns</button>
+                      <button className={`nqb-nudge-action-btn${activeBtn === 'suggest-cols' ? ' nqb-btn-loading' : ''}`} onClick={() => navigateStep(3, 'suggest-cols', () => setSelectedCols(COLUMNS_BY_AREA[selectedArea].filter(c=>c.pre).map(c=>c.key)))}>Yes, suggest columns</button>
                       <button className="nqb-nudge-dismiss">Dismiss</button>
                     </div>
                   </div>
@@ -1204,7 +1231,7 @@ export default function DataStudioView() {
               </div>
 
               {/* Step 3: Columns */}
-              <div className="nqb-step-content" id="nqb-panel-3" style={{ display: nqStep === 3 ? 'flex' : 'none' }}>
+              <div key={nqStep === 3 ? `p3-${stepKey}` : 'p3-off'} className={`nqb-step-content${nqStep === 3 && stepKey > 0 ? ` nqb-step-${transitionDir}` : ''}`} id="nqb-panel-3" style={{ display: nqStep === 3 ? 'flex' : 'none' }}>
                 <div>
                   <div className="nqb-step-title">Which columns do you need?</div>
                   <div className="nqb-step-sub">We've pre-selected the most useful ones — tweak as needed.</div>
@@ -1235,7 +1262,7 @@ export default function DataStudioView() {
                   <div className="nqb-inline-nudge-body">
                     <span className="nqb-inline-nudge-text">I can predict the remaining columns you'll need based on your question. Complete the selection for you?</span>
                     <div className="nqb-inline-nudge-actions">
-                      <button className="nqb-nudge-action-btn">Complete selection</button>
+                      <button className={`nqb-nudge-action-btn${activeBtn === 'complete' ? ' nqb-btn-loading' : ''}`} onClick={() => { if (activeBtn) return; setActiveBtn('complete'); setSelectedCols((COLUMNS_BY_AREA[selectedArea]||[]).map(c=>c.key)); setTimeout(() => setActiveBtn(null), 400) }}>Complete selection</button>
                       <button className="nqb-nudge-dismiss">Dismiss</button>
                     </div>
                   </div>
@@ -1243,38 +1270,40 @@ export default function DataStudioView() {
               </div>
 
               {/* Step 4: Filters */}
-              <div className="nqb-step-content" id="nqb-panel-4" style={{ display: nqStep === 4 ? 'flex' : 'none' }}>
+              <div key={nqStep === 4 && !queryRan ? `p4-${stepKey}` : 'p4-off'} className={`nqb-step-content${nqStep === 4 && !queryRan && stepKey > 0 ? ` nqb-step-${transitionDir}` : ''}`} id="nqb-panel-4" style={{ display: nqStep === 4 && !queryRan ? 'flex' : 'none' }}>
                 <div>
                   <div className="nqb-step-title">Any filters?</div>
                   <div className="nqb-step-sub">Narrow your data down. All filters are optional.</div>
                 </div>
-                {/* Inline Kap AI nudge: step 3 */}
-                <div className="nqb-inline-nudge" id="nqb-nudge-4">
-                  <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
-                  <div className="nqb-inline-nudge-body">
-                    <span className="nqb-inline-nudge-text">Describe what you want to see — I'll set the grouping &amp; filters. <em>e.g. "by agent, last 7 days"</em></span>
-                    <div className="nqb-inline-nudge-actions" style={{ marginTop: 'var(--space-2)' }}>
-                      <button className="nqb-nudge-action-btn" onClick={() => setAiDescribeOpen(true)}>Describe it</button>
-                      <button className="nqb-nudge-dismiss">Set manually</button>
+                {/* Inline Kap AI nudge: step 3 — toggles into describe bar */}
+                {!aiDescribeOpen ? (
+                  <div className="nqb-inline-nudge" id="nqb-nudge-4">
+                    <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
+                    <div className="nqb-inline-nudge-body">
+                      <span className="nqb-inline-nudge-text">Describe what you want to see — I'll set the grouping &amp; filters. <em>e.g. "by agent, last 7 days"</em></span>
+                      <div className="nqb-inline-nudge-actions" style={{ marginTop: 'var(--space-2)' }}>
+                        <button className="nqb-nudge-action-btn" onClick={() => setAiDescribeOpen(true)}>Describe it</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                {/* Describe-it pill bar */}
-                <div className="nqb-describe-bar" id="nqb-describe-bar" style={{ display: aiDescribeOpen ? 'flex' : 'none' }}>
-                  <div className="nqb-describe-bar-inner">
-                    <span className="nqb-describe-bar-icon" aria-hidden="true">✦</span>
-                    <input
-                      id="nqb-describe-input"
-                      className="nqb-describe-input"
-                      type="text"
-                      placeholder='e.g. "by agent, last 7 days, status open"'
-                      value={aiDescribeText}
-                      onChange={e => setAiDescribeText(e.target.value)}
-                    />
-                    <button className="nqb-nudge-action-btn" style={{ borderRadius: '20px', flexShrink: 0 }} onClick={() => setAiDescribeOpen(false)}>Apply</button>
-                    <button className="nqb-nudge-dismiss" onClick={() => setAiDescribeOpen(false)}>Cancel</button>
+                ) : (
+                  <div className="nqb-describe-bar" id="nqb-describe-bar">
+                    <div className="nqb-describe-bar-inner">
+                      <span className="nqb-describe-bar-icon" aria-hidden="true">✦</span>
+                      <input
+                        id="nqb-describe-input"
+                        className="nqb-describe-input"
+                        type="text"
+                        placeholder='e.g. "by agent, last 7 days, status open"'
+                        value={aiDescribeText}
+                        onChange={e => setAiDescribeText(e.target.value)}
+                        autoFocus
+                      />
+                      <button className="nqb-nudge-action-btn" style={{ borderRadius: '20px', flexShrink: 0 }} onClick={() => setAiDescribeOpen(false)}>Apply</button>
+                      <button className="nqb-nudge-dismiss" onClick={() => setAiDescribeOpen(false)}>Cancel</button>
+                    </div>
                   </div>
-                </div>
+                )}
                 <div>
                   <div style={{ fontSize: 'var(--font-sm)', fontWeight: 'var(--weight-semibold)', color: 'var(--dark-teal)', marginBottom: 'var(--space-3)' }}>Time range</div>
                   <div className="nqb-time-row" id="nqb-time-row">
@@ -1322,44 +1351,93 @@ export default function DataStudioView() {
               </div>
 
               {/* Results view */}
-              <div className="nqb-results" id="nqb-results" style={{ display: 'none' }}>
+              <div key={queryRan ? `res-${stepKey}` : 'res-off'} className={`nqb-results${queryRan && stepKey > 0 ? ' nqb-step-forward' : ''}`} id="nqb-results" style={{ display: queryRan ? 'flex' : 'none' }}>
                 <div className="nqb-results-hd">
                   <div>
                     <div className="nqb-results-title" id="nqb-results-title">Query Results</div>
-                    <div className="nqb-results-meta" id="nqb-results-meta"></div>
+                    <div className="nqb-results-meta" id="nqb-results-meta">
+                      {SAMPLE_ROWS[selectedArea]?.rows.length} rows · {selectedArea && AREA_LABELS[selectedArea]}
+                    </div>
                   </div>
                   <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
-                    <button className="nqb-results-back">
+                    <button className={`nqb-results-back${activeBtn === 'edit-query' ? ' nqb-btn-loading' : ''}`} onClick={() => backFromResults('edit-query')}>
                       <svg width="11" height="11" viewBox="0 0 13 13" fill="none"><path d="M8.5 10.5L4.5 6.5l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       Edit query
                     </button>
                   </div>
                 </div>
                 <div className="nqb-results-body">
-                  <table className="nqb-results-table" id="nqb-results-table"></table>
+                  <table className="nqb-results-table" id="nqb-results-table">
+                    {SAMPLE_ROWS[selectedArea] && (
+                      <>
+                        <thead>
+                          <tr>{SAMPLE_ROWS[selectedArea].cols.map(c => <th key={c}>{c}</th>)}</tr>
+                        </thead>
+                        <tbody>
+                          {SAMPLE_ROWS[selectedArea].rows.map((row, ri) => (
+                            <tr key={ri}>
+                              {row.map((cell, ci) => {
+                                const col = SAMPLE_ROWS[selectedArea].cols[ci]
+                                const isStatus = col === 'status' || col === 'status'
+                                const statusStyles = isStatus ? (
+                                  cell === 'Resolved' || cell === 'Met'
+                                    ? { bg: '#e8f5f0', color: '#1e6e4f', border: '#b3dece' }
+                                  : cell === 'Open'
+                                    ? { bg: '#e6f2fb', color: '#1356a3', border: '#a8ccee' }
+                                  : cell === 'Escalated'
+                                    ? { bg: '#fff3e0', color: '#a04000', border: '#f7c87a' }
+                                  : cell === 'Pending'
+                                    ? { bg: '#fdf4e0', color: '#8a6200', border: '#f0d88a' }
+                                  : cell === 'Breached'
+                                    ? { bg: '#fde8e8', color: '#9b1c1c', border: '#f5a8a8' }
+                                  : null
+                                ) : null
+                                return (
+                                  <td key={ci}>
+                                    {statusStyles ? (
+                                      <span style={{
+                                        display: 'inline-flex', alignItems: 'center',
+                                        padding: '2px 8px', borderRadius: '12px',
+                                        fontSize: '11px', fontWeight: 600, letterSpacing: '0.01em',
+                                        background: statusStyles.bg, color: statusStyles.color,
+                                        border: `1px solid ${statusStyles.border}`
+                                      }}>{cell}</span>
+                                    ) : cell}
+                                  </td>
+                                )
+                              })}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </>
+                    )}
+                  </table>
                 </div>
                 <div className="nqb-results-count" id="nqb-results-count"></div>
                 {/* Kap AI nudge: step 4 */}
-                <div className="nqb-results-nudge" id="nqb-results-nudge">
-                  <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
-                  <span className="nqb-results-nudge-text">Want a plain-English summary of this data, or need to refine the query?</span>
-                  <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                    <button className="nqb-nudge-action-btn">Summarise</button>
-                    <button className="nqb-nudge-action-btn">Refine</button>
-                    <button className="nqb-nudge-dismiss">Dismiss</button>
+                {!summaryOpen && (
+                  <div className="nqb-results-nudge" id="nqb-results-nudge">
+                    <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
+                    <span className="nqb-results-nudge-text">Want a plain-English summary of this data, or need to refine the query?</span>
+                    <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                      <button className="nqb-nudge-action-btn" onClick={() => setSummaryOpen(true)}>Summarise</button>
+                      <button className={`nqb-nudge-action-btn${activeBtn === 'refine' ? ' nqb-btn-loading' : ''}`} onClick={() => backFromResults('refine')}>Refine</button>
+                    </div>
                   </div>
-                </div>
+                )}
                 {/* Summary card */}
-                <div className="nqb-summary-card" id="nqb-summary-card" style={{ display: 'none' }}>
-                  <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
-                  <div className="nqb-summary-card-body">
-                    <div className="nqb-summary-card-label">Kap AI Summary</div>
-                    <div className="nqb-summary-card-text" id="nqb-summary-card-text"></div>
+                {summaryOpen && (
+                  <div className="nqb-summary-card" id="nqb-summary-card">
+                    <span className="nqb-inline-nudge-icon" aria-hidden="true">✦</span>
+                    <div className="nqb-summary-card-body">
+                      <div className="nqb-summary-card-label">Kap AI Summary</div>
+                      <div className="nqb-summary-card-text">{AREA_SUMMARY[selectedArea] || 'No summary available for this data set.'}</div>
+                    </div>
+                    <button className="nqb-nudge-dismiss" title="Dismiss" onClick={() => setSummaryOpen(false)}>
+                      <svg width="12" height="12" viewBox="0 0 15 15" fill="none"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                   </div>
-                  <button className="nqb-nudge-dismiss" title="Dismiss">
-                    <svg width="12" height="12" viewBox="0 0 15 15" fill="none"><path d="M13.5 1.5L1.5 13.5M1.5 1.5L13.5 13.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </button>
-                </div>
+                )}
               </div>
 
               {/* Ask Kap AI: always-visible inline chat bar */}
@@ -1392,23 +1470,32 @@ export default function DataStudioView() {
               </div>
 
               {/* Floating bottom card: summary chips + nav buttons */}
-              <div className="nqb-actions is-empty" id="nqb-actions-bar">
+              <div className={`nqb-actions${(!selectedArea && selectedCols.length === 0) ? ' is-empty' : ''}`} id="nqb-actions-bar">
                 <div className="nqb-summary" id="nqb-summary">
-                  <span className="nqb-summary-empty" id="nqb-summary-empty">Your query will appear here as you build it.</span>
+                  {(!selectedArea && selectedCols.length === 0) ? (
+                    <span className="nqb-summary-empty" id="nqb-summary-empty">Your query will appear here as you build it.</span>
+                  ) : (
+                    <>
+                      {selectedArea && <span className="nqb-summary-chip">{AREA_LABELS[selectedArea]}</span>}
+                      {selectedCols.length > 0 && <span className="nqb-summary-chip">{selectedCols.length} columns</span>}
+                      {selectedTimePreset && <span className="nqb-summary-chip">{TIME_PRESET_LABELS[selectedTimePreset]}</span>}
+                    </>
+                  )}
                 </div>
                 <div className="nqb-actions-nav">
                   <button
-                    className="nqb-back-btn"
+                    className={`nqb-back-btn${activeBtn === 'back' ? ' nqb-btn-loading' : ''}`}
                     id="nqb-back-btn"
                     style={{ visibility: nqStep > 1 ? 'visible' : 'hidden' }}
-                    onClick={() => goToStep(nqStep - 1)}
+                    disabled={!!activeBtn}
+                    onClick={() => navigateStep(nqStep - 1, 'back', null, 'back')}
                   >&larr; Back</button>
                   <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
                     {nqStep < 4 && (
-                      <button className="nqb-continue-btn" id="nqb-continue-btn" onClick={() => goToStep(nqStep + 1)}>Continue &rarr;</button>
+                      <button className={`nqb-continue-btn${activeBtn === 'continue' ? ' nqb-btn-loading' : ''}`} id="nqb-continue-btn" disabled={!!activeBtn} onClick={() => navigateStep(nqStep + 1, 'continue')}>Continue &rarr;</button>
                     )}
                     {nqStep === 4 && (
-                      <button className="nqb-run-btn" id="nqb-run-btn">&#9654; Run Query</button>
+                      <button className={`nqb-run-btn${activeBtn === 'run' ? ' nqb-btn-loading' : ''}`} id="nqb-run-btn" disabled={!!activeBtn} onClick={runQueryDelayed}>&#9654; Run Query</button>
                     )}
                   </div>
                 </div>

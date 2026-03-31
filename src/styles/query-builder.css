@@ -1,3 +1,40 @@
+/* ── Step sweep animations ───────────────────────────────── */
+@keyframes nqb-sweep-fwd {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes nqb-sweep-back {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.nqb-step-forward { animation: nqb-sweep-fwd  0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.nqb-step-back    { animation: nqb-sweep-back 0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ── Button loading state ────────────────────────────────── */
+@keyframes nqb-btn-spin { to { transform: translateY(-50%) rotate(360deg); } }
+.nqb-btn-loading {
+  opacity: 0.72;
+  pointer-events: none;
+  cursor: default;
+  position: relative;
+}
+.nqb-btn-loading::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  animation: nqb-btn-spin 0.55s linear infinite;
+}
+.nqb-continue-btn.nqb-btn-loading,
+.nqb-run-btn.nqb-btn-loading { padding-right: 30px; }
+.nqb-back-btn.nqb-btn-loading { padding-right: 28px; }
+
 /* ── Queries section ─────────────────────────────────────── */
 #queries-section {
   display: none; flex: 1; flex-direction: column; overflow: hidden;
@@ -918,6 +955,7 @@
 .nqb-chip-icon { font-size: 11px; }
 .nqb-chip-label { font-weight: var(--weight-medium); }
 .nqb-summary-empty { font-size: var(--font-sm); color: var(--cutty-sark); opacity: 0.7; font-style: italic; }
+.nqb-summary-chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; background: var(--teal-10); border: 1px solid var(--teal-30); font-size: var(--font-sm); color: var(--dark-teal); font-weight: var(--weight-medium); }
 
 /* Action bar */
 .nqb-actions { position: sticky; bottom: 0; flex-shrink: 0; display: flex; flex-direction: column; margin: 0 40px 16px; border-radius: var(--radius-md); border: 1px solid var(--nebula); background: #fff; box-shadow: 0 4px 16px rgba(77,182,172,0.10), 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
