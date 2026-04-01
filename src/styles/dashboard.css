@@ -11,7 +11,6 @@
   position: relative;
   background: #fff;
   border: 1px solid var(--nebula);
-  border-left: 3px solid var(--mc, var(--teal));
   border-radius: var(--radius-md);
   padding: 0;
   cursor: pointer;
@@ -22,7 +21,6 @@
 }
 .dash-card:hover {
   border-color: var(--mc, var(--teal-30));
-  border-left-color: var(--mc, var(--teal));
   box-shadow: 0 8px 28px var(--mc-glow, rgba(77,182,172,0.14)), 0 2px 8px rgba(0,0,0,0.06);
   transform: translateY(-2px);
 }
