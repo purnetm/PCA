@@ -68,7 +68,7 @@ export default function CMGView() {
             <div className="cmg-grid">
 
               {/* Card A1: Repeat Issue Rate */}
-              <div className="cmg-card" id="cmg-card-a1">
+              <div className={`cmg-card${expandedCard === 'a1' ? ' expanded' : ''}`} id="cmg-card-a1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Repeat Issue Rate</span>
                   <span className="cmg-card-badge caution">Caution</span>
@@ -89,12 +89,12 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'a1' ? <button className="cmg-close-btn" onClick={() => toggleCard('a1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>Details ›</button>}
+                  {expandedCard === 'a1' ? <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a1')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card A2: Issue Gravity Score */}
-              <div className="cmg-card" id="cmg-card-a2">
+              <div className={`cmg-card${expandedCard === 'a2' ? ' expanded' : ''}`} id="cmg-card-a2">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Issue Gravity Score</span>
                   <span className="cmg-card-badge caution">Caution</span>
@@ -117,12 +117,12 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e07a2a', fontWeight: 600 }}>19% High or Critical — monitor closely</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'a2' ? <button className="cmg-close-btn" onClick={() => toggleCard('a2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>Details ›</button>}
+                  {expandedCard === 'a2' ? <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a2')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card A3: Customer Loyalty Erosion Score */}
-              <div className="cmg-card" id="cmg-card-a3">
+              <div className={`cmg-card${expandedCard === 'a3' ? ' expanded' : ''}`} id="cmg-card-a3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Customer Loyalty Erosion Score</span>
                   <span className="cmg-card-badge caution">Caution</span>
@@ -145,7 +145,7 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'a3' ? <button className="cmg-close-btn" onClick={() => toggleCard('a3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>Details ›</button>}
+                  {expandedCard === 'a3' ? <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('a3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -154,7 +154,10 @@ export default function CMGView() {
                 <div className="cmg-detail-row-inner">
                 {expandedCard === 'a1' && (
                   <div className="cmg-detail-panel" id="cmg-detail-a1">
-                    <div className="cmg-detail-title">Repeat Issue Rate — Drill-down</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Repeat Issue Rate — Drill-down</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('a1')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Ranked by repeat frequency · Period-over-period trend</div>
                       <table className="cmg-detail-table">
@@ -173,7 +176,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'a2' && (
                   <div className="cmg-detail-panel" id="cmg-detail-a2">
-                    <div className="cmg-detail-title">Issue Gravity Score — Drill-down</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Issue Gravity Score — Drill-down</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('a2')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Breakdown by intent and channel</div>
                       <table className="cmg-detail-table">
@@ -191,7 +197,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'a3' && (
                   <div className="cmg-detail-panel" id="cmg-detail-a3">
-                    <div className="cmg-detail-title">Customer Loyalty Erosion — Drill-down</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Customer Loyalty Erosion — Drill-down</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('a3')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <div style={{ marginBottom: 10, fontSize: 12, color: 'var(--text-muted)' }}>Band movement this period · by customer segment</div>
                       <table className="cmg-detail-table">
@@ -341,7 +350,7 @@ export default function CMGView() {
             <div className="cmg-grid">
 
               {/* Card B1: Sentiment Distribution */}
-              <div className="cmg-card" id="cmg-card-b1">
+              <div className={`cmg-card${expandedCard === 'b1' ? ' expanded' : ''}`} id="cmg-card-b1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Customer Sentiment Distribution</span>
                   <span className="cmg-card-badge caution">Caution</span>
@@ -362,12 +371,12 @@ export default function CMGView() {
                   <div className="cmg-stat-compare" style={{ marginTop: 8 }}><span className="cmg-stat-arrow warn">&#9650;</span> Negative up from 16.4% last period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'b1' ? <button className="cmg-close-btn" onClick={() => toggleCard('b1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>Details ›</button>}
+                  {expandedCard === 'b1' ? <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b1')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card B2: Emotional Intensity Distribution */}
-              <div className="cmg-card" id="cmg-card-b2">
+              <div className={`cmg-card${expandedCard === 'b2' ? ' expanded' : ''}`} id="cmg-card-b2">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Emotional Intensity Distribution</span>
                   <span className="cmg-card-badge red">Action Needed</span>
@@ -392,12 +401,12 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e03a2a', fontWeight: 600 }}>Distressed + Irate = 23% of base</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'b2' ? <button className="cmg-close-btn" onClick={() => toggleCard('b2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>Details ›</button>}
+                  {expandedCard === 'b2' ? <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b2')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card B3: Frustration Trigger Mapping */}
-              <div className="cmg-card" id="cmg-card-b3">
+              <div className={`cmg-card${expandedCard === 'b3' ? ' expanded' : ''}`} id="cmg-card-b3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Frustration Trigger Mapping</span>
                   <span className="cmg-card-badge caution">Watch</span>
@@ -428,7 +437,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 6, fontSize: 10, color: 'var(--text-muted)' }}>Freq = occurrences · Drop = avg sentiment score change</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'b3' ? <button className="cmg-close-btn" onClick={() => toggleCard('b3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>Details ›</button>}
+                  {expandedCard === 'b3' ? <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('b3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -437,7 +446,10 @@ export default function CMGView() {
                 <div className="cmg-detail-row-inner">
                 {expandedCard === 'b1' && (
                   <div className="cmg-detail-panel" id="cmg-detail-b1">
-                    <div className="cmg-detail-title">Sentiment Distribution — Drill-down</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Sentiment Distribution — Drill-down</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('b1')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>Channel</th><th>Positive</th><th>Neutral</th><th>Negative</th></tr></thead>
@@ -453,7 +465,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'b2' && (
                   <div className="cmg-detail-panel" id="cmg-detail-b2">
-                    <div className="cmg-detail-title">Emotional Intensity — Drill-down by Intent</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Emotional Intensity — Drill-down by Intent</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('b2')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>Intent</th><th>Distressed</th><th>Irate</th><th>Combined</th></tr></thead>
@@ -469,7 +484,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'b3' && (
                   <div className="cmg-detail-panel" id="cmg-detail-b3">
-                    <div className="cmg-detail-title">Frustration Triggers — Full Ranked List</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Frustration Triggers — Full Ranked List</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('b3')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>#</th><th>Trigger phrase</th><th>Occurrences</th><th>Avg sentiment drop</th></tr></thead>
@@ -581,7 +599,7 @@ export default function CMGView() {
             <div className="cmg-grid">
 
               {/* Card C1: Churn Risk Distribution */}
-              <div className="cmg-card" id="cmg-card-c1">
+              <div className={`cmg-card${expandedCard === 'c1' ? ' expanded' : ''}`} id="cmg-card-c1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Churn Risk Distribution</span>
                   <span className="cmg-card-badge red">Action Needed</span>
@@ -608,12 +626,12 @@ export default function CMGView() {
                   <div className="cmg-stat-compare" style={{ marginTop: 10 }}><span className="cmg-stat-arrow warn">&#9650;</span> High band grew by 89 customers this period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'c1' ? <button className="cmg-close-btn" onClick={() => toggleCard('c1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>Details ›</button>}
+                  {expandedCard === 'c1' ? <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c1')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card C2: High-Value Customer Risk Concentration */}
-              <div className="cmg-card" id="cmg-card-c2">
+              <div className={`cmg-card${expandedCard === 'c2' ? ' expanded' : ''}`} id="cmg-card-c2">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">High-Value Customer Risk Concentration</span>
                   <span className="cmg-card-badge red">Action Needed</span>
@@ -642,12 +660,12 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e03a2a', fontWeight: 600 }}>187 High-Value customers at High churn risk</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'c2' ? <button className="cmg-close-btn" onClick={() => toggleCard('c2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>Details ›</button>}
+                  {expandedCard === 'c2' ? <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c2')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card C3: Recovery Rate */}
-              <div className="cmg-card" id="cmg-card-c3">
+              <div className={`cmg-card${expandedCard === 'c3' ? ' expanded' : ''}`} id="cmg-card-c3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Recovery Rate</span>
                   <span className="cmg-card-badge green">Healthy</span>
@@ -661,7 +679,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 10, fontSize: 12 }}><strong>38 customers</strong> de-escalated from High risk band this period</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'c3' ? <button className="cmg-close-btn" onClick={() => toggleCard('c3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>Details ›</button>}
+                  {expandedCard === 'c3' ? <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('c3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -670,7 +688,10 @@ export default function CMGView() {
                 <div className="cmg-detail-row-inner">
                 {expandedCard === 'c1' && (
                   <div className="cmg-detail-panel" id="cmg-detail-c1">
-                    <div className="cmg-detail-title">Churn Risk — Drill-down by Segment &amp; Tenure</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Churn Risk — Drill-down by Segment &amp; Tenure</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('c1')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>Segment</th><th>High Risk</th><th>Period change</th></tr></thead>
@@ -686,7 +707,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'c2' && (
                   <div className="cmg-detail-panel" id="cmg-detail-c2">
-                    <div className="cmg-detail-title">High-Value Risk — Revenue at Risk Estimate</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">High-Value Risk — Revenue at Risk Estimate</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('c2')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
                         <div style={{ background: 'rgba(224,58,42,0.08)', border: '1px solid rgba(224,58,42,0.2)', borderRadius: 6, padding: '10px 14px', flex: 1, minWidth: 120 }}>
@@ -706,7 +730,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'c3' && (
                   <div className="cmg-detail-panel" id="cmg-detail-c3">
-                    <div className="cmg-detail-title">Recovery Rate — What's Working</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Recovery Rate — What's Working</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('c3')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <div style={{ marginBottom: 8, fontSize: 12, color: 'var(--text-muted)' }}>Factors correlated with successful recovery</div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12 }}>
@@ -762,7 +789,7 @@ export default function CMGView() {
             <div className="cmg-grid">
 
               {/* Card D1: Journey Abandonment Rate */}
-              <div className="cmg-card" id="cmg-card-d1">
+              <div className={`cmg-card${expandedCard === 'd1' ? ' expanded' : ''}`} id="cmg-card-d1">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Customer Journey Abandonment Rate</span>
                   <span className="cmg-card-badge caution">Caution</span>
@@ -796,12 +823,12 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'd1' ? <button className="cmg-close-btn" onClick={() => toggleCard('d1')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>Details ›</button>}
+                  {expandedCard === 'd1' ? <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d1')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card D2: Unresolved Intent Accumulation */}
-              <div className="cmg-card" id="cmg-card-d2">
+              <div className={`cmg-card${expandedCard === 'd2' ? ' expanded' : ''}`} id="cmg-card-d2">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Unresolved Intent Accumulation</span>
                   <span className="cmg-card-badge red">Action Needed</span>
@@ -818,12 +845,12 @@ export default function CMGView() {
                   </div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'd2' ? <button className="cmg-close-btn" onClick={() => toggleCard('d2')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>Details ›</button>}
+                  {expandedCard === 'd2' ? <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d2')}>Details ›</button>}
                 </div>
               </div>
 
               {/* Card D3: Resolution Journey Stage Breakdown */}
-              <div className="cmg-card" id="cmg-card-d3">
+              <div className={`cmg-card${expandedCard === 'd3' ? ' expanded' : ''}`} id="cmg-card-d3">
                 <div className="cmg-card-hd">
                   <span className="cmg-card-name">Resolution Journey Stage Breakdown</span>
                   <span className="cmg-card-badge caution">Caution</span>
@@ -848,7 +875,7 @@ export default function CMGView() {
                   <div style={{ marginTop: 8, fontSize: 12, color: '#e07a2a', fontWeight: 600 }}>Hold phase (22%) above 15% benchmark — investigate hold causes</div>
                 </div>
                 <div className="cmg-card-footer">
-                  {expandedCard === 'd3' ? <button className="cmg-close-btn" onClick={() => toggleCard('d3')} aria-label="Close">✕</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>Details ›</button>}
+                  {expandedCard === 'd3' ? <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>Close</button> : <button className="cmg-detail-btn" onClick={() => toggleCard('d3')}>Details ›</button>}
                 </div>
               </div>
 
@@ -857,7 +884,10 @@ export default function CMGView() {
                 <div className="cmg-detail-row-inner">
                 {expandedCard === 'd1' && (
                   <div className="cmg-detail-panel" id="cmg-detail-d1">
-                    <div className="cmg-detail-title">Journey Abandonment — Drill-down by Intent &amp; Stage</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Journey Abandonment — Drill-down by Intent &amp; Stage</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('d1')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>Intent</th><th>Abandon %</th><th>Avg time before abandon</th></tr></thead>
@@ -874,7 +904,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'd2' && (
                   <div className="cmg-detail-panel" id="cmg-detail-d2">
-                    <div className="cmg-detail-title">Unresolved Intent Accumulation — Full Breakdown</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Unresolved Intent Accumulation — Full Breakdown</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('d2')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>Intent</th><th>Customers</th><th>Avg attempts</th><th>Max attempts</th></tr></thead>
@@ -891,7 +924,10 @@ export default function CMGView() {
                 )}
                 {expandedCard === 'd3' && (
                   <div className="cmg-detail-panel" id="cmg-detail-d3">
-                    <div className="cmg-detail-title">Journey Stage Breakdown — By Intent</div>
+                    <div className="cmg-detail-panel-hd">
+                      <div className="cmg-detail-title">Journey Stage Breakdown — By Intent</div>
+                      <button className="cmg-close-btn" onClick={() => toggleCard('d3')} aria-label="Close">✕</button>
+                    </div>
                     <div className="cmg-detail-body">
                       <table className="cmg-detail-table">
                         <thead><tr><th>Intent</th><th>Greeting</th><th>Probing</th><th>Hold</th><th>Execution</th><th>Closing</th></tr></thead>
