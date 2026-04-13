@@ -71,42 +71,42 @@ export default function RPAView() {
               <div className="a-card">
                 <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Top Bottlenecks</div><div className="a-card-sub">Leading causes of delays or escalations</div></div><span className="a-card-badge info">5 identified</span></div>
                 <div className="a-card-body">
-                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: '#F97316' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Excessive Customer Frustration</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '100%', background: '#F97316' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">134 tickets</span><span className="a-card-badge alert" style={{ fontSize: 9, padding: '1px 6px' }}>High Impact 3.4</span></div></div></div></div>
-                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: '#F59E0B' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Level 2 Technical Support Needed</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '59%', background: '#F59E0B' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">79 tickets</span><span className="a-card-badge info" style={{ fontSize: 9, padding: '1px 6px' }}>Low Impact 1.2</span></div></div></div></div>
-                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: '#6B7280' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Others</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '44%', background: '#6B7280' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">59 tickets</span><span className="a-card-badge info" style={{ fontSize: 9, padding: '1px 6px' }}>Low Impact 1.2</span></div></div></div></div>
-                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: '#DC2626' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Unresolved Complaint Deadlock</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '39%', background: '#DC2626' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">52 tickets</span><span className="a-card-badge caution" style={{ fontSize: 9, padding: '1px 6px' }}>Med Impact 1.5</span></div></div></div></div>
-                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: '#3B82F6' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Complex Logistics Coordination</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '38%', background: '#3B82F6' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">51 tickets</span><span className="a-card-badge info" style={{ fontSize: 9, padding: '1px 6px' }}>Low Impact 0.8</span></div></div></div></div>
+                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: 'var(--color-amber-400)' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Excessive Customer Frustration</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '100%', background: 'var(--color-amber-400)' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">134 tickets</span><span className="a-card-badge alert" style={{ fontSize: 9, padding: '1px 6px' }}>High Impact 3.4</span></div></div></div></div>
+                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: 'var(--color-amber-300)' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Level 2 Technical Support Needed</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '59%', background: 'var(--color-amber-300)' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">79 tickets</span><span className="a-card-badge info" style={{ fontSize: 9, padding: '1px 6px' }}>Low Impact 1.2</span></div></div></div></div>
+                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: 'var(--color-neutral-400)' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Others</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '44%', background: 'var(--color-neutral-400)' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">59 tickets</span><span className="a-card-badge info" style={{ fontSize: 9, padding: '1px 6px' }}>Low Impact 1.2</span></div></div></div></div>
+                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: 'var(--color-red-400)' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Unresolved Complaint Deadlock</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '39%', background: 'var(--color-red-400)' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">52 tickets</span><span className="a-card-badge caution" style={{ fontSize: 9, padding: '1px 6px' }}>Med Impact 1.5</span></div></div></div></div>
+                  <div className="a-bottleneck-row"><div className="a-bottleneck-color" style={{ background: 'var(--color-blue-300)' }}></div><div style={{ flex: 1, minWidth: 0 }}><div className="a-bottleneck-name">Complex Logistics Coordination</div><div className="a-bottleneck-bar-wrap"><div className="a-bottleneck-bar"><div className="a-bottleneck-bar-fill" style={{ width: '38%', background: 'var(--color-blue-300)' }}></div></div><div className="a-bottleneck-footer"><span className="a-bottleneck-count">51 tickets</span><span className="a-card-badge info" style={{ fontSize: 9, padding: '1px 6px' }}>Low Impact 0.8</span></div></div></div></div>
                 </div>
               </div>
               <div className="a-card">
                 <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Customer Effort Score</div><div className="a-card-sub">Avg effort level for customers</div></div><span className="a-card-badge info">0.8/5</span></div>
-                <div className="a-card-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingTop: 8 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div className="a-card-body" style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingTop: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                     <svg width="100" height="100" viewBox="0 0 110 110" style={{ flexShrink: 0 }}>
                       <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(16,185,129,0.12)" strokeWidth="14"/>
                       <circle cx="55" cy="55" r="44" fill="none" stroke="var(--accent-success)" strokeWidth="14" strokeDasharray="44 232" strokeDashoffset="0" transform="rotate(-90 55 55)"/>
                       <text x="55" y="51" textAnchor="middle" fontFamily="var(--font-display)" fontSize="20" fontWeight="700" fill="var(--accent-success)">0.8</text>
                       <text x="55" y="64" textAnchor="middle" fontFamily="var(--font-body)" fontSize="9" fill="var(--accent-success)" opacity=".7">/ 5</text>
                     </svg>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--accent-success)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>Excellent</div>
-                      <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6, marginBottom: 4 }}>Low customer effort</div>
+                      <div style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6 }}>Low customer effort</div>
                     </div>
                   </div>
-                  <div style={{ marginTop: 12, padding: '10px 12px', background: 'var(--surface)', border: '1px solid var(--nebula)', borderRadius: 8 }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--cutty-sark)', opacity: .6, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '.05em' }}>Benchmark Comparison</div>
-                    <div style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
-                      <div style={{ flex: 1, textAlign: 'center', padding: '6px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                  <div style={{ padding: '14px 16px', background: 'var(--surface)', border: '1px solid var(--nebula)', borderRadius: 8 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--cutty-sark)', opacity: .6, marginBottom: 12, textTransform: 'uppercase', letterSpacing: '.05em' }}>Benchmark Comparison</div>
+                    <div style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
+                      <div style={{ flex: 1, textAlign: 'center', padding: '10px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.2)' }}>
                         <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent-success)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>0.8</div>
-                        <div style={{ fontSize: 9, color: 'var(--cutty-sark)', opacity: .7, marginTop: 3 }}>Yours</div>
+                        <div style={{ fontSize: 9, color: 'var(--cutty-sark)', opacity: .7, marginTop: 5 }}>Yours</div>
                       </div>
-                      <div style={{ flex: 1, textAlign: 'center', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--nebula)' }}>
+                      <div style={{ flex: 1, textAlign: 'center', padding: '10px 8px', borderRadius: 6, border: '1px solid var(--nebula)' }}>
                         <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>1.0</div>
-                        <div style={{ fontSize: 9, color: 'var(--cutty-sark)', opacity: .7, marginTop: 3 }}>Target</div>
+                        <div style={{ fontSize: 9, color: 'var(--cutty-sark)', opacity: .7, marginTop: 5 }}>Target</div>
                       </div>
-                      <div style={{ flex: 1, textAlign: 'center', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--nebula)' }}>
+                      <div style={{ flex: 1, textAlign: 'center', padding: '10px 8px', borderRadius: 6, border: '1px solid var(--nebula)' }}>
                         <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--cutty-sark)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>2.1</div>
-                        <div style={{ fontSize: 9, color: 'var(--cutty-sark)', opacity: .7, marginTop: 3 }}>Ind. Avg</div>
+                        <div style={{ fontSize: 9, color: 'var(--cutty-sark)', opacity: .7, marginTop: 5 }}>Ind. Avg</div>
                       </div>
                     </div>
                     <div style={{ fontSize: 10, color: 'var(--cutty-sark)', opacity: .6 }}>vs last period: <strong style={{ color: 'var(--accent-success)' }}>1.1/5</strong> → <strong style={{ color: 'var(--accent-success)' }}>0.8/5</strong> <span style={{ color: 'var(--accent-success)' }}>↓ improving</span></div>
@@ -159,8 +159,8 @@ export default function RPAView() {
             <div className="a-card">
               <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Sentiment &amp; Journey Analysis</div></div><button className="a-card-btn">Journey</button></div>
               <div className="a-card-body">
-                <div className="a-2col">
-                  <div>
+                <div className="a-2col" style={{ gap: 0 }}>
+                  <div style={{ paddingRight: 24 }}>
                     <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 12 }}>Sentiment Distribution</div>
                     <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
                       <div style={{ flex: 1, padding: '12px', border: '1px solid var(--nebula)', borderRadius: 'var(--radius-sm)', background: 'rgba(16,185,129,0.05)', borderTop: '3px solid var(--accent-success)' }}>
@@ -177,20 +177,32 @@ export default function RPAView() {
                       </div>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', paddingLeft: 24, borderLeft: '1px solid var(--nebula)' }}>
                     <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 12 }}>CX Impact Score</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                      <svg width="80" height="80" viewBox="0 0 80 80">
-                        <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info-10)" strokeWidth="12"/>
-                        <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info)" strokeWidth="12" strokeDasharray="123 78" strokeDashoffset="0" transform="rotate(-90 40 40)"/>
-                        <text x="40" y="38" textAnchor="middle" fontFamily="var(--font-display)" fontSize="14" fontWeight="700" fill="var(--accent-info-dark)">43</text>
-                        <text x="40" y="48" textAnchor="middle" fontFamily="var(--font-body)" fontSize="7" fill="var(--accent-info-mid)" opacity=".7">/ 100</text>
-                      </svg>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        <div style={{ marginBottom: 2 }}><span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent-warning)', padding: '1px 6px', background: 'rgba(245,158,11,0.1)', borderRadius: 4 }}>Moderate</span></div>
-                        <div><span style={{ fontSize: 20, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>4.4/5</span> <span style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6 }}>CSAT</span> <span style={{ fontSize: 10, color: 'var(--accent-success)' }}>↑ +0.2</span></div>
-                        <div><span style={{ fontSize: 20, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>0.8/5</span> <span style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6 }}>Effort</span> <span style={{ fontSize: 10, color: 'var(--accent-success)' }}>↓ -0.1</span></div>
-                        <div><span style={{ fontSize: 20, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>2,721</span> <span style={{ fontSize: 11, color: 'var(--cutty-sark)', opacity: .6 }}>Happy</span> <span style={{ fontSize: 10, color: 'var(--accent-success)' }}>↑ +124</span></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                      {/* Gauge */}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                        <svg width="80" height="80" viewBox="0 0 80 80">
+                          <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info-10)" strokeWidth="12"/>
+                          <circle cx="40" cy="40" r="32" fill="none" stroke="var(--accent-info)" strokeWidth="12" strokeDasharray="123 78" strokeDashoffset="0" transform="rotate(-90 40 40)"/>
+                          <text x="40" y="38" textAnchor="middle" fontFamily="var(--font-display)" fontSize="14" fontWeight="700" fill="var(--accent-info-dark)">43</text>
+                          <text x="40" y="48" textAnchor="middle" fontFamily="var(--font-body)" fontSize="7" fill="var(--accent-info-mid)" opacity=".7">/ 100</text>
+                        </svg>
+                        <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent-warning)', padding: '1px 8px', background: 'rgba(245,158,11,0.1)', borderRadius: 4 }}>Moderate</span>
+                      </div>
+                      {/* Metrics grid — fills remaining width */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px 12px', flex: 1 }}>
+                        {[
+                          { val: '4.4/5', label: 'CSAT',   delta: '↑ +0.2' },
+                          { val: '0.8/5', label: 'Effort', delta: '↓ -0.1' },
+                          { val: '2,721', label: 'Happy',  delta: '↑ +124' },
+                        ].map(({ val, label, delta }) => (
+                          <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--nebula)', borderRadius: 6, padding: '8px 10px' }}>
+                            <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--dark-teal)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>{val}</div>
+                            <div style={{ fontSize: 10, color: 'var(--cutty-sark)', opacity: .6, marginTop: 3 }}>{label}</div>
+                            <div style={{ fontSize: 10, color: 'var(--accent-success)', marginTop: 2 }}>{delta}</div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                     <div style={{ marginTop: 12, padding: '8px 10px', background: 'var(--surface)', border: '1px solid var(--nebula)', borderRadius: 6 }}>
@@ -270,24 +282,89 @@ export default function RPAView() {
               <div className="a-card-head"><div className="a-card-head-left"><div className="a-card-title">Escalation &amp; Transfer</div></div></div>
               <div className="a-card-body">
                 <div className="a-2col">
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 12 }}>Escalations <span style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--status-negative)', lineHeight: 1 }}> 444 </span><span style={{ fontSize: 11, fontWeight: 400, opacity: .6 }}>total</span></div>
-                    <svg width="100%" height="160" viewBox="0 0 260 120" preserveAspectRatio="none">
-                      <defs><linearGradient id="esc-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#DC2626" stopOpacity=".2"/><stop offset="100%" stopColor="#DC2626" stopOpacity="0"/></linearGradient></defs>
-                      <line x1="30" y1="10" x2="255" y2="10" stroke="var(--nebula)" strokeWidth=".5" opacity=".5"/>
-                      <line x1="30" y1="40" x2="255" y2="40" stroke="var(--nebula)" strokeWidth=".5" opacity=".5"/>
-                      <line x1="30" y1="70" x2="255" y2="70" stroke="var(--nebula)" strokeWidth=".5" opacity=".5"/>
-                      <text x="26" y="13" fontFamily="var(--font-body)" fontSize="7" textAnchor="end" fill="var(--cutty-sark)" opacity=".6">140</text>
-                      <text x="26" y="43" fontFamily="var(--font-body)" fontSize="7" textAnchor="end" fill="var(--cutty-sark)" opacity=".6">100</text>
-                      <text x="26" y="73" fontFamily="var(--font-body)" fontSize="7" textAnchor="end" fill="var(--cutty-sark)" opacity=".6">50</text>
-                      <path d="M30,10 C70,10 90,28 110,43 C150,73 200,88 255,94 L255,94 L255,97 L30,97 Z" fill="url(#esc-grad)"/>
-                      <path d="M30,10 C70,10 90,28 110,43 C150,73 200,88 255,94" fill="none" stroke="var(--status-negative)" strokeWidth="1.8" strokeLinecap="round"/>
-                      <text x="30"  y="114" fontSize="7" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Mon</text>
-                      <text x="72"  y="114" fontSize="7" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Tue</text>
-                      <text x="114" y="114" fontSize="7" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Wed</text>
-                      <text x="156" y="114" fontSize="7" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Thu</text>
-                      <text x="198" y="114" fontSize="7" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Fri</text>
-                      <text x="255" y="114" fontSize="7" textAnchor="middle" fill="var(--cutty-sark)" opacity=".6">Sat</text>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--dark-teal)', marginBottom: 0 }}>Escalations <span style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--status-negative)', lineHeight: 1 }}> 444 </span><span style={{ fontSize: 11, fontWeight: 400, opacity: .6 }}>total</span></div>
+                    <svg width="100%" height="200" viewBox="0 0 275 120">
+                      <defs>
+                        {/* Multi-stop area fill — depth without loudness */}
+                        <linearGradient id="esc-area" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%"   stopColor="#DC2626" stopOpacity="0.18"/>
+                          <stop offset="45%"  stopColor="#DC2626" stopOpacity="0.07"/>
+                          <stop offset="100%" stopColor="#DC2626" stopOpacity="0"/>
+                        </linearGradient>
+                        {/* Horizontal stroke gradient — encodes improving trend */}
+                        <linearGradient id="esc-stroke" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%"   stopColor="#DC2626" stopOpacity="1"/>
+                          <stop offset="60%"  stopColor="#EF4444" stopOpacity="0.9"/>
+                          <stop offset="100%" stopColor="#F87171" stopOpacity="0.75"/>
+                        </linearGradient>
+                        {/* Glow blur for peak point */}
+                        <filter id="esc-glow" x="-50%" y="-50%" width="200%" height="200%">
+                          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                      </defs>
+
+                      {/* Y-axis rule */}
+                      <line x1="30" y1="8" x2="30" y2="97" stroke="var(--nebula)" strokeWidth="0.8" opacity="0.4"/>
+                      {/* Baseline */}
+                      <line x1="30" y1="97" x2="260" y2="97" stroke="var(--nebula)" strokeWidth="0.8" opacity="0.35"/>
+
+                      {/* Dotted grid lines */}
+                      <line x1="30" y1="10" x2="260" y2="10" stroke="var(--nebula)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.55"/>
+                      <line x1="30" y1="35" x2="260" y2="35" stroke="var(--nebula)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.45"/>
+                      <line x1="30" y1="60" x2="260" y2="60" stroke="var(--nebula)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.45"/>
+                      <line x1="30" y1="85" x2="260" y2="85" stroke="var(--nebula)" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.35"/>
+
+                      {/* Y-axis tick marks */}
+                      <line x1="27" y1="10" x2="30" y2="10" stroke="var(--cutty-sark)" strokeWidth="0.6" opacity="0.4"/>
+                      <line x1="27" y1="35" x2="30" y2="35" stroke="var(--cutty-sark)" strokeWidth="0.6" opacity="0.4"/>
+                      <line x1="27" y1="60" x2="30" y2="60" stroke="var(--cutty-sark)" strokeWidth="0.6" opacity="0.4"/>
+                      <line x1="27" y1="85" x2="30" y2="85" stroke="var(--cutty-sark)" strokeWidth="0.6" opacity="0.4"/>
+
+                      {/* Y-axis labels — precisely scaled to data (140→10, 100→35, 50→66, 0→97) */}
+                      <text x="24" y="13"  fontFamily="var(--font-body)" fontSize="6.5" textAnchor="end" fill="var(--cutty-sark)" opacity="0.55">140</text>
+                      <text x="24" y="38"  fontFamily="var(--font-body)" fontSize="6.5" textAnchor="end" fill="var(--cutty-sark)" opacity="0.5">100</text>
+                      <text x="24" y="63"  fontFamily="var(--font-body)" fontSize="6.5" textAnchor="end" fill="var(--cutty-sark)" opacity="0.5">50</text>
+                      <text x="24" y="99"  fontFamily="var(--font-body)" fontSize="6.5" textAnchor="end" fill="var(--cutty-sark)" opacity="0.4">0</text>
+
+                      {/* Area fill */}
+                      <path d="M30,10 C55,10 65,19 75,19 C95,19 108,34 120,35 C140,36 153,53 165,54 C185,55 200,71 210,72 L255,85 L255,97 L30,97 Z" fill="url(#esc-area)"/>
+
+                      {/* Stroke — animated draw */}
+                      <path
+                        className="esc-trend-line"
+                        d="M30,10 C55,10 65,19 75,19 C95,19 108,34 120,35 C140,36 153,53 165,54 C185,55 200,71 210,72 L255,85"
+                        fill="none"
+                        stroke="url(#esc-stroke)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+
+                      {/* Data point dots */}
+                      <circle cx="75"  cy="19" r="2.5" fill="#EF4444" stroke="white" strokeWidth="1.5" opacity="0.85"/>
+                      <circle cx="120" cy="35" r="2.5" fill="#EF4444" stroke="white" strokeWidth="1.5" opacity="0.8"/>
+                      <circle cx="165" cy="54" r="2.5" fill="#F87171" stroke="white" strokeWidth="1.5" opacity="0.75"/>
+                      <circle cx="210" cy="72" r="2.5" fill="#F87171" stroke="white" strokeWidth="1.5" opacity="0.7"/>
+                      {/* Sat — end point with improvement badge nearby */}
+                      <circle cx="255" cy="85" r="2.5" fill="#FCA5A5" stroke="white" strokeWidth="1.5" opacity="0.65"/>
+
+                      {/* Peak point — Mon, highlighted with glow */}
+                      <circle cx="30" cy="10" r="3.5" fill="#DC2626" stroke="white" strokeWidth="1.5" filter="url(#esc-glow)"/>
+
+                      {/* "Peak" callout badge above Mon */}
+                      <rect x="33" y="2" width="24" height="10" rx="2.5" fill="#DC2626"/>
+                      <text x="45" y="9" fontFamily="var(--font-body)" fontSize="6" textAnchor="middle" fill="white" fontWeight="700" letterSpacing="0.3">PEAK</text>
+
+
+                      {/* X-axis labels — evenly spaced */}
+                      <text x="30"  y="112" fontSize="6.5" fontFamily="var(--font-body)" textAnchor="middle" fill="var(--cutty-sark)" opacity="0.55">Mon</text>
+                      <text x="75"  y="112" fontSize="6.5" fontFamily="var(--font-body)" textAnchor="middle" fill="var(--cutty-sark)" opacity="0.5">Tue</text>
+                      <text x="120" y="112" fontSize="6.5" fontFamily="var(--font-body)" textAnchor="middle" fill="var(--cutty-sark)" opacity="0.5">Wed</text>
+                      <text x="165" y="112" fontSize="6.5" fontFamily="var(--font-body)" textAnchor="middle" fill="var(--cutty-sark)" opacity="0.5">Thu</text>
+                      <text x="210" y="112" fontSize="6.5" fontFamily="var(--font-body)" textAnchor="middle" fill="var(--cutty-sark)" opacity="0.5">Fri</text>
+                      <text x="255" y="112" fontSize="6.5" fontFamily="var(--font-body)" textAnchor="middle" fill="var(--cutty-sark)" opacity="0.5">Sat</text>
                     </svg>
                   </div>
                   <div>
