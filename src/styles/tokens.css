@@ -1,59 +1,164 @@
-/* ── Design tokens ──────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Portfolio Iteration
+   Visual direction: Clean editorial / Stripe–Notion grade
+   Palette source:  Radix UI Colors (Slate + Indigo)
+   Fonts:           Geist (display) · DM Sans (body)
+   Changed from Iterations-A:
+     • Teal brand → Indigo (perceptual precision, fintech-grade)
+     • Warm pink gradient bg → Cool Slate neutral
+     • Teal-tinted shadows → Neutral layered grey
+     • Rounded radii (8/12/20) → Structured (4/6/8)
+     • Bricolage Grotesque + Plus Jakarta Sans → Geist + DM Sans
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts import ──────────────────────────────────────────
+   Geist is served via CDN; DM Sans via Google Fonts.
+   Add both to your index.html <head> instead if preferred.
+   ─────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* Geist — Vercel's open-source typeface (MIT) */
+@font-face {
+  font-family: 'Geist';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+  font-weight: 500; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+  font-weight: 600; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+  font-weight: 700; font-display: swap;
+}
+
 :root {
-  /* ── Colour Primitives 50–900 ───────────────────────────────
-     Teal anchors confirmed from Figma (teal-400, teal-600).
-     All other stops interpolated; verify remaining shades in
-     Figma Primitives collection and update as needed.        */
 
-  /* Teal */
-  --color-teal-50:  #EFF9F8;
-  --color-teal-100: #D0EDEB;
-  --color-teal-200: #A3DCDA;
-  --color-teal-300: #72C5C0;
-  --color-teal-400: #4DB6AC; /* ✓ Figma */
-  --color-teal-500: #4DA8A1;
-  --color-teal-600: #4D7D7A; /* ✓ Figma */
-  --color-teal-700: #3B5E5C;
-  --color-teal-800: #2A4342;
-  --color-teal-900: #1A2B2A;
+  /* ── Radix UI Slate (neutral foundation) ───────────────────────
+     Source: radix-ui.com/colors — MIT licence
+     Slate-1 through Slate-12 light scale.
+     ──────────────────────────────────────────────────────────── */
+  --slate-1:  #FBFCFD;   /* App background            */
+  --slate-2:  #F8F9FA;   /* Subtle background          */
+  --slate-3:  #F1F3F5;   /* UI element background      */
+  --slate-4:  #ECEEF0;   /* Hovered UI element bg      */
+  --slate-5:  #E6E8EB;   /* Active / selected bg       */
+  --slate-6:  #DDE1E6;   /* Subtle border              */
+  --slate-7:  #C1C8CD;   /* UI element border          */
+  --slate-8:  #889096;   /* Hovered border             */
+  --slate-9:  #687076;   /* Solid background (badges)  */
+  --slate-10: #5F6B7C;   /* Hovered solid bg           */
+  --slate-11: #60646C;   /* Low-contrast text          */
+  --slate-12: #1C2024;   /* High-contrast text         */
 
-  /* Green (anchored to accent-success #10B981 = green-500) */
+  /* ── Radix UI Indigo (brand accent) ───────────────────────────
+     Replaces teal. Indigo reads "fintech precision" vs teal's
+     "wellness calm". Still distinctive vs generic blue.
+     ──────────────────────────────────────────────────────────── */
+  --indigo-1:  #FDFDFE;
+  --indigo-2:  #F7F9FF;
+  --indigo-3:  #EDF2FE;
+  --indigo-4:  #E1E9FF;
+  --indigo-5:  #D2DEFF;
+  --indigo-6:  #B8C7F5;
+  --indigo-7:  #96AFEC;
+  --indigo-8:  #6B93E0;
+  --indigo-9:  #3E63DD;   /* ← Primary brand accent     */
+  --indigo-10: #3657C9;   /* Hover state                */
+  --indigo-11: #3A5BC7;   /* Text on light bg           */
+  --indigo-12: #1F2D5C;   /* High-contrast indigo text  */
+
+  /* ── Semantic colour aliases (mapped to Radix) ─────────────── */
+
+  /* Backgrounds */
+  --bg-light:        var(--slate-1);      /* #FBFCFD — App base     */
+  --surface:         var(--slate-2);      /* #F8F9FA — Cards/panels */
+  --surface-hover:   var(--slate-3);      /* #F1F3F5 — Hover state  */
+  --surface-active:  var(--slate-4);      /* #ECEEF0 — Active state */
+
+  /* Borders */
+  --nebula:          var(--slate-6);      /* Subtle border          */
+  --border-strong:   var(--slate-7);      /* Stronger border        */
+  --aqua-haze:       var(--slate-3);      /* Legacy alias           */
+
+  /* Text */
+  --dark-teal:       var(--slate-12);     /* Primary text           */
+  --cutty-sark:      var(--slate-11);     /* Secondary / muted      */
+
+  /* Brand accent (Indigo replaces Teal) */
+  --teal:            var(--indigo-9);     /* Legacy alias → indigo  */
+  --teal-10:         rgba(62, 99, 221, 0.08);
+  --teal-15:         rgba(62, 99, 221, 0.12);
+  --teal-20:         rgba(62, 99, 221, 0.14);
+  --teal-30:         rgba(62, 99, 221, 0.20);
+  --teal-50:         rgba(62, 99, 221, 0.45);
+  --teal-80:         rgba(62, 99, 221, 0.75);
+  --cutty-sark-dark: var(--indigo-12);
+  --dark-teal-alt:   var(--indigo-12);
+
+  /* Background gradient tokens (cool Slate, replaces warm pink) */
+  --bg-gradient-top: #F8F9FB;
+  --bg-gradient-mid: rgba(244, 246, 250, 0.97);
+  --bg-gradient-bot: rgba(232, 236, 245, 0.95);
+
+  /* ── Full colour primitive scales (preserved for charts) ────── */
+
+  /* Indigo (brand primitives — replaces teal scale) */
+  --color-teal-50:  #FDFDFE;
+  --color-teal-100: #EDF2FE;
+  --color-teal-200: #D2DEFF;
+  --color-teal-300: #96AFEC;
+  --color-teal-400: #6B93E0;
+  --color-teal-500: #3E63DD;   /* primary */
+  --color-teal-600: #3657C9;
+  --color-teal-700: #2D4AA8;
+  --color-teal-800: #1F2D5C;
+  --color-teal-900: #141D3B;
+
+  /* Green (success — unchanged) */
   --color-green-50:  #ECFDF5;
   --color-green-100: #D1FAE5;
   --color-green-200: #A7F3D0;
   --color-green-300: #6EE7B7;
   --color-green-400: #34D399;
-  --color-green-500: #10B981; /* ✓ accent-success */
+  --color-green-500: #10B981;
   --color-green-600: #059669;
   --color-green-700: #047857;
   --color-green-800: #065F46;
   --color-green-900: #064E3B;
 
-  /* Red (anchored to status-negative #DC2626 = red-600) */
+  /* Red (error — unchanged) */
   --color-red-50:  #FEF2F2;
   --color-red-100: #FEE2E2;
   --color-red-200: #FECACA;
   --color-red-300: #FCA5A5;
   --color-red-400: #F87171;
   --color-red-500: #EF4444;
-  --color-red-600: #DC2626; /* ✓ status-negative */
+  --color-red-600: #DC2626;
   --color-red-700: #B91C1C;
   --color-red-800: #991B1B;
   --color-red-900: #7F1D1D;
 
-  /* Amber (anchored to accent-warning #F59E0B = amber-500) */
+  /* Amber (warning — unchanged) */
   --color-amber-50:  #FFFBEB;
   --color-amber-100: #FEF3C7;
   --color-amber-200: #FDE68A;
   --color-amber-300: #FCD34D;
   --color-amber-400: #FBBF24;
-  --color-amber-500: #F59E0B; /* ✓ accent-warning */
+  --color-amber-500: #F59E0B;
   --color-amber-600: #D97706;
   --color-amber-700: #B45309;
   --color-amber-800: #92400E;
   --color-amber-900: #78350F;
 
-  /* Purple */
+  /* Purple (unchanged) */
   --color-purple-50:  #FAF5FF;
   --color-purple-100: #F3E8FF;
   --color-purple-200: #E9D5FF;
@@ -65,55 +170,19 @@
   --color-purple-800: #6B21A8;
   --color-purple-900: #581C87;
 
-  /* Neutral / Gray (anchored to accent-neutral #6B7280 = neutral-500) */
+  /* Neutral / Gray */
   --color-neutral-50:  #F9FAFB;
   --color-neutral-100: #F3F4F6;
   --color-neutral-200: #E5E7EB;
   --color-neutral-300: #D1D5DB;
   --color-neutral-400: #9CA3AF;
-  --color-neutral-500: #6B7280; /* ✓ accent-neutral */
+  --color-neutral-500: #6B7280;
   --color-neutral-600: #4B5563;
   --color-neutral-700: #374151;
   --color-neutral-800: #1F2937;
   --color-neutral-900: #111827;
 
-  /* ── Semantic / legacy aliases (kept for backward compat) ── */
-  --teal:       #4DB6AC;
-  --teal-10:    rgba(77, 182, 172, 0.10);
-  --teal-15:    rgba(77, 182, 172, 0.15);
-  --teal-20:    rgba(77, 182, 172, 0.20);
-  --teal-30:    rgba(77, 182, 172, 0.30);
-  --teal-50:    rgba(77, 182, 172, 0.50);
-  --teal-80:    rgba(77, 182, 172, 0.80);
-  --cutty-sark: #4C6A69;
-  --dark-teal:  #1F4141;
-  --aqua-haze:  #ECF4F2;
-  --nebula:     #C7D9D6;
-  --surface:    #F5FAF8;
-  --bg-light:   #F8FDFC;
-  --bg-gradient-top: #E8F4F2;
-  --bg-gradient-mid: rgba(235, 230, 236, 0.94);
-  --bg-gradient-bot: rgba(210, 178, 190, 0.92);
-  --radius-sm:  8px;
-  --radius-md:  12px;
-  --radius-lg:  20px;
-  /* Status */
-  --status-negative: #DC2626;
-  --status-positive: #4DB6AC;
-  --color-disabled:  #9E9E9E;
-  /* Accent colors */
-  --accent-success:  #10B981;
-  --accent-warning:  #F59E0B;
-  --accent-info:     #3B82F6;
-  --accent-info-10:  rgba(59, 130, 246, 0.10);
-  --accent-info-15:  rgba(59, 130, 246, 0.15);
-  --accent-info-20:  rgba(59, 130, 246, 0.20);
-  --accent-info-30:  rgba(59, 130, 246, 0.30);
-  --accent-info-50:  rgba(59, 130, 246, 0.50);
-  --accent-info-dark: #1D4ED8;
-  --accent-info-mid:  #4B7BC4;
-  --accent-neutral:  #6B7280;
-  /* Blue palette */
+  /* Blue (accent-info) */
   --blue-50:  #EFF6FF;
   --blue-100: #DBEAFE;
   --blue-200: #BFDBFE;
@@ -124,14 +193,38 @@
   --blue-700: #1D4ED8;
   --blue-800: #1E40AF;
   --blue-900: #1E3A8A;
-  /* Category tag backgrounds */
-  --tag-volume:      rgba(77, 182, 172, 0.12);
-  --tag-performance: rgba(77, 182, 172, 0.12);
-  --tag-compliance:  rgba(229, 115, 115, 0.12);
-  --tag-experience:  rgba(100, 181, 246, 0.12);
-  --tag-quality:     rgba(186, 104, 200, 0.12);
-  --tag-operations:  rgba(255, 183, 77, 0.12);
-  /* Typography */
+
+  /* ── Status & accent aliases ─────────────────────────────────── */
+  --status-negative:   #DC2626;
+  --status-positive:   var(--indigo-9);
+  --color-disabled:    var(--slate-8);
+  --accent-success:    #10B981;
+  --accent-warning:    #F59E0B;
+  --accent-info:       #3B82F6;
+  --accent-info-10:    rgba(59, 130, 246, 0.10);
+  --accent-info-15:    rgba(59, 130, 246, 0.15);
+  --accent-info-20:    rgba(59, 130, 246, 0.20);
+  --accent-info-30:    rgba(59, 130, 246, 0.30);
+  --accent-info-50:    rgba(59, 130, 246, 0.50);
+  --accent-info-dark:  #1D4ED8;
+  --accent-info-mid:   #4B7BC4;
+  --accent-neutral:    var(--slate-9);
+
+  /* Category tag backgrounds — updated to match indigo brand */
+  --tag-volume:      rgba(62,  99,  221, 0.10);
+  --tag-performance: rgba(62,  99,  221, 0.10);
+  --tag-compliance:  rgba(229, 115, 115, 0.10);
+  --tag-experience:  rgba(100, 181, 246, 0.10);
+  --tag-quality:     rgba(186, 104, 200, 0.10);
+  --tag-operations:  rgba(245, 158, 11,  0.10);
+
+  /* ── Typography ──────────────────────────────────────────────── */
+
+  /* Font families — Geist (display precision) + DM Sans (body warmth) */
+  --font-display: 'Geist', 'DM Sans', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Size scale — unchanged; carefully tuned for this density */
   --font-xs:       11px;
   --font-sm:       12px;
   --font-base:     13px;
@@ -141,20 +234,33 @@
   --font-2xl:      22px;
   --font-subtitle: 20px;
   --font-hero:     40px;
+
+  /* Weights */
   --weight-regular:  400;
   --weight-medium:   500;
   --weight-semibold: 600;
   --weight-bold:     700;
-  /* Font families */
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body:    'Plus Jakarta Sans', sans-serif;
-  /* Letter spacing for hierarchy */
-  --letter-tight:  -0.4px;
-  --letter-normal: 0;
-  /* Spacing scale */
-  --space-1:  4px;
-  --space-2:  6px;
-  --space-3:  8px;
+
+  /* Letter spacing — editorial tightness on headings */
+  --letter-tight:   -0.5px;   /* Headings, KPI values     */
+  --letter-normal:   0px;     /* Body text                */
+  --letter-wide:     0.04em;  /* Uppercase labels / tags  */
+
+  /* ── Border radii — tighter = more editorial ─────────────────
+     Before: 8 / 12 / 20 px  →  Now: 4 / 6 / 8 px
+     Rationale: Rounded corners read "consumer app"; square
+     corners read "precision tool". This is the #1 visual signal
+     separating Notion/Stripe from typical SaaS dashboards.
+     ──────────────────────────────────────────────────────────── */
+  --radius-xs: 3px;   /* Tags, badges, small chips         */
+  --radius-sm: 5px;   /* Buttons, inputs, small controls   */
+  --radius-md: 7px;   /* Cards, panels, dropdowns          */
+  --radius-lg: 10px;  /* Modals, large panels              */
+
+  /* ── Spacing scale — unchanged; well-calibrated ─────────────── */
+  --space-1:   4px;
+  --space-2:   6px;
+  --space-3:   8px;
   --space-4:  10px;
   --space-5:  12px;
   --space-6:  14px;
@@ -164,17 +270,59 @@
   --space-10: 28px;
   --space-11: 32px;
   --space-12: 40px;
-  /* Sizing */
+
+  /* ── Sizing ──────────────────────────────────────────────────── */
   --size-sidebar: 256px;
-  --size-topbar:  52px;
-  --icon-sm: 16px;
-  --icon-md: 20px;
-  /* Opacity */
-  --opacity-wave:        0.35;
-  --opacity-placeholder: 0.55;
-  --opacity-muted:       0.6;
-  /* Shadows */
-  --shadow-card:    0px 10px 15px rgba(77, 182, 172, 0.10), 0px 4px 6px rgba(77, 182, 172, 0.08);
-  --shadow-card-sm: 0px 4px 6px rgba(77, 182, 172, 0.08);
-  --shadow-topbar:  0 1px 0 rgba(199, 217, 214, 0.60);
+  --size-topbar:   52px;
+  --icon-sm:       16px;
+  --icon-md:       20px;
+
+  /* ── Opacity ─────────────────────────────────────────────────── */
+  --opacity-wave:        0.25;  /* reduced: cooler bg feels cleaner */
+  --opacity-placeholder: 0.45;
+  --opacity-muted:       0.55;
+
+  /* ── Shadows — the most impactful single change ───────────────
+     Before: teal-tinted rgba(77,182,172,...)
+     After:  neutral grey — two-layer system like Stripe/Linear
+     No colour in shadows = editorial, not branded.
+     ──────────────────────────────────────────────────────────── */
+
+  /* Card: subtle resting shadow */
+  --shadow-card:
+    0px  1px  2px rgba(0, 0, 0, 0.04),
+    0px  4px 12px rgba(0, 0, 0, 0.05);
+
+  /* Card small: hairline only */
+  --shadow-card-sm:
+    0px  1px  2px rgba(0, 0, 0, 0.05);
+
+  /* Card hover: lifts cleanly */
+  --shadow-card-hover:
+    0px  2px  4px rgba(0, 0, 0, 0.05),
+    0px  8px 24px rgba(0, 0, 0, 0.08);
+
+  /* Modal: deep but not dramatic */
+  --shadow-modal:
+    0px  4px  6px rgba(0, 0, 0, 0.04),
+    0px 16px 48px rgba(0, 0, 0, 0.12);
+
+  /* Topbar: single pixel separator */
+  --shadow-topbar: 0 1px 0 var(--slate-6);
+
+  /* Dropdown */
+  --shadow-dropdown:
+    0px  2px  4px rgba(0, 0, 0, 0.04),
+    0px  8px 20px rgba(0, 0, 0, 0.10);
+
+  /* Button primary: indigo glow, very subtle */
+  --shadow-btn-primary:
+    0px 1px 2px rgba(62, 99, 221, 0.20),
+    0px 3px 8px rgba(62, 99, 221, 0.16);
+
+  /* Button primary hover */
+  --shadow-btn-primary-hover:
+    0px 2px 4px rgba(62, 99, 221, 0.22),
+    0px 6px 16px rgba(62, 99, 221, 0.22);
+
 }
