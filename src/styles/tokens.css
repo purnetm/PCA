@@ -1,0 +1,180 @@
+/* ── Design tokens ──────────────────────────────────────────── */
+:root {
+  /* ── Colour Primitives 50–900 ───────────────────────────────
+     Teal anchors confirmed from Figma (teal-400, teal-600).
+     All other stops interpolated; verify remaining shades in
+     Figma Primitives collection and update as needed.        */
+
+  /* Teal */
+  --color-teal-50:  #EFF9F8;
+  --color-teal-100: #D0EDEB;
+  --color-teal-200: #A3DCDA;
+  --color-teal-300: #72C5C0;
+  --color-teal-400: #4DB6AC; /* ✓ Figma */
+  --color-teal-500: #4DA8A1;
+  --color-teal-600: #4D7D7A; /* ✓ Figma */
+  --color-teal-700: #3B5E5C;
+  --color-teal-800: #2A4342;
+  --color-teal-900: #1A2B2A;
+
+  /* Green (anchored to accent-success #10B981 = green-500) */
+  --color-green-50:  #ECFDF5;
+  --color-green-100: #D1FAE5;
+  --color-green-200: #A7F3D0;
+  --color-green-300: #6EE7B7;
+  --color-green-400: #34D399;
+  --color-green-500: #10B981; /* ✓ accent-success */
+  --color-green-600: #059669;
+  --color-green-700: #047857;
+  --color-green-800: #065F46;
+  --color-green-900: #064E3B;
+
+  /* Red (anchored to status-negative #DC2626 = red-600) */
+  --color-red-50:  #FEF2F2;
+  --color-red-100: #FEE2E2;
+  --color-red-200: #FECACA;
+  --color-red-300: #FCA5A5;
+  --color-red-400: #F87171;
+  --color-red-500: #EF4444;
+  --color-red-600: #DC2626; /* ✓ status-negative */
+  --color-red-700: #B91C1C;
+  --color-red-800: #991B1B;
+  --color-red-900: #7F1D1D;
+
+  /* Amber (anchored to accent-warning #F59E0B = amber-500) */
+  --color-amber-50:  #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-300: #FCD34D;
+  --color-amber-400: #FBBF24;
+  --color-amber-500: #F59E0B; /* ✓ accent-warning */
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
+  --color-amber-800: #92400E;
+  --color-amber-900: #78350F;
+
+  /* Purple */
+  --color-purple-50:  #FAF5FF;
+  --color-purple-100: #F3E8FF;
+  --color-purple-200: #E9D5FF;
+  --color-purple-300: #D8B4FE;
+  --color-purple-400: #C084FC;
+  --color-purple-500: #A855F7;
+  --color-purple-600: #9333EA;
+  --color-purple-700: #7E22CE;
+  --color-purple-800: #6B21A8;
+  --color-purple-900: #581C87;
+
+  /* Neutral / Gray (anchored to accent-neutral #6B7280 = neutral-500) */
+  --color-neutral-50:  #F9FAFB;
+  --color-neutral-100: #F3F4F6;
+  --color-neutral-200: #E5E7EB;
+  --color-neutral-300: #D1D5DB;
+  --color-neutral-400: #9CA3AF;
+  --color-neutral-500: #6B7280; /* ✓ accent-neutral */
+  --color-neutral-600: #4B5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1F2937;
+  --color-neutral-900: #111827;
+
+  /* ── Semantic / legacy aliases (kept for backward compat) ── */
+  --teal:       #4DB6AC;
+  --teal-10:    rgba(77, 182, 172, 0.10);
+  --teal-15:    rgba(77, 182, 172, 0.15);
+  --teal-20:    rgba(77, 182, 172, 0.20);
+  --teal-30:    rgba(77, 182, 172, 0.30);
+  --teal-50:    rgba(77, 182, 172, 0.50);
+  --teal-80:    rgba(77, 182, 172, 0.80);
+  --cutty-sark: #4C6A69;
+  --dark-teal:  #1F4141;
+  --aqua-haze:  #ECF4F2;
+  --nebula:     #C7D9D6;
+  --surface:    #F5FAF8;
+  --bg-light:   #F8FDFC;
+  --bg-gradient-top: #E8F4F2;
+  --bg-gradient-mid: rgba(235, 230, 236, 0.94);
+  --bg-gradient-bot: rgba(210, 178, 190, 0.92);
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  /* Status */
+  --status-negative: #DC2626;
+  --status-positive: #4DB6AC;
+  --color-disabled:  #9E9E9E;
+  /* Accent colors */
+  --accent-success:  #10B981;
+  --accent-warning:  #F59E0B;
+  --accent-info:     #3B82F6;
+  --accent-info-10:  rgba(59, 130, 246, 0.10);
+  --accent-info-15:  rgba(59, 130, 246, 0.15);
+  --accent-info-20:  rgba(59, 130, 246, 0.20);
+  --accent-info-30:  rgba(59, 130, 246, 0.30);
+  --accent-info-50:  rgba(59, 130, 246, 0.50);
+  --accent-info-dark: #1D4ED8;
+  --accent-info-mid:  #4B7BC4;
+  --accent-neutral:  #6B7280;
+  /* Blue palette */
+  --blue-50:  #EFF6FF;
+  --blue-100: #DBEAFE;
+  --blue-200: #BFDBFE;
+  --blue-300: #93C5FD;
+  --blue-400: #60A5FA;
+  --blue-500: #3B82F6;
+  --blue-600: #2563EB;
+  --blue-700: #1D4ED8;
+  --blue-800: #1E40AF;
+  --blue-900: #1E3A8A;
+  /* Category tag backgrounds */
+  --tag-volume:      rgba(77, 182, 172, 0.12);
+  --tag-performance: rgba(77, 182, 172, 0.12);
+  --tag-compliance:  rgba(229, 115, 115, 0.12);
+  --tag-experience:  rgba(100, 181, 246, 0.12);
+  --tag-quality:     rgba(186, 104, 200, 0.12);
+  --tag-operations:  rgba(255, 183, 77, 0.12);
+  /* Typography */
+  --font-xs:       11px;
+  --font-sm:       12px;
+  --font-base:     13px;
+  --font-md:       14px;
+  --font-lg:       15px;
+  --font-xl:       18px;
+  --font-2xl:      22px;
+  --font-subtitle: 20px;
+  --font-hero:     40px;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  /* Font families */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+  /* Letter spacing for hierarchy */
+  --letter-tight:  -0.4px;
+  --letter-normal: 0;
+  /* Spacing scale */
+  --space-1:  4px;
+  --space-2:  6px;
+  --space-3:  8px;
+  --space-4:  10px;
+  --space-5:  12px;
+  --space-6:  14px;
+  --space-7:  16px;
+  --space-8:  20px;
+  --space-9:  24px;
+  --space-10: 28px;
+  --space-11: 32px;
+  --space-12: 40px;
+  /* Sizing */
+  --size-sidebar: 256px;
+  --size-topbar:  52px;
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  /* Opacity */
+  --opacity-wave:        0.35;
+  --opacity-placeholder: 0.55;
+  --opacity-muted:       0.6;
+  /* Shadows */
+  --shadow-card:    0px 10px 15px rgba(77, 182, 172, 0.10), 0px 4px 6px rgba(77, 182, 172, 0.08);
+  --shadow-card-sm: 0px 4px 6px rgba(77, 182, 172, 0.08);
+  --shadow-topbar:  0 1px 0 rgba(199, 217, 214, 0.60);
+}

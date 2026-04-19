@@ -1,0 +1,54 @@
+﻿Resolution Path Analysis (RPA)
+
+1. Probing Phase Duration - Time spent understanding and clarifying the customer’s issue before any resolution action is attempted. Example : Customer explains issue ->agent asks clarifying questions ->agent restates issue correctly.
+
+
+2. Hold Phase Duration - Time during which the customer is waiting without active resolution progress. Example : Agent says “Please wait while I check” and sends multiple wait messages before any action.
+
+3. Execution Phase Duration - Time spent actively attempting to resolve the issue through actions or instructions. Example: Agent resets password, asks customer to try logging in, and verifies the outcome.
+
+4. Transition Phase Duration (Transfers / Escalations) - Time consumed during transfers or escalations, including pre-transfer explanation and post-transfer reorientation. Example : Agent explains transfer ->customer waits ->new agent joins and re-engages.
+
+5. Dead Air Percentage - Portion of the interaction with no meaningful progress or communication. Example : Long silence or repeated “still checking” messages without updates.
+
+6. Hold Time Breach Rate - Frequency of hold periods exceeding acceptable duration without progress. Example : Agent says “Please wait 2 minutes,” customer waits 6 minutes.
+
+7. Over-Probing Rate -  Instances where additional diagnostic questions are asked despite sufficient information already being available.Example : Customer: My order hasn’t been delivered yet -> Agent: Can you share your order ID? -> Customer: 78234 -> Agent: What was the scheduled delivery date? ->  Customer: Today, between 9 and 11 AM. -> Agent: Is the order showing as “Out for Delivery” or “Delivered” in the app?-> Customer: It shows “Out for Delivery.” -> Agent: Was this a prepaid or COD order? -> Customer: Prepaid -> Agent: Which items were included in the order? -> Customer: Groceries -> Agent: Have you faced this issue before? -> Customer: No.
+
+8. Under-Probing Rate - Instances where resolution or escalation occurs before the issue is adequately understood. Example : Customer reports payment failure ->agent escalates without asking transaction details.
+
+9. Repeated Information  Request Rate(entity) - How often customers are asked to repeat previously shared information. Example : Customer repeats address details multiple times to the same agent.
+
+10. Context Lost Rate (During Transfers) - Loss of customer-provided information specifically across transfer or escalation points.Example: Bot collects order ID ->human agent asks for it again.
+
+11. Customer Re-Explanation Rate(intent) - Frequency with which customers restate the issue after diagnosis should already be complete. Example : Customer says “As I mentioned earlier, my order never arrived.”
+
+12. Hold Occurrence Rate - How often customers are placed on hold or asked to wait.         Example : Multiple “please wait” messages during one interaction.( hold occurring more than once).
+
+13. Delay Explanation Rate - Frequency with which delays are clearly explained to the customer. Example : “I’m checking with the delivery partner, this may take two minutes.”(under hold)
+
+14. Instruction Density - Number of distinct actions requested from the customer per execution turn. Example : “Open the app, go to settings, click profile, update address, save.”(no. Of tickets where customer had to take action more than once)(customer effort score)
+
+15. Escalation Frequency - How often interactions are escalated to another agent or team ( most of the tickets for replacement are being escalated showing possible broken processes.) 
+
+16. Early Escalation Rate - Escalations occurring before sufficient probing or execution. Example : Customer: My refund hasn’t been credited yet->Agent: I will escalate this to the finance team.
+
+17. Late Escalation Rate - Escalations occurring only after prolonged unsuccessful attempts. Example : Customer: My refund hasn’t been credited yet ->Agent: When was the refund initiated? -> Customer: Five days ago ->Agent: Was it a bank refund or wallet refund? -> Customer: Bank refund -> Agent: Please wait while I check the status ->Customer: Okay -> Agent: The refund should reflect soon. Please wait another 24 hours ->  Customer: It still hasn’t come -> Agent: Please wait while I recheck ->Customer: This is taking too long ->Agent: I will now escalate this to the finance team.
+
+18. Recontact Rate - Customer returns with the same issue after a previous interaction. Example : Customer contacts support again the next day for the same problem.
+
+19. Drop-Off Stage Classification - Stage where the customer disengages: probing, Hold, execution, transfer, or post-resolution. Example : Customer leaves during hold.
+
+20. Customer-to-Agent Turn Ratio - Ratio of customer turns to agent turns. Example : Customer sends many messages while agent gives minimal guidance.
+
+21. Action Centric Repetition: The number of customers that keep raising the same query, the issues which require the agent to give a walkthrough of a process to a customer. Example:  Customer: I’m unable to log into my account ->Agent: Please try resetting your password using the “Forgot Password” option ->Customer: I tried that, but I’m still getting an error -> Agent: Please clear your browser cache and try logging in again -> Customer: It’s still not working -> Agent: Let me escalate this to the technical support team.
+
+22. Replies per Resolution: Average messages sent by agent per ticket, flagging verbosity or conciseness.
+
+23. Customer Sentiment Drift - Change in customer sentiment from the beginning to the end of the interaction. Example : Customer starts neutral, ends frustrated.
+
+24. Negative Sentiment Recovery Rate - Cases where sentiment becomes negative but improves before the conversation ends. Example :Customer frustrated ->agent resolves issue ->customer thanks agent.
+
+25. Compensation Issued Rate - Frequency of issuing refunds, replacements, vouchers, or credits. Example : Agent issues a refund to resolve the issue.
+
+26. Compensation Type Mix - Distribution of compensation types used. Example : Refund vs voucher vs replacement vs coupons vs gift cards.( percentage of ticket compensation, agents who offer compensation more,types of compensation.
